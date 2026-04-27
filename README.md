@@ -18,7 +18,7 @@
 | 💬 掲示板アプリ | PHP / MySQL | [Demo](http://shimada.atwebpages.com/post/) ・ [Code](https://github.com/ns7jp/post) |
 | 🛠️ 作品集（Python・HTML/CSS） | Python / Web | [Code](https://github.com/ns7jp/works) |
 
-🌐 **ポートフォリオサイト**: http://shimada.atwebpages.com/pf/
+🌐 **ポートフォリオサイト**: https://ns7jp.github.io/
 
 ## 🌱 興味・今後学びたいこと
 
