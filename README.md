@@ -14,8 +14,9 @@
 
 | 作品 | 技術 | リンク |
 |------|------|------|
-| 🌟 SNSアプリ「Pulse」 | PHP / SQLite | [Demo](http://shimada.atwebpages.com/pulse/) ・ [Code](https://github.com/ns7jp/pulse) |
+| 🌟 SNSアプリ「Pulse」 | PHP / SQLite | [Demo](http://shimada.atwebpages.com/pulse/) ・ [Code](https://github.com/ns7jp/pulse) 
 | 💬 掲示板アプリ | PHP / MySQL | [Demo](http://shimada.atwebpages.com/post/) ・ [Code](https://github.com/ns7jp/post) |
+| 📊 サーバー監視ダッシュボード | Flask / psutil / Chart.js | [Code](https://github.com/ns7jp/server-monitor) |
 | 🛠️ 作品集（Python・HTML/CSS） | Python / Web | [Code](https://github.com/ns7jp/works) |
 
 🌐 **ポートフォリオサイト**: https://ns7jp.github.io/
