@@ -43,9 +43,11 @@ flowchart LR
 | 物流現場 | インフラ運用 | 該当ドキュメント |
 | --- | --- | --- |
 | 15 分単位の作業時間記録 | SLI 計測（Prometheus / Loki） | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
-| ABC 分析（パレート図） | 問い合わせ TOP10 → FAQ / 自動化対象選定 | [想定 FAQ](./it-support/faq.md) |
+| ABC 分析（パレート図） | 問い合わせ TOP10 → FAQ / 自動化対象選定 | [想定 FAQ](./it-support/faq.md) / [Service Desk Metrics](./it-support/service-desk-metrics.md) |
 | 「忙しい時間帯」の特定 | バーンレートアラート（負荷ピーク検出） | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
 | 出庫頻度の集計 | アラート発火頻度・ノイズ率の集計 | [07. インシデント対応](./server-monitor-improvements/07-incident-response.md) |
+| 容量上限の把握（棚・倉庫） | キャパシティ計画（CPU / Mem / Disk / RPS） | [10. キャパシティプランニング](./server-monitor-improvements/10-capacity-planning.md) |
+| ピッキング件数の月次レビュー | Service Desk メトリクスの月次レビュー | [Service Desk Metrics](./it-support/service-desk-metrics.md) |
 
 ### 2.2 標準化・属人化排除
 
@@ -64,6 +66,8 @@ flowchart LR
 | 季節要因で計測期間を見直す | 月次 SLO レビュー、エラーバジェット消費判断 | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
 | 「カイゼンのリバウンド防止」 | IaC + CI で「設定が手動で戻らない」 | [02. Ansible](./server-monitor-improvements/02-ansible-automation.md) |
 | 棚卸し（実物と帳簿の突合） | 構成棚卸し（Ansible / AWS Config） | [02. Ansible](./server-monitor-improvements/02-ansible-automation.md) [09. セキュリティ運用](./server-monitor-improvements/09-security-operations.md) |
+| 「変えてはいけない時期」の合意 | 変更窓・凍結期間（年末年始・連休前） | [11. 変更管理](./server-monitor-improvements/11-change-management.md) |
+| 想定外への備え（停電演習） | カオスエンジニアリング / Game Day | [17. カオスエンジニアリング](./server-monitor-improvements/17-chaos-engineering.md) |
 
 ### 2.4 セキュリティ・統制（5S → セキュリティ統制）
 
@@ -132,6 +136,8 @@ flowchart LR
 
 - [プロフィール README](../README.md)
 - [業務改善レポート](./business-improvement/picking-improvement.md)
-- [サーバー監視ラボ 改善計画](./server-monitor-improvements/README.md)
+- [サーバー監視ラボ 改善計画（17 本）](./server-monitor-improvements/README.md)
+- [ADR（技術選定の根拠）](./adr/README.md)
+- [Service Desk Metrics 設計](./it-support/service-desk-metrics.md)
 - [アーキテクチャ図](./architecture-diagram.md)
 - [資格取得ロードマップ](./certifications/roadmap.md)
