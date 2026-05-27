@@ -44,7 +44,9 @@ gantt
 
     section 長期 (〜2027 Q4)
     LPIC-2             :l3, 2027-04, 3M
+    CKAD               :k1, 2027-05, 2M
     AWS SOA            :a2, 2027-07, 2M
+    CKA                :k2, 2027-08, 3M
 ```
 
 ---
@@ -108,6 +110,24 @@ gantt
 | --- | --- |
 | 目的 | 運用視点での AWS（監視、ログ、自動化、コスト管理） |
 | 受験予定 | 2027 年 7 〜 8 月 |
+
+### CKAD（Certified Kubernetes Application Developer）
+
+| 項目 | 内容 |
+| --- | --- |
+| 目的 | Kubernetes 上でアプリを動かす基礎（Pod / Service / Deployment / Helm） |
+| 受験予定 | 2027 年 5 〜 6 月 |
+| 学習方法 | kind / minikube ローカル学習 + KodeKloud 実機演習 |
+| ポートフォリオ連動 | server-monitor を Helm chart 化（[K8s 発展計画](../server-monitor-improvements/08-kubernetes-roadmap.md) Phase 1〜2） |
+
+### CKA（Certified Kubernetes Administrator）
+
+| 項目 | 内容 |
+| --- | --- |
+| 目的 | Kubernetes クラスタの構築・運用（kubeadm / RBAC / Networking / Storage） |
+| 受験予定 | 2027 年 8 〜 10 月 |
+| 学習方法 | KodeKloud + 自宅ラボでクラスタ構築演習、EKS 上での運用 |
+| ポートフォリオ連動 | server-monitor on EKS（[K8s 発展計画](../server-monitor-improvements/08-kubernetes-roadmap.md) Phase 3〜4） |
 
 ---
 

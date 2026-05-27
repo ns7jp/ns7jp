@@ -156,7 +156,9 @@
 
 ## 7. 関連ドキュメント
 
+- [現場経験とインフラ運用の橋渡し](../career-bridge.md)
 - [想定 FAQ](../it-support/faq.md)
 - [トラブルシューティングフロー](../it-support/troubleshooting.md)
 - [アカウント管理・キッティング手順](../it-support/account-management.md)
 - [サーバー監視ラボ（SLO 設計）](../server-monitor-improvements/04-slo-design.md)
+- [サーバー監視ラボ（インシデント対応プロセス）](../server-monitor-improvements/07-incident-response.md)
