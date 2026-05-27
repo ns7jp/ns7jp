@@ -134,5 +134,5 @@ gantt
 
 ## 関連ドキュメント
 
-- [サーバー監視ラボ：改善計画一覧](../server-monitor-improvements/README.md)
-- [アーキテクチャ図（現状 / 将来構想）](../architecture-diagram.md)
+- [サーバー監視ラボ：改善設計の実装対応表](../server-monitor-improvements/README.md)
+- [アーキテクチャ図（実装済み構成 / 検証境界）](../architecture-diagram.md)

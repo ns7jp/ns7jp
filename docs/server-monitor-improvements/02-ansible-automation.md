@@ -1,5 +1,9 @@
 # 02. Ansible による構成管理自動化
 
+> 状態更新（2026-05-27）: roles / playbooks と通常 CI の構文検証は
+> [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
+> 冪等性を含む full `molecule test` は手動 workflow の実行結果が採録されるまで未実測として扱う。
+
 ## 1. 背景・課題
 
 現状の server-monitor は構築手順を `docs/deployment.md` に手順書として書いている。
