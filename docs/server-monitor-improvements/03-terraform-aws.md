@@ -66,7 +66,7 @@ flowchart TB
 
 ## 4. ディレクトリ構成
 
-```
+```text
 server-monitor/
 └── terraform/
     ├── environments/

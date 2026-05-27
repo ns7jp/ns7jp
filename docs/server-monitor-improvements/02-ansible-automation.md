@@ -31,7 +31,7 @@ Ansible 化により、**構成を「コード」として宣言** し、`ansibl
 
 ## 3. ディレクトリ構成
 
-```
+```text
 server-monitor/
 ├── ansible/
 │   ├── ansible.cfg
@@ -171,7 +171,7 @@ ansible-vault edit group_vars/all/vault.yml
 
 各ロールに Molecule テストを付ける。
 
-```
+```text
 roles/common/
 ├── tasks/
 ├── handlers/
