@@ -104,13 +104,22 @@ flowchart TB
 | 構成管理 | Ansible playbook で OS / ミドルウェア設定を冪等化 | [02-ansible-automation.md](./server-monitor-improvements/02-ansible-automation.md) |
 | ログ | Loki + Promtail を追加し、メトリクスとログを 1 画面に | [01-loki-log-aggregation.md](./server-monitor-improvements/01-loki-log-aggregation.md) |
 | トレース | Tempo + OpenTelemetry で Exemplars 連動の解析動線 | [06-observability-traces.md](./server-monitor-improvements/06-observability-traces.md) |
+| メタ監視 | Healthchecks.io / UptimeRobot で監視の監視を冗長化 | [12-meta-monitoring.md](./server-monitor-improvements/12-meta-monitoring.md) |
 | 冗長化 | 2 AZ 構成 + ALB によるアクティブ-スタンバイ | [05-backup-recovery-drill.md](./server-monitor-improvements/05-backup-recovery-drill.md) |
 | 信頼性指標 | SLO / SLI / エラーバジェット導入 | [04-slo-design.md](./server-monitor-improvements/04-slo-design.md) |
+| キャパ計画 | k6 で SLO 限界値を実測、Rightsizing と連動 | [10-capacity-planning.md](./server-monitor-improvements/10-capacity-planning.md) |
 | 障害運用 | インシデント宣言・ポストモーテム・月次レビュー | [07-incident-response.md](./server-monitor-improvements/07-incident-response.md) |
+| 変更管理 | Standard / Normal / Emergency 区分、PR ベース CAB | [11-change-management.md](./server-monitor-improvements/11-change-management.md) |
 | バックアップ | EBS スナップショット → S3、定期復旧演習 | [05-backup-recovery-drill.md](./server-monitor-improvements/05-backup-recovery-drill.md) |
+| DB 運用 | mysqldump + binlog で PITR、スロークエリ調査 | [14-database-operations.md](./server-monitor-improvements/14-database-operations.md) |
+| ネットワーク | TLS 期限監視、SG 棚卸し、SSM Session Manager | [15-network-operations.md](./server-monitor-improvements/15-network-operations.md) |
+| カオス / Game Day | pumba / AWS FIS で「気付ける設計」を実証 | [17-chaos-engineering.md](./server-monitor-improvements/17-chaos-engineering.md) |
 | セキュリティ | 脆弱性スキャン CI、監査ログ、SSO、シークレットローテーション | [09-security-operations.md](./server-monitor-improvements/09-security-operations.md) |
+| ID 運用 | ID ライフサイクル、IAM Identity Center、特権管理 | [16-identity-operations.md](./server-monitor-improvements/16-identity-operations.md) |
+| コスト | タグ規約、Budgets / Anomaly Detection、Rightsizing 月次 | [13-finops.md](./server-monitor-improvements/13-finops.md) |
 | CI/CD | Terraform + Ansible + セキュリティスキャンを GitHub Actions から適用 | 同上 |
 | 中長期発展 | Kubernetes / EKS（学習ロードマップ） | [08-kubernetes-roadmap.md](./server-monitor-improvements/08-kubernetes-roadmap.md) |
+| 技術選定根拠 | 主要な技術選定の比較・採否を ADR で記録 | [ADR 一覧](./adr/README.md) |
 
 ---
 
@@ -145,5 +154,7 @@ flowchart LR
 
 ## 関連ドキュメント
 
-- [server-monitor 改善計画 一覧](./server-monitor-improvements/README.md)
+- [server-monitor 改善計画 一覧（17 本 + ADR 8 本）](./server-monitor-improvements/README.md)
+- [ADR（アーキテクチャ決定記録）一覧](./adr/README.md)
 - [資格取得ロードマップ](./certifications/roadmap.md)
+- [現場経験 ↔ インフラ運用 橋渡し](./career-bridge.md)
