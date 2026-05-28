@@ -29,7 +29,7 @@ const errors = [];
 
 for (const file of walk(root)) {
   const text = readFileSync(file, 'utf8');
-  const re = /```mermaid\n([\s\S]*?)```/g;
+  const re = /```mermaid\r?\n([\s\S]*?)```/g;
   let m;
   let idx = 0;
   while ((m = re.exec(text)) !== null) {

@@ -17,7 +17,7 @@ v1.0 はメトリクス中心で、障害時のログ調査は SSH + `journalctl
 
 ## 2. Decision
 
-**Grafana Loki + Promtail** を採用する（[01 設計書](../server-monitor-improvements/01-loki-log-aggregation.md)）。
+**Grafana Loki + Grafana Alloy** を採用する（[01 設計書](../server-monitor-improvements/01-loki-log-aggregation.md)）。
 
 ---
 
@@ -43,7 +43,7 @@ v1.0 はメトリクス中心で、障害時のログ調査は SSH + `journalctl
 2. **ラベルベース索引**：全文インデックスを持たず、Prometheus と同じラベル思想。ストレージコストが ELK の 10 分の 1 程度
 3. **PromQL に近い LogQL**：Prometheus を理解していればすぐ書ける
 4. **軽量**：単一プロセス、個人ホストでも余裕で動く
-5. **Promtail / Grafana Agent / Fluent Bit 等の多様な収集元**：柔軟
+5. **Alloy / Fluent Bit 等の多様な収集元**：柔軟
 
 ### 4.2 Trace 連携の重要性
 

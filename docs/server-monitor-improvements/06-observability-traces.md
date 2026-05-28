@@ -8,7 +8,7 @@
 | 観点 | 現状 / 計画 |
 | --- | --- |
 | Metrics | Prometheus + node-exporter（実装済み） |
-| Logs | Loki + Promtail（[01](./01-loki-log-aggregation.md) で追加予定） |
+| Logs | Loki + Grafana Alloy（[01](./01-loki-log-aggregation.md) で追加済み） |
 | Traces | **未整備** |
 
 トレースが無いと、レイテンシ悪化時に「Nginx か、Gunicorn か、アプリ内のどの処理か」を切り分けるために SSH + 個別ログ調査が必要になり、[04. SLO](./04-slo-design.md) で定義する `p95 < 500ms` の改善活動に時間がかかる。

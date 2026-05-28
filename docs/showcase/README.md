@@ -4,10 +4,28 @@
 >
 > 採用ご担当者様が **数十秒で** 「何ができる人か」を判断できるよう、主要画面と動作のサンプルをまとめたページです。
 >
+> - **実機キャプチャ**：実際に動作している画面やログのみ掲載します
 > - **テキストモックアップ部分**：設計済みの内容を ASCII で先行表示しています
 > - **実機キャプチャ予定**：[server-monitor](https://github.com/ns7jp/server-monitor) 本体への [改善計画](../server-monitor-improvements/README.md) 実装が進むタイミングで、実画面のスクリーンショットへ差し替えます
 >
 > 「実物（既に動いているもの）」「設計サンプル」「未実装の計画」を **混同せず提示する** ことを意識しています。
+
+---
+
+## 実機キャプチャ / 採録予定
+
+| 区分 | 内容 | 状態 | 証跡 |
+| --- | --- | --- | --- |
+| 実機 | Server Monitor UI | 掲載済み | [server-monitor screenshot](https://github.com/ns7jp/server-monitor/blob/main/docs/screenshot.png) |
+| 実機予定 | Grafana 統合監視 dashboard | 採録待ち | `server-monitor/docs/evidence/` |
+| 実機予定 | Alertmanager / Slack 通知 | 採録待ち | `server-monitor/docs/evidence/` |
+| 実機予定 | D-1 / D-2 復旧演習ログ | テンプレート整備済み | `server-monitor/docs/drills/logs/` |
+| 実機予定 | AWS apply / destroy / Cost Explorer | テンプレート整備済み | `server-monitor/docs/evidence/` |
+
+![Server Monitor Dashboard](https://raw.githubusercontent.com/ns7jp/server-monitor/main/docs/screenshot.png)
+
+採録時は秘密値、公開 IP、AWS account ID、個人名をマスクし、対象 commit と
+実行日時を必ず併記します。
 
 ---
 

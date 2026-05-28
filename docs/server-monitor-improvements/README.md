@@ -5,6 +5,7 @@
 実環境での検証証跡が未収録の内容を分けて管理する。
 
 ## 対応状況
+
 技術選定の根拠は [ADR（アーキテクチャ決定記録）](../adr/README.md) に分離して記録しています。
 
 ---
@@ -26,11 +27,12 @@
 - 証跡は server-monitor の
   [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
   に沿って採録する。
+
 ### 運用基盤の強化（v1.1 〜 v2.0 実装対象）
 
 | # | テーマ | 目的 | 想定工数 | 優先度 |
 | --- | --- | --- | --- | --- |
-| 01 | [Loki + Promtail によるログ集約](./01-loki-log-aggregation.md) | メトリクスとログを同一ダッシュボードで可視化 | 約 2 週間 | 高 |
+| 01 | [Loki + Grafana Alloy によるログ集約](./01-loki-log-aggregation.md) | メトリクスとログを同一ダッシュボードで可視化 | 約 2 週間 | 高 |
 | 02 | [Ansible による構成管理自動化](./02-ansible-automation.md) | 手順書をコード化し、再現性と移植性を確保 | 約 3 週間 | 高 |
 | 03 | [AWS + Terraform 化](./03-terraform-aws.md) | クラウド + IaC への移行（学習要素を兼ねる） | 約 4 週間 | 中 |
 | 04 | [SLO / SLI / エラーバジェット設計](./04-slo-design.md) | 「何を守るか」を数値で定義し、運用品質を可視化 | 約 1 週間 | 中 |
@@ -67,9 +69,10 @@
 3. 承認された短時間 AWS 検証で `apply` / `destroy` と Cost Explorer 実費を記録する。
 4. 外部 probe と中央 telemetry の構成を追加した後、AWS 向け SLO を再定義する。
 
-## 関連ドキュメント
+## 主要リンク
 
 - [アーキテクチャ図（実装済み構成 / 検証境界）](../architecture-diagram.md)
+
 ## 全体ロードマップ
 
 ```mermaid

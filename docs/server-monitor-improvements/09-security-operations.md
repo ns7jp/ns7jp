@@ -117,7 +117,7 @@ jobs:
 
 | 頻度 | 確認内容 | 担当 |
 | --- | --- | --- |
-| 日次（自動） | SSH 失敗回数の異常スパイク、外部 IP からの sudo | Promtail + Alertmanager |
+| 日次（自動） | SSH 失敗回数の異常スパイク、外部 IP からの sudo | Grafana Alloy + Alertmanager |
 | 週次 | 不審な API コール（IAM 変更、Security Group 変更） | 運用者（30 分） |
 | 月次 | アカウント・権限の棚卸し | 運用者（1 時間） |
 
