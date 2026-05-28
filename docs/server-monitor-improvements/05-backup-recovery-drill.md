@@ -1,5 +1,9 @@
 # 05. バックアップ・復旧演習
 
+> 状態更新（2026-05-27）: backup verification CI、D-1 script、D-2 runbook と
+> 記録テンプレートは [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
+> 実際の D-1 / D-2 実行ログおよび RTO / RPO 実測はまだ収録されていない。
+
 ## 1. 背景
 
 現状の server-monitor には `docs/architecture.md` 配下に **バックアップ復旧設計** が記載されているが、これは **「設計だけ」** の段階。

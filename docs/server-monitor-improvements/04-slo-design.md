@@ -1,5 +1,10 @@
 # 04. SLO / SLI / エラーバジェット設計
 
+> 状態更新（2026-05-27）: recording rules、burn-rate alerts、Grafana dashboard、
+> runbooks は [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
+> 現行 blackbox-exporter は対象と同一ホスト内のラボ観測点であり、AWS の利用者視点 SLO
+> を主張するには外部 synthetic probe の追加と証跡が必要である。
+
 ## 1. 背景
 
 現状の server-monitor は「障害アラート」は仕込んでいるが、**「どこまでの品質を守るべきか」** の合意水準（SLO）が定義されていない。
@@ -21,7 +26,7 @@
 | **SLI** (Service Level Indicator) | サービス品質の指標 | 月間可用性 |
 | **SLO** (Service Level Objective) | SLI に対する目標値 | 月間可用性 99.5% |
 | **SLA** (Service Level Agreement) | 契約上の保証値（通常 SLO より緩い） | 月間可用性 99.0%、下回ったら返金 |
-| **エラーバジェット** | SLO 達成のために許容される「失敗の量」 | 99.5% SLO → 月 219 分の失敗を許容 |
+| **エラーバジェット** | SLO 達成のために許容される「失敗の量」 | 99.5% SLO → 30 日窓で 216 分の失敗を許容 |
 
 ---
 
@@ -46,7 +51,7 @@ server-monitor は **社内向け監視ダッシュボード**。以下の特性
 | --- | --- |
 | SLI 定義 | `(ALB の 2xx + 3xx + 4xx) / 全リクエスト` を 1 分粒度で集計 |
 | 計測方法 | Prometheus blackbox-exporter で `/health` を 30 秒毎にプローブ |
-| SLO | **月間 99.5%**（許容ダウンタイム：219 分 / 月） |
+| SLO | **30 日窓で 99.5%**（許容ダウンタイム：216 分） |
 | 例外 | 計画停止（事前周知 + 早朝 / 週末）は分母から除外 |
 
 ### 4.2 レイテンシ SLI/SLO

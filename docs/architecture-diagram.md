@@ -1,51 +1,57 @@
-# アーキテクチャ図：現状と将来構想
+# アーキテクチャ図：実装済み構成と検証境界
 
-サーバー監視ラボ（[server-monitor](https://github.com/ns7jp/server-monitor)）の **現状構成** と、改善後の **将来構想** を一枚絵で示します。
+サーバー監視ラボ（[server-monitor](https://github.com/ns7jp/server-monitor)）について、
+構成コードとして実装した範囲と、実環境での証跡をまだ必要とする範囲を分けて示す。
 
----
-
-## 現状構成（v1.0：単一ホスト Docker Compose）
+## ローカルラボ構成（Docker Compose に実装済み）
 
 ```mermaid
 flowchart TB
-    User[運用者] -->|HTTPS| Nginx
+    User[運用者] -->|Basic auth| Nginx[Nginx :8080]
 
-    subgraph Host[単一ホスト Ubuntu Server]
-        Nginx[Nginx<br/>リバースプロキシ<br/>TLS 終端]
-        Nginx -->|Basic 認証| App[Flask Dashboard<br/>Gunicorn]
-        Nginx -->|Bearer Token| Prom[Prometheus]
-
-        App -.読込.-> Prom
-        NodeExp[node-exporter] --> Prom
+    subgraph Host[Linux Docker host]
+        Nginx --> App[Flask + Gunicorn]
+        Prom[Prometheus] -->|Bearer token /metrics| App
+        Node[node-exporter] --> Prom
+        Probe[blackbox-exporter] -->|GET /healthz| Nginx
+        Probe --> Prom
         Prom --> Alert[Alertmanager]
         Prom --> Grafana[Grafana]
-
-        Alert -->|Webhook| Slack[Slack 通知]
+        Alloy[Grafana Alloy] -->|logs| Loki[Loki]
+        Loki --> Grafana
     end
-
-    style Host stroke-dasharray: 5 5
 ```
 
-| 観点 | 現状 |
+| 観点 | 状態 |
 | --- | --- |
-| 配備 | 単一ホスト + Docker Compose |
-| メトリクス | Prometheus + node-exporter |
-| 可視化 | Grafana |
-| 通知 | Alertmanager → Slack |
-| 認証 | Basic 認証 + Bearer Token |
-| TLS | Nginx で終端 |
-| CI | GitHub Actions（pytest・設定検証） |
-| 構築手順 | Markdown 手順書 |
+| Metrics / alerts | Prometheus、Alertmanager、rules を実装 |
+| Logs | Loki + Grafana Alloy を実装。Promtail は 2026-03-02 の EOL に伴い不採用 |
+| SLO | blackbox-exporter、burn-rate rules、dashboard を実装 |
+| 構成管理 | Ansible roles / playbook を実装 |
+| 実測 | Docker 起動、演習 RTO、full Molecule の採録は未収録 |
 
----
+blackbox-exporter は対象サービスと同じホスト内にあるため、ラボでのアプリ停止は測れるが、
+ホスト全停止を外部利用者の視点から測定できない。この SLO はラボ内観測として扱う。
 
-## 将来構想（v2.0：AWS + Terraform + Ansible + Loki + 冗長化）
+## AWS Terraform 構成（コード実装済み、適用証跡は未収録）
 
 ```mermaid
 flowchart TB
-    User[運用者] -->|HTTPS| ALB
+    User[運用者] -->|HTTPS| ALB[Application Load Balancer]
 
     subgraph AWS[AWS ap-northeast-1]
+        ALB --> A[EC2 AZ-1a<br/>app target + local lab stack]
+        ALB --> C[EC2 AZ-1c<br/>app target + local lab stack]
+        A -.AWS metrics.-> CW[CloudWatch alarms]
+        C -.AWS metrics.-> CW
+        CW --> SNS[SNS notification]
+        A -.snapshot.-> Backup[AWS Backup]
+        C -.snapshot.-> Backup
+        Trail[CloudTrail + GuardDuty]
+        Budget[AWS Budgets] --> SNS
+    end
+
+    Future[External synthetic probe<br/>and central telemetry store] -.required for production SLO.-> ALB
         ALB[Application Load Balancer]
         ALB --> EC2A
         ALB --> EC2B
@@ -98,8 +104,12 @@ flowchart TB
     style AWS stroke-dasharray: 5 5
 ```
 
-| 観点 | 改善内容 | 参照 |
+| 観点 | 実装済み | まだ主張しないこと |
 | --- | --- | --- |
+| IaC | VPC / ALB / EC2 / Backup / CloudWatch / CloudTrail / GuardDuty / Budgets | AWS での apply 成功、実費 |
+| 可用性 | ALB health / CloudWatch alarm のコード | 外部 synthetic probe による利用者視点 SLO |
+| データ | 各 EC2 のローカル Compose 構成 | 複数 EC2 をまたぐ metrics / logs の中央正本 |
+| 復旧 | AWS Backup とランブックのコード・文書 | 復旧演習の RTO / RPO 実測 |
 | インフラ | AWS 上に Terraform で構築（IaC） | [03-terraform-aws.md](./server-monitor-improvements/03-terraform-aws.md) |
 | 構成管理 | Ansible playbook で OS / ミドルウェア設定を冪等化 | [02-ansible-automation.md](./server-monitor-improvements/02-ansible-automation.md) |
 | ログ | Loki + Promtail を追加し、メトリクスとログを 1 画面に | [01-loki-log-aggregation.md](./server-monitor-improvements/01-loki-log-aggregation.md) |
@@ -150,10 +160,14 @@ flowchart LR
 4. **AWS + Terraform（v2.0）** — Ansible が出来てから着手することで、クラウド固有部分（Terraform）と OS 内設定（Ansible）を綺麗に分離できる。
 5. **Kubernetes / EKS（v3.0）** — VM ベース AWS 環境を運用したうえで、CKAD / CKA と連動した段階的習得へ進む。
 
----
+ALB の背後で node-local Grafana を複数台運用しても履歴は統合されないため、
+監視データの正本とは扱わない。本番相当へ進める際は外部 probe と AMP / CloudWatch
+Logs または中央 Loki の導入を先に証明する。
 
 ## 関連ドキュメント
 
+- [改善設計の実装対応表](./server-monitor-improvements/README.md)
+- [server-monitor の検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
 - [server-monitor 改善計画 一覧（17 本 + ADR 8 本）](./server-monitor-improvements/README.md)
 - [ADR（アーキテクチャ決定記録）一覧](./adr/README.md)
 - [資格取得ロードマップ](./certifications/roadmap.md)
