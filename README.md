@@ -9,7 +9,6 @@
 | 見る場所 | 何が分かるか | 状態 |
 | --- | --- | --- |
 | [採用ご担当者さまへ（1 枚）](./docs/overview-for-recruiters.md) | 非エンジニアの方向けに「何ができるか」を平易に要約 | 整備済み |
-| [職務経歴書・スキルシート](./docs/resume.md) | 経歴・スキル・資格の応募用サマリ | 整備済み |
 | [server-monitor](https://github.com/ns7jp/server-monitor) | Linux / Docker / 監視 / IaC / 運用文書の実装 | コード実装済み |
 | [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) | 実測済み・未測定を分けた証跡管理 | 証跡追加中 |
 | [アーキテクチャ図](./docs/architecture-diagram.md) | 実装済み構成と本番相当へ足す構成 | 整備済み |
