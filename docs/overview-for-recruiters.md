@@ -48,7 +48,6 @@
 
 ## もっと知りたい方へ
 
-- 経歴・スキルの詳細 — [職務経歴書・スキルシート](./resume.md)
 - 技術の中身 — [ポートフォリオ README](../README.md) / [server-monitor](https://github.com/ns7jp/server-monitor)
 - 現場経験との地続きの説明 — [現場経験 ↔ インフラ運用の橋渡し](./career-bridge.md)
 
