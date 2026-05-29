@@ -150,6 +150,14 @@ gantt
 - Projects：Kanban（学習中 / 受験予約済み / 合格）で全資格を一覧化
 - Wiki：各資格の学習ノート（後輩・転職時の自分用）
 
+### 公開中の学習ログ Issue
+
+- [#5 LPIC-1 101](https://github.com/ns7jp/ns7jp/issues/5)（2026 Q2）
+- [#6 LPIC-1 102](https://github.com/ns7jp/ns7jp/issues/6)（2026 Q2-Q3）
+- [#7 ITIL 4 Foundation](https://github.com/ns7jp/ns7jp/issues/7)（2026 Q3）
+
+CCNA・AWS SAA 以降は、着手時に同じ形式で Issue を作成します。
+
 ---
 
 ## 関連ドキュメント
