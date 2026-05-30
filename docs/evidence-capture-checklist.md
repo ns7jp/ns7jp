@@ -15,6 +15,7 @@
 2. 採録物は **server-monitor 側の [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)** に集約し、本リポジトリからリンクする。
 3. **実物が貯まるまで、改善設計 06–17 に新規テーマを追加しない**（[新規設計を増やさない運用ルール](#新規設計を増やさない運用ルール)）。
 4. 「設計サンプル」と「実測証跡」を**絶対に混同しない**（既存の honesty 方針を踏襲）。
+5. 証跡を追加する変更は、server-monitor の PR テンプレートに沿って、変更理由・確認結果・ロールバック・証跡リンクを残す。
 
 ---
 
@@ -30,6 +31,20 @@
 | 6 | `terraform apply` → `destroy` と **Cost Explorer の実費** | 承認済み AWS アカウント | 数十〜数百円 | [03 AWS + Terraform](./server-monitor-improvements/03-terraform-aws.md) |
 
 > 1〜5 は**すべて無料・ローカル完結**です。まずここを全部埋めるだけで、ポートフォリオの説得力は段違いになります。6 は費用と承認が要るため最後で構いません。
+
+---
+
+## 完了条件
+
+採録 1 件ごとに、次を満たしたら「実測証跡」として扱います。
+
+| 条件 | 内容 |
+| --- | --- |
+| 再現性 | 実行コマンド、対象 commit、環境、実行日時が残っている |
+| 結果 | 成功 / 失敗、所要時間、主要ログまたはスクリーンショットがある |
+| 安全性 | 秘密値、公開 IP、AWS account ID、個人名、webhook URL がマスク済み |
+| 導線 | `server-monitor/docs/evidence/README.md` または `docs/drills/logs/` から辿れる |
+| 変更管理 | PR 本文に確認結果、影響範囲、ロールバック、証跡リンクがある |
 
 ---
 
@@ -122,3 +137,5 @@
 - [学習の一次記録（つまずきログ）](../LEARNINGS.md)
 - [改善設計の実装対応表](./server-monitor-improvements/README.md)
 - [server-monitor 検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
+- [server-monitor ローカル証跡採録ガイド](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/local-evidence-quickstart.md)
+- [server-monitor 変更管理ミニ運用](https://github.com/ns7jp/server-monitor/blob/main/docs/change-management.md)

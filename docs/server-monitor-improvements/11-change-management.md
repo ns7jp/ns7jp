@@ -1,5 +1,12 @@
 # 11. 変更管理プロセス
 
+> **反映状況**
+>
+> server-monitor 側に、第一段階として PR テンプレート、Change request Issue、
+> Evidence capture Issue、[変更管理ミニ運用](https://github.com/ns7jp/server-monitor/blob/main/docs/change-management.md)
+> を追加しました。CAB など組織前提の部分は設計サンプルとして残し、個人ラボでは
+> PR / Issue による軽量 Change Enablement として運用します。
+
 ## 1. 背景・課題
 
 server-monitor は **「障害対応プロセス」（[07](./07-incident-response.md)）** はあるが、**「平常時の変更」をどう統制するか** が定義されていない。
