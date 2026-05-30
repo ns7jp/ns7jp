@@ -57,4 +57,12 @@
 
 After 10+ years on manufacturing and logistics floors — where I cut about one hour of daily work by measuring, improving, and standardizing — I now apply the same approach to IT. I build and operate Linux server-monitoring stacks (Prometheus / Grafana / Loki / Docker) and write the runbooks and FAQs that let anyone respond when something breaks.
 
-I am targeting IT support, internal IT, and infrastructure-operations roles, and I am steadily turning designs into measured, evidence-backed results. Details: [resume](./resume.md) and [server-monitor](https://github.com/ns7jp/server-monitor).
+I am targeting IT support, internal IT, and infrastructure-operations roles, and I am steadily turning designs into measured, evidence-backed results. Details: [portfolio README](../README.md) and [server-monitor](https://github.com/ns7jp/server-monitor).
+
+---
+
+## ご連絡先 / Contact
+
+- GitHub: [github.com/ns7jp](https://github.com/ns7jp)
+- ポートフォリオサイト: [ns7jp.github.io](https://ns7jp.github.io/)
+- メール: `（公開用メールアドレスを記入）`
