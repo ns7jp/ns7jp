@@ -17,6 +17,7 @@
 | 03 | [AWS + Terraform](./03-terraform-aws.md) | network / compute / alb / monitoring / backup modules、dev / prod | `apply` / `destroy` と実費は未収録 |
 | 04 | [SLO / SLI](./04-slo-design.md) | blackbox、recording / burn-rate rules、dashboard、runbooks | 同一ホスト内のラボ SLI。外部 probe による SLO は未実装 |
 | 05 | [バックアップ・復旧演習](./05-backup-recovery-drill.md) | backup verification CI、D-1 script、D-2 runbook、templates | D-1 / D-2 の RTO / RPO 実測は未収録 |
+| 11 | [変更管理プロセス](./11-change-management.md) | PR テンプレート、Change request / Evidence capture Issue、変更管理ミニ運用 | PR ごとの検証・ロールバック・証跡リンクを蓄積する |
 
 ## 重要な更新
 
@@ -24,6 +25,8 @@
 - AWS Terraform はコードとして用意されているが、稼働中の環境や費用実績を示すものではない。
 - AWS の本番相当 SLO では、対象 EC2 外からの synthetic probe と中央 metrics / logs
   保存先が必要であり、現時点では追加実装・検証対象である。
+- 変更管理は CAB など組織前提の部分を設計サンプルとして残しつつ、個人ラボでは
+  PR / Issue テンプレートで実運用できる軽量版へ落とし込んだ。
 - 証跡は server-monitor の
   [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
   に沿って採録する。

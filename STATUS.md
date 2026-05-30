@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-05-30（証跡採録チェックリスト・デモ動画台本・学習の一次記録 LEARNINGS.md を追加、README / overview に連絡先を追加、壊れた resume リンクを修正、証跡採録フェーズへ移行）
+最終更新：2026-05-30（README 冒頭を「まず見る 3 つ」へ圧縮、志望トラックを明確化、server-monitor 側に変更管理・証跡採録導線を追加）
 
 ---
 
@@ -30,6 +30,8 @@
 | 学習の一次記録 LEARNINGS.md | ✅ 追加（記録中） |
 | README / overview の連絡先 / CTA | ✅ 追加 |
 | overview の壊れた resume リンク | ✅ 修正 |
+| 志望トラックと証跡の対応 | ✅ 完了（インフラ運用を第一志望として明示） |
+| 変更管理の実物化 | ✅ server-monitor 側に PR テンプレート / 変更管理ミニ運用を追加 |
 
 ### 未対応 / 将来対応（証跡採録フェーズ）
 
@@ -38,7 +40,7 @@
 - [ ] **実機の実測証跡を採録**（[#8](https://github.com/ns7jp/ns7jp/issues/8) で管理。[チェックリスト](./docs/evidence-capture-checklist.md) の優先 1〜5 は無料・ローカルで実施可能）
 - [ ] **デモ動画を収録**（[台本](./docs/demo-script.md) 整備済み。最優先の差別化要素）
 - [ ] **LEARNINGS.md に一次体験を記入**（つまずきの生ログで信頼性を裏付け）
-- [ ] **志望トラックの配分を判断**（Linux / SRE を主軸に、社内 SE / Windows の最小証跡を確保するか）
+- [ ] 応募先に応じて **社内 SE / Windows の最小証跡を追加**（PowerShell / AD / M365 など）
 - [ ] 業務改善レポートの **想定値部分を実数に置き換え**（記憶 / 当時の上長への確認次第）
 - [ ] IT サポート資料を **実体験ベース** に書き換え（IT サポート業務に従事してから）
 - [ ] 資格ロードマップの日程確定（学習着手後に随時更新）
@@ -72,7 +74,7 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 | v1.3 | セキュリティ運用プロセス | ⬜ 設計のみ・実装未着手 | [09](./docs/server-monitor-improvements/09-security-operations.md) |
 | v3.0 | Kubernetes / EKS 発展計画 | ⬜ 学習ロードマップ段階（2027 Q2 着手予定） | [08](./docs/server-monitor-improvements/08-kubernetes-roadmap.md) |
 | v1.1 | メタモニタリング（監視の監視） | ⬜ 設計のみ・実装未着手 | [12](./docs/server-monitor-improvements/12-meta-monitoring.md) |
-| v1.2 | 変更管理プロセス | ⬜ 設計のみ・実装未着手 | [11](./docs/server-monitor-improvements/11-change-management.md) |
+| v1.2 | 変更管理プロセス | ✅ PR / Issue テンプレートとミニ運用を server-monitor 側へ追加 | [11](./docs/server-monitor-improvements/11-change-management.md) |
 | v1.3 | キャパシティプランニング・負荷試験 | ⬜ 設計のみ・実装未着手 | [10](./docs/server-monitor-improvements/10-capacity-planning.md) |
 | v1.3 | データベース運用設計 | ⬜ 設計のみ・実装未着手 | [14](./docs/server-monitor-improvements/14-database-operations.md) |
 | v1.3 | カオスエンジニアリング / Game Day | ⬜ 設計のみ・実装未着手 | [17](./docs/server-monitor-improvements/17-chaos-engineering.md) |
