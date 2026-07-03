@@ -127,7 +127,7 @@ Logs または中央 Loki の導入を先に証明する。
 - [改善設計の実装対応表](./server-monitor-improvements/README.md)
 - [server-monitor の検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
 - [外部 probe / 中央 telemetry 設計](https://github.com/ns7jp/server-monitor/blob/main/docs/external-probe-central-telemetry.md)
-- [server-monitor 改善計画 一覧（17 本 + ADR 8 本）](./server-monitor-improvements/README.md)
+- [server-monitor 改善計画 一覧](./server-monitor-improvements/README.md)（中長期テーマ 4 本は [ロードマップ](./roadmap/README.md) へ分離）
 - [ADR（アーキテクチャ決定記録）一覧](./adr/README.md)
 - [資格取得ロードマップ](./certifications/roadmap.md)
 - [現場経験 ↔ インフラ運用 橋渡し](./career-bridge.md)

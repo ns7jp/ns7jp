@@ -1,5 +1,11 @@
 # 09. セキュリティ運用プロセス
 
+> **組織前提の扱い**
+>
+> 退職者管理・複数人でのレビュー分担など、組織を前提とした記述は
+> **組織適用時の設計サンプル** である。個人ラボでは §6.2「個人ラボでの読み替え」の
+> 軽量版で運用する。
+
 ## 1. 背景・課題
 
 現状の server-monitor は **個別のセキュリティ設定** は十分に施されている。
@@ -49,7 +55,7 @@ flowchart TB
 | Docker イメージ | Trivy（GitHub Actions） | PR 毎 + 日次 cron | Slack（High/Critical） |
 | Python 依存（pip） | Dependabot + `pip-audit` | 週次 | GitHub PR 自動作成 |
 | OS パッケージ | `unattended-upgrades`（自動） + 月次手動レビュー | 自動 + 月次 | 月次レポート |
-| Terraform | tfsec / checkov | PR 毎 | PR ブロック |
+| Terraform | Trivy（misconfig スキャン）/ checkov | PR 毎 | PR ブロック |
 | Ansible | ansible-lint + `community.general.cve` | PR 毎 | PR ブロック |
 | Secrets | gitleaks（pre-commit + CI） | コミット毎 | PR ブロック |
 
@@ -179,29 +185,49 @@ sum by (host) (
 
 | 対象 | 認証統合先 | タイミング |
 | --- | --- | --- |
-| Grafana | OIDC（AWS IAM Identity Center / Google Workspace） | [03](./03-terraform-aws.md) AWS 化と同時 |
-| アプリダッシュボード | OIDC | 同上 |
-| SSH | AWS SSM Session Manager（鍵レス） | 同上 |
+| Grafana | OIDC（第一候補：**Keycloak / Authentik**。自己ホスト・無料・自宅ラボで実構築可能） | v2.0。ラボ内での先行構築も可 |
+| アプリダッシュボード | OIDC（同上） | 同上 |
+| SSH | AWS SSM Session Manager（鍵レス） | [03](./03-terraform-aws.md) AWS 化と同時 |
 
-### 6.1 Grafana OIDC 設定例
+> **注記（2026-07 見直し）**：AWS IAM Identity Center は **組織導入時の選択肢**。
+> カスタムアプリ連携は SAML 2.0 経由であり、Grafana の Generic OAuth と直接統合できる
+> 汎用 OAuth2 / OIDC エンドポイントは公開していないため、ラボの OIDC IdP としては
+> 採用しない（[ADR-0008 の 2026-07 追記](../adr/0008-stepwise-auth.md) 参照）。
+
+### 6.1 Grafana OIDC 設定例（Keycloak）
 
 ```ini
 # grafana.ini
 [auth.generic_oauth]
 enabled = true
-name = AWS IAM Identity Center
+name = Keycloak
 client_id = ${OAUTH_CLIENT_ID}
 client_secret = ${OAUTH_CLIENT_SECRET}
 scopes = openid email profile
-auth_url = https://example.awsapps.com/start/oauth2/authorize
-token_url = https://example.awsapps.com/start/oauth2/token
-api_url = https://example.awsapps.com/start/oauth2/userInfo
+auth_url = https://keycloak.example.com/realms/monitor/protocol/openid-connect/auth
+token_url = https://keycloak.example.com/realms/monitor/protocol/openid-connect/token
+api_url = https://keycloak.example.com/realms/monitor/protocol/openid-connect/userinfo
 allowed_domains = ns7jp.example.com
 allow_sign_up = false
 role_attribute_path = contains(groups[*], 'monitor-admin') && 'Admin' || 'Viewer'
 ```
 
+Keycloak 側は realm `monitor` に confidential client を作成し、Group Membership マッパーで
+`groups` クレームをトークンに含める（`role_attribute_path` が参照する）。
+
 **退職時運用**：人事から退職連絡 → IdP 側の Group から外す → Grafana / アプリ / AWS 全停止が即時連動。
+
+### 6.2 個人ラボでの読み替え
+
+[11 変更管理](./11-change-management.md) と同じ方式で、組織前提の記述は設計サンプルとして
+残し、個人ラボでは以下の軽量版に読み替えて運用する。
+
+| 組織前提の記述 | 個人ラボでの運用 |
+| --- | --- |
+| 退職者アカウントの取り残し（§1） | 現状該当者なし（利用者は本人 1 名）。組織適用時の想定シナリオとして記載 |
+| 人事からの退職連絡 → IdP Group 除外（§6） | テストユーザーの無効化演習として実施し、記録を残す |
+| 週次 / 月次レビューの「運用者」（§4 / §8） | すべて本人が実施。結果を Issue に記録し、実施したこと自体を証跡化 |
+| Slack #ops など共有チャンネルへの通知 | 自分宛 Slack 通知 + Issue へのタイムライン記録 |
 
 ---
 
@@ -265,7 +291,7 @@ gantt
 
 ## 10. 完了条件（Definition of Done）
 
-- [ ] Trivy / Dependabot / gitleaks / tfsec が CI で常時動作
+- [ ] Trivy（イメージ + IaC misconfig）/ Dependabot / gitleaks が CI で常時動作（tfsec は Trivy へ置換予定）
 - [ ] High/Critical CVE 発生時に Slack 通知が届く
 - [ ] `docs/security/exceptions.md` に保留 CVE が記録される運用が回っている
 - [ ] 監査ログレビュー手順が `docs/security/audit-review.md` にある

@@ -265,7 +265,7 @@ groups:
 | 2 | Alertmanager Watchdog アラート + Healthchecks.io webhook 連携 |
 | 3 | UptimeRobot で `/health` `/grafana/api/health` の外形監視追加、TLS / DNS モニタ追加 |
 | 4 | 内部メタモニタリングのルール追加（PrometheusDown / AlertmanagerNotificationFailing 等）、ランブック整備 |
-| 5 | 意図的に Prometheus / Alertmanager を停止して **検知できることを実証**（[17 カオス](./17-chaos-engineering.md)と連動） |
+| 5 | 意図的に Prometheus / Alertmanager を停止して **検知できることを実証**（[17 カオス](../roadmap/17-chaos-engineering.md)と連動） |
 
 ---
 
@@ -277,7 +277,7 @@ groups:
 - [ ] TLS 証明書の 30 日前 / 7 日前メール通知が動作確認済み
 - [ ] `PrometheusDown` `AlertmanagerNotificationFailing` 等の内部メタアラートが Prometheus に登録されている
 - [ ] ランブック（`prometheus-down.md` 等）が `server-monitor/docs/runbooks/` に存在
-- [ ] Game Day で **意図的に Prometheus 停止** → 外部から検知できることを実証（[17](./17-chaos-engineering.md)）
+- [ ] Game Day で **意図的に Prometheus 停止** → 外部から検知できることを実証（[17](../roadmap/17-chaos-engineering.md)）
 
 ---
 
@@ -286,7 +286,7 @@ groups:
 - [01 Loki](./01-loki-log-aggregation.md) — Loki 自身のメタモニタリングも本ドキュメントの思想で
 - [04 SLO 設計](./04-slo-design.md) — 監視の SLI / SLO は本ドキュメントで担保
 - [07 インシデント対応](./07-incident-response.md) — メタ監視からの通知が Sev 起点
-- [17 カオスエンジニアリング](./17-chaos-engineering.md) — 検知できることを実証する Game Day
+- [17 カオスエンジニアリング](../roadmap/17-chaos-engineering.md) — 検知できることを実証する Game Day
 - [ADR-0006 監視自前運用](../adr/0006-self-host-monitoring.md)
 
 ---

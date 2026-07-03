@@ -61,7 +61,7 @@
 
 - **設計判断の蓄積**：「ストレージ戦略」「ラベル設計」「Federation」など、自分で考える機会が連続して発生
 - **メタモニタリング設計**（[12](../server-monitor-improvements/12-meta-monitoring.md)）の必然性：「監視そのものが落ちたら？」を真剣に考える契機
-- **コスト最適化スキル**：Prometheus のリテンション、Loki のラベル基数を制御する経験は FinOps（[13](../server-monitor-improvements/13-finops.md)）と直結
+- **コスト最適化スキル**：Prometheus のリテンション、Loki のラベル基数を制御する経験は FinOps（[13](../roadmap/13-finops.md)）と直結
 - **ポートフォリオの厚み**：8 本以上の設計書群が「自前運用の証拠」として揃う
 
 ### 5.2 悪い影響・制約

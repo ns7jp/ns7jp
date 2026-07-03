@@ -38,8 +38,17 @@ jobs:
           path: .lycheecache
           key: cache-lychee-${{ github.sha }}
           restore-keys: cache-lychee-
-      - name: Run lychee link check
+      # ローカル（リポジトリ内）リンク切れは決定的に検出できるため CI を落とす
+      - name: Check local links (blocking)
         uses: lycheeverse/lychee-action@v2
         with:
           args: --cache --max-cache-age 7d --no-progress --offline './**/*.md'
+          fail: true
+      # 外部リンクは相手側の一時障害で揺れるため参考情報として実行（結果はログで確認）
+      - name: Check external links (informational)
+        uses: lycheeverse/lychee-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: --cache --max-cache-age 7d --no-progress './**/*.md'
           fail: false

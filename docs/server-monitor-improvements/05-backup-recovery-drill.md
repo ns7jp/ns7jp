@@ -86,21 +86,114 @@ flowchart TD
 
 ## 6. シナリオ詳細：D-2「ホスト障害」
 
-最も実用度の高い D-2 を詳述する。
+最も実用度の高い D-2 を詳述する。現環境（ローカル Linux + Docker Compose）で
+そのまま実行できる **ローカル Docker 版（§6.1）** と、
+**v2.0（AWS 移行後）に実施する AWS 版（§6.2）** に分ける。
+初回実施と RTO / RPO 実測はローカル Docker 版で行う。
 
-### 6.1 事前準備
+### 6.1 ローカル Docker 版（現環境で実施）
+
+#### 6.1.1 想定シナリオ
+
+> Docker ホストのストレージ障害で、監視スタックのデータボリューム
+> （Grafana DB / Prometheus TSDB）が失われた。
+> コンテナは再作成できるが、データはバックアップからの復元が必要。
+
+- 設定（compose / nginx / rules）は git にあるため復元対象はデータボリュームのみ（§3 の設計方針通り）
+- ボリューム名・ポートは環境により異なるため、`docker volume ls` と compose の公開設定で実名を確認してから実行する
+
+#### 6.1.2 事前準備（バックアップ取得 = RPO 起点）
+
+```bash
+cd ~/server-monitor
+PROJECT=server-monitor                          # compose プロジェクト名
+BACKUP_DIR="$HOME/backups/drill-$(date +%Y%m%d)"
+mkdir -p "$BACKUP_DIR"
+
+# バックアップ取得時刻を記録（この時刻が RPO の起点になる）
+date +%Y-%m-%dT%H:%M:%S | tee "$BACKUP_DIR/backup-timestamp.txt"
+
+# 静止点を作ってからボリュームを tar で退避
+docker compose stop grafana prometheus
+docker run --rm \
+  -v "${PROJECT}_grafana-data":/data:ro -v "$BACKUP_DIR":/backup \
+  alpine tar czf /backup/grafana-data.tar.gz -C /data .
+docker run --rm \
+  -v "${PROJECT}_prometheus-data":/data:ro -v "$BACKUP_DIR":/backup \
+  alpine tar czf /backup/prometheus-data.tar.gz -C /data .
+docker compose start grafana prometheus
+```
+
+#### 6.1.3 障害注入 → 復元
+
+```bash
+# 1. 障害注入：コンテナ停止 + データボリューム破壊（検知計測の起点）
+echo "[$(date +%H:%M:%S)] 障害発生: データボリューム消失"
+docker compose down
+docker volume rm "${PROJECT}_grafana-data" "${PROJECT}_prometheus-data"
+
+# 2. 復元：ボリューム再作成 → バックアップ展開
+docker volume create "${PROJECT}_grafana-data"
+docker volume create "${PROJECT}_prometheus-data"
+docker run --rm \
+  -v "${PROJECT}_grafana-data":/data -v "$BACKUP_DIR":/backup:ro \
+  alpine tar xzf /backup/grafana-data.tar.gz -C /data
+docker run --rm \
+  -v "${PROJECT}_prometheus-data":/data -v "$BACKUP_DIR":/backup:ro \
+  alpine tar xzf /backup/prometheus-data.tar.gz -C /data
+
+# 3. 起動
+docker compose up -d
+```
+
+#### 6.1.4 ヘルスチェック
+
+```bash
+# 全コンテナが Up になっていること
+docker compose ps
+
+# エンドポイント疎通（ポート / 認証は compose の公開設定に合わせる）
+curl -fsS http://localhost:8080/healthz         # アプリ（Nginx 経由）
+curl -fsS http://localhost:3000/api/health      # Grafana
+curl -fsS http://localhost:9090/-/healthy       # Prometheus
+
+# データが戻ったことの確認：
+# - Grafana のダッシュボード一覧が破壊前と一致する
+# - Prometheus にバックアップ取得時刻以前のデータが残っている
+#   （バックアップ以降〜障害までのデータは失われる = 実測 RPO）
+echo "[$(date +%H:%M:%S)] 復旧完了"
+```
+
+#### 6.1.5 RTO / RPO 実測表
+
+| 項目 | 想定 | 実測 |
+| --- | --- | --- |
+| 障害注入 → 検知（`docker compose ps` / アラート） | 2 分 | _要記録_ |
+| ボリューム再作成 + バックアップ展開 | 5 分 | _要記録_ |
+| `docker compose up -d` → 全コンテナ Up | 3 分 | _要記録_ |
+| ヘルスチェック 3 点 OK | 2 分 | _要記録_ |
+| **合計（RTO）** | **12 分** | _要記録_ |
+| **RPO（バックアップ取得時刻 → 障害注入時刻）** | **24 時間以内** | _要記録_ |
+
+### 6.2 AWS 版（v2.0：AWS 移行後に実施）
+
+> 以下の手順は AWS CLI（EBS スナップショット / EC2）前提であり、
+> 現環境（ローカル Linux + Docker Compose）では実行できない。
+> **v2.0（AWS 移行後）に実施する手順** として隔離して残す。
+
+#### 6.2.1 事前準備
 
 - 演習用環境を本番と同等に構築（staging）
 - 「最新のバックアップ」が存在することを確認
 - 関係者（観測役・操作役）の役割分担
 - Slack 演習チャンネルを開設し、時刻を都度記録
 
-### 6.2 想定シナリオ
+#### 6.2.2 想定シナリオ
 
 > staging サーバー `monitor-stg-01` が突如応答しなくなった。
 > 監視ダッシュボード（Grafana / Prometheus）が全停止している。
 
-### 6.3 復旧手順
+#### 6.2.3 復旧手順
 
 ```bash
 # 0. 障害宣言（演習チャンネルへ）
@@ -145,7 +238,7 @@ ansible-playbook -i inventory/staging.yml playbooks/site.yml
 curl -fsS https://monitor-stg.example.com/health
 ```
 
-### 6.4 計測項目
+#### 6.2.4 計測項目
 
 | 項目 | 想定 | 実測 |
 | --- | --- | --- |
@@ -157,7 +250,7 @@ curl -fsS https://monitor-stg.example.com/health
 | ヘルスチェック OK | 5 分 | _要記録_ |
 | **合計（RTO）** | **38 分** | _要記録_ |
 
-### 6.5 演習ログ テンプレート
+### 6.3 演習ログ テンプレート（ローカル版 / AWS 版共通）
 
 ```markdown
 # 復旧演習記録: D-2 ホスト障害

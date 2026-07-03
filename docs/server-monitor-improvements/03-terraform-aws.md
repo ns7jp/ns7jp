@@ -23,7 +23,7 @@
 | IaC | Terraform | クラウド非依存、コミュニティ最大、宣言的 |
 | OS 設定 | Ansible（[02 参照](./02-ansible-automation.md)） | Terraform は OS 内に踏み込まない設計判断 |
 | シークレット | AWS Secrets Manager + Terraform `sensitive` | git に平文を残さない |
-| State 管理 | S3 + DynamoDB ロック | チーム開発を想定した標準構成 |
+| State 管理 | S3 + S3 ネイティブロック（`use_lockfile`） | Terraform 1.11 以降で GA のネイティブロックを第一候補とする。DynamoDB ロックは旧構成（非推奨方向） |
 
 ---
 
@@ -89,7 +89,7 @@ server-monitor/
     │   ├── alb/            # ALB / Target Group / Listener / ACM
     │   ├── monitoring/     # CloudWatch Alarms / SNS
     │   └── backup/         # AWS Backup / S3
-    ├── backend.tf          # remote state (S3 + DynamoDB)
+    ├── backend.tf          # remote state (S3 + ネイティブロック)
     ├── versions.tf         # provider バージョンピン
     └── README.md
 ```
@@ -196,14 +196,19 @@ resource "aws_instance" "monitor" {
 # backend.tf
 terraform {
   backend "s3" {
-    bucket         = "ns7jp-tfstate"
-    key            = "server-monitor/prod/terraform.tfstate"
-    region         = "ap-northeast-1"
-    dynamodb_table = "terraform-lock"
-    encrypt        = true
+    bucket       = "ns7jp-tfstate"
+    key          = "server-monitor/prod/terraform.tfstate"
+    region       = "ap-northeast-1"
+    use_lockfile = true   # S3 ネイティブロック（Terraform 1.11 以降で GA）
+    encrypt      = true
   }
 }
 ```
+
+> **State ロックの更新（2026-07）**：Terraform 1.11 以降は S3 ネイティブロック
+> （`use_lockfile`）が GA となったため、これを第一候補とする。
+> `dynamodb_table` による DynamoDB ロックは旧構成であり、非推奨方向のため
+> 新規構築では採用しない（[ADR-0005 の 2026-07 追記](../adr/0005-terraform-for-iac.md) 参照）。
 
 ---
 
@@ -253,12 +258,15 @@ terraform {
 flowchart LR
     PR[Pull Request] --> Fmt[terraform fmt -check]
     Fmt --> Val[terraform validate]
-    Val --> Sec[tfsec / checkov]
+    Val --> Sec[Trivy misconfig / checkov]
     Sec --> Plan[terraform plan]
     Plan --> Comment[PR にコメントで plan 結果貼付]
     Comment --> Approve[手動承認]
     Approve --> Apply[terraform apply<br/>環境別ジョブ]
 ```
+
+IaC の静的セキュリティスキャンは **Trivy（misconfig スキャン）/ checkov** を推奨とする
+（2026-07 更新：tfsec はメンテナンスモードとなり Trivy への統合が進んでいるため）。
 
 GitHub Actions ワークフロー例（抜粋）
 
@@ -280,7 +288,12 @@ jobs:
       - run: terraform fmt -check -recursive
       - run: terraform init -backend-config=environments/prod/backend.hcl
       - run: terraform validate
-      - uses: aquasecurity/tfsec-action@v1.0.3
+      - uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: '1'
       - run: terraform plan -out=plan.bin
       - run: terraform show -no-color plan.bin > plan.txt
       - uses: marocchino/sticky-pull-request-comment@v2
@@ -298,7 +311,7 @@ jobs:
 | 1 → 0 削除 | `terraform destroy` | リソース完全削除、課金停止 |
 | 障害復旧 | EC2_A を terminate | EC2_B が ALB から応答継続、新 EC2 が自動起動 |
 | バックアップ | EBS スナップショットからの復元 | 最新スナップから 15 分以内に復旧 |
-| セキュリティ | tfsec / checkov | High 以上 0 件 |
+| セキュリティ | Trivy（misconfig）/ checkov | High 以上 0 件 |
 | コスト | Cost Explorer | 月額 5,000 円以内 |
 
 ---
@@ -307,7 +320,7 @@ jobs:
 
 | 週 | 内容 |
 | --- | --- |
-| 1 | AWS アカウント整備、IAM、CloudTrail、tfstate 用 S3 / DynamoDB 構築 |
+| 1 | AWS アカウント整備、IAM、CloudTrail、tfstate 用 S3 構築（ネイティブロック利用のため DynamoDB テーブルは不要） |
 | 2 | `network` モジュール作成、VPC / Subnet 構築 |
 | 3 | `compute` モジュール作成、EC2 起動、Ansible で構成適用 |
 | 4 | `alb` + `monitoring` + `backup` モジュール、動作検証、コスト試算 |
@@ -331,7 +344,7 @@ jobs:
 - [ ] `terraform apply` で AWS 上に環境が再現できる
 - [ ] Ansible playbook で EC2 内の構成が適用できる（[02 参照](./02-ansible-automation.md)）
 - [ ] ALB の DNS にアクセスし、Grafana が表示される
-- [ ] tfsec / checkov が緑（High 0 件）
+- [ ] Trivy（misconfig スキャン）/ checkov が緑（High 0 件）
 - [ ] コスト試算と実測値を `docs/cost-report.md` に記録
 - [ ] AWS Budgets / GuardDuty / CloudTrail が有効
 
@@ -341,4 +354,4 @@ jobs:
 
 - [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
-- [tfsec](https://aquasecurity.github.io/tfsec/)
+- [Trivy Documentation — Misconfiguration Scanning](https://trivy.dev/latest/docs/scanner/misconfiguration/)

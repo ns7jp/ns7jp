@@ -283,7 +283,7 @@ ITIL 4 Foundation 取得（[資格ロードマップ](../certifications/roadmap.
 - [04 SLO 設計](./04-slo-design.md) — エラーバジェット消費で変更凍結を発動
 - [07 インシデント対応](./07-incident-response.md) — Emergency Change と直結
 - [09 セキュリティ運用](./09-security-operations.md) — パッチ管理サイクル
-- [13 FinOps](./13-finops.md) — コスト影響を変更レビューに組込む
+- [13 FinOps](../roadmap/13-finops.md) — コスト影響を変更レビューに組込む
 - [ADR-0004 Ansible 採用](../adr/0004-ansible-for-config.md)
 - [ADR-0005 Terraform 採用](../adr/0005-terraform-for-iac.md)
 

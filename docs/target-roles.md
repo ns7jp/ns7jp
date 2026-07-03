@@ -37,7 +37,11 @@
 
 ## 次に増やす証跡
 
-1. ローカル Linux + Docker で Grafana / Loki / Alertmanager の実画面を採録する。
-2. D-1 プロセス停止演習を実行し、検知から復旧までの実測時間を記録する。
-3. `molecule test` の full 実行結果を採録する。
-4. 応募先に社内 SE が多い場合、PowerShell 実行ログを 1 本追加する。
+順序と手順は [証跡採録チェックリスト](./evidence-capture-checklist.md) に一元化しています（2026-07 見直し）。
+
+1. ローカル Linux + Docker で Grafana / Loki / Alertmanager の実画面を採録する（優先 1〜3。1 晩で可能）。
+2. ネットワーク切り分けの一次メモ（dig / traceroute / ss / tcpdump）を採録する（優先 4。監視運用の一次対応の中核スキル）。
+3. D-1 プロセス停止演習を実行し、検知から復旧までの実測時間を記録する（優先 5）。
+4. `molecule test` の full 実行結果を採録する（優先 6）。
+5. Windows / AD 最小ラボで PowerShell 実行ログを採録する（優先 7。社内 SE トラックの唯一の実行証跡になる）。
+6. AWS `plan → apply → destroy` と Cost Explorer 実費を、優先 1〜3 完了直後の週に 1 日で採録する（優先 8）。

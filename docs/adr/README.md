@@ -30,9 +30,9 @@
 | [0003](./0003-loki-for-logs.md) | ログ集約に Loki を採用 | Accepted | [01 Loki](../server-monitor-improvements/01-loki-log-aggregation.md) |
 | [0004](./0004-ansible-for-config.md) | 構成管理に Ansible を採用 | Accepted | [02 Ansible](../server-monitor-improvements/02-ansible-automation.md) |
 | [0005](./0005-terraform-for-iac.md) | IaC に Terraform を採用 | Accepted | [03 Terraform/AWS](../server-monitor-improvements/03-terraform-aws.md) |
-| [0006](./0006-self-host-monitoring.md) | 監視は自前運用（SaaS にしない） | Accepted | [13 FinOps](../server-monitor-improvements/13-finops.md) |
+| [0006](./0006-self-host-monitoring.md) | 監視は自前運用（SaaS にしない） | Accepted | [13 FinOps](../roadmap/13-finops.md) |
 | [0007](./0007-slack-notifications.md) | 通知チャネルに Slack を採用 | Accepted | [07 インシデント対応](../server-monitor-improvements/07-incident-response.md) |
-| [0008](./0008-stepwise-auth.md) | 認証を Basic → OIDC SSO へ段階移行 | Accepted | [09 セキュリティ運用](../server-monitor-improvements/09-security-operations.md) [16 ID 運用](../server-monitor-improvements/16-identity-operations.md) |
+| [0008](./0008-stepwise-auth.md) | 認証を Basic → OIDC SSO へ段階移行 | Accepted | [09 セキュリティ運用](../server-monitor-improvements/09-security-operations.md) [16 ID 運用](../roadmap/16-identity-operations.md) |
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## 1. 背景・課題
 
-[03 Terraform / AWS](./03-terraform-aws.md) で AWS 化するにあたり、**コスト** の議論が薄い。クラウド案件では「**コストに鈍感なインフラ運用** は実務で歓迎されない」のが現実。
+[03 Terraform / AWS](../server-monitor-improvements/03-terraform-aws.md) で AWS 化するにあたり、**コスト** の議論が薄い。クラウド案件では「**コストに鈍感なインフラ運用** は実務で歓迎されない」のが現実。
 
 | 現状の課題 | リスク |
 | --- | --- |
@@ -13,6 +13,20 @@
 | タグ規約が無い | コスト按分・棚卸しが不可能 |
 
 > ポートフォリオ観点：「**SLO・キャパ・コストの三角関係**」を語れることが、シニア寄りのインフラ運用に必須。
+
+### 1.1 個人ラボでの読み替え
+
+本ドキュメントには組織適用時の設計サンプルを含む。
+[11 変更管理](../server-monitor-improvements/11-change-management.md) の軽量版方式と同じ考え方で、
+個人ラボでは以下に読み替えて運用する。
+
+| 組織前提の記述 | 個人ラボでの運用 |
+| --- | --- |
+| `CostCenter` タグによる部門按分（§4） | 按分先の部門が無いため **`Project` タグのみ運用**。`CostCenter` は組織適用時の設計サンプルとして記載 |
+| Slack #ops への通知（§6） | 自分宛 Slack 通知 + Issue への記録 |
+| IC アサイン検討（§6.1） | 1 人で帽子を掛け替える運用（[07 §3](../server-monitor-improvements/07-incident-response.md) の「1 人体制での運用」を参照） |
+| Owner への確認フロー（§10） | Owner は常に本人のため確認フローは発生しない。組織適用時の設計サンプルとして記載 |
+| 月次レビュー会議体（§9） | 月初の 1 人レビュー。議事録は同じテンプレで残し証跡化 |
 
 ---
 
@@ -37,7 +51,7 @@ flowchart LR
 
 ## 3. v2.0 月額試算（AWS / 単一 AZ + スタンバイ）
 
-[03 Terraform / AWS](./03-terraform-aws.md) の構成での月額見積（東京リージョン、2026 年単価ベース、実費は変動）。
+[03 Terraform / AWS](../server-monitor-improvements/03-terraform-aws.md) の構成での月額見積（東京リージョン、2026 年単価ベース、実費は変動）。
 
 | サービス | リソース | 月額（USD） | 備考 |
 | --- | --- | --- | --- |
@@ -269,7 +283,7 @@ gp2 → gp3 は **同性能で 20% 程度コスト削減** できる典型例。
 4. Compute Optimizer 推奨と適用判断
 5. 不要リソース棚卸し結果
 6. Reserved / Savings Plans カバー率と次月の購入計画
-7. **キャパシティレビューと整合**：[10 §6 月次レビュー](./10-capacity-planning.md) と同会議体
+7. **キャパシティレビューと整合**：[10 §6 月次レビュー](../server-monitor-improvements/10-capacity-planning.md) と同会議体
 
 ### 9.2 議事録テンプレ
 
@@ -351,9 +365,9 @@ flowchart TD
 
 ## 13. 関連設計書・ADR
 
-- [03 Terraform / AWS 化](./03-terraform-aws.md) — 本ドキュメントの実装基盤
-- [10 キャパシティプランニング](./10-capacity-planning.md) — Rightsizing 判断と統合
-- [11 変更管理](./11-change-management.md) — コスト変更も変更管理プロセスに乗せる
+- [03 Terraform / AWS 化](../server-monitor-improvements/03-terraform-aws.md) — 本ドキュメントの実装基盤
+- [10 キャパシティプランニング](../server-monitor-improvements/10-capacity-planning.md) — Rightsizing 判断と統合
+- [11 変更管理](../server-monitor-improvements/11-change-management.md) — コスト変更も変更管理プロセスに乗せる
 - [ADR-0005 Terraform 採用](../adr/0005-terraform-for-iac.md)
 - [ADR-0006 自前運用](../adr/0006-self-host-monitoring.md)
 

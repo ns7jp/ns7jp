@@ -67,7 +67,7 @@ flowchart LR
 | 「カイゼンのリバウンド防止」 | IaC + CI で「設定が手動で戻らない」 | [02. Ansible](./server-monitor-improvements/02-ansible-automation.md) |
 | 棚卸し（実物と帳簿の突合） | 構成棚卸し（Ansible / AWS Config） | [02. Ansible](./server-monitor-improvements/02-ansible-automation.md) [09. セキュリティ運用](./server-monitor-improvements/09-security-operations.md) |
 | 「変えてはいけない時期」の合意 | 変更窓・凍結期間（年末年始・連休前） | [11. 変更管理](./server-monitor-improvements/11-change-management.md) |
-| 想定外への備え（停電演習） | カオスエンジニアリング / Game Day | [17. カオスエンジニアリング](./server-monitor-improvements/17-chaos-engineering.md) |
+| 想定外への備え（停電演習） | カオスエンジニアリング / Game Day | [17. カオスエンジニアリング](./roadmap/17-chaos-engineering.md) |
 
 ### 2.4 セキュリティ・統制（5S → セキュリティ統制）
 
@@ -87,6 +87,21 @@ flowchart LR
 | 繁忙期のピーク対応 | 負荷スパイク時のオートスケール / 帯域制御 | [08. K8s 計画](./server-monitor-improvements/08-kubernetes-roadmap.md) |
 | 棚卸しズレ発生時の原因追跡 | データ不整合時の調査・復旧 | [05. 復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 | 災害時の代替動線 | 2 AZ 冗長化、リージョン障害対応 | [03. Terraform 化](./server-monitor-improvements/03-terraform-aws.md) [05. 復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
+
+### 2.6 監視ツールの転用可能性（Prometheus → Zabbix / JP1）
+
+本ラボは Prometheus / Grafana / Loki（OSS・SRE 系）で構成していますが、国内の監視運用・運用保守の現場では **Zabbix や JP1 系** が使われることも多いと理解しています。ツールは違っても監視の基本概念は対応するため、次の対応で読み替えて習得します。
+
+| 監視の概念 | 本ラボ（Prometheus 系） | Zabbix | JP1 系 |
+| --- | --- | --- | --- |
+| メトリクス収集 | exporter（pull） | Zabbix エージェント / アイテム | JP1/PFM のレコード収集 |
+| 監視対象の登録 | scrape config / service discovery | ホスト登録 + テンプレート | エージェント管理 |
+| 異常判定のルール | alerting rule（PromQL） | トリガー（条件式） | 監視条件・しきい値定義 |
+| 通知・エスカレーション | Alertmanager（ルーティング・抑制） | アクション（段階通知） | JP1/IM の自動アクション |
+| 可視化 | Grafana ダッシュボード | Zabbix ダッシュボード / グラフ | 統合コンソール |
+| ログ監視 | Loki + Alloy | ログ監視アイテム | JP1/Base ログトラップ |
+
+「しきい値を決めて・検知して・通知して・手順書で対応する」という運用の骨格は共通なので、**ツール指定のある現場でも短期間でキャッチアップできる** 前提で学習しています（面接で「うちは Zabbix だが」と問われた際も、この対応表で説明します）。
 
 ---
 
@@ -136,7 +151,7 @@ flowchart LR
 
 - [プロフィール README](../README.md)
 - [業務改善レポート](./business-improvement/picking-improvement.md)
-- [サーバー監視ラボ 改善計画（17 本）](./server-monitor-improvements/README.md)
+- [サーバー監視ラボ 改善計画](./server-monitor-improvements/README.md)（中長期テーマは[ロードマップ](./roadmap/README.md)へ分離）
 - [ADR（技術選定の根拠）](./adr/README.md)
 - [Service Desk Metrics 設計](./it-support/service-desk-metrics.md)
 - [アーキテクチャ図](./architecture-diagram.md)

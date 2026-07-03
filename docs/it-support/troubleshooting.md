@@ -120,9 +120,10 @@ flowchart TD
     F1 --> F2{改善せず?}
     F2 -- Yes --> F3[メモリ増設見積]
 
-    D1 -- ディスク 100% --> G{HDD?}
-    G -- Yes --> G1[SSD 換装提案]
-    G -- No --> G2[インデックス再構築<br/>SuperFetch 設定確認]
+    D1 -- ディスク 100% --> G[Windows Update / Defender /<br/>同期クライアントの動作確認]
+    G --> G0{レガシー HDD 機?}
+    G0 -- Yes --> G1[SSD 換装提案]
+    G0 -- No --> G2[インデックス再構築<br/>SysMain 設定確認]
 
     D1 -- ネットワーク高 --> H[OneDrive 等の同期確認]
     H --> H1[同期一時停止で改善するか]
