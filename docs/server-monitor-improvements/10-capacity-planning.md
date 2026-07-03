@@ -234,7 +234,7 @@ flowchart LR
 - [04 SLO 設計](./04-slo-design.md) — レイテンシ SLO とキャパ判断は連動
 - [07 インシデント対応](./07-incident-response.md) — キャパ枯渇は Sev 案件
 - [11 変更管理](./11-change-management.md) — スケール変更は Standard Change
-- [13 FinOps](./13-finops.md) — スケール判断はコスト判断と一体
+- [13 FinOps](../roadmap/13-finops.md) — スケール判断はコスト判断と一体
 - [ADR-0001 Prometheus 採用](../adr/0001-monitoring-stack.md)
 
 ---

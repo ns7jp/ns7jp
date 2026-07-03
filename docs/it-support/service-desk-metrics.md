@@ -225,7 +225,7 @@ flowchart LR
 | バーンレートアラート | 24h 滞留チケット警告 |
 | 月次 SLO レビュー | 月次 Service Desk レビュー |
 | ポストモーテム（[07](../server-monitor-improvements/07-incident-response.md)） | CSAT 低スコアフォロー |
-| カオスエンジニアリング（[17](../server-monitor-improvements/17-chaos-engineering.md)） | 「IT 担当不在で他者が対応できるか」演習 |
+| カオスエンジニアリング（[17](../roadmap/17-chaos-engineering.md)） | 「IT 担当不在で他者が対応できるか」演習 |
 
 「**インフラ運用も IT サポートも、同じ計測 → 仮説 → 改善のサイクル**」を扱える人材であることを示します。
 

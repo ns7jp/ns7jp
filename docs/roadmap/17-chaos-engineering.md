@@ -2,7 +2,7 @@
 
 ## 1. 背景・課題
 
-[05 復旧演習](./05-backup-recovery-drill.md) は「**計画されたシナリオを練習する**」プロセスだが、それだけでは **「想定外」が起きた時に対応できる組織か** が分からない。
+[05 復旧演習](../server-monitor-improvements/05-backup-recovery-drill.md) は「**計画されたシナリオを練習する**」プロセスだが、それだけでは **「想定外」が起きた時に対応できる組織か** が分からない。
 
 | 復旧演習で分かること | カオスエンジニアリングで分かること |
 | --- | --- |
@@ -35,7 +35,7 @@
 | # | カテゴリ | シナリオ | 期待される反応 |
 | --- | --- | --- | --- |
 | G-1 | プロセス | アプリコンテナを kill | Alertmanager 通知 < 2 分、自動再起動 |
-| G-2 | プロセス | Prometheus を停止 | メタモニタリング（[12](./12-meta-monitoring.md)）が外部通知 |
+| G-2 | プロセス | Prometheus を停止 | メタモニタリング（[12](../server-monitor-improvements/12-meta-monitoring.md)）が外部通知 |
 | G-3 | リソース | CPU 100% 持続 | `HighCpuUsage` アラート、HPA 動作（v3.0） |
 | G-4 | リソース | メモリリーク（OOM） | `OOMKilled` 検知、再起動、根本原因調査ランブック |
 | G-5 | リソース | ディスク満杯（`/var/log`） | `DiskFull` アラート、ローテート確認 |
@@ -200,7 +200,7 @@ flowchart LR
 
 ## 9. メタモニタリングとの連動（G-2）
 
-[12 メタモニタリング](./12-meta-monitoring.md) の検証は Game Day でしか実施できない。
+[12 メタモニタリング](../server-monitor-improvements/12-meta-monitoring.md) の検証は Game Day でしか実施できない。
 
 ```bash
 # G-2: Prometheus を停止
@@ -221,9 +221,9 @@ docker stop server-monitor-prometheus
 | 週 | 内容 |
 | --- | --- |
 | 1 | `docs/game-days/` ディレクトリ整備、テンプレ作成、初回 G-1 を staging で実施 |
-| 2 | G-2 メタモニタリング検証（[12](./12-meta-monitoring.md) との連動） |
+| 2 | G-2 メタモニタリング検証（[12](../server-monitor-improvements/12-meta-monitoring.md) との連動） |
 | 3 | G-3 / G-5（CPU / Disk）でしきい値を実証 |
-| 4 | 結果を [04 SLO](./04-slo-design.md) [07 IR](./07-incident-response.md) と統合レビュー |
+| 4 | 結果を [04 SLO](../server-monitor-improvements/04-slo-design.md) [07 IR](../server-monitor-improvements/07-incident-response.md) と統合レビュー |
 | 月次 | ローテーション運用 |
 | 四半期 | 大規模 Game Day（G-10 以降） |
 | v2.0 | AWS FIS で G-10 G-11 を実施 |
@@ -237,7 +237,7 @@ docker stop server-monitor-prometheus
 - [ ] G-1（コンテナ kill）が staging で実施され、結果が記録されている
 - [ ] G-2（Prometheus 停止）が staging で実施され、メタモニタリングが機能することを実証
 - [ ] Game Day 結果に基づくランブック修正 PR が 1 件以上 merge されている
-- [ ] 月次レビューで Game Day の結果が議題に上がっている（[04 SLO](./04-slo-design.md) [07 IR](./07-incident-response.md) と統合）
+- [ ] 月次レビューで Game Day の結果が議題に上がっている（[04 SLO](../server-monitor-improvements/04-slo-design.md) [07 IR](../server-monitor-improvements/07-incident-response.md) と統合）
 - [ ] 四半期に 1 回、大規模 Game Day（G-10 以降）が計画されている
 
 ---
@@ -257,11 +257,11 @@ docker stop server-monitor-prometheus
 
 ## 13. 関連設計書・ADR
 
-- [04 SLO 設計](./04-slo-design.md) — Game Day はバーンレート検証の機会
-- [05 復旧演習](./05-backup-recovery-drill.md) — 計画演習とカオスは相補的
-- [07 インシデント対応](./07-incident-response.md) — Game Day 結果はインシデントと同じ重さ
-- [10 キャパシティプランニング](./10-capacity-planning.md) — 負荷試験と Game Day は別物（負荷 = 想定内ピーク、カオス = 想定外）
-- [12 メタモニタリング](./12-meta-monitoring.md) — メタ監視は Game Day で初めて実証される
+- [04 SLO 設計](../server-monitor-improvements/04-slo-design.md) — Game Day はバーンレート検証の機会
+- [05 復旧演習](../server-monitor-improvements/05-backup-recovery-drill.md) — 計画演習とカオスは相補的
+- [07 インシデント対応](../server-monitor-improvements/07-incident-response.md) — Game Day 結果はインシデントと同じ重さ
+- [10 キャパシティプランニング](../server-monitor-improvements/10-capacity-planning.md) — 負荷試験と Game Day は別物（負荷 = 想定内ピーク、カオス = 想定外）
+- [12 メタモニタリング](../server-monitor-improvements/12-meta-monitoring.md) — メタ監視は Game Day で初めて実証される
 - [14 DB 運用](./14-database-operations.md) — G-8 / G-9 で DB を試す
 
 ---

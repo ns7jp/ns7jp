@@ -18,7 +18,7 @@ v2.0 で server-monitor を AWS へ移行するにあたり、インフラ構築
 
 **HashiCorp Terraform** を採用する（[03 設計書](../server-monitor-improvements/03-terraform-aws.md)）。
 
-State は S3 + DynamoDB Lock（後述）。モジュール構造は `network / compute / monitoring / iam` で分割する。
+State は S3 + DynamoDB Lock（後述。**2026-07 追記：S3 ネイティブロックへ見直し、§8 参照**）。モジュール構造は `network / compute / monitoring / iam` で分割する。
 
 ---
 
@@ -59,7 +59,7 @@ State は S3 + DynamoDB Lock（後述）。モジュール構造は `network / c
 | 項目 | 採用 | 不採用 |
 | --- | --- | --- |
 | Backend | S3（リージョン：ap-northeast-1） | local（壊れたら復旧不能） |
-| Lock | DynamoDB（state ファイル単位） | なし（複数人で同時 apply 時に破損） |
+| Lock | DynamoDB（state ファイル単位）※2026-07 に S3 ネイティブロックへ見直し（§8） | なし（複数人で同時 apply 時に破損） |
 | 暗号化 | KMS Customer Managed Key | デフォルトの SSE-S3（監査で弱い） |
 | バージョニング | S3 Versioning + MFA Delete | バージョニング無し |
 | State 分割 | env 別 + 機能別（4 モジュール） | 巨大 monolith state |
@@ -70,7 +70,7 @@ State は S3 + DynamoDB Lock（後述）。モジュール構造は `network / c
 
 | ステージ | 内容 |
 | --- | --- |
-| PR 作成 | `terraform fmt -check` / `terraform validate` / `tfsec` / `checkov` |
+| PR 作成 | `terraform fmt -check` / `terraform validate` / `tfsec` / `checkov`（2026-07 追記：tfsec は Trivy misconfig スキャンへ更新、§8） |
 | PR レビュー | `terraform plan` の結果を PR コメントに自動投稿 |
 | Merge | 手動承認（Issue / Slack）後に `terraform apply` |
 | State Drift | 週次で `terraform plan` をスケジュール実行、差分があれば Slack 通知 |
@@ -103,7 +103,32 @@ State は S3 + DynamoDB Lock（後述）。モジュール構造は `network / c
 
 ---
 
-## 8. 参考
+## 8. 2026-07 追記（決定の見直し）
+
+Status は Accepted のまま、周辺技術の変化に合わせて以下 2 点を見直した。
+決定本体（IaC に Terraform を採用）は変更しない。
+
+### 8.1 State ロック：DynamoDB → S3 ネイティブロック
+
+- **トリガー**：Terraform 1.11 で S3 backend のネイティブロック（`use_lockfile`）が GA
+  となり、DynamoDB テーブルによるロック（`dynamodb_table`）は旧構成・非推奨方向となった
+- **見直し内容**：新規構築では `use_lockfile = true` を第一候補とし、ロック専用の
+  DynamoDB テーブルは作成しない。§5 の「Lock: DynamoDB」は当時の判断の記録として残す
+- **影響**：ロック用テーブルが不要になり、構成要素・コスト・IAM 権限が削減される
+  （実装は [03 §5.3](../server-monitor-improvements/03-terraform-aws.md) を更新済み）
+
+### 8.2 IaC セキュリティスキャン：tfsec → Trivy（misconfig）
+
+- **トリガー**：tfsec はメンテナンスモードとなり、同じ Aqua Security の Trivy への統合が
+  進んでいる
+- **見直し内容**：CI の IaC スキャンは **Trivy（misconfig スキャン）/ checkov** を推奨へ
+  更新する（[03 §8](../server-monitor-improvements/03-terraform-aws.md)）
+- **補足**：server-monitor 側で実装済みの tfsec CI は現状動作しているため、置換は次回の
+  CI 整備時に実施する
+
+---
+
+## 9. 参考
 
 - [Terraform Best Practices](https://www.terraform-best-practices.com/)
 - [HashiCorp Learn — Terraform](https://developer.hashicorp.com/terraform/tutorials)

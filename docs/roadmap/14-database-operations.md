@@ -136,7 +136,7 @@ WantedBy=timers.target
 
 ### 4.3 検証
 
-**バックアップは取れただけでは無価値**。週次で **リストアを実演** する（[05 復旧演習](./05-backup-recovery-drill.md) と連動）。
+**バックアップは取れただけでは無価値**。週次で **リストアを実演** する（[05 復旧演習](../server-monitor-improvements/05-backup-recovery-drill.md) と連動）。
 
 ---
 
@@ -237,7 +237,7 @@ flowchart TD
     Verify --> Doc[6. 結果記録]
 ```
 
-→ [11 変更管理](./11-change-management.md) Normal Change として運用。
+→ [11 変更管理](../server-monitor-improvements/11-change-management.md) Normal Change として運用。
 
 ### 7.3 危険な変更（要 Emergency 級レビュー）
 
@@ -278,7 +278,7 @@ flowchart TD
 | 暗号化 | OS 層 | KMS |
 | シークレット | Ansible Vault | Secrets Manager + 自動ローテーション |
 
-→ [03 Terraform / AWS](./03-terraform-aws.md) で RDS モジュール化。
+→ [03 Terraform / AWS](../server-monitor-improvements/03-terraform-aws.md) で RDS モジュール化。
 
 ---
 
@@ -289,7 +289,7 @@ flowchart TD
 | 1 | mysqld-exporter / Grafana ダッシュボード追加、主要メトリクス可視化 |
 | 2 | mysqldump cron + S3 連携、初回ダンプ取得 |
 | 3 | binlog 連続バックアップ、PITR ランブック整備 |
-| 4 | 復旧演習（D-3 シナリオ：データ破壊 → PITR で復旧）を [05](./05-backup-recovery-drill.md) と連動して実施 |
+| 4 | 復旧演習（D-3 シナリオ：データ破壊 → PITR で復旧）を [05](../server-monitor-improvements/05-backup-recovery-drill.md) と連動して実施 |
 | v2.0 | RDS へ移行、自前バックアップは縮退 |
 
 ---
@@ -308,13 +308,13 @@ flowchart TD
 
 ## 12. 関連設計書・ADR
 
-- [01 Loki](./01-loki-log-aggregation.md) — slow query log も Loki に集約
-- [04 SLO 設計](./04-slo-design.md) — DB レイテンシも SLI 候補
-- [05 復旧演習](./05-backup-recovery-drill.md) — DB 復旧演習を D-3 シナリオに追加
-- [07 インシデント対応](./07-incident-response.md) — DB 障害は Sev1-2
-- [09 セキュリティ運用](./09-security-operations.md) — DB シークレットローテーション
-- [10 キャパシティプランニング](./10-capacity-planning.md) — DB は典型的なキャパ枯渇箇所
-- [11 変更管理](./11-change-management.md) — スキーマ変更はすべて Normal Change
+- [01 Loki](../server-monitor-improvements/01-loki-log-aggregation.md) — slow query log も Loki に集約
+- [04 SLO 設計](../server-monitor-improvements/04-slo-design.md) — DB レイテンシも SLI 候補
+- [05 復旧演習](../server-monitor-improvements/05-backup-recovery-drill.md) — DB 復旧演習を D-3 シナリオに追加
+- [07 インシデント対応](../server-monitor-improvements/07-incident-response.md) — DB 障害は Sev1-2
+- [09 セキュリティ運用](../server-monitor-improvements/09-security-operations.md) — DB シークレットローテーション
+- [10 キャパシティプランニング](../server-monitor-improvements/10-capacity-planning.md) — DB は典型的なキャパ枯渇箇所
+- [11 変更管理](../server-monitor-improvements/11-change-management.md) — スキーマ変更はすべて Normal Change
 - [16 ID 運用](./16-identity-operations.md) — DB 接続ユーザーのライフサイクル
 - [17 カオスエンジニアリング](./17-chaos-engineering.md) — DB プロセスキル演習
 
