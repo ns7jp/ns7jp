@@ -107,7 +107,7 @@
 | --- | --- | --- |
 | 2026 Q3 | LPIC-1 101 | [#5](https://github.com/ns7jp/ns7jp/issues/5) |
 | 2026 Q4 | LPIC-1 102 | [#6](https://github.com/ns7jp/ns7jp/issues/6) |
-| 2026 Q4 - 2027 Q1 | 基本情報技術者試験（FE） | 着手時に作成 |
+| 2026 Q4（12 月までに受験） | 基本情報技術者試験（FE） | 着手時に作成 |
 | 2027 | CCNA → AWS SAA | 着手時に作成 |
 
 詳細（就業後に検討する資格を含む）: [資格取得ロードマップ](./certifications/roadmap.md)
