@@ -152,6 +152,7 @@
 ## 関連ドキュメント
 
 - [STATUS.md（全体進捗）](../STATUS.md)
+- [サーバー構築エンジニア学習プラン](./learning-plan/README.md)（Phase 2 の成果物が優先 4、Phase 6 の成果物が優先 5・8 に対応）
 - [ビジュアルショーケース（差し替え対象）](./showcase/README.md)
 - [デモ動画台本](./demo-script.md)
 - [学習の一次記録（つまずきログ）](../LEARNINGS.md)
