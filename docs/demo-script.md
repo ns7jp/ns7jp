@@ -5,7 +5,7 @@
 > 採用ご担当者様が**数十秒で**「実際に動かせる人」と判断できるよう、server-monitor を題材にした短尺デモの**収録台本**です。
 > 未経験者で短いデモ動画まで用意している人はほとんどおらず、**差別化の効果が最も高い**証跡です。収録後は [ビジュアルショーケース](./showcase/README.md) 冒頭と [README](../README.md) に貼ります。
 
-最終更新: 2026-05-30
+最終更新: 2026-08-11
 
 ---
 
@@ -31,13 +31,13 @@
 
 | 時間 | シーン | 画面 / 操作 | 字幕（一言） |
 | --- | --- | --- | --- |
-| 0:00–0:20 | つかみ | 構成図（[アーキテクチャ図](./architecture-diagram.md)）を 1 枚表示 | 「Linux サーバー監視を、構築から障害対応まで自分で運用します」 |
-| 0:20–0:50 | デプロイ | ターミナルで `docker compose up -d` → 起動ログ | 「監視スタックを 1 コマンドで起動」 |
+| 0:00–0:20 | つかみ | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)の構成図を 1 枚表示 | 「Linux サーバーを、設計・構築・試験・障害対応まで扱います」 |
+| 0:20–0:50 | デプロイ | Ansible の recap と `docker compose ps` を表示 | 「手順と構成コードから再現可能に構築」 |
 | 0:50–1:20 | 正常状態 | Grafana で CPU/メモリ/HTTP ステータス/SLO を一巡 | 「メトリクスとログを 1 画面で可視化」 |
 | 1:20–1:50 | 障害注入 | `stress-ng` で負荷 or プロセス停止 → グラフが跳ねる | 「ここでわざと異常を起こします」 |
 | 1:50–2:20 | 検知・通知 | Alertmanager が FIRING → Slack に通知が届く瞬間 | 「閾値超過を検知し、自動で Slack へ通知」 |
 | 2:20–2:45 | 復旧 | [ランブック](https://github.com/ns7jp/server-monitor/blob/main/docs/runbooks/service-down.md)に沿って対処 → RESOLVED | 「手順書に沿って復旧、復旧通知まで確認」 |
-| 2:45–3:00 | 締め | 「設計 → 実装 → 運用 → 改善」の一言 + リンク表示 | 「コードと設計は概要欄のリンクから」 |
+| 2:45–3:00 | 締め | 試験結果票と「設計 → 構築 → 試験 → 復旧」の一言 | 「コマンドと結果は概要欄の証跡から確認できます」 |
 
 > **撮り方のコツ**: 1 テイクで通そうとせず、シーンごとに録って編集でつなぐと失敗が減ります。最重要カットは **1:50–2:20 の「異常 → Slack 通知」** です。ここだけは確実に映してください。
 
@@ -69,3 +69,5 @@
 - [ビジュアルショーケース](./showcase/README.md)
 - [アーキテクチャ図](./architecture-diagram.md)
 - [server-monitor 障害対応ランブック](https://github.com/ns7jp/server-monitor/blob/main/docs/runbooks/service-down.md)
+- [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)
+- [二セグメント通信障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)

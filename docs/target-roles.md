@@ -1,47 +1,26 @@
 # 志望トラックと証跡の対応
 
-本ポートフォリオは「何でもできます」と広げるのではなく、第一志望を
-**インフラ運用 / 監視運用** に置き、IT サポート・社内 SE 補助を入口業務として
-接続する方針で整理しています。
-
----
-
 ## 優先順位
 
-| 優先 | トラック | 狙う業務 | 現在の証拠 | 追加する証跡 |
+| 優先 | 志望領域 | 想定する入口業務 | 提示する証拠 | 次に必要な実測 |
 | --- | --- | --- | --- | --- |
-| 1 | インフラ運用 / 監視運用 | Linux サーバー監視、障害一次対応、運用手順整備 | [server-monitor](https://github.com/ns7jp/server-monitor)、ランブック、SLO、Alertmanager | Grafana 実画面、Slack 通知、D-1 復旧演習ログ |
-| 2 | IT サポート / 社内 SE 補助 | 問い合わせ切り分け、FAQ、キッティング、棚卸し | [FAQ](./it-support/faq.md)、[アカウント管理](./it-support/account-management.md)、[Service Desk メトリクス](./it-support/service-desk-metrics.md) | PowerShell 実行ログ、ミニ AD / M365 ラボ、ネットワーク調査メモ |
-| 3 | クラウド / IaC 発展 | Terraform、AWS 検証、費用管理、バックアップ | Terraform AWS 構成、Cost / Backup / Security 設計 | `terraform apply` / `destroy`、Cost Explorer 実費、AWS Backup 検証 |
+| 1 | Linux サーバー構築・運用 | OS 初期設定、ミドルウェア配備、試験、手順・パラメータ更新 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、Ansible、Compose | Ubuntu 新規構築、冪等性、結合試験の実行ログ |
+| 2 | インフラ監視・運用 | 監視確認、一次切り分け、障害対応、定型作業 | Prometheus / Grafana / Loki、ランブック、[障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting) | Grafana / 通知 / D-1 / network drill の記録 |
+| 3 | IT サポート・社内 SE 補助 | 問い合わせ、キッティング、棚卸し、FAQ 更新 | [FAQ](./it-support/faq.md)、[アカウント管理](./it-support/account-management.md)、PowerShell scripts | 実機出力を添えた Windows / network 切り分け記録 |
+| 発展 | Cloud / IaC | Terraform の修正・レビュー、構築補助 | AWS Terraform modules、AWS / cost / backup 設計 | `plan / apply / destroy`、費用、復元 |
 
----
+## 応募先別の最短導線
 
-## 応募先に合わせた見せ方
-
-| 応募先 | 最初に見せるもの | 補足で見せるもの |
+| 応募先 | 最初に見せるもの | 面接で実演するもの |
 | --- | --- | --- |
-| インフラ運用 | [server-monitor](https://github.com/ns7jp/server-monitor)、[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) | [アーキテクチャ図](./architecture-diagram.md)、[ADR](./adr/README.md)、[学習の一次記録](../LEARNINGS.md) |
-| ヘルプデスク / 社内 SE | [採用ご担当者さまへ](./overview-for-recruiters.md)、[IT サポート資料](./it-support/faq.md) | [現場経験との橋渡し](./career-bridge.md)、[業務改善レポート](./business-improvement/picking-improvement.md) |
-| クラウド運用補助 | [server-monitor Terraform](https://github.com/ns7jp/server-monitor/tree/main/terraform)、[AWS 設計](https://github.com/ns7jp/server-monitor/blob/main/docs/aws-architecture.md) | [コスト計画](https://github.com/ns7jp/server-monitor/blob/main/docs/cost-report.md)、[外部 probe / 中央 telemetry](https://github.com/ns7jp/server-monitor/blob/main/docs/external-probe-central-telemetry.md) |
+| サーバー構築 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | Ansible の check / apply / 2 回目の冪等性、試験結果 |
+| インフラ運用・監視 | [server-monitor](https://github.com/ns7jp/server-monitor) | Grafana → alert → logs → recovery |
+| ネットワークを含む運用 | [二セグメント障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting) | 正常 → 通信断 → 経路・名前解決確認 → 復旧 |
+| IT サポート・社内 SE | [IT サポート資料](./it-support/faq.md) | 問い合わせの再現条件、影響範囲、確認順、記録方法 |
 
----
+## 現時点の境界
 
-## 現時点の正直な境界
-
-- 実務での大規模インフラ運用経験はこれからです。
-- `server-monitor` は単一ホスト中心の学習ラボであり、本番冗長化の実績ではありません。
-- AWS、D-2 復元、full Molecule は、実行結果を採録するまで「設計・コード実装済み」として扱います。
-- 社内 SE / Windows 系は設計資料が中心です。応募比率に応じて、PowerShell / AD / M365 の最小証跡を追加します。
-
----
-
-## 次に増やす証跡
-
-順序と手順は [証跡採録チェックリスト](./evidence-capture-checklist.md) に一元化しています（2026-07 見直し）。
-
-1. ローカル Linux + Docker で Grafana / Loki / Alertmanager の実画面を採録する（優先 1〜3。1 晩で可能）。
-2. ネットワーク切り分けの一次メモ（dig / traceroute / ss / tcpdump）を採録する（優先 4。監視運用の一次対応の中核スキル）。
-3. D-1 プロセス停止演習を実行し、検知から復旧までの実測時間を記録する（優先 5）。
-4. `molecule test` の full 実行結果を採録する（優先 6）。
-5. Windows / AD 最小ラボで PowerShell 実行ログを採録する（優先 7。社内 SE トラックの唯一の実行証跡になる）。
-6. AWS `plan → apply → destroy` と Cost Explorer 実費を、優先 1〜3 完了直後の週に 1 日で採録する（優先 8）。
+- 実務でのサーバー構築・大規模インフラ運用経験はこれからです。
+- `server-monitor` は単一ホスト中心の学習ラボで、本番冗長化の実績ではありません。
+- Linux host、AWS、D-1 / D-2、full Molecule は、実行結果を採録するまで設計・コード・手順実装済みとして扱います。
+- 計画や資格数を増やすより、既存の一構成を新規構築し、試験し、壊して直した証跡を優先します。
