@@ -169,6 +169,7 @@ FE・CCNA 以降は、着手時に同じ形式で Issue を作成します。
 
 ## 関連ドキュメント
 
+- [サーバー構築エンジニア学習プラン](../learning-plan/README.md)（資格が担当しない「手を動かす側」の 24 週カリキュラム）
 - [サーバー監視ラボ：改善設計の実装対応表](../server-monitor-improvements/README.md)
 - [アーキテクチャ図（実装済み構成 / 検証境界）](../architecture-diagram.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)

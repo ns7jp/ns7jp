@@ -22,7 +22,8 @@
 [アーキテクチャ図](./docs/architecture-diagram.md) /
 [改善設計一覧](./docs/server-monitor-improvements/README.md) /
 [ADR](./docs/adr/README.md) /
-[ビジュアルショーケース](./docs/showcase/README.md)
+[ビジュアルショーケース](./docs/showcase/README.md) /
+[サーバー構築エンジニア学習プラン](./docs/learning-plan/README.md)
 
 ---
 
@@ -199,6 +200,15 @@ server-monitor を実運用水準へ引き上げるため、本リポジトリ�
 | 就業後に検討 | LPIC-2、AWS CloudOps（旧 SOA）、AZ-802（Windows Server）、ITIL 4、Kubernetes 系（CKAD / CKA） | — |
 
 詳細：[資格取得ロードマップ](./docs/certifications/roadmap.md)
+
+### 学習プラン（未経験者向け・24 週）
+
+資格と並行して進める **手を動かす側** の学習設計を、24 週のカリキュラムとして公開しています。
+Linux / ネットワーク / ミドルウェア構築に加え、**パラメータシート・構築手順書・試験項目書といった
+構築工程のドキュメント** まで扱い、フェーズごとに成果物と到達確認を定義しています。
+自分の到達状況（弱点はネットワークの実機調査と構築ドキュメント）も同じ 6 フェーズで自己評価しています。
+
+詳細：[サーバー構築エンジニア学習プラン](./docs/learning-plan/README.md)
 
 ### 訓練校
 
