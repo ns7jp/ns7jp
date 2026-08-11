@@ -1,103 +1,58 @@
-# 採用ご担当者さまへ — 島田則幸（1 枚サマリ）
-
-> **本ドキュメントの位置付け**
->
-> 技術用語をできるだけ使わずに、「どんな人で・何ができて・入社後どう役立つか」を 1 ページにまとめたものです。技術的な裏付けは各リンク先で確認できます。
-
-最終更新: 2026-07-03
-
----
+# 採用ご担当者さまへ — 島田則幸
 
 ## ひとことで
 
-製造・物流の現場で 10 年以上、「**測って・改善して・定着させる**」を続けてきました。その進め方を IT に持ち込み、サーバーの監視・運用や社内 IT サポートで貢献します。
+製造・物流の現場で 10 年以上続けてきた「測る・原因を絞る・手順化する・定着させる」を、Linux サーバーの構築・運用に生かすエンジニア志望です。
 
-## なぜ IT へ、なぜインフラ運用か
+第一志望は **Linux サーバー構築・運用**。入口としてインフラ監視・運用、IT サポート、社内 SE 補助にも対応します。
 
-現場の業務改善を続ける中で、改善を定着させる決め手はいつも「仕組み」でした。人の注意力に頼る改善はリバウンドし、計測とルールを仕組みに落とし込んだ改善だけが残りました。その仕組みを **作る側に回りたい** というのが IT を選んだ理由です。
+## 何を作ったか
 
-職業訓練ではプログラミング（Python）を学びましたが、修了後に監視基盤を自作してみて、自分の 10 年の経験（測る・手順化する・属人化させない・止まる前に気づく）が **最も直接活きるのは開発よりも運用・監視の領域** だと確信し、インフラ運用を第一志望にしています。
+主作品の [Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor) では、Ubuntu サーバーの構築案件を想定し、次を作成しました。
 
----
+- 基本・詳細設計、パラメータシート、ネットワーク・IP 設計
+- Ansible による OS / Docker / 監視基盤の構成管理
+- Nginx、Flask、Prometheus、Grafana、Alertmanager、Loki、Alloy
+- 構築手順、単体・結合試験、引き渡しチェックリスト
+- サービス停止、CPU 高負荷、二セグメント通信断の障害・復旧手順
+- Terraform による AWS 構成コードと CI
 
-## 志望領域
+採用時の最短確認先は [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) です。
 
-第一志望は **インフラ運用 / 監視運用** です。入口業務として IT サポート、社内 SE 補助、監視オペレーションにも対応し、一次切り分け・手順書整備・定型作業の標準化から貢献します。
+## 入社後に任せやすいこと
 
-| 優先 | 領域 | 最初に任せやすいこと |
-| --- | --- | --- |
-| 1 | インフラ運用 / 監視運用 | サーバー監視、アラート確認、ランブックに沿った一次対応 |
-| 2 | IT サポート / 社内 SE 補助 | 問い合わせ切り分け、FAQ 更新、キッティング・棚卸し手順の整備 |
-| 3 | クラウド / IaC 補助 | Terraform 構成理解、手順書化、費用・バックアップ確認の補助 |
-
----
-
-## どんなことができる人か
-
-| できること | かみくだくと | 裏付け |
-| --- | --- | --- |
-| サーバー監視の仕組みづくり | 「システムが止まる前に異常へ気づき、関係者へ自動で知らせる」仕組みを自分で組んで動かせます | [server-monitor](https://github.com/ns7jp/server-monitor) |
-| 運用変更の記録 | 変更前後の確認、ロールバック、証跡リンクを PR テンプレートで残す運用を作っています | [変更管理ミニ運用](https://github.com/ns7jp/server-monitor/blob/main/docs/change-management.md) |
-| 手順書・FAQ の整備 | 「担当者がいなくても、他の人が同じ品質で対応できる」状態を作るのが得意です | [IT サポート資料](./it-support/faq.md) |
-| 数字で語る業務改善 | 感覚ではなく記録（数値）で「どこが遅いか」を示し、改善し、戻らないよう標準化します | [業務改善レポート](./business-improvement/picking-improvement.md) |
-| トラブルの一次対応 | 「PC が遅い・ネットが繋がらない・メールが届かない」等の切り分け手順を整理できます | [トラブルシューティング](./it-support/troubleshooting.md) |
-
----
-
-## これまでの歩み
-
-> `〈 〉` 部分は本人記入欄です（実年月に置き換えます）。
-
-| 時期 | 内容 |
+| 領域 | 最初に貢献できること |
 | --- | --- |
-| 〈YYYY/MM〉 | 中部大学 応用生物学部 卒業 |
-| 〈YYYY/MM〉〜〈YYYY/MM〉 | 製造・物流業務（在庫管理・ピッキング）10 年以上。現場のムダを記録して **1 日あたり約 1 時間の作業短縮** を実現 |
-| 2025/10〜2026/01 | 公共職業訓練「情報処理（Python エンジニア）コース」修了。Python / PHP の認定資格を取得 |
-| 2026/02〜現在 | 独学で Linux・サーバー監視基盤を自作（このポートフォリオ）。LPIC-1 を学習中 |
+| サーバー構築 | 手順に沿った設定、チェックリスト確認、単体試験、パラメータ・手順書更新 |
+| インフラ運用 | アラート確認、コマンドとログによる一次切り分け、エスカレーション |
+| 自動化補助 | Ansible / shell / Python の小さな定型作業、CI の結果確認 |
+| IT サポート | 再現条件と影響範囲の整理、キッティング、FAQ・台帳整備 |
 
-**現況**: 〈記入してください。例: 離職中・即日勤務可能〉
+## 現場経験とのつながり
 
-## 勤務条件について
+物流現場では、1 週間の作業を 15 分単位で計測し、棚配置・動線・補充ルールを改善して、1 日あたり約 1 時間の作業時間短縮につなげました。さらに OJT 用マップとチェックリストを作り、改善が元へ戻りにくい形にしました。
 
-- **交代制・夜勤**: 〈対応可否を記入。例: 24/365 監視オペレーション業務のシフト勤務に対応できます。前職の勤務形態（交代制の経験があれば）もここに記載〉
-- **教わる姿勢**: 年下の先輩からの指導も歓迎します。現場で「教わったことを手順書にして返す」進め方を 10 年続けてきました
-- **雇用形態**: 〈正社員希望 / 契約からの登用も可、など方針を記入〉
+サーバー構築でも、作って終わりではなく、設定値、試験結果、監視、復旧手順を残して、他の人が同じ品質で扱える状態を目指します。
 
----
+## 正直な境界
 
-## 入社初日から貢献できること
+実務での大規模インフラ経験はこれからです。コードや設計書の存在と、実環境で成功した結果を混同しないよう、[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) で区別しています。
 
-- 問い合わせ対応の一次切り分けと、FAQ・手順書の整備
-- キッティング（PC の初期設定）や棚卸しの手順づくり・属人化の解消
-- サーバーやサービスの監視・記録・改善提案
+- Linux host での全構成起動、D-1 / D-2、AWS `apply / destroy` は実測証跡の採録前
+- 未実施項目は「実装・手順作成済み」と表現
+- 実行日時、commit SHA、コマンド、結果、所要時間を残してから「実測済み」へ変更
 
-## これから伸ばすこと（正直にお伝えします）
+## 経歴・学習
 
-- 大規模な実運用の経験はこれからです。まずは自作環境で「**実際に動かして数字を採る**」ことを進めています（[採録の進捗](https://github.com/ns7jp/ns7jp/issues/8)）
-- 資格は計画的に取得を進めています（[学習ログ](./certifications/roadmap.md)）
+- 製造・物流業務 10 年以上
+- 中部大学 応用生物学部 応用生物化学科 卒業
+- 公共職業訓練「情報処理（Python エンジニア）コース」修了（2025 年 10 月〜2026 年 1 月）
+- Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級
+- LPIC-1 学習中
 
----
+## 詳細
 
-## もっと知りたい方へ
-
-- 職務経歴書・スキルシート — [resume.md](./resume.md)
-- 技術の中身 — [ポートフォリオ README](../README.md) / [server-monitor](https://github.com/ns7jp/server-monitor)
-- 現場経験との地続きの説明 — [現場経験 ↔ インフラ運用の橋渡し](./career-bridge.md)
-- 志望領域と証跡の対応 — [志望トラックと証跡の対応](./target-roles.md)
-
----
-
-## Summary (English)
-
-After 10+ years on manufacturing and logistics floors — where I cut about one hour of daily work by measuring, improving, and standardizing — I now apply the same approach to IT. I build and operate Linux server-monitoring stacks (Prometheus / Grafana / Loki / Docker) and write the runbooks and FAQs that let anyone respond when something breaks.
-
-I am targeting IT support, internal IT, and infrastructure-operations roles, and I am steadily turning designs into measured, evidence-backed results. Details: [portfolio README](../README.md) and [server-monitor](https://github.com/ns7jp/server-monitor).
-
----
-
-## ご連絡先 / Contact
-
-**メールが最も確実です。** 採用・カジュアル面談のご連絡を歓迎します。
-
-- メール: [net7jp@gmail.com](mailto:net7jp@gmail.com)
-- GitHub: [github.com/ns7jp](https://github.com/ns7jp)
+- [職務経歴書・スキルシート](./resume.md)
+- [志望トラックと証跡](./target-roles.md)
+- [現場経験とインフラの橋渡し](./career-bridge.md)
+- [ポートフォリオサイト](https://ns7jp.github.io/)

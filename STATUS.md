@@ -101,7 +101,7 @@
 | 学習ログ Issue（#5-#7）/ 実証トラッキング Issue（#8） | ✅ 作成済み（**運用はこれから**。週 1 回更新を上記ルールで開始する） |
 | docs CI（markdownlint / Mermaid 構文 / リンク） | ✅ 完了（2026-07 にリンクチェックを強化） |
 | デモ動画台本 | ✅ 整備済み（収録はスクショ・演習採録後） |
-| 志望トラックと証跡の対応 | ✅ 完了（インフラ運用を第一志望として明示） |
+| 志望トラックと証跡の対応 | ✅ 完了（Linux サーバー構築・運用を第一志望として明示） |
 | 変更管理の実物化 | ✅ server-monitor 側に PR テンプレート / 変更管理ミニ運用を追加 |
 
 ### 未対応 / 次のアクション（証跡採録フェーズ）
@@ -201,7 +201,7 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 | [post](https://github.com/ns7jp/post) | 学習作品（PHP / MySQL、CSRF / bcrypt / PDO） | 完成・公開中。DB 運用設計（[14](./docs/roadmap/14-database-operations.md)）の題材 |
 | [pulse](https://github.com/ns7jp/pulse) | 学習作品（PHP / SQLite） | 完成・公開中 |
 | [works](https://github.com/ns7jp/works) | 学習作品集（Python / HTML / CSS） | 公開中（学習過程の記録） |
-| [ns7jp.github.io](https://ns7jp.github.io/) | ポートフォリオサイト | ⚠ README のインフラ第一志望の構成へ**未同期**。同期まで README を一次情報とする |
+| [ns7jp.github.io](https://ns7jp.github.io/) | ポートフォリオサイト | ✅ Linux サーバー構築・運用を第一志望とする導線へ同期 |
 
 ---
 
