@@ -115,7 +115,7 @@
 - [ ] **証跡の採録を開始**（[#8](https://github.com/ns7jp/ns7jp/issues/8) で管理。優先 1〜3 の Grafana / Slack / Loki スクショは 1 晩・0 円で可能）
 - [ ] **Issue #5〜#8 の週次更新を継続**（初回の状況コメントは 2026-07-12 に記録済み。次回から LPIC-1 の学習状況・受験予約の有無を自分の言葉で記録する）
 - [ ] **LEARNINGS.md の Alloy エントリの「学び」を自分の言葉で肉付け**（現在の記述は事実ベースの下書き。面接で話す言葉に直す）
-- [ ] **ポートフォリオサイト（ns7jp.github.io）を本 README の構成へ同期**（同期までは README を一次情報とする注記を掲載済み）
+- [ ] **ポートフォリオサイト（ns7jp.github.io）を本 README の構成へ同期**（志望順位・経験年数・実績数値等の整合から着手中。全面同期は未完了）
 - [ ] デモ動画を収録（スクショ・演習採録後の集大成として）
 - [ ] 応募先に応じて **Windows / AD 最小証跡を採録**（チェックリスト優先 7）
 - [ ] 業務改善レポートの **想定値部分を実数に置き換え**（記憶 / 当時の上長への確認次第）
@@ -201,7 +201,7 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 | [post](https://github.com/ns7jp/post) | 学習作品（PHP / MySQL、CSRF / bcrypt / PDO） | 完成・公開中。DB 運用設計（[14](./docs/roadmap/14-database-operations.md)）の題材 |
 | [pulse](https://github.com/ns7jp/pulse) | 学習作品（PHP / SQLite） | 完成・公開中 |
 | [works](https://github.com/ns7jp/works) | 学習作品集（Python / HTML / CSS） | 公開中（学習過程の記録） |
-| [ns7jp.github.io](https://ns7jp.github.io/) | ポートフォリオサイト | ✅ Linux サーバー構築・運用を第一志望とする導線へ同期 |
+| [ns7jp.github.io](https://ns7jp.github.io/) | ポートフォリオサイト | 🔄 同期作業中（志望順位・経験年数・実績数値等の整合を本 PR で対応） |
 
 ---
 
