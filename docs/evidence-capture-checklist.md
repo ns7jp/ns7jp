@@ -5,7 +5,7 @@
 > 本ポートフォリオは設計資料が充実している一方で、**実機で動かして測った証跡が不足**しています（[STATUS.md](../STATUS.md) でも最優先の伸びしろと明記）。
 > このチェックリストは、**新規の設計を増やすのをやめ、既存の設計を「実物」に変換する**ための実行計画です。設計書ではなく作業手順として使います。
 
-最終更新: 2026-08-17（**必要な環境**順に組み替え。Linux 環境が不要な 2 件を最優先へ昇格。トライアル就業開始により可処分時間が減ったため、着手コストの低い順を徹底する）
+最終更新: 2026-08-17（**優先 1（full `molecule test`）を採録完了**。あわせて**必要な環境**順への組み替えを実施）
 
 ---
 
@@ -28,12 +28,14 @@
 
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
-| 1 | **full `molecule test` の実行ログ**（converge → verify → idempotence、4 ロール分） | **ブラウザのみ**（GitHub Actions） | 0 円・15 分 | [02 Ansible 構成管理](./server-monitor-improvements/02-ansible-automation.md) |
+| ✅ 1 | ~~**full `molecule test` の実行ログ**（converge → verify → idempotence、4 ロール分）~~ **2026-08-17 採録完了** → [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) | **ブラウザのみ**（GitHub Actions） | 0 円・実績 2 分 42 秒 | [02 Ansible 構成管理](./server-monitor-improvements/02-ansible-automation.md) |
 | 2 | **既存 CI の成功ログを証跡台帳へ記録**（Python check / Terraform check / Security scan / Backup verify） | **ブラウザのみ** | 0 円・30 分 | [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
 
-> **優先 1 は 2026-08-17 時点で一度も実行されていません**（`ansible-integration.yml` の実行履歴 0 件）。
-> `workflow_dispatch` で定義済みのため、GitHub の Actions タブで「Run workflow」を押すだけで走ります。
-> Linux も Docker も VirtualBox も要りません。手順は [Molecule を GitHub Actions で実行する](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/molecule-via-github-actions.md) を参照してください。
+> **優先 1 は 2026-08-17 に採録完了しました。** 4 ロール（common / docker / nginx / monitoring）すべてが
+> create → converge → idempotence → verify を通過しています（0 円・2 分 42 秒）。
+> 到達までに 6 回失敗しており、その過程で**静的検査では検出できないロールの欠陥を 2 件**発見・修正しました
+> （`tzdata` の依存漏れ、UFW の `allow` と `limit` が同一ポートを奪い合う不具合）。
+> 経緯は [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) に残しています。
 >
 > **優先 2 は「すでに存在する証跡を拾っていないだけ」です。** `Backup verify` は毎日 04:00 UTC に自動実行されて成功が積み上がっており、
 > 累計 400 回超の CI 実行履歴があります。これらは第三者が再確認できる機械検証の記録ですが、台帳に一度も記載されていません。
@@ -68,7 +70,7 @@
 
 デモ動画（[台本](./demo-script.md)）は差別化効果が高い一方で、収録前チェック 6 項目を要する**最重量のタスク**です。「動画を撮るまで何も出せない」状態を避けるため、順序は次のとおり固定します。
 
-1. **CI 証跡（優先 1〜2）** — ブラウザのみ・合計 45 分
+1. ~~**CI 証跡（優先 1〜2）** — ブラウザのみ~~ → 優先 1 は ✅ 採録済み。残るは優先 2（30 分）
 2. **スクショ 3 点（優先 3〜5）** — 1 晩で採録
 3. **演習・実測（優先 6〜7）** — 各半日
 4. **デモ動画** — 証跡が揃った後の**集大成**として収録（スクショはリハーサルの副産物として撮れるため、逆順にはしない）
@@ -91,7 +93,10 @@
 
 ## 各証跡の最小採録手順
 
-### 1. full molecule test（GitHub Actions・Linux 環境不要）
+### 1. full molecule test（GitHub Actions・Linux 環境不要）✅ 採録済み
+
+> 2026-08-17 に採録完了（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)）。
+> 以下は**再実行するときの手順**として残します。ロールを変更したら再実行し、冪等性が保たれているか確認してください。
 
 1. `ns7jp/server-monitor` の **Actions** タブを開く。
 2. 左の一覧から **Ansible integration evidence** を選ぶ。

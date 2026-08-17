@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-17（派遣社員としてトライアル就業を開始。ポートフォリオの目的を「未経験応募で内定を取る」から「就業先で信頼を得てサーバー構築業務へ移る」へ転換）
+最終更新：2026-08-17（**Molecule で Ansible ロール 4 本の適用・冪等性・検証を完走し、初の Linux 実測証跡を採録**。あわせて派遣社員としてのトライアル就業開始を反映）
 
 ---
 
@@ -27,6 +27,58 @@
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
 
+### 2026-08-17 の更新内容（追補：Molecule フル実行の完走と初の Linux 実測証跡）
+
+**Ansible ロール 4 本の `molecule test` が全て成功し、リポジトリで初めて Linux 上の実測証跡を採録しました**
+（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／
+[実行 URL](https://github.com/ns7jp/server-monitor/actions/runs/32031882695)、0 円・2 分 42 秒）。
+
+| Role | create | converge | idempotence | verify | 所要 |
+| --- | --- | --- | --- | --- | --- |
+| common | PASS | PASS | PASS | PASS | 84 秒 |
+| docker | PASS | PASS | PASS | PASS | 105 秒 |
+| nginx | PASS | PASS | PASS | PASS | 68 秒 |
+| monitoring | PASS | PASS | PASS | PASS | 53 秒 |
+
+#### 到達までに 6 回失敗し、原因は 4 種類に分かれた
+
+| run | 停止段階 | 原因 | 種別 |
+| --- | --- | --- | --- |
+| #1 | `destroy`（初手） | `stdout_callback: yaml` が指す callback が community.general 12.0.0 で削除済み | 設定の陳腐化 |
+| #2 | versions 表示 | `ansible-galaxy collection list` の引数の渡し方 | 記述ミス |
+| #3 | `converge` | `tzdata` 未導入かつ timezone 設定がパッケージ導入より前 ／ docker daemon 起動不可 | **ロールの欠陥** ／ 環境制約 |
+| #4 | `converge` | chrony 起動不可 | 環境制約（**後に誤診と判明**） |
+| #5 | `idempotence` | 同一 port 22 に `ufw allow` と `ufw limit` を適用しており毎回互いを上書き | **ロールの欠陥** |
+| #6 | `verify` | systemd が PID 1 で起動していなかった | 検証環境の設定不備 |
+| #7 | — | — | **全ロール成功** |
+
+#### 特筆すべき 2 件
+
+**1. 静的検査では検出できない欠陥を冪等性テストが捕まえた（#5）**
+
+UFW の `allow` と `limit` が同じ port を奪い合う問題は、`ansible-lint` も `--syntax-check` も検出できませんでした。
+文法は正しく個々のタスクも妥当で、**2 回適用して初めて矛盾が現れる**種類だったためです。
+かつ実ホストでも毎回 SSH のルールが `ALLOW` / `LIMIT` 間で書き換わるため、
+総当たり攻撃の抑止が意図した状態で維持されない、**セキュリティ上の欠陥**でもありました。
+
+**2. 自分の診断が誤りだったと後から判明した（#4 → #6）**
+
+chrony の失敗を「コンテナは時計を共有するため NTP を動かせない」と判断しましたが、誤りでした。
+実際は **systemd が PID 1 で起動していなかった**ことが原因で、docker daemon・chrony・`timedatectl` という
+**別々に見えた 3 件すべてがこの 1 点に由来**していました。判明後、当該の無効化は取り消しています。
+
+> **この証跡の範囲を広げて解釈しない。** 確認できたのは「ロールが適用でき、冪等で、期待した状態になる」
+> ところまでです。監視スタック全体の起動、復旧演習、AWS 適用は依然として未採録です。
+
+| 項目 | 状態 |
+| --- | --- |
+| チェックリスト優先 1（full `molecule test`） | ✅ **完了**。実行 URL・commit SHA 付きで採録 |
+| 検証で見つかったロールの欠陥の修正 | ✅ `tzdata` 依存漏れ、UFW ルール競合の 2 件を修正 |
+| Molecule scenario の設定不備の修正 | ✅ 4 scenario に `command: /lib/systemd/systemd` を追加 |
+| 検証証跡台帳の更新 | ✅ 実測済みと未採録の境界を要約に明記 |
+| README / overview の「証拠の境界」更新 | ✅ 実測済み範囲を追加し、未実測範囲を維持 |
+| LEARNINGS.md への反映 | ⬜ **本人記入待ち**。事実関係と時系列は証跡ファイルに揃えてあるため、「学び」を自分の言葉で書く |
+
 ### 2026-08-17 の更新内容（就業状況の変化とポートフォリオの目的転換）
 
 **派遣社員としてトライアル就業を開始しました**（詳細は [職務経歴書](./docs/resume.md) の「現況」）。これに伴い、ポートフォリオの目的が変わります。
@@ -45,7 +97,7 @@
 | 現況表記の更新（派遣・トライアル就業中） | ✅ [resume](./docs/resume.md) / [overview](./docs/overview-for-recruiters.md) / [README](./README.md) に反映（`〈 〉` の派遣元・就業先・期間は本人記入待ち） |
 | 応募開始ルール（§0 ルール 5）の終了処理 | ✅ 目的達成として終了し、後継ルール 6（月 1 件の実測証跡）を制定 |
 | Issue 更新頻度を週 1 → 月 1 へ緩和 | ✅ 5 週間更新が止まった事実を残したうえで、守れる粒度へ変更（§0「守れなかったルールの扱い」） |
-| 実測証跡の現状を正確に記載 | ✅ §2 に「実測証跡は Windows 端末の pytest 1 件のみ」と明記。従来は「未収録」という表現で不足の深刻さが伝わっていなかった |
+| 実測証跡の現状を正確に記載 | ✅ §2 を実態へ更新。当初は「実測証跡は Windows 端末の pytest 1 件のみ」だったが、同日中に Molecule 完走により Linux 実測証跡を採録（上記の追補を参照） |
 | Molecule を GitHub Actions で実行する導線の明示 | ✅ [証跡採録チェックリスト](./docs/evidence-capture-checklist.md)の優先度を組み替え、**Linux 環境なしで採れる証跡**を最優先へ |
 | ショーケースのスクリーンショット表示の是正 | ✅ Windows 端末の画面を「実機キャプチャ」として掲示していた点を修正 |
 | STATUS.md のアンカー切れ修正 | ✅ §4 の AI 開示リンクが README の見出し変更に追随していなかった（`--include-fragments` を docs CI に追加して再発防止） |
@@ -142,10 +194,11 @@
 
 #### 今週（合計 1 時間以内・Linux 環境不要）
 
-- [ ] **`ansible-integration.yml` を GitHub Actions で実行**（[手順](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/molecule-via-github-actions.md)）。ブラウザのボタン 1 回で Molecule の全ロール検証が走り、[チェックリスト優先 1](./docs/evidence-capture-checklist.md) が埋まる。**2026-08-17 時点で一度も実行されていない**（実行履歴 0 件）
+- [x] ~~**`ansible-integration.yml` を GitHub Actions で実行**~~ → **2026-08-17 完了**。4 ロール完走し[実測証跡を採録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)（チェックリスト優先 1）
+- [ ] **[LEARNINGS.md](./LEARNINGS.md) に今日の 2 件を追記**（UFW の冪等性欠陥 ／ 自分の診断が誤りだった件）。事実と時系列は証跡ファイルに揃っているため、**「学び」を自分の言葉で書くだけ**。現在エントリが 1 件しかなく、最も費用対効果が高い
 - [ ] **resume.md / overview の `〈 〉` 箇所を記入**（派遣元・就業先・トライアル期間・在籍年月・夜勤/交代制の可否）
 - [ ] **[#8](https://github.com/ns7jp/ns7jp/issues/8) に現況コメントを 1 件残す**（トライアル就業の開始と、証跡採録の再開予定。2026-07-12 以降が空白のままになっている）
-- [ ] **server-monitor の Dependabot PR 12 件を処理**（最古 2026-05-28、約 3 か月放置）。CI が緑のものは merge、Terraform provider の 2 件は下記「未処理の Dependabot PR と CI 失敗」を参照。**リポジトリを開いた人に最初に見える箇所なので、証跡採録より先に片付ける**
+- [ ] **server-monitor の Dependabot PR 残り 7 件を処理**（設定修正により 12 件 → 7 件、Terraform check は約 3 か月ぶりに緑）。**#47 は AWS provider 5.x → 6.x のメジャー更新のため、[アップグレードガイド](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/guides/version-6-upgrade)を確認してから merge する**。リポジトリを開いた人に最初に見える箇所
 
 #### 今月（1 晩〜半日・0 円）
 
@@ -175,16 +228,20 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 加え、ログ集約、構成管理、SLO、復旧手順、AWS IaC のコードが実装されている。
 コード実装と実行実績は区別して表示する。
 
-> **実測証跡の現状（2026-08-17 時点、正確な記載）**
+> **実測証跡の現状（2026-08-17 更新）**
 >
-> `server-monitor/docs/evidence/` に存在する実測記録は **1 件のみ**であり、その内容は
-> **Windows 端末での `pytest` 14 件 PASS**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-11-local-code-validation.md)）。
-> つまり現時点で、**Linux 上で本構成を起動した記録は 1 件も無い**。
+> **Ansible ロール 4 本（common / docker / nginx / monitoring）について、Linux 上で
+> 適用・冪等性・適用結果まで検証した実測証跡がある**
+> （[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／
+> [実行 URL](https://github.com/ns7jp/server-monitor/actions/runs/32031882695)、0 円・2 分 42 秒）。
+>
+> 一方、**監視スタック全体を起動した記録はまだ無い**。
 > [試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/build-package/06-test-specification.md)の
-> IT-01〜IT-11 および ST-01〜ST-05 は**全項目 `NOT RUN`**。
+> IT-01〜IT-11 および ST-01〜ST-05 も大半が `NOT RUN` のまま。
 >
-> 従来この状態を「未収録」と表現していたが、不足の深刻さが伝わらないため表現を改めた。
-> Linux サーバー構築を志望する以上、**これは最優先で解消すべき欠陥**である。
+> **この証跡の範囲を広げて解釈しない。** 確認できたのは「ロールが適用でき、冪等で、
+> 期待した状態になる」ところまでで、実 VM での挙動、複数ホスト間の疎通、
+> スタック全体の動作、復旧時間（RTO）は含まない。
 
 ### 実装済み / 証跡待ち
 
@@ -192,7 +249,7 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 | --- | --- | --- | --- |
 | v1.0 | 基本構成（Linux + Docker + Prometheus + Grafana + Nginx + Alertmanager） | ✅ 実装済み（server-monitor 本体） | — |
 | v1.1 | Loki + Grafana Alloy ログ集約 | ✅ 構成実装済み（Promtail EOL に伴い移行） | [01](./docs/server-monitor-improvements/01-loki-log-aggregation.md) |
-| v1.2 | Ansible 構成管理 | ✅ roles / playbook 実装済み。full Molecule 証跡は未収録 | [02](./docs/server-monitor-improvements/02-ansible-automation.md) |
+| v1.2 | Ansible 構成管理 | ✅ roles / playbook 実装済み。**full `molecule test` 4 ロール完走を [2026-08-17 に採録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)** | [02](./docs/server-monitor-improvements/02-ansible-automation.md) |
 | v1.3 | SLO / バーンレートアラート | ✅ rules / dashboard 実装済み。ラボ内 SLI として扱う | [04](./docs/server-monitor-improvements/04-slo-design.md) |
 | v1.3 | バックアップ・復旧演習 | ✅ 手順・自動化実装済み。D-1 / D-2 実測は未収録（ローカル版手順を 2026-07 追加） | [05](./docs/server-monitor-improvements/05-backup-recovery-drill.md) |
 | v2.0 | AWS + Terraform 化 | ✅ IaC 実装済み。`apply` / Cost Explorer 証跡は未収録 | [03](./docs/server-monitor-improvements/03-terraform-aws.md) |
@@ -236,7 +293,12 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 
 ### 未処理の Dependabot PR と CI 失敗（2026-08-17 に判明）
 
-**server-monitor に Dependabot PR が 12 件滞留**しており、最古は **2026-05-28（約 3 か月）**。うち Terraform provider 更新の 2 件は **Terraform check が失敗したまま**です。
+**server-monitor に Dependabot PR が 12 件滞留**しており、最古は **2026-05-28（約 3 か月）**。うち Terraform provider 更新の 2 件は **Terraform check が失敗したまま**でした。
+
+> **2026-08-17 追記**: `dependabot.yml` の修正後、Dependabot が PR を作り直し **12 件 → 7 件** に減りました。
+> 両立しない制約で永久に落ち続けていた #44 / #45 は **#47（8 ディレクトリを 1 本に統合）** に置き換わり、
+> **Terraform check が約 3 か月ぶりに success** になっています。Actions 更新 5 本も **#48** の 1 本に統合されました。
+> 残り 7 件（#17 / #18 / #20 / #31 / #42 / #47 / #48）の処理は本人作業です。
 
 本ポートフォリオは変更管理・保守運用・EOL 追従を主要な訴求点にしており、[LEARNINGS.md](./LEARNINGS.md) の唯一のエントリも「採用時に保守状況・EOL 予定を確認していなかった」という反省です。**リポジトリを開いた人に最初に見えるのが 3 か月放置された依存更新 PR である状態は、その訴求と正面から矛盾します。**
 
@@ -263,9 +325,9 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 | 対応 | 状態 |
 | --- | --- |
 | `dependabot.yml` に全 Terraform ディレクトリを登録し、`groups` で 1 PR にまとめる | ✅ 本 PR で修正（今後の provider 更新は整合した 1 PR で届く） |
-| 既存の PR #44 / #45 を close し、修正後の設定で作り直す | ⬜ 本人操作（設定反映後に Dependabot が再作成する） |
+| 既存の PR #44 / #45 を close し、修正後の設定で作り直す | ✅ **完了**。Dependabot が #47（terraform-providers group、8 ディレクトリ統合）として再作成し、**Terraform check が success** |
 | AWS provider 5.x → 6.x のメジャー更新を実施 | ⬜ **本人作業**。破壊的変更の有無を確認する必要があるため自動更新に任せない |
-| Actions / pip / Docker 系の 10 件を処理 | ⬜ 本人作業。CI が緑のものから順に merge する |
+| Actions / pip / Docker 系を処理 | ⬜ 本人作業。Actions 5 本は #48 に統合済み。CI が緑のものから順に merge する |
 
 > **面接での価値**: この provider 6.x 移行は、`terraform init` の失敗ログから制約の重複宣言を特定した実例です。**LEARNINGS.md に書く題材として、現時点で最も質が高いもの**です（症状・原因・対処・学びの 4 点が既に揃っている）。
 
@@ -275,7 +337,7 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 
 **Linux 環境が不要なもの（先にこちらを消化する）**
 
-1. full `molecule test` の実行ログ（優先 1。GitHub Actions のボタン 1 回・15 分・**未実行**）
+1. ~~full `molecule test` の実行ログ（優先 1）~~ → ✅ **2026-08-17 採録済み**
 2. 既存 CI の成功ログを証跡台帳へ記録（優先 2。Backup verify は毎日実行され成功が蓄積しているのに、台帳に一度も記載されていない）
 
 **Linux + Docker が必要なもの**

@@ -57,9 +57,23 @@
   ADR に「見直しトリガー」を書く運用にした（上記 Alloy の学び）のに、**運用そのものが回っていなかった**という反省は、
   設計と運用の差を実体験として語れる材料になる。
 
+**2026-08-17 の Molecule 完走で題材が揃ったもの（最優先）**
+
+- **UFW の `allow` と `limit` が同じ port を奪い合い、冪等性が壊れていた件**
+  — `ansible-lint` も `--syntax-check` も検出できず、**2 回適用して初めて現れた**。
+  実ホストでも毎回 SSH のルールが `ALLOW` / `LIMIT` 間で書き換わるため、
+  総当たり抑止が意図した状態で維持されないというセキュリティ上の欠陥でもあった。
+  → 「なぜ冪等性テストを回すのか」を自分の実例で説明できる材料。
+- **chrony の失敗を「コンテナだから無理」と誤診した件**
+  — 実際の原因は systemd が PID 1 で起動していなかったことで、
+  docker daemon・chrony・`timedatectl` という**別々に見えた 3 件が 1 つの原因**だった。
+  症状が同じでも原因が同じとは限らない、という切り分けの教訓。
+- 症状・原因・対処・時系列は
+  [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)
+  に揃っている。**残るは「学び」を自分の言葉で書くことだけ。**
+
 **実施待ち**
 
-- full `molecule test` の初回実行（[証跡採録チェックリスト](./docs/evidence-capture-checklist.md) 優先 1）
 - Linux ホストでの全 stack 初回起動（優先 3）
 - D-1 プロセス停止演習の初回実施（優先 7）
 - LPIC-1 学習でつまずいた箇所（[#5](https://github.com/ns7jp/ns7jp/issues/5) と連動）
