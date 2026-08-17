@@ -38,11 +38,13 @@ jobs:
           path: .lycheecache
           key: cache-lychee-${{ github.sha }}
           restore-keys: cache-lychee-
-      # ローカル（リポジトリ内）リンク切れは決定的に検出できるため CI を落とす
-      - name: Check local links (blocking)
+      # ローカル（リポジトリ内）リンク切れは決定的に検出できるため CI を落とす。
+      # --include-fragments は見出しアンカー（#...）も検証する。
+      # 2026-08-17: 見出し変更にリンクが追随せずアンカー切れが発生したため追加。
+      - name: Check local links and anchors (blocking)
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --cache --max-cache-age 7d --no-progress --offline './**/*.md'
+          args: --cache --max-cache-age 7d --no-progress --offline --include-fragments './**/*.md'
           fail: true
       # 外部リンクは相手側の一時障害で揺れるため参考情報として実行（結果はログで確認）
       - name: Check external links (informational)
