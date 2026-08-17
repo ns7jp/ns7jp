@@ -29,13 +29,24 @@
 
 | 区分 | 内容 | 状態 | 証跡 |
 | --- | --- | --- | --- |
-| 実機 | Server Monitor UI | 掲載済み | [server-monitor screenshot](https://github.com/ns7jp/server-monitor/blob/main/docs/screenshot.png) |
+| 開発時の画面（**Windows 端末**） | Server Monitor UI | 掲載済み。**Linux サーバー構築の証跡ではない** | [server-monitor screenshot](https://github.com/ns7jp/server-monitor/blob/main/docs/screenshot.png) |
+| 実機予定（**Linux**） | Server Monitor UI を Linux ホストで起動した画面 | 採録待ち。**上の画像の差し替え対象** | `server-monitor/docs/evidence/` |
 | 実機予定 | Grafana 統合監視 dashboard | 採録待ち | `server-monitor/docs/evidence/` |
 | 実機予定 | Alertmanager / Slack 通知 | 採録待ち | `server-monitor/docs/evidence/` |
 | 実機予定 | D-1 / D-2 復旧演習ログ | テンプレート整備済み | `server-monitor/docs/drills/logs/` |
 | 実機予定 | AWS apply / destroy / Cost Explorer | テンプレート整備済み | `server-monitor/docs/evidence/` |
 
-![Server Monitor Dashboard](https://raw.githubusercontent.com/ns7jp/server-monitor/main/docs/screenshot.png)
+![Server Monitor Dashboard（Windows 端末での開発時画面）](https://raw.githubusercontent.com/ns7jp/server-monitor/main/docs/screenshot.png)
+
+> **この画像について（2026-08-17 追記）**
+>
+> 上の画面は **Windows 11 端末で開発中に撮影したもの**です。アプリケーションが動作することは示しますが、
+> **Linux サーバーを構築・運用した証跡ではありません**。第一志望が Linux サーバー構築である以上、
+> この画像を主要キャプチャとして掲示し続けるのは適切でないため、
+> Linux ホストで起動した画面が採録でき次第、差し替えます（[チェックリスト優先 3](../evidence-capture-checklist.md)）。
+>
+> 従来は本表で「実機 / 掲載済み」とだけ記載しており、**どの OS で撮ったものかが読み手に伝わらない状態**でした。
+> 「実物・設計サンプル・計画を混同しない」という本ページの方針に照らして、記載を訂正しています。
 
 採録時は秘密値、公開 IP、AWS account ID、個人名をマスクし、対象 commit と
 実行日時を必ず併記します。

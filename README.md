@@ -4,6 +4,8 @@
 
 製造・物流の現場で 15 年以上培った「計測する・手順化する・改善を定着させる」力を生かし、Linux サーバーの構築から監視、障害対応、改善までを担うエンジニアを目指しています。
 
+**現況（2026-08）**: 派遣社員としてトライアル就業中です。IT 業務に従事しながら、Linux サーバー構築へのキャリア移行を進めています。
+
 第一志望は **Linux サーバー構築・運用** です。入口業務としてインフラ監視・運用、IT サポート、社内 SE 補助にも対応します。
 
 ## まず見る 3 点
@@ -41,12 +43,14 @@ flowchart LR
 
 | 状態 | 現在確認できるもの |
 | --- | --- |
-| コード・設定実装済み | Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform |
-| 自動検査あり | Python tests、構成ファイル、Ansible / Terraform、依存・秘密値 scan |
-| 手動の実測証跡が必要 | Ubuntu 新規構築、Grafana / Loki / 通知、D-1 / D-2、二セグメント障害ラボ |
+| CI で継続的に自動検証している | Python tests、Compose / Prometheus / Loki 設定、Ansible lint・syntax、Terraform fmt / validate、Trivy による依存・秘密値・設定 scan、バックアップスクリプトの日次検証 |
+| コード・設定を実装済み | Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform |
+| **実機での実測はこれから** | **Linux ホストでの全 stack 起動、Grafana / Loki / 通知の実画面、D-1 / D-2 復旧演習、二セグメント障害ラボ** |
 | AWS 実測が必要 | `plan / apply / destroy`、費用、AWS Backup 復元 |
 
-未収録の項目は「実装・手順作成済み」とし、実行日時、commit SHA、コマンド、結果、所要時間を記録して初めて「実測済み」へ変更します。進捗は [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) で管理しています。
+**現時点で、Linux 上で本構成を起動した記録はありません。** [試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/build-package/06-test-specification.md)の結合試験・セキュリティ試験は全項目 `NOT RUN` です。ここを埋めることを最優先の課題として [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) で管理しています。
+
+自動検査で担保できる範囲（構文、設定の整合、秘密値の混入、依存の脆弱性）と、実機でしか確認できない範囲（起動、疎通、復旧時間）を区別すること自体を、運用設計の一部として扱っています。未収録の項目は「実装・手順作成済み」とし、実行日時、commit SHA、コマンド、結果、所要時間を記録して初めて「実測済み」へ変更します。
 
 ## サーバー構築で説明できること
 
