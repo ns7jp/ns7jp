@@ -43,12 +43,15 @@ flowchart LR
 
 | 状態 | 現在確認できるもの |
 | --- | --- |
+| **Linux 上で実測済み** | **Ansible ロール 4 本（common / docker / nginx / monitoring）の適用・冪等性・適用結果の検証**（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／ [実行 URL](https://github.com/ns7jp/server-monitor/actions/runs/32031882695)） |
 | CI で継続的に自動検証している | Python tests、Compose / Prometheus / Loki 設定、Ansible lint・syntax、Terraform fmt / validate、Trivy による依存・秘密値・設定 scan、バックアップスクリプトの日次検証 |
 | コード・設定を実装済み | Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform |
-| **実機での実測はこれから** | **Linux ホストでの全 stack 起動、Grafana / Loki / 通知の実画面、D-1 / D-2 復旧演習、二セグメント障害ラボ** |
+| **実機での実測はこれから** | **監視スタック全体の起動、Grafana / Loki / 通知の実画面、D-1 / D-2 復旧演習、二セグメント障害ラボ** |
 | AWS 実測が必要 | `plan / apply / destroy`、費用、AWS Backup 復元 |
 
-**現時点で、Linux 上で本構成を起動した記録はありません。** [試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/build-package/06-test-specification.md)の結合試験・セキュリティ試験は全項目 `NOT RUN` です。ここを埋めることを最優先の課題として [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) で管理しています。
+**Ansible ロールについては、実際に適用して 2 回目で `changed=0` になること（冪等性）まで確認済みです。** この検証では、静的検査では検出できなかった実際の欠陥を 2 件見つけて修正しました（`tzdata` の依存漏れ、および UFW の `allow` と `limit` が同一ポートを奪い合う不具合）。経緯は [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) に残しています。
+
+一方で、**監視スタック全体を起動した記録はまだありません。** [試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/build-package/06-test-specification.md)の結合試験・セキュリティ試験も大半が `NOT RUN` です。ここを埋めることを最優先の課題として [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) で管理しています。
 
 自動検査で担保できる範囲（構文、設定の整合、秘密値の混入、依存の脆弱性）と、実機でしか確認できない範囲（起動、疎通、復旧時間）を区別すること自体を、運用設計の一部として扱っています。未収録の項目は「実装・手順作成済み」とし、実行日時、commit SHA、コマンド、結果、所要時間を記録して初めて「実測済み」へ変更します。
 

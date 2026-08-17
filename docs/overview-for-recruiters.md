@@ -40,11 +40,14 @@
 
 実務での大規模インフラ経験はこれからです。コードや設計書の存在と、実環境で成功した結果を混同しないよう、[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) で区別しています。
 
-**現時点で、Linux ホスト上で本構成を起動した記録はありません。** 構文・設定・依存・秘密値の検査は CI で継続的に自動実行していますが、起動・疎通・復旧時間といった実機でしか確認できない項目は未採録です。
+実測済みの範囲と、未実測の範囲を分けて記載します。
 
-- Linux host での全構成起動、D-1 / D-2、AWS `apply / destroy` は実測証跡の採録前
-- [試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/build-package/06-test-specification.md)の結合試験・セキュリティ試験は全項目 `NOT RUN`
+**実測済み**: Ansible ロール 4 本を Linux 上で実際に適用し、冪等性（2 回目で `changed=0`）と適用結果まで検証しました（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)）。この検証で、静的検査では見つからなかった実際の欠陥を 2 件検出・修正しています。
+
+**未実測**: 監視スタック全体の起動、Grafana / Loki / 通知の実画面、D-1 / D-2 復旧演習、AWS 適用は採録前です。
+
 - 未実施項目は「実装・手順作成済み」と表現
+- [試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/build-package/06-test-specification.md)の結合試験・セキュリティ試験は大半が `NOT RUN`
 - 実行日時、commit SHA、コマンド、結果、所要時間を残してから「実測済み」へ変更
 
 この区別を曖昧にしないこと自体を、運用職に必要な姿勢として重視しています。「動くはず」と「動くことを確認した」の差は、障害対応で最も重い差になるためです。
