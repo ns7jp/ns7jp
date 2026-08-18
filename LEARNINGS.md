@@ -6,7 +6,7 @@
 > 未経験からの信頼性は、整った設計書よりも「何が壊れて、どう直したか」という**生の学習過程**で証明されます。
 > 各エントリは自分の言葉で、事実だけを短く書きます（盛らない・推測は推測と明記する）。
 
-最終更新: 2026-08-17
+最終更新: 2026-08-18
 
 ---
 
@@ -16,7 +16,6 @@
 - 「うまくいった成功談」より、**つまずきと、その後どうしたか**を優先して書く。
 - 採録した証跡（スクショ・ログ）があればリンクする。
 - エントリはまだ少ないです。設計書の量ではなく、このログと[証跡](./docs/evidence-capture-checklist.md)を増やすことを現在の最優先にしています。
-- **2026-08 の 2 件は、事実（環境・症状・原因・対処・証跡）まで記入済みで「学び」が `〈 〉` のまま**です。ここは本人が書く欄なので、空のまま公開しています。
 
 ---
 
@@ -54,7 +53,7 @@
 
 - **原因**: 既定値 `common_ufw_allowed_tcp_ports` が `[22]` だったため、上記 2 タスクが**どちらも port 22 を対象にしていた**。ufw では同一 port への `allow` と `limit` は別々のルールにならず、**後から適用したほうが前を置き換える**。そのため実行のたびに `allow → limit → allow …` と交互に書き換わり、両タスクが永久に `changed` を返し続けていた。同じ play の `Configure UFW default incoming policy` は冪等と判定されていたため、**ufw モジュール自体は正常で、ロールが矛盾する 2 つのルールを同じ port へ適用していた**ことが原因だと切り分けられた。
 - **対処**: `common_ufw_limit_ssh`（既定 `true`）と `common_ufw_ssh_port`（既定 `22`）を追加し、**rate limit の対象 port を allow のループから `difference` で除外**した。「SSH は allow ではなく limit で開放する」という設計意図はそのまま維持している。あわせて `map('int')` で型を正規化した（従来は許可一覧に文字列 `'22'` が入っていると `22 in ...` が偽になり、limit が適用されない不整合があった）。振り分けは 6 パターンで実測して確認した。
-- **学び**: 〈ここを自分の言葉で書く。手がかり: **`ansible-lint` も `--syntax-check` も、この欠陥を検出できなかった**。文法は正しく、個々のタスクも妥当で、2 回適用して初めて矛盾が現れる種類だったため。また冪等性が壊れるだけの問題ではなく、実ホストでも毎回 SSH のルールが `ALLOW` と `LIMIT` の間で書き換わるため、**総当たり攻撃の抑止が意図した状態で維持されない**というセキュリティ上の欠陥でもあった。「設定の見た目」と「実際の状態」が一致していることを、どう担保するか〉
+- **学び**: 文法が正しく、個々のタスクとして妥当であっても、それだけで設定が意図どおりに働いているとは言えない。今回は `ansible-lint` も `--syntax-check` も通過していたのに、**2 回適用して初めて矛盾が現れた**。しかも実害は「毎回 `changed` になる」ことにとどまらず、SSH の総当たり抑止が意図した状態で維持されないという、セキュリティ上の問題でもあった。**「設定の見た目」と「実際の状態」が一致していることを、どう担保するかを考える必要がある**と思う。今回それを捉えられたのは冪等性の確認だったが、静的検査だけでは届かない範囲があるという前提で検証手段を選ぶこと。
 - **証跡**: [Molecule フル実行記録 2026-08-17](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／ [修正 PR #53](https://github.com/ns7jp/server-monitor/pull/53)
 - **関連**: [02 Ansible 構成管理](./docs/server-monitor-improvements/02-ansible-automation.md) / [証跡採録チェックリスト](./docs/evidence-capture-checklist.md)
 
@@ -70,7 +69,7 @@
 
 - **原因**: 当初、chrony の失敗を「**コンテナはホストの時計を共有するので、中で NTP デーモンを動かせない**」と判断し、変数で無効化した。しかしこれは誤りで、実際の原因は **systemd が PID 1 として起動していなかった**ことだった。molecule-plugins の docker driver は `override_command` が既定 `true` で、指定しない限り `bash -c "while true; do sleep 10000; done"` をイメージの `CMD` に上書きする。4 つの scenario はいずれも `privileged: true`・`cgroupns_mode: host`・`/sys/fs/cgroup` のマウントという **systemd 稼働の前提を全部揃えていたのに、`command` だけ指定していなかった**ため、その準備がすべて無効化されていた。
 - **対処**: 全 scenario に `command: /lib/systemd/systemd` を追加した。あわせて、誤診に基づいて入れた `common_manage_services: false` の上書きを**取り消し**、chrony 起動と sshd 再起動を実際に検証する構成へ戻した。`docker_manage_service` のほうは、daemon 起動に入れ子のコンテナランタイム（storage driver / iptables）が必要で systemd だけでは足りないため据え置き、理由づけを正確な内容へ書き直した。
-- **学び**: 〈ここを自分の言葉で書く。手がかり: **別々に見えた 3 件（docker daemon・chrony・`timedatectl`）が、すべて 1 つの原因に由来していた**。`nginx` と `monitoring` がサービス操作を持たず早くから完走していたことも、後から見れば同じ説明で整合していた。「症状が同じでも原因が同じとは限らない」と同時に「別々の症状が同じ原因のこともある」。また、**「環境の制約だ」と結論づけるのは、調査を打ち切る判断でもある**。どこまで確かめてからその判断をしてよいか〉
+- **学び**: 「環境の制約だ」と結論づけるのは、**同時に調査を打ち切る判断でもある**。今回はその判断が早すぎて、実際には `command` の指定漏れだった原因を、さらに 2 回の実行を挟むまで見落とした。打ち切っている間は、別々に見えた 3 件が 1 つの原因に由来していることにも気づけなかった。**どこまで確かめてからその判断をしてよいかが重要だ**と思う。「できない」と判断する前に、できるための前提条件が本当に揃っているかを確認すること。今回は `privileged` も cgroup も揃えておきながら、systemd を起動する指定だけが抜けていた。
 - **証跡**: [Molecule フル実行記録 2026-08-17](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／ [誤診した PR #52](https://github.com/ns7jp/server-monitor/pull/52) ／ [訂正した PR #54](https://github.com/ns7jp/server-monitor/pull/54)
 - **関連**: [02 Ansible 構成管理](./docs/server-monitor-improvements/02-ansible-automation.md)
 
