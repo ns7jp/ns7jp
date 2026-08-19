@@ -5,7 +5,8 @@
 - **Deciders**: ns7jp（個人ポートフォリオ）
 
 > 公式ドキュメントや技術記事を調べて書いた学習目的の判断記録であり、
-> 実務でのAWS運用・チーム意思決定の経験に基づくものではない。
+> 実務での AWS 運用・チーム意思決定の経験に基づくものではない。
+> 代替案の比較も、深く使い込んだ上での判断ではなく、調べた範囲での判断である。
 
 ---
 
@@ -21,118 +22,58 @@ v2.0 で server-monitor を AWS へ移行するにあたり、インフラ構築
 
 **HashiCorp Terraform** を採用する（[03 設計書](../server-monitor-improvements/03-terraform-aws.md)）。
 
-State は S3 + DynamoDB Lock（後述。**2026-07 追記：S3 ネイティブロックへ見直し、§8 参照**）。モジュール構造は `network / compute / monitoring / iam` で分割する。
+State は S3 に置く（**2026-07 追記：ロック方式を見直し、§6 参照**）。モジュールは `network / compute / monitoring / iam` で分ける。
 
 ---
 
-## 3. Alternatives
+## 3. 他に見た選択肢
 
-| 選択肢 | 評価 | 不採用理由 |
-| --- | --- | --- |
-| **AWS CloudFormation** | AWS 純正、ロールバックが堅牢 | AWS 固有でマルチクラウド時に詰む、構文が冗長、求人ニーズで Terraform に劣後 |
-| **AWS CDK（TypeScript / Python）** | プログラム言語で書ける | プログラム的抽象化の自由度が高すぎて、純粋な「宣言」より読みにくくなりがち。学習段階では HCL の方が「インフラを宣言する感覚」を掴みやすい |
-| **Pulumi** | プログラム言語、マルチクラウド | Terraform よりコミュニティが小さい、求人マッチで弱い |
-| **OpenTofu**（Terraform フォーク） | OSS ライセンス、Terraform 互換 | 採用しても良いが、現時点では Terraform Registry / ドキュメントの揃いで本家を選択。**将来切替の余地あり** |
-| **手動 + ドキュメント化** | 学習コスト最小 | IaC の意義そのものを放棄、不採用 |
+- **AWS CloudFormation**: AWS 純正だが、教材・求人情報の多さで Terraform を優先した
+- **Pulumi / AWS CDK**: プログラミング言語で書けるが、学習段階では宣言型の HCL の方が理解しやすいと感じた
+- **OpenTofu**（Terraform のフォーク）: OSS ライセンスだが、現時点では Terraform 本家の方がドキュメント・Registry が揃っている（将来切り替える可能性はある）
+
+深い比較検討というより、「教材が多く独学しやすいか」を基準に選んだ。
 
 ---
 
-## 4. Decision Rationale
+## 4. State 管理
 
-### 4.1 なぜ Terraform か
-
-1. **求人マッチ**：「Terraform 経験」は AWS インフラ求人で最頻出キーワード
-2. **マルチクラウド経験への布石**：将来 GCP / Azure / オンプレも触る場合に同じツールで通用
-3. **教材の豊富さ**：日本語書籍、AWS公式ハンズオン、HashiCorp Learn が揃っている
-4. **State という概念の学習価値**：「現在のあるべき姿」をコードで持つ思想は、宣言型インフラ理解の核
-5. **Ansible との役割分担の明確さ**（[ADR-0004](./0004-ansible-for-config.md) 参照）
-
-### 4.2 OpenTofu との関係
-
-2023 年の Terraform ライセンス変更後、OpenTofu がフォークされた。本ポートフォリオでは：
-
-- **学習・採用面接アピール**：Terraform の方が圧倒的に通りが良い
-- **コード互換**：プロバイダブロックは互換、将来 OpenTofu 移行は容易
-- **判断保留**：商用案件で OpenTofu 指定があれば即対応可能と回答
+| 項目 | 内容 |
+| --- | --- |
+| Backend | S3（ap-northeast-1） |
+| Lock | 2026-07 に S3 ネイティブロックへ変更（§6） |
+| 暗号化 | KMS で暗号化 |
+| バージョニング | S3 Versioning を有効化 |
+| State 分割 | 環境別 + 機能別（4 モジュール） |
 
 ---
 
-## 5. State 管理の決定
-
-| 項目 | 採用 | 不採用 |
-| --- | --- | --- |
-| Backend | S3（リージョン：ap-northeast-1） | local（壊れたら復旧不能） |
-| Lock | DynamoDB（state ファイル単位）※2026-07 に S3 ネイティブロックへ見直し（§8） | なし（複数人で同時 apply 時に破損） |
-| 暗号化 | KMS Customer Managed Key | デフォルトの SSE-S3（監査で弱い） |
-| バージョニング | S3 Versioning + MFA Delete | バージョニング無し |
-| State 分割 | env 別 + 機能別（4 モジュール） | 巨大 monolith state |
-
----
-
-## 6. CI/CD への組込み
+## 5. CI への組込み
 
 | ステージ | 内容 |
 | --- | --- |
-| PR 作成 | `terraform fmt -check` / `terraform validate` / `tfsec` / `checkov`（2026-07 追記：tfsec は Trivy misconfig スキャンへ更新、§8） |
+| PR 作成 | `terraform fmt -check` / `terraform validate` / セキュリティスキャン |
 | PR レビュー | `terraform plan` の結果を PR コメントに自動投稿 |
 | Merge | Issue / Slack の通知内容を自分で確認してから `terraform apply` |
-| State Drift | 週次で `terraform plan` をスケジュール実行、差分があれば Slack 通知 |
-
-→ [09 §3 セキュリティ CI](../roadmap/09-security-operations.md) と統合運用。
 
 ---
 
-## 7. Consequences
+## 6. Consequences
 
-### 7.1 良い影響
-
-- **「マネコンで作りました」の卒業**：採用面接で IaC 経験として語れる
-- **環境間の一貫性**：dev / staging / prod を同じコードで再現可能
-- **コードレビュー可**：インフラ変更を Pull Request 単位で見直せる
-- **災害復旧の保証**：State さえ残れば、AWS アカウントを失っても再構築可能
-
-### 7.2 悪い影響・制約
-
-- **学習コスト**：HCL、モジュール設計、State 設計、Provider 仕様の習得が必要
-- **State 破損リスク**：Lock を取らない / 手作業で AWS を変更するとドリフト発生
-- **モジュール設計の難しさ**：抽象化しすぎると読みにくく、しなさすぎるとコピペになる
-- **「terraform apply で全部消える」事故**：レビューと minimal blast radius を運用で担保
-
-### 7.3 リスク低減策
-
-- `prevent_destroy` lifecycle ルールを重要リソース（S3 / KMS / DB）に付与
-- `terraform plan` の出力を PR でレビュー必須
-- 商用導入時は **Terraform Cloud / Atlantis / Spacelift** などの GitOps 系を導入
+- **良い影響**: コードとして残るので、同じ構成を何度でも再現できる。変更を Pull Request 単位で見直せる
+- **悪い影響・注意点**: HCL やモジュール設計、State の扱いを覚える必要がある。Lock を取らずに手作業で AWS を変更すると state とズレる
+- **対策**: 重要リソースには `prevent_destroy` を設定し、`terraform plan` の内容を確認してから apply する
 
 ---
 
-## 8. 2026-07 追記（決定の見直し）
+## 7. 2026-07 追記（見直し）
 
-Status は Accepted のまま、周辺技術の変化に合わせて以下 2 点を見直した。
-決定本体（IaC に Terraform を採用）は変更しない。
-
-### 8.1 State ロック：DynamoDB → S3 ネイティブロック
-
-- **トリガー**：Terraform 1.11 で S3 backend のネイティブロック（`use_lockfile`）が GA
-  となり、DynamoDB テーブルによるロック（`dynamodb_table`）は旧構成・非推奨方向となった
-- **見直し内容**：新規構築では `use_lockfile = true` を第一候補とし、ロック専用の
-  DynamoDB テーブルは作成しない。§5 の「Lock: DynamoDB」は当時の判断の記録として残す
-- **影響**：ロック用テーブルが不要になり、構成要素・コスト・IAM 権限が削減される
-  （実装は [03 §5.3](../server-monitor-improvements/03-terraform-aws.md) を更新済み）
-
-### 8.2 IaC セキュリティスキャン：tfsec → Trivy（misconfig）
-
-- **トリガー**：tfsec はメンテナンスモードとなり、同じ Aqua Security の Trivy への統合が
-  進んでいる
-- **見直し内容**：CI の IaC スキャンは **Trivy（misconfig スキャン）/ checkov** を推奨へ
-  更新する（[03 §8](../server-monitor-improvements/03-terraform-aws.md)）
-- **補足**：server-monitor 側で実装済みの tfsec CI は現状動作しているため、置換は次回の
-  CI 整備時に実施する
+- **State ロック**: Terraform 1.11 で S3 backend 自体のロック機能（`use_lockfile`）が使えるようになったため、別途 DynamoDB テーブルを用意する方式から切り替えた（実装は [03 §5.3](../server-monitor-improvements/03-terraform-aws.md)）
+- **セキュリティスキャン**: `tfsec` がメンテナンスモードになったため、後継の Trivy への切り替えを検討中（server-monitor 側では現状 tfsec がまだ動いている）
 
 ---
 
-## 9. 参考
+## 8. 参考
 
 - [Terraform Best Practices](https://www.terraform-best-practices.com/)
 - [HashiCorp Learn — Terraform](https://developer.hashicorp.com/terraform/tutorials)
-- [Yevgeniy Brikman, "Terraform: Up & Running"](https://www.terraformupandrunning.com/)
