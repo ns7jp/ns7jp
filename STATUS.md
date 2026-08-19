@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-19（**D-1 復旧演習を実測し PASS を記録**。あわせて、実態と一致していなかった Dependabot の「残り 7 件」という記述を訂正し、安全な更新の取り込みと AWS provider メジャー更新の見送りを決定。別セッションで、未経験者としての実際のスキル水準に対して内容が高度すぎるという自己評価を受けたポートフォリオ全体の難易度・スコープ引き下げも並行して実施）
+最終更新：2026-08-19（**優先 1・2・3・5・7 の実測証跡採録が完了**。D-1 演習 PASS、Grafana/Loki 実画面、既存 CI 成功ログ、試験仕様書 10/21 PASS。Dependabot の実態誤記を訂正し、実機で見つかった nginx・secrets の欠陥 2 件も修正。§1 の「今週」チェックリストを実態に合わせて全面整理。別セッションで、ポートフォリオ全体の難易度・スコープ引き下げも並行して実施）
 
 ---
 
@@ -319,20 +319,27 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 
 トライアル就業中で可処分時間が減るため、**所要時間の短い順**に並べ替えました。上から順に消化すれば、1 件あたりの着手コストが小さいまま証跡が増えます。
 
-#### 今週（合計 1 時間以内・Linux 環境不要）
+#### 完了（2026-08-17〜19）
 
 - [x] ~~**`ansible-integration.yml` を GitHub Actions で実行**~~ → **2026-08-17 完了**。4 ロール完走し[実測証跡を採録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)（チェックリスト優先 1）
-- [ ] **[LEARNINGS.md](./LEARNINGS.md) に今日の 2 件を追記**（UFW の冪等性欠陥 ／ 自分の診断が誤りだった件）。事実と時系列は証跡ファイルに揃っているため、**「学び」を自分の言葉で書くだけ**。現在エントリが 1 件しかなく、最も費用対効果が高い
+- [x] ~~**LEARNINGS.md に「学び」を追記**~~ → **完了**。UFW の冪等性欠陥・自分の診断が誤りだった件・`docker kill` が `unless-stopped` を無効化していた件・直したコードが反映されていなかった件の計 4 エントリすべて記入済み（[#22](https://github.com/ns7jp/ns7jp/pull/22)、[#31](https://github.com/ns7jp/ns7jp/pull/31)）
+- [x] ~~**server-monitor の Dependabot PR を処理**~~ → **2026-08-19 完了**。滞留していた PR 18 件が処理されずに全件 close されていた実態を確認して STATUS.md を訂正し、安全な更新は [PR #59](https://github.com/ns7jp/server-monitor/pull/59)（マージ済み）として作り直し、AWS provider のメジャー更新は見送りを決定して理由を明記した
+- [x] ~~**Linux + Docker で全 stack を起動し、スクショ 3 点を採録**~~（優先 3〜5） → **2026-08-18 完了**。[Grafana / Loki の実測証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)を採録
+- [x] ~~**`server-monitor/docs/screenshot.png` を Linux 版に差し替え**~~ → **2026-08-19 完了**
+- [x] ~~**D-1 復旧演習の実測**~~（優先 7） → **2026-08-19 完了**。[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)（PASS、RTO 13 秒）。実施に伴い nginx の起動時クラッシュループと secrets の `chmod` 不整合という実機の欠陥 2 件を発見・修正済み（[PR #61](https://github.com/ns7jp/server-monitor/pull/61)）
+- [x] ~~**既存 CI の成功ログを証跡台帳へ記録**~~（優先 2） → **2026-08-19 完了**。あわせて「Backup verify 累計 400 回超」という誤った記載を、実際に数えた 102 回へ訂正した
+- [x] ~~**試験仕様書の `NOT RUN` を実施できた分だけ更新**~~ → **2026-08-19 完了**。21 項目中 10 項目を `PASS` に更新し、残りは `NOT RUN` のまま明示
+
+#### 今週（本人作業・Linux 環境不要）
+
 - [ ] **resume.md / overview の `〈 〉` 箇所を記入**（派遣元・就業先・トライアル期間・在籍年月・夜勤/交代制の可否）
 - [ ] **[#8](https://github.com/ns7jp/ns7jp/issues/8) に現況コメントを 1 件残す**（トライアル就業の開始と、証跡採録の再開予定。2026-07-12 以降が空白のままになっている）
-- [ ] ~~**server-monitor の Dependabot PR 残り 7 件を処理**~~ → **2026-08-19 に実態を確認して修正**。実際には残り 7 件ではなく、**滞留していた PR 18 件が処理されずに全件 close されていた**（マージ 0 件）。安全な更新（GitHub Actions・pip）は [PR #59](https://github.com/ns7jp/server-monitor/pull/59)（CI 確認中）として作り直し、AWS provider のメジャー更新は見送りを決定して理由を明記した（詳細は下記「未処理の Dependabot PR と CI 失敗」）。#59 のマージ確認が残作業
 
 #### 今月（1 晩〜半日・0 円）
 
-- [ ] **Linux + Docker で全 stack を起動し、スクショ 3 点を採録**（[優先 3〜5](./docs/evidence-capture-checklist.md)）。WSL2 でも可。**現在ポートフォリオ内に Linux 上の実行画面が 1 枚も無い**ため、ここが最大の欠落
-- [ ] **`server-monitor/docs/screenshot.png` を Linux 版に差し替え**（現在の画像は Windows 11 端末の画面。Linux サーバー構築の証跡として提示できない）
-- [ ] **[試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/build-package/06-test-specification.md)の `NOT RUN` を、実施できた分だけ `PASS` に更新**（全件埋める必要はない。1 件でも `PASS` があれば、残りの `NOT RUN` は「正直さ」として機能する。全件 `NOT RUN` では「未着手」の証明にしかならない）
-- [ ] **LEARNINGS.md にトライアル就業中のつまずきを追記**（機密・顧客情報に触れない範囲で。エントリが 1 件しかないため、ここが最も費用対効果が高い）
+- [ ] **LEARNINGS.md にトライアル就業中のつまずきを追記**（機密・顧客情報に触れない範囲で。この項目のみ、まだ着手できていない）
+- [ ] **二セグメント障害ラボの実行ログ**（[優先 6](./docs/evidence-capture-checklist.md)、ネットワーク切り分けの一次メモ）
+- [ ] **Alertmanager → Slack の実通知配信**（[優先 4](./docs/evidence-capture-checklist.md)、Slack Webhook が必要）
 
 #### 継続
 
@@ -342,9 +349,9 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 
 #### 就業内容が固まってから
 
-- [ ] **D-1 復旧演習の実測**、**二セグメント障害ラボの実行ログ**（[優先 6〜7](./docs/evidence-capture-checklist.md)）
 - [ ] デモ動画を収録（スクショ・演習採録後の集大成として）
 - [ ] 就業先が Windows / AD 環境なら **Windows / AD 最小証跡を採録**（優先 8）
+- [ ] `terraform apply` → `destroy` の実費と Cost Explorer 記録（優先 9）
 - [ ] IT サポート資料を **実体験ベース** に書き換え（該当業務に従事してから）
 
 ---
