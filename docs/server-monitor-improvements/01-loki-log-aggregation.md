@@ -36,8 +36,9 @@ flowchart LR
 | Nginx access log | `method`、`status` | path、client IP |
 | ホストログ | `job`、`host`、`process` | message 本文 |
 
-高カーディナリティ値を label にしないことで、学習用の単一ホスト Loki でも
-index の増大を抑える。
+IP アドレスや URL のように値の種類が多すぎる項目を label にしてしまうと、Loki の
+index がどんどん大きくなってしまう。そのため、検索の軸として使う項目だけを
+label にしている。
 
 ## 実装参照
 

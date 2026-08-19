@@ -46,7 +46,7 @@
 - **求人マッチ**：Prometheus / Grafana は「Linux + Docker + 監視」案件で第一選択肢
 - **学習価値**：Pull モデル、多次元ラベル、PromQL、Recording Rules、Federation など、設計思想を体得できる
 - **拡張性**：Loki（ログ）/ Tempo（トレース）が同じ Grafana で統合可能（[01](../server-monitor-improvements/01-loki-log-aggregation.md) / [06](../roadmap/06-observability-traces.md)）
-- **SLO 設計と直結**：histogram + Burn Rate アラート（[04](../server-monitor-improvements/04-slo-design.md)）が公式パターンとして確立
+- **SLO 設計とも相性がよい**：しきい値に近づく速さを見てアラートを出すような設計（[04](../server-monitor-improvements/04-slo-design.md)）にも histogram のデータがそのまま使える
 
 ### 4.2 悪い影響・制約
 

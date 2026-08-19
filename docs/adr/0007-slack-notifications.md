@@ -17,7 +17,7 @@ Alertmanager / GitHub Actions / セキュリティスキャナーからの通知
 ## 2. Decision
 
 **Slack（Incoming Webhook + Slack App）** を主通知チャネルとする。
-ただし将来の On-Call 本格運用を見据え、**Critical Sev は PagerDuty / Opsgenie への切替パスを設計に含める**。
+ただし将来、重大なアラートだけは電話などですぐ気づけるようにすることも検討し、**その場合に備えて PagerDuty / Opsgenie への切替パスを設計に含める**。
 
 ---
 
@@ -61,8 +61,8 @@ Alertmanager / GitHub Actions / セキュリティスキャナーからの通知
 ```mermaid
 flowchart LR
     AM[Alertmanager] --> Severity{Severity}
-    Severity -- Critical --> C[#alerts-critical<br/>通知音 ON<br/>夜間も対応]
-    Severity -- Warning --> W[#alerts-warning<br/>業務時間内対応]
+    Severity -- Critical --> C[#alerts-critical<br/>通知音 ON<br/>気づいたらすぐ確認]
+    Severity -- Warning --> W[#alerts-warning<br/>時間があるときに確認]
     Severity -- Info --> I[#alerts-info<br/>レビュー時に一読]
 
     GA[GitHub Actions] --> Deploy[#deploy<br/>CI/CD 結果]
@@ -83,7 +83,7 @@ flowchart LR
 
 ### 6.2 悪い影響・制約
 
-- **夜間の対応保証ができない**：個人通知音だけでは寝てしまう。Critical Sev は PagerDuty / Opsgenie の導入で補完予定
+- **夜間の対応保証ができない**：個人通知音だけでは寝てしまう。重大なアラートは PagerDuty / Opsgenie の導入で補完予定
 - **Slack 障害時の代替経路がない**：副チャネルとしてメール / SMS の冗長化も将来検討
 - **チャネルが増えると疲労**：定期的に「実効性のある通知」を棚卸しする月次レビューに組込み
 
