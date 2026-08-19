@@ -79,7 +79,7 @@
 - **症状**: D-1（プロセスダウン→自動復旧演習）で `docker compose kill -s KILL app` を実行すると、コンテナは確かに落ちる（`exit=137`）が、8 分以上待っても `RestartCount` が増えず、`/healthz` も復活しなかった。
 - **原因**: `docker compose kill` / `docker kill` は Docker Engine の kill API を経由するため、デーモン内部で「手動で止められた」と記録され、`restart: unless-stopped` による自動復旧が無効化される（Docker の仕様）。回避策として、コンテナ内部から `docker exec <container> kill -9 1` を試したが、これは別の理由でさらに失敗した。PID 名前空間の内側から init（PID 1）へ、ハンドラを設定していないシグナルを送っても、カーネルが黙って破棄するため、そもそも届かない。
 - **対処**: 両方を避けるため、コンテナのホスト側 PID（`docker inspect -f '{{.State.Pid}}'`）に対して直接 `kill -9` する方式に変更した（[PR #56](https://github.com/ns7jp/server-monitor/pull/56)）。実機で `RestartCount` が `0 → 1` に増え、RTO 13 秒で正しく自動復旧することを確認した。
-- **学び**: 〈 〉
+- **学び**: `docker compose kill` はコンテナを確かに落とせるので、演習としては「壊せている」ように見えた。しかし Docker 内部では、Engine の API を経由した停止は `unless-stopped` から見て「意図的に止められた」ものとして扱われ、本物の障害とは区別されている。この違いは exit code や `docker compose ps` の見た目だけでは分からず、`RestartCount` が実際に増えるかまで確認して初めて気づけた。**演習・テストの「壊し方」が、本番で実際に起こりうる壊れ方と一致しているかを、どう確認すべきか**を学んだ。壊し方を1つ試して失敗を確認しただけで終わらせず（`docker exec` 経由の代替案も、別の理由でもう一度失敗している）、意図した復旧が実際に起きるところまで検証して、ようやく演習として成立した。
 - **証跡**: [D-1 演習記録 2026-08-19](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) ／ [修正 PR #56](https://github.com/ns7jp/server-monitor/pull/56)
 - **関連**: [D-1 プロセスダウン演習](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/D-1-process-down.md)
 
@@ -89,7 +89,7 @@
 - **症状**: 上記の修正（PR #56）をマージした後、スクリプトを実行してもまったく同じ症状（自動復旧しない）が再現した。一方、同じ内容を手動でコマンド 1 行ずつ打つと 4 回連続で成功する。「同じ操作のはずなのに、スクリプト経由だけ必ず失敗する」という矛盾した結果になり、`docker events` でデーモンの挙動まで確認する調査に進んだ。
 - **原因**: 手元の `main` ブランチが、修正をマージする前の内容のままだった。`git checkout main` はしていたが、その後 `git fetch` をしていなかったため、ローカルが持つ `origin/main` の参照自体が古く、`git status` が表示する「up to date with origin/main」が、その古い基準と比較した結果に過ぎなかった。
 - **対処**: `git fetch origin main && git merge --ff-only origin/main` でブランチを取り直し、スクリプトの中身を直接見て修正が反映されていることを確認してから、再実行した。
-- **学び**: 〈 〉
+- **学び**: 低レイヤーの調査（`docker events`、カーネルの PID 名前空間の挙動）にまで踏み込んだのに、実際の原因は `git fetch` を忘れていたという、調査を始める前に数秒で確認できたはずのことだった。`git status` が出す「up to date with origin/main」という表示を、生きた最新情報だと思い込んでいたのも一因である。**「もっと安く確認できることはないか」と立ち止まる機会**があったはずで、低レイヤーの調査に進む前に「今動いているコードは本当に直したコードか」を確認していれば、この回り道は避けられた。原因不明の・再現しない不具合に当たったときほど、まず自分の手元の前提（コード・設定・バージョン）を疑う順番を先に置く。
 - **証跡**: [D-1 演習記録 2026-08-19](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)（「ここまでの経緯」の表に記載）
 - **関連**: 上記エントリ
 
