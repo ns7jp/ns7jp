@@ -5,7 +5,7 @@
 > 本ポートフォリオは設計資料が充実している一方で、**実機で動かして測った証跡が不足**しています（[STATUS.md](../STATUS.md) でも最優先の伸びしろと明記）。
 > このチェックリストは、**新規の設計を増やすのをやめ、既存の設計を「実物」に変換する**ための実行計画です。設計書ではなく作業手順として使います。
 
-最終更新: 2026-08-19（**優先 1・3・5・7 を採録完了**。残るは優先 2・4・6・8・9）
+最終更新: 2026-08-19（**優先 1・2・3・5・7 を採録完了**。残るは優先 4・6・8・9）
 
 ---
 
@@ -29,7 +29,7 @@
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
 | ✅ 1 | ~~**full `molecule test` の実行ログ**（converge → verify → idempotence、4 ロール分）~~ **2026-08-17 採録完了** → [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) | **ブラウザのみ**（GitHub Actions） | 0 円・実績 2 分 42 秒 | [02 Ansible 構成管理](./server-monitor-improvements/02-ansible-automation.md) |
-| 2 | **既存 CI の成功ログを証跡台帳へ記録**（Python check / Terraform check / Security scan / Backup verify） | **ブラウザのみ** | 0 円・30 分 | [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
+| ✅ 2 | ~~**既存 CI の成功ログを証跡台帳へ記録**（Python check / Terraform check / Security scan / Backup verify）~~ **2026-08-19 採録完了** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md) | **ブラウザのみ** | 0 円・30 分 | [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
 
 > **優先 1 は 2026-08-17 に採録完了しました。** 4 ロール（common / docker / nginx / monitoring）すべてが
 > create → converge → idempotence → verify を通過しています（0 円・2 分 42 秒）。
@@ -37,9 +37,10 @@
 > （`tzdata` の依存漏れ、UFW の `allow` と `limit` が同一ポートを奪い合う不具合）。
 > 経緯は [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) に残しています。
 >
-> **優先 2 は「すでに存在する証跡を拾っていないだけ」です。** `Backup verify` は毎日 04:00 UTC に自動実行されて成功が積み上がっており、
-> 累計 400 回超の CI 実行履歴があります。これらは第三者が再確認できる機械検証の記録ですが、台帳に一度も記載されていません。
-> 実機の実測証跡の代わりにはなりませんが、**「自動化された検証を継続的に回している」ことの証拠としては十分**です。
+> **優先 2 は 2026-08-19 に採録完了しました。** `Backup verify` は毎日 04:00 UTC に自動実行されており、
+> GitHub Actions API で実際に数えたところ累計 **102 回**の実行履歴があった（従来「400回超」と記載していたが誤りだったため訂正）。
+> `python-check` / `terraform-check` / `security-scan` の直近成功ログとあわせて
+> [server-monitor 側の記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md)に採録した。
 
 ### グループ B — Linux + Docker が必要（WSL2 で可。1 晩）
 
@@ -70,7 +71,7 @@
 
 デモ動画（[台本](./demo-script.md)）は差別化効果が高い一方で、収録前チェック 6 項目を要する**最重量のタスク**です。「動画を撮るまで何も出せない」状態を避けるため、順序は次のとおり固定します。
 
-1. ~~**CI 証跡（優先 1〜2）** — ブラウザのみ~~ → 優先 1 は ✅ 採録済み。残るは優先 2（30 分）
+1. ~~**CI 証跡（優先 1〜2）** — ブラウザのみ~~ → 優先 1・2 ともに ✅ 採録済み
 2. ~~**スクショ 3 点（優先 3〜5）**~~ → 優先 3・5 は ✅ 採録済み（2026-08-18）。残るは優先 4（Alertmanager → Slack）
 3. ~~**演習・実測（優先 6〜7）**~~ → 優先 7（D-1）は ✅ 採録済み（2026-08-19、PASS）。残るは優先 6（ネットワーク切り分けメモ）
 4. **デモ動画** — 証跡が揃った後の**集大成**として収録（スクショはリハーサルの副産物として撮れるため、逆順にはしない）
@@ -109,7 +110,12 @@
 > 成功ログだけの記録より価値があります（[LEARNINGS.md](../LEARNINGS.md) のエントリにもなります）。
 > 詳しい手順は [Molecule を GitHub Actions で実行する](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/molecule-via-github-actions.md) を参照してください。
 
-### 2. 既存 CI の成功ログを証跡台帳へ記録（Linux 環境不要）
+### 2. 既存 CI の成功ログを証跡台帳へ記録（Linux 環境不要）✅ 採録済み
+
+> 2026-08-19 に採録完了（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md)）。
+> `Backup verify` は毎日自動実行されており、GitHub Actions API で実際に数えたところ累計 **102 回**
+> の実行履歴があった（本ファイルに以前あった「400回超」という記載は誤りだったため訂正した）。
+> 以下は**再実行するときの手順**として残す。
 
 1. Actions タブで `Python check` / `Terraform check` / `Security scan` / `Backup verify` の**成功した最新実行**を開く。
 2. それぞれの実行 URL、実行日時、対象 commit SHA、検証内容を控える。
@@ -117,10 +123,6 @@
 4. 台帳（`docs/evidence/README.md`）の該当行に、この記録へのリンクを張る。
 
 > **これは新しく何かを実行する作業ではなく、すでに存在する結果を拾う作業です。**
-> `Backup verify` は毎日自動実行されており、CI の累計実行回数は 400 回を超えています。
-> 「自動検証を継続的に回している」ことの裏付けとして提示できるのに、台帳に記載がないため
-> 読み手には見えていません。**所要 30 分で、証跡台帳の空欄が目に見えて減ります。**
->
 > ただし、これは**実機の実測証跡の代わりにはなりません**。CI で確認できるのは構文・設定の整合・
 > 依存の脆弱性までであり、起動・疎通・復旧時間は含まれません。台帳にもその区別を明記してください。
 
