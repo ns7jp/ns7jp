@@ -29,11 +29,9 @@ Docker Compose 止まりだと、以下を学べない。
 
 ## 2. 進め方の方針
 
-「**いきなり EKS を立てない**」ことを最優先する。理由：
-
-1. **コスト**：EKS コントロールプレーン $0.10/h ≒ 月 11,000 円。学習中に放置すると痛い
-2. **抽象度**：K8s 概念（Pod / Service / Ingress / RBAC）を理解しないまま AWS 固有の便利機能（IRSA / VPC CNI）に進むと、後で原理が分からなくなる
-3. **資格との整合**：CKAD（Kubernetes 認定アプリ開発者）→ CKA（管理者）の順で学習教材が整っており、ローカル → クラウドの段階移行が公式に推奨
+「**いきなり EKS を立てない**」ことを最優先する。EKS はコントロールプレーンだけで月 11,000 円程度かかり、
+K8s の基本概念（Pod / Service / Ingress）を理解しないまま AWS 固有の機能に進むと後で分からなくなるため、
+ローカル（kind → minikube）で慣れてから EKS に進む。
 
 ### 学習フェーズ
 
@@ -88,79 +86,15 @@ flowchart TB
 
 ### 3.1 ワークロード分類
 
-| リソース | 種別 | 理由 |
-| --- | --- | --- |
-| Flask Dashboard | Deployment | ステートレス、レプリカ 2 で HA |
-| Prometheus | StatefulSet (Operator) | TSDB を PV に持つ |
-| Loki | StatefulSet | チャンクは S3、インデックスは PV |
-| Tempo | StatefulSet | 同上 |
-| Grafana | Deployment | DB は RDS or PV |
-| 監視ターゲット（node-exporter） | DaemonSet | 全ノードに 1 つ |
+| リソース | 種別 |
+| --- | --- |
+| Flask Dashboard | Deployment（レプリカ 2） |
+| Prometheus / Loki / Tempo | StatefulSet |
+| Grafana | Deployment |
+| 監視ターゲット（node-exporter） | DaemonSet |
 
-### 3.2 サンプル Deployment
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: dashboard
-  namespace: server-monitor
-spec:
-  replicas: 2
-  selector: { matchLabels: { app: dashboard } }
-  template:
-    metadata:
-      labels: { app: dashboard }
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9100"
-    spec:
-      serviceAccountName: dashboard
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 10001
-        fsGroup: 10001
-      containers:
-        - name: app
-          image: ghcr.io/ns7jp/server-monitor:1.2.0
-          ports:
-            - { name: http, containerPort: 8000 }
-            - { name: metrics, containerPort: 9100 }
-          env:
-            - name: OTLP_ENDPOINT
-              value: http://tempo.monitoring:4317
-          readinessProbe:
-            httpGet: { path: /health, port: http }
-            periodSeconds: 5
-          livenessProbe:
-            httpGet: { path: /health, port: http }
-            periodSeconds: 15
-          resources:
-            requests: { cpu: 100m, memory: 128Mi }
-            limits:   { cpu: 500m, memory: 512Mi }
-```
-
-### 3.3 オートスケール（HPA）
-
-```yaml
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: dashboard
-  namespace: server-monitor
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: dashboard
-  minReplicas: 2
-  maxReplicas: 6
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target: { type: Utilization, averageUtilization: 70 }
-```
+具体的な manifest（Deployment / HPA など）は、実際に kind で動かし始めてから
+このドキュメントに追記する。
 
 ---
 
@@ -176,9 +110,7 @@ flowchart LR
     ArgoCD -->|ドリフト検知| Slack[Slack 通知]
 ```
 
-- `kubectl apply` を **禁止** し、変更は必ず git 経由
-- App-of-Apps パターンで Namespace ごとに ArgoCD Application を管理
-- Sync Wave で順序制御（CRD → Operator → ワークロードの順）
+`kubectl apply` での直接変更はせず、manifest の変更は必ず git 経由で ArgoCD に反映させる想定。
 
 ---
 
@@ -213,12 +145,8 @@ EKS は **資格学習（CKA / AWS SAA Pro）と連動した期間集中型** �
 
 ## 7. リスクと対策
 
-| リスク | 対策 |
-| --- | --- |
-| 学習中に EKS を放置して課金累積 | AWS Budgets で月 15,000 円の警報、毎週金曜に `terraform destroy` |
-| K8s 概念を理解する前に AWS 固有機能に進む | Phase 1（kind）で **クラウド非依存の概念** を必ず先に固める |
-| 過剰な複雑性で「VM 構成より良くなった証拠」が出ない | RTO / コスト / 開発リードタイムの 3 指標で VM 構成（[03](./03-terraform-aws.md)）と比較 |
-| 自分一人で運用できなくなる（YAML 量爆発） | Helm + Kustomize で重複削減、不要な抽象は導入しない |
+最大のリスクは、学習中に EKS を立てたまま忘れて課金が積み上がること。
+対策として AWS Budgets で月 15,000 円の警報を設定し、毎週金曜に `terraform destroy` する運用にする。
 
 ---
 
