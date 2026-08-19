@@ -12,7 +12,7 @@
 
 - 障害ランブック（`runbooks/service-down.md` 等）
 - Alertmanager から Slack 通知
-- [04. SLO](./04-slo-design.md) でアラート優先度の数値根拠
+- [04. SLO](../server-monitor-improvements/04-slo-design.md) でアラート優先度の数値根拠
 
 一方で、**「インシデント発生 → 一次対応 → 復旧 → 振り返り → 再発防止」** という運用プロセス全体は未整備。
 
@@ -32,7 +32,7 @@
 
 | Sev | 例 | 検知 | 初動 | エスカレーション |
 | --- | --- | --- | --- | --- |
-| **Sev1** | 全停止、データロス可能性 | バーンレート Fast burn（[04](./04-slo-design.md)） | 即時オンコール起動、IC 任命 | 30 分以内に上長へ報告 |
+| **Sev1** | 全停止、データロス可能性 | バーンレート Fast burn（[04](../server-monitor-improvements/04-slo-design.md)） | 即時オンコール起動、IC 任命 | 30 分以内に上長へ報告 |
 | **Sev2** | 機能の一部停止、性能劣化 | バーンレート Slow burn | 業務時間内 1 時間以内に着手 | 翌営業日朝に報告 |
 | **Sev3** | 軽微な異常（単発エラー） | 個別アラート | 業務時間内に確認 | 不要 |
 | **Sev4** | ノイズ / 誤検知 | 同上 | アラートチューニング対象として記録 | 不要 |
@@ -66,7 +66,7 @@ flowchart LR
 
 ### 3.1 個人ラボでの読み替え
 
-[11 変更管理](./11-change-management.md) が CAB を PR レビューへ落とし込んだのと同じ方式で、
+[11 変更管理](../server-monitor-improvements/11-change-management.md) が CAB を PR レビューへ落とし込んだのと同じ方式で、
 組織前提の記述は設計サンプルとして残し、個人ラボでは以下の軽量版に読み替えて運用する。
 
 | 組織前提の記述 | 個人ラボでの運用 |
@@ -251,7 +251,7 @@ flowchart LR
 | 原因カテゴリ | 設定ミス 40%, ハード障害 20%, ... |
 | アクション完了率 | 12/15 = 80% |
 
-[04. SLO](./04-slo-design.md) の月次レビューと **同じ会議体で実施** すると効率的。
+[04. SLO](../server-monitor-improvements/04-slo-design.md) の月次レビューと **同じ会議体で実施** すると効率的。
 
 ---
 
@@ -273,7 +273,7 @@ flowchart LR
 | --- | --- |
 | 1 | Severity / ロール / フローを `docs/incident-response.md` に明文化 |
 | 2 | テンプレ（宣言・更新・解決・ポストモーテム）を整備 |
-| 3 | 演習（[05](./05-backup-recovery-drill.md) D-1）で 1 件目のポストモーテムを書く |
+| 3 | 演習（[05](../server-monitor-improvements/05-backup-recovery-drill.md) D-1）で 1 件目のポストモーテムを書く |
 | 4 | 月次レビュー会の枠を設定、初回開催 |
 
 ---
@@ -282,17 +282,17 @@ flowchart LR
 
 - [ ] `docs/incident-response.md` に運用ルールが明文化
 - [ ] `docs/postmortems/TEMPLATE.md` がリポジトリにある
-- [ ] [05](./05-backup-recovery-drill.md) の演習が 1 回終わり、対応する PM が公開されている
+- [ ] [05](../server-monitor-improvements/05-backup-recovery-drill.md) の演習が 1 回終わり、対応する PM が公開されている
 - [ ] アクションアイテム用の Issue ラベルと Projects が設定済
-- [ ] 月次レビューが [04](./04-slo-design.md) の SLO レビューと統合されている
+- [ ] 月次レビューが [04](../server-monitor-improvements/04-slo-design.md) の SLO レビューと統合されている
 
 ---
 
 ## 12. 関連設計書
 
-- [04. SLO 設計](./04-slo-design.md)（Sev 判定の数値根拠）
-- [05. 復旧演習](./05-backup-recovery-drill.md)（初回ポストモーテムの源泉）
-- [06. 分散トレース](./06-observability-traces.md)（調査時の解析動線）
+- [04. SLO 設計](../server-monitor-improvements/04-slo-design.md)（Sev 判定の数値根拠）
+- [05. 復旧演習](../server-monitor-improvements/05-backup-recovery-drill.md)（初回ポストモーテムの源泉）
+- [06. 分散トレース](06-observability-traces.md)（調査時の解析動線）
 
 ---
 

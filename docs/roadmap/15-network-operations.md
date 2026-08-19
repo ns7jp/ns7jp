@@ -117,7 +117,7 @@ groups:
           severity: critical
 ```
 
-- **UptimeRobot の SSL モニタ**を冗長化として併用（[12 §5](./12-meta-monitoring.md)）
+- **UptimeRobot の SSL モニタ**を冗長化として併用（[12 §5](12-meta-monitoring.md)）
 
 ### 4.3 更新失敗時のフォールバック
 
@@ -333,7 +333,7 @@ host = monitor.example.com
 | CCNA トピック | 本ドキュメント該当箇所 |
 | --- | --- |
 | Network Fundamentals（OSI 層） | §2 全体像、§7 計測層 |
-| Network Access（VLAN / Trunk） | v2.0 VPC / Subnet（[03](./03-terraform-aws.md)） |
+| Network Access（VLAN / Trunk） | v2.0 VPC / Subnet（[03](../server-monitor-improvements/03-terraform-aws.md)） |
 | IP Connectivity（Routing） | §2 Subnet → Route Table |
 | IP Services（DNS / NAT） | §3 DNS、AWS NAT GW |
 | Security Fundamentals | §5 SG、§6 VPN / SSM、§4 TLS |
@@ -345,10 +345,10 @@ CCNA の知識を「**実運用設計に落とす**」訴求が本ドキュメ�
 
 ## 13. 関連設計書・ADR
 
-- [03 Terraform / AWS](./03-terraform-aws.md) — Network / SG / Route 53 の実装基盤
-- [04 SLO 設計](./04-slo-design.md) — DNS / TLS 障害も SLI に組込み
-- [09 セキュリティ運用](./09-security-operations.md) — SG 監査、TLS シークレット管理
-- [12 メタモニタリング](./12-meta-monitoring.md) — UptimeRobot による外部 TLS / DNS 監視
+- [03 Terraform / AWS](../server-monitor-improvements/03-terraform-aws.md) — Network / SG / Route 53 の実装基盤
+- [04 SLO 設計](../server-monitor-improvements/04-slo-design.md) — DNS / TLS 障害も SLI に組込み
+- [09 セキュリティ運用](09-security-operations.md) — SG 監査、TLS シークレット管理
+- [12 メタモニタリング](12-meta-monitoring.md) — UptimeRobot による外部 TLS / DNS 監視
 - [16 ID 運用](../roadmap/16-identity-operations.md) — VPN / SSM の認証統合
 - [ADR-0005 Terraform 採用](../adr/0005-terraform-for-iac.md)
 

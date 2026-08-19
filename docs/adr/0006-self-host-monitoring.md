@@ -60,7 +60,7 @@
 ### 5.1 良い影響
 
 - **設計判断の蓄積**：「ストレージ戦略」「ラベル設計」「Federation」など、自分で考える機会が連続して発生
-- **メタモニタリング設計**（[12](../server-monitor-improvements/12-meta-monitoring.md)）の必然性：「監視そのものが落ちたら？」を真剣に考える契機
+- **メタモニタリング設計**（[12](../roadmap/12-meta-monitoring.md)）の必然性：「監視そのものが落ちたら？」を真剣に考える契機
 - **コスト最適化スキル**：Prometheus のリテンション、Loki のラベル基数を制御する経験は FinOps（[13](../roadmap/13-finops.md)）と直結
 - **ポートフォリオの厚み**：8 本以上の設計書群が「自前運用の証拠」として揃う
 
@@ -68,12 +68,12 @@
 
 - **運用負荷**：自分でアップデート / バックアップ / 容量管理する責任
 - **可用性の責任**：監視そのものの SLO は SaaS より低くなる
-- **APM がない**：Datadog なら自動で取れるアプリ内部の計装を、OpenTelemetry で自分で実装する必要（[06](../server-monitor-improvements/06-observability-traces.md)）
+- **APM がない**：Datadog なら自動で取れるアプリ内部の計装を、OpenTelemetry で自分で実装する必要（[06](../roadmap/06-observability-traces.md)）
 - **アラート品質**：SaaS の機械学習ベースのアラート（異常検知）は自前では実装が重い
 
 ### 5.3 リスク低減策
 
-- [12 メタモニタリング](../server-monitor-improvements/12-meta-monitoring.md)：外部からの Dead man's switch を組み込み、「監視が落ちたこと」を SaaS の Healthchecks.io 等で受ける
+- [12 メタモニタリング](../roadmap/12-meta-monitoring.md)：外部からの Dead man's switch を組み込み、「監視が落ちたこと」を SaaS の Healthchecks.io 等で受ける
 - 長期保管は S3 + Athena で実装、Prometheus 単体に依存しない設計
 
 ---

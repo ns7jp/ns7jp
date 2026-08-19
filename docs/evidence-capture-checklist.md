@@ -46,9 +46,9 @@
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
 | 3 | `docker compose up` 後の **Grafana 実画面**（CPU/メモリ/HTTP/アラート状態） | ローカル Linux + Docker | 0 円 | [アーキテクチャ図](./architecture-diagram.md) |
-| 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [07 インシデント対応](./server-monitor-improvements/07-incident-response.md) |
+| 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [07 インシデント対応](roadmap/07-incident-response.md) |
 | 5 | Loki + Grafana Alloy の **ログ検索実画面**（クエリ + 結果） | 同上 | 0 円 | [01 ログ集約](./server-monitor-improvements/01-loki-log-aggregation.md) |
-| 6 | **ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる） | 同上 | 0 円 | [15 ネットワーク運用](./server-monitor-improvements/15-network-operations.md) / [橋渡し](./career-bridge.md) |
+| 6 | **ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる） | 同上 | 0 円 | [15 ネットワーク運用](roadmap/15-network-operations.md) / [橋渡し](./career-bridge.md) |
 | 7 | **D-1 復旧演習の実測**（検知 → 復旧の各ステップを実時間で計測） | 同上 | 0 円 | [05 バックアップ・復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 
 > **優先 3 は単なるスクショ 1 枚ではありません。** 現在ポートフォリオ内に存在する唯一の画面キャプチャは

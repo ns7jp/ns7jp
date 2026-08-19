@@ -169,7 +169,7 @@ Prometheus は自分自身のメトリクスを `/metrics` で公開している
 
 ### 6.3 二重 Prometheus（v2.0 以降）
 
-v2.0 で AWS / 2 AZ 化（[03](./03-terraform-aws.md)）するタイミングで、**AZ A の Prometheus が AZ B の Prometheus を監視** する相互監視構成へ発展。
+v2.0 で AWS / 2 AZ 化（[03](../server-monitor-improvements/03-terraform-aws.md)）するタイミングで、**AZ A の Prometheus が AZ B の Prometheus を監視** する相互監視構成へ発展。
 
 ```mermaid
 flowchart LR
@@ -283,9 +283,9 @@ groups:
 
 ## 12. 関連設計書・ADR
 
-- [01 Loki](./01-loki-log-aggregation.md) — Loki 自身のメタモニタリングも本ドキュメントの思想で
-- [04 SLO 設計](./04-slo-design.md) — 監視の SLI / SLO は本ドキュメントで担保
-- [07 インシデント対応](./07-incident-response.md) — メタ監視からの通知が Sev 起点
+- [01 Loki](../server-monitor-improvements/01-loki-log-aggregation.md) — Loki 自身のメタモニタリングも本ドキュメントの思想で
+- [04 SLO 設計](../server-monitor-improvements/04-slo-design.md) — 監視の SLI / SLO は本ドキュメントで担保
+- [07 インシデント対応](07-incident-response.md) — メタ監視からの通知が Sev 起点
 - [17 カオスエンジニアリング](../roadmap/17-chaos-engineering.md) — 検知できることを実証する Game Day
 - [ADR-0006 監視自前運用](../adr/0006-self-host-monitoring.md)
 
