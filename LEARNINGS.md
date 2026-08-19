@@ -6,7 +6,7 @@
 > 未経験からの信頼性は、整った設計書よりも「何が壊れて、どう直したか」という**生の学習過程**で証明されます。
 > 各エントリは自分の言葉で、事実だけを短く書きます（盛らない・推測は推測と明記する）。
 
-最終更新: 2026-08-18
+最終更新: 2026-08-19
 
 ---
 
@@ -73,6 +73,26 @@
 - **証跡**: [Molecule フル実行記録 2026-08-17](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／ [誤診した PR #52](https://github.com/ns7jp/server-monitor/pull/52) ／ [訂正した PR #54](https://github.com/ns7jp/server-monitor/pull/54)
 - **関連**: [02 Ansible 構成管理](./docs/server-monitor-improvements/02-ansible-automation.md)
 
+### 2026-08 D-1 演習: `docker kill` が `restart: unless-stopped` を無効化していた
+
+- **環境**: ローカル Linux（WSL2 Ubuntu 24.04）+ Docker Compose。対象は `app` コンテナ（`restart: unless-stopped` 設定済み）。
+- **症状**: D-1（プロセスダウン→自動復旧演習）で `docker compose kill -s KILL app` を実行すると、コンテナは確かに落ちる（`exit=137`）が、8 分以上待っても `RestartCount` が増えず、`/healthz` も復活しなかった。
+- **原因**: `docker compose kill` / `docker kill` は Docker Engine の kill API を経由するため、デーモン内部で「手動で止められた」と記録され、`restart: unless-stopped` による自動復旧が無効化される（Docker の仕様）。回避策として、コンテナ内部から `docker exec <container> kill -9 1` を試したが、これは別の理由でさらに失敗した。PID 名前空間の内側から init（PID 1）へ、ハンドラを設定していないシグナルを送っても、カーネルが黙って破棄するため、そもそも届かない。
+- **対処**: 両方を避けるため、コンテナのホスト側 PID（`docker inspect -f '{{.State.Pid}}'`）に対して直接 `kill -9` する方式に変更した（[PR #56](https://github.com/ns7jp/server-monitor/pull/56)）。実機で `RestartCount` が `0 → 1` に増え、RTO 13 秒で正しく自動復旧することを確認した。
+- **学び**: 〈 〉
+- **証跡**: [D-1 演習記録 2026-08-19](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) ／ [修正 PR #56](https://github.com/ns7jp/server-monitor/pull/56)
+- **関連**: [D-1 プロセスダウン演習](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/D-1-process-down.md)
+
+### 2026-08 「Docker がおかしい」と疑って調べたら、直したコードが反映されていなかった
+
+- **環境**: 同上（D-1 演習、`main` ブランチでの実行）。
+- **症状**: 上記の修正（PR #56）をマージした後、スクリプトを実行してもまったく同じ症状（自動復旧しない）が再現した。一方、同じ内容を手動でコマンド 1 行ずつ打つと 4 回連続で成功する。「同じ操作のはずなのに、スクリプト経由だけ必ず失敗する」という矛盾した結果になり、`docker events` でデーモンの挙動まで確認する調査に進んだ。
+- **原因**: 手元の `main` ブランチが、修正をマージする前の内容のままだった。`git checkout main` はしていたが、その後 `git fetch` をしていなかったため、ローカルが持つ `origin/main` の参照自体が古く、`git status` が表示する「up to date with origin/main」が、その古い基準と比較した結果に過ぎなかった。
+- **対処**: `git fetch origin main && git merge --ff-only origin/main` でブランチを取り直し、スクリプトの中身を直接見て修正が反映されていることを確認してから、再実行した。
+- **学び**: 〈 〉
+- **証跡**: [D-1 演習記録 2026-08-19](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)（「ここまでの経緯」の表に記載）
+- **関連**: 上記エントリ
+
 ---
 
 ## 次に追加する予定のエントリ（未実施のため、まだ書きません）
@@ -93,7 +113,6 @@
 **実施待ち**
 
 - Linux ホストでの全 stack 初回起動（優先 3）
-- D-1 プロセス停止演習の初回実施（優先 7）
 - LPIC-1 学習でつまずいた箇所（[#5](https://github.com/ns7jp/ns7jp/issues/5) と連動）
 - ネットワーク切り分けメモの初回作成（dig / traceroute / tcpdump、優先 6）
 
