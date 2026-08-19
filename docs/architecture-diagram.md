@@ -35,59 +35,19 @@ blackbox-exporter は対象サービスと同じホスト内にあるため、�
 
 ## AWS Terraform 構成（コード実装済み、適用証跡は未収録）
 
-```mermaid
-flowchart TB
-    User[運用者] -->|HTTPS| ALB[Application Load Balancer]
+ローカルラボと同じ構成を、AWS 上で ALB + 2 台の EC2 として動かす Terraform コードを
+用意している。CloudWatch によるアラーム通知、AWS Backup によるスナップショット、
+基本的な監査ログの有効化などをあわせてコード化した。
 
-    subgraph AWS[AWS ap-northeast-1]
-        ALB --> A[EC2 AZ-1a<br/>app target + local lab stack]
-        ALB --> C[EC2 AZ-1c<br/>app target + local lab stack]
-        A -.AWS metrics.-> CW[CloudWatch alarms]
-        C -.AWS metrics.-> CW
-        CW --> SNS[SNS notification]
-        A -.snapshot.-> Backup[AWS Backup]
-        C -.snapshot.-> Backup
-        Trail[CloudTrail + GuardDuty]
-        Budget[AWS Budgets] --> SNS
-    end
+実装済みなのはコードのみで、実際に `terraform apply` した実績・実費は未収録。
+詳細な構成図とセキュリティ設定は
+[server-monitor 側のAWS設計](https://github.com/ns7jp/server-monitor/blob/main/docs/aws-architecture.md)
+を正本とする。
 
-    subgraph ProductionGap[本番相当 SLO で追加する構成]
-        Synthetic[外部 synthetic probe<br/>CloudWatch Synthetics / UptimeRobot]
-        Central[中央 telemetry store<br/>AMP / CloudWatch Logs / Loki S3]
-    end
-
-    Synthetic -.利用者視点の /healthz.-> ALB
-    A -.remote write / logs.-> Central
-    C -.remote write / logs.-> Central
-
-    subgraph CICD[GitHub]
-        Repo[server-monitor repo]
-        Actions[GitHub Actions<br/>+ Trivy / tfsec / gitleaks]
-        Repo --> Actions
-        Actions -->|terraform apply| AWS
-        Actions -->|ansible-playbook| A
-        Actions -->|ansible-playbook| C
-    end
-
-    style AWS stroke-dasharray: 5 5
-```
-
-| 観点 | 実装済み | まだ主張しないこと |
-| --- | --- | --- |
-| IaC | VPC / ALB / EC2 / Backup / CloudWatch / CloudTrail / GuardDuty / Budgets | AWS での apply 成功、実費 |
-| 可用性 | ALB health / CloudWatch alarm のコード | 外部 synthetic probe による利用者視点 SLO |
-| データ | 各 EC2 のローカル Compose 構成 | 複数 EC2 をまたぐ metrics / logs の中央正本 |
-| 復旧 | AWS Backup とランブックのコード・文書 | 復旧演習の RTO / RPO 実測 |
-
-## 本番相当 SLO へ進めるための追加設計
-
-| 領域 | 最小構成 | 目的 |
-| --- | --- | --- |
-| 外部 probe | CloudWatch Synthetics または UptimeRobot | 対象 EC2 外から `/healthz` を測る |
-| Metrics 中央化 | Prometheus remote_write → AMP | EC2 障害時も時系列を失わない |
-| Logs 中央化 | Alloy → CloudWatch Logs または Loki S3 | ノードをまたぐログ検索を可能にする |
-| 通知 | CloudWatch Alarm / Alertmanager → Slack | 外形監視と内部監視の通知を統合 |
-| 証跡 | probe 履歴、Grafana 画面、Cost Explorer | 「動いた」ことを再現可能に示す |
+複数 EC2 をまたぐ metrics / logs の一元化や、対象ホスト外からの外形監視は
+未実装の将来構想として
+[外部 probe / 中央 telemetry 設計](https://github.com/ns7jp/server-monitor/blob/main/docs/roadmap/external-probe-central-telemetry.md)
+に整理している。
 
 ---
 

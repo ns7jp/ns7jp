@@ -5,6 +5,9 @@
 > `terraform apply` / `destroy`、復旧試験、Cost Explorer の実費は未収録であり、
 > AWS 稼働実績としてはまだ提示しない。現行の費用・観測境界は server-monitor 側の
 > `docs/cost-report.md` と `docs/aws-architecture.md` を正本とする。
+>
+> この設計は AWS の公式ドキュメントやベストプラクティス集を参考に組み立てたものであり、
+> 実務での AWS 運用経験に基づくものではない。
 
 ## 1. 背景・目的
 
