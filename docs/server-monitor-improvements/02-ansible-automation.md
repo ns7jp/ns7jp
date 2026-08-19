@@ -22,14 +22,8 @@ Ansible 化により、**構成を「コード」として宣言** し、`ansibl
 
 ## 2. 採用技術
 
-### なぜ Ansible か
-
-| 候補 | 採用判断 | 理由 |
-| --- | --- | --- |
-| **Ansible** | ◎ 採用 | エージェントレス（SSH のみ）、YAML で読みやすい、学習コスト低 |
-| Chef / Puppet | × | エージェント常駐、学習コスト高、現場での採用例が減少傾向 |
-| シェルスクリプト | × | 冪等性確保が困難、エラーハンドリングが煩雑 |
-| Pulumi / Terraform で OS 設定 | △ | Terraform はクラウドリソース管理に専念、OS 設定は Ansible が適切 |
+Ansible を採用した（エージェントレス、YAML ベース、学習教材が多い）。
+他候補との比較は [ADR-0004 Ansible 採用](../adr/0004-ansible-for-config.md) にまとめている。
 
 ---
 
@@ -235,39 +229,23 @@ jobs:
 
 ### 5.3 本番デプロイフロー
 
-```mermaid
-flowchart LR
-    Dev[ローカル<br/>編集] --> PR[Pull Request]
-    PR --> Lint[ansible-lint]
-    Lint --> Mole[Molecule テスト]
-    Mole --> Review[セルフレビュー]
-    Review --> Merge[main へ merge]
-    Merge --> Stg[staging へ自動デプロイ]
-    Stg --> Smoke[スモークテスト]
-    Smoke --> Manual[最終確認]
-    Manual --> Prod[production へデプロイ]
-```
+PR → lint / Molecule が CI で通る → セルフレビューして merge、という順で進める。
+本番ホストへの適用前には必ず `--check --diff` で差分を確認する。
 
 ---
 
 ## 6. 段階的移行（既存環境からの切替）
 
-1. **既存環境の状態をスナップショット**（設定ファイルを git 管理）
-2. **Ansible playbook を書きながら、ステージング環境で再構築**
-3. **ステージングと本番の `diff` を取り、差異をゼロに**
-4. 本番に対しては最初は `--check --diff` モードで実行
-5. 問題なければ実適用、以後は手動変更を避け、変更は極力 Ansible 経由で行うようにする
+既存ホストの設定ファイルはまず git 管理下に置き、Ansible playbook を書きながら
+ステージング環境で再構築する。本番には最初 `--check --diff` で差分確認のみ行い、
+問題なければ実適用する。以後の変更は手作業を避け、Ansible 経由で行う。
 
 ---
 
 ## 7. リスクと対策
 
-| リスク | 対策 |
-| --- | --- |
-| 既存環境との差異で予期せぬ変更 | `--check --diff` で事前差分確認、本番には段階適用 |
-| Vault パスワード紛失 | パスワードマネージャー（1Password など）で保管 |
-| Ansible バージョン依存 | `requirements.yml` でバージョンピン留め、CI で同バージョン検証 |
-| 冪等でないタスクの混入 | Molecule の idempotence テストで検出 |
+- Vault パスワードは紛失すると復号できないため、パスワードマネージャーで保管する
+- 冪等でないタスクが混入していないかは Molecule の idempotence テストで検出する
 
 ---
 

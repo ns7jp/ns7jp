@@ -7,14 +7,12 @@
 > `docs/cost-report.md` と `docs/aws-architecture.md` を正本とする。
 >
 > この設計は AWS の公式ドキュメントやベストプラクティス集を参考に組み立てたものであり、
-> 実務での AWS 運用経験に基づくものではない。
+> 実務での AWS 運用経験に基づくものではない。設定値の妥当性やトレードオフを面接で
+> 深く問われた場合、体系立てて説明できるレベルには達していない。
 
 ## 1. 背景・目的
 
-現状の server-monitor は単一ホスト構成（オンプレ or 単一 VM）。
-求人で頻出する **「AWS / Terraform」** 経験を積むため、また「冗長化」「IaC」「クラウド運用」を実体験するために、AWS 上に Terraform で再構築する。
-
-学習目的を兼ねるため、**無料利用枠 + ごく小規模な有料リソース** で完結させる。
+現状の server-monitor は単一ホスト構成（オンプレ or 単一 VM）。求人で頻出する **「AWS / Terraform」** 経験を積むため、また「冗長化」「IaC」「クラウド運用」を実体験するために、**無料利用枠 + ごく小規模な有料リソース** の範囲で AWS 上に Terraform で再構築する。
 
 ---
 
@@ -22,11 +20,11 @@
 
 | 領域 | 採用 | 理由 |
 | --- | --- | --- |
-| クラウド | AWS | 国内求人比率最大、無料枠が手厚い |
-| IaC | Terraform | クラウド非依存、コミュニティ最大、宣言的 |
-| OS 設定 | Ansible（[02 参照](./02-ansible-automation.md)） | Terraform は OS 内に踏み込まない設計判断 |
-| シークレット | AWS Secrets Manager + Terraform `sensitive` | git に平文を残さない |
-| State 管理 | S3 + S3 ネイティブロック（`use_lockfile`） | Terraform 1.11 以降で GA のネイティブロックを第一候補とする。DynamoDB ロックは旧構成（非推奨方向） |
+| クラウド | AWS | 国内求人比率が高く、無料枠も使えるため |
+| IaC | Terraform | 教材が多く独学しやすいため（詳細は [ADR-0005](../adr/0005-terraform-for-iac.md)） |
+| OS 設定 | Ansible（[02 参照](./02-ansible-automation.md)） | Terraform は OS 内の設定までは行わない構成にした |
+| シークレット | AWS Secrets Manager + Terraform `sensitive` | git に平文の認証情報を残さないため |
+| State 管理 | S3 + S3 ネイティブロック（`use_lockfile`） | Terraform 1.11 以降の GA 機能。DynamoDB ロックは廃止方向のため使わない |
 
 ---
 
@@ -36,40 +34,17 @@
 flowchart TB
     User[運用者] -->|HTTPS:443| ALB[ALB<br/>TLS 終端]
 
-    subgraph VPC[VPC 10.0.0.0/16]
-        subgraph PublicA[Public Subnet AZ-1a]
-            ALB
-            NAT_A[NAT GW]
-        end
-        subgraph PublicB[Public Subnet AZ-1c]
-            NAT_B[NAT GW]
-        end
-
-        subgraph PrivateA[Private Subnet AZ-1a]
-            EC2_A[EC2 t3.small<br/>app + monitoring]
-        end
-        subgraph PrivateB[Private Subnet AZ-1c]
-            EC2_B[EC2 t3.small<br/>app + monitoring<br/>standby]
-        end
-
-        ALB --> EC2_A
-        ALB --> EC2_B
-        EC2_A --> NAT_A --> IGW
-        EC2_B --> NAT_B --> IGW
+    subgraph VPC[VPC 10.0.0.0/16・マルチAZ ×2]
+        ALB --> EC2[Private Subnet<br/>EC2 t3.small ×2<br/>app + monitoring]
+        EC2 --> NAT[NAT GW] --> IGW[Internet Gateway]
     end
 
-    IGW[Internet Gateway] --> Internet
-
-    EC2_A -.snapshot.-> S3[(S3<br/>backup + logs)]
-    EC2_B -.snapshot.-> S3
-    EC2_A -.metrics.-> CW[CloudWatch]
-    EC2_B -.metrics.-> CW
-
-    CW --> SNS[SNS Topic]
-    SNS --> Slack[Slack]
-
-    style VPC stroke-dasharray: 5 5
+    IGW --> Internet
+    EC2 -.snapshot.-> S3[(S3<br/>backup + logs)]
+    EC2 -.metrics.-> CW[CloudWatch] --> SNS[SNS Topic] --> Slack[Slack]
 ```
+
+AZ を跨いで EC2 を 2 台配置し、片系が落ちてももう片方が応答を継続する構成にしている。
 
 ---
 
@@ -79,13 +54,8 @@ flowchart TB
 server-monitor/
 └── terraform/
     ├── environments/
-    │   ├── dev/
-    │   │   ├── main.tf
-    │   │   ├── variables.tf
-    │   │   ├── outputs.tf
-    │   │   └── terraform.tfvars
-    │   └── prod/
-    │       └── ... (同上)
+    │   ├── dev/    # main.tf, variables.tf, outputs.tf, terraform.tfvars
+    │   └── prod/   # 同上
     ├── modules/
     │   ├── network/        # VPC / Subnet / IGW / NAT / Route Table
     │   ├── compute/        # EC2 / SG / Key Pair / EBS
@@ -101,94 +71,25 @@ server-monitor/
 
 ## 5. モジュール設計
 
-### 5.1 `network` モジュール（抜粋）
+`network` / `compute` / `alb` / `monitoring` / `backup` の 5 モジュールに分割している。VPC・Subnet は `for_each` と `cidrsubnet()` で AZ ごとに動的生成し、EC2 は IMDSv2 強制・EBS 暗号化・セキュリティグループでの通信制御を入れている（抜粋）。
 
 ```hcl
-variable "name"        { type = string }
-variable "cidr_block"  { type = string }
-variable "azs"         { type = list(string) }
-
-resource "aws_vpc" "this" {
-  cidr_block           = var.cidr_block
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-  tags = { Name = "${var.name}-vpc" }
-}
-
-resource "aws_subnet" "public" {
-  for_each                = toset(var.azs)
-  vpc_id                  = aws_vpc.this.id
-  cidr_block              = cidrsubnet(var.cidr_block, 8, index(var.azs, each.value))
-  availability_zone       = each.value
-  map_public_ip_on_launch = true
-  tags = { Name = "${var.name}-public-${each.value}" }
-}
-
-resource "aws_subnet" "private" {
-  for_each          = toset(var.azs)
-  vpc_id            = aws_vpc.this.id
-  cidr_block        = cidrsubnet(var.cidr_block, 8, index(var.azs, each.value) + 100)
-  availability_zone = each.value
-  tags = { Name = "${var.name}-private-${each.value}" }
-}
-
-# ... IGW, NAT, Route Table 略
-```
-
-### 5.2 `compute` モジュール（抜粋）
-
-```hcl
-resource "aws_security_group" "monitor" {
-  name        = "${var.name}-sg"
-  description = "Monitoring EC2 security group"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description     = "HTTPS from ALB"
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
-    security_groups = [var.alb_sg_id]
-  }
-
-  ingress {
-    description = "SSH from bastion only"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.bastion_cidr]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_instance" "monitor" {
-  for_each      = toset(var.azs)
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = var.instance_type
-  subnet_id     = var.private_subnet_ids[each.value]
-  vpc_security_group_ids = [aws_security_group.monitor.id]
-  iam_instance_profile   = aws_iam_instance_profile.monitor.name
+  for_each                = toset(var.azs)
+  ami                     = data.aws_ami.ubuntu.id
+  instance_type           = var.instance_type
+  subnet_id               = var.private_subnet_ids[each.value]
+  vpc_security_group_ids  = [aws_security_group.monitor.id]
+  iam_instance_profile    = aws_iam_instance_profile.monitor.name
 
   metadata_options {
     http_tokens = "required"   # IMDSv2 強制
   }
 
   root_block_device {
-    volume_type           = "gp3"
-    volume_size           = 30
-    encrypted             = true
-    delete_on_termination = true
-  }
-
-  tags = {
-    Name        = "${var.name}-${each.value}"
-    Environment = var.environment
+    volume_type = "gp3"
+    volume_size = 30
+    encrypted   = true
   }
 }
 ```
@@ -208,10 +109,8 @@ terraform {
 }
 ```
 
-> **State ロックの更新（2026-07）**：Terraform 1.11 以降は S3 ネイティブロック
-> （`use_lockfile`）が GA となったため、これを第一候補とする。
-> `dynamodb_table` による DynamoDB ロックは旧構成であり、非推奨方向のため
-> 新規構築では採用しない（[ADR-0005 の 2026-07 追記](../adr/0005-terraform-for-iac.md) 参照）。
+> **2026-07 追記**：State ロックは S3 ネイティブロック（`use_lockfile`）に切り替えた。
+> 旧 DynamoDB ロック方式からの変更経緯は [ADR-0005](../adr/0005-terraform-for-iac.md) を参照。
 
 ---
 
@@ -221,8 +120,7 @@ terraform {
 
 | リソース | 仕様 | 月額（東京リージョン目安） |
 | --- | --- | --- |
-| EC2 t3.small × 2 | 24h 稼働 | 約 4,000 円 |
-| EBS gp3 30GB × 2 | | 約 720 円 |
+| EC2 t3.small × 2 + EBS gp3 30GB × 2 | 24h 稼働 | 約 4,720 円 |
 | ALB | 24h 稼働 | 約 2,500 円 |
 | NAT Gateway × 1 | AZ 単独 | 約 4,500 円 |
 | S3 | 10GB | 約 30 円 |
@@ -242,16 +140,10 @@ terraform {
 
 | 項目 | 設定 |
 | --- | --- |
-| EC2 認証 | SSH 鍵 + IAM SSM Session Manager 推奨 |
-| パブリック IP | EC2 はプライベートのみ、ALB のみパブリック |
-| IMDS | v2 強制（`http_tokens = "required"`） |
-| EBS | 全ボリューム暗号化 |
-| S3 | バケット暗号化、Public Access Block 全有効 |
-| IAM | 最小権限（インスタンスプロファイル × ロール分離） |
-| Secrets | Secrets Manager + KMS、Terraform では `sensitive` |
-| CloudTrail | 全リージョン有効、S3 へ集約 |
-| Config | 主要リソースの構成変更を記録 |
-| GuardDuty | 有効化（無料枠 30 日後は月数百円） |
+| アクセス制御 | EC2 はプライベートのみ（ALB のみパブリック）、SSH 鍵 + IAM SSM Session Manager 推奨、IMDSv2 強制 |
+| 暗号化 | EBS 全ボリューム暗号化、S3 バケット暗号化 + Public Access Block 全有効 |
+| IAM / Secrets | インスタンスプロファイルでロールを分離、機密情報は Secrets Manager + KMS（Terraform では `sensitive`） |
+| 監査・検知 | CloudTrail（全リージョン）/ Config / GuardDuty を有効化 |
 
 ---
 
@@ -268,8 +160,7 @@ flowchart LR
     Approve --> Apply[terraform apply<br/>環境別ジョブ]
 ```
 
-IaC の静的セキュリティスキャンは **Trivy（misconfig スキャン）/ checkov** を推奨とする
-（2026-07 更新：tfsec はメンテナンスモードとなり Trivy への統合が進んでいるため）。
+IaC の静的セキュリティスキャンには Trivy（misconfig スキャン）を使う（2026-07 に tfsec から切り替え。checkov も候補）。
 
 GitHub Actions ワークフロー例（抜粋）
 
@@ -280,7 +171,6 @@ jobs:
     permissions:
       id-token: write
       contents: read
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: aws-actions/configure-aws-credentials@v4
@@ -289,19 +179,14 @@ jobs:
           aws-region: ap-northeast-1
       - uses: hashicorp/setup-terraform@v3
       - run: terraform fmt -check -recursive
-      - run: terraform init -backend-config=environments/prod/backend.hcl
       - run: terraform validate
       - uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: config
-          scan-ref: .
           severity: HIGH,CRITICAL
           exit-code: '1'
       - run: terraform plan -out=plan.bin
-      - run: terraform show -no-color plan.bin > plan.txt
-      - uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          path: plan.txt
+      # plan 結果を PR にコメント投稿する処理は省略
 ```
 
 ---
@@ -310,9 +195,8 @@ jobs:
 
 | 項目 | 検証方法 | 合格基準 |
 | --- | --- | --- |
-| 0 → 1 構築 | 空アカウントで `terraform apply` | 30 分以内に完了 |
-| 1 → 0 削除 | `terraform destroy` | リソース完全削除、課金停止 |
-| 障害復旧 | EC2_A を terminate | EC2_B が ALB から応答継続、新 EC2 が自動起動 |
+| 構築・削除 | `terraform apply` / `destroy` | apply は 30 分以内に完了、destroy でリソース完全削除・課金停止 |
+| 障害復旧 | EC2 を 1 台 terminate | もう 1 台が ALB から応答継続、新 EC2 が自動起動 |
 | バックアップ | EBS スナップショットからの復元 | 最新スナップから 15 分以内に復旧 |
 | セキュリティ | Trivy（misconfig）/ checkov | High 以上 0 件 |
 | コスト | Cost Explorer | 月額 5,000 円以内 |
