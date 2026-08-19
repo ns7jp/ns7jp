@@ -12,7 +12,7 @@
 
 ## 1. 背景・課題
 
-[09 セキュリティ運用](../server-monitor-improvements/09-security-operations.md) で OIDC SSO を扱っているが、**ID ライフサイクル全体（入社 → 異動 → 退職）** の設計が薄い。
+[09 セキュリティ運用](09-security-operations.md) で OIDC SSO を扱っているが、**ID ライフサイクル全体（入社 → 異動 → 退職）** の設計が薄い。
 
 | 現状の課題 | リスク |
 | --- | --- |
@@ -34,7 +34,7 @@
 | 退職者アカウントの取り残し（§1） | 現状該当者なし（利用者は本人 1 名）。組織適用時の想定シナリオとして記載 |
 | 入社・異動・退職 SOP（§2） | 該当イベントが発生しないため、退職 SOP をテストユーザーで演習し議事録を残す（§10 の完了条件と対応） |
 | 人事システムからのイベント連携（§2） | 人事システムが存在しないため、IdP 上の手動操作で代替 |
-| IT 担当 / 本人の分担（§2.1〜2.3） | すべて本人が実施。1 人で帽子を掛け替える運用（[07 §3](../server-monitor-improvements/07-incident-response.md) の「1 人体制での運用」を参照） |
+| IT 担当 / 本人の分担（§2.1〜2.3） | すべて本人が実施。1 人で帽子を掛け替える運用（[07 §3](07-incident-response.md) の「1 人体制での運用」を参照） |
 | 月次 / 四半期棚卸しの担当（§7） | 本人が実施し、結果を Issue に記録して証跡化 |
 
 ---
@@ -228,7 +228,7 @@ flowchart TD
 | 棚卸し | 四半期に MFA 動作確認、年次でパスワードローテーション |
 | パスワード保管 | 物理金庫に印刷、デジタルでは保管しない |
 
-利用 = 必ずインシデント宣言とポストモーテム（[07](../server-monitor-improvements/07-incident-response.md)）。
+利用 = 必ずインシデント宣言とポストモーテム（[07](07-incident-response.md)）。
 
 ---
 
@@ -319,10 +319,10 @@ v1.0 は Basic 認証なので、上記の多くは設計のみ。最低限以�
 
 ## 11. 関連設計書・ADR
 
-- [09 セキュリティ運用](../server-monitor-improvements/09-security-operations.md) — SSO / 監査ログ運用
+- [09 セキュリティ運用](09-security-operations.md) — SSO / 監査ログ運用
 - [03 Terraform / AWS](../server-monitor-improvements/03-terraform-aws.md) — IdP / Permission Set の IaC 化
 - [11 変更管理](../server-monitor-improvements/11-change-management.md) — グループ・権限変更も Normal Change
-- [15 ネットワーク運用](../server-monitor-improvements/15-network-operations.md) — VPN / SSM の認証統合
+- [15 ネットワーク運用](15-network-operations.md) — VPN / SSM の認証統合
 - [IT サポート - アカウント管理](../it-support/account-management.md) — 入社・退職 SOP の実装
 - [ADR-0008 段階移行](../adr/0008-stepwise-auth.md)
 

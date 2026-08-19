@@ -4,6 +4,9 @@
 - **Date**: 2026-01-25
 - **Deciders**: ns7jp（個人ポートフォリオ）
 
+> 公式ドキュメントや技術記事を調べて書いた学習目的の判断記録であり、
+> 実務でのID管理・チーム意思決定の経験に基づくものではない。
+
 ---
 
 ## 1. Context
@@ -27,7 +30,7 @@ server-monitor の Web UI（Flask ダッシュボード / Prometheus / Grafana�
 | 選択肢 | 評価 | 不採用理由 |
 | --- | --- | --- |
 | **最初から OIDC SSO** | 退職者管理が容易、本格的 | IdP（Google Workspace / Auth0 / AWS IAM Identity Center）の初期セットアップが重い、個人ポートフォリオで過剰（2026-07 追記：自己ホスト IdP なら Keycloak / Authentik が無料で構築可能。§7） |
-| **Basic 認証で固定運用** | 簡単 | 退職時の取り残し、複数人運用時の共有秘密問題 |
+| **Basic 認証で固定運用** | 簡単 | パスワードを使い回すと漏えい時に気付きにくい、複数人で使う場合は秘密の共有が問題になる |
 | **OAuth2 Proxy + GitHub** | GitHub 連携で軽量 | GitHub 個人アカウント依存になり、組織管理が難しい |
 | **クライアント証明書（mTLS）** | 強固 | 証明書配布・更新の運用が個人で重い |
 | **VPN 経由でのアクセス + 認証なし** | ネットワーク層で守る | 「アプリの認証は不要」と誤解されやすい、職務分離違反になりうる |
@@ -52,13 +55,13 @@ Basic 認証だけでは弱いため、以下で補強：
 - **TLS 必須**：Basic 認証は平文なので TLS 終端が前提
 - **`metrics` 用 Bearer Token を別チャネル**：Prometheus からのスクレイプは Bearer Token、人間は Basic と分離
 - **パスワード強度**：`pwgen -s 24 1` で 24 文字ランダム
-- **アクセスログ**：認証失敗は Loki に集約し、しきい値でアラート（[09 §4](../server-monitor-improvements/09-security-operations.md)）
+- **アクセスログ**：認証失敗は Loki に集約し、しきい値でアラート（[09 §4](../roadmap/09-security-operations.md)）
 
 ### 4.3 v2.0 での移行戦略
 
 | 対象 | 移行方法 |
 | --- | --- |
-| Grafana | OIDC Generic OAuth 設定（[09 §6](../server-monitor-improvements/09-security-operations.md)） |
+| Grafana | OIDC Generic OAuth 設定（[09 §6](../roadmap/09-security-operations.md)） |
 | Flask アプリ | `authlib` で OIDC クライアント実装 |
 | Prometheus / Alertmanager | リバースプロキシ（oauth2-proxy）経由 |
 | SSH | AWS SSM Session Manager で **SSH 鍵レス化** |
@@ -71,9 +74,9 @@ Basic 認証だけでは弱いため、以下で補強：
 
 | ライフサイクル | v1.0 | v2.0 |
 | --- | --- | --- |
-| 入社 | Basic 認証パスワード手動配布 | IdP のグループに追加 → 全サービス即時利用可 |
-| 異動 | Vault 上のパスワード変更通知 | IdP のグループ変更 → 権限自動連動 |
-| 退職 | Basic 認証エントリ削除 | IdP からの除外 → 全サービス即時遮断 |
+| アカウント作成 | Basic 認証パスワード手動配布 | IdP のグループに追加 → 全サービス即時利用可 |
+| 権限変更 | Vault 上のパスワード変更通知 | IdP のグループ変更 → 権限自動連動 |
+| アカウント削除 | Basic 認証エントリ削除 | IdP からの除外 → 全サービス即時遮断 |
 
 ---
 
@@ -94,7 +97,7 @@ Basic 認証だけでは弱いため、以下で補強：
 ### 6.3 リスク低減策
 
 - v1.0 でも **「OIDC 移行が前提」** を README に明示し、本気の本番運用と混同されないようにする
-- 監査ログ（[09 §4](../server-monitor-improvements/09-security-operations.md)）で Basic 認証の失敗を可視化、攻撃検知の最低ラインを担保
+- 監査ログ（[09 §4](../roadmap/09-security-operations.md)）で Basic 認証の失敗を可視化、攻撃検知の最低ラインを担保
 
 ---
 
@@ -108,7 +111,7 @@ Status は Accepted のまま、**v2.0 の OIDC 移行先の選定** を見直�
   Grafana の Generic OAuth と直接統合する当初想定は成立しない
 - **見直し内容**：v2.0 の OIDC 移行先は **Keycloak / Authentik（自己ホスト・無料・
   実構築可能）+ oauth2-proxy** を第一候補とする。Grafana は Generic OAuth で Keycloak と
-  統合し（[09 §6](../server-monitor-improvements/09-security-operations.md)）、
+  統合し（[09 §6](../roadmap/09-security-operations.md)）、
   Prometheus / Alertmanager は oauth2-proxy 経由とする
 - **IAM Identity Center の位置付け**：組織導入時の選択肢として注記に降格。
   AWS アカウントアクセス（Console / CLI）の統合には引き続き有力で、カスタムアプリとは

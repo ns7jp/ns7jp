@@ -79,7 +79,7 @@ flowchart LR
 ### 5.1 良い影響
 
 - **再現性**：`ansible-playbook site.yml` で 0 から構築可能
-- **コードレビュー可**：構成変更が Pull Request で議論できる
+- **コードレビュー可**：構成変更を Pull Request 単位で見直せる（変更履歴として残せる）
 - **棚卸し**：Ansible inventory が現存ホスト台帳になる
 - **学習積み上げ**：Terraform への移行時、「これは TF / これは Ansible」の判断が自然に身につく
 
@@ -87,7 +87,7 @@ flowchart LR
 
 - **実行が遅い**：SSH 越し逐次実行のため、台数が増えると分単位で時間がかかる → 部分実行（`--tags`）で対処
 - **Pull 型ではない**：エージェント常駐がないため、「いま全ホストが宣言通りか」を継続検証する別の仕組みが必要 → CI で定期的に `--check` モード実行
-- **シークレット管理**：Ansible Vault は使いやすいが、商用では AWS Secrets Manager / SSM Parameter Store に寄せた方が長期的に良い → [09 §5](../server-monitor-improvements/09-security-operations.md)
+- **シークレット管理**：Ansible Vault は使いやすいが、商用では AWS Secrets Manager / SSM Parameter Store に寄せた方が長期的に良い → [09 §5](../roadmap/09-security-operations.md)
 
 ### 5.3 将来の発展
 

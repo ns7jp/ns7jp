@@ -39,7 +39,7 @@ v1.0 はメトリクス中心で、障害時のログ調査は SSH + `journalctl
 
 ### 4.1 なぜ Loki か
 
-1. **Grafana 完全統合**：同じ UI でメトリクスとログを切り替え可能。Trace（[06](../server-monitor-improvements/06-observability-traces.md)）も同 UI で繋がる
+1. **Grafana 完全統合**：同じ UI でメトリクスとログを切り替え可能。Trace（[06](../roadmap/06-observability-traces.md)）も同 UI で繋がる
 2. **ラベルベース索引**：全文インデックスを持たず、Prometheus と同じラベル思想。ストレージコストが ELK の 10 分の 1 程度
 3. **PromQL に近い LogQL**：Prometheus を理解していればすぐ書ける
 4. **軽量**：単一プロセス、個人ホストでも余裕で動く
@@ -47,9 +47,7 @@ v1.0 はメトリクス中心で、障害時のログ調査は SSH + `journalctl
 
 ### 4.2 Trace 連携の重要性
 
-Loki 採用の隠れた決め手は **「LogQL クエリ結果から traceID をワンクリックで Tempo にジャンプ」** という Grafana の DerivedFields 機能。
-
-これにより、Metrics → Logs → Traces の **3 本柱を 1 UI で横断する動線** が成立する（[06 設計書 §5](../server-monitor-improvements/06-observability-traces.md)）。
+LogQL の結果から traceID で Tempo に飛べる機能があり、ログとトレースを同じ画面で行き来しやすくなる点も選定理由の一つ（[06 設計書 §5](../roadmap/06-observability-traces.md)）。
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## 1. 背景・課題
 
-server-monitor は SLO（[04](./04-slo-design.md)）を定義しているが、**「平常時にどれだけ余裕があるか」「いつスケールアウトを判断するか」** の数値根拠が無い。
+server-monitor は SLO（[04](../server-monitor-improvements/04-slo-design.md)）を定義しているが、**「平常時にどれだけ余裕があるか」「いつスケールアウトを判断するか」** の数値根拠が無い。
 
 | 現状の課題 | リスク |
 | --- | --- |
@@ -172,7 +172,7 @@ export default function () {
 
 ### 6.2 SLO レビュー / インシデントレビューと統合
 
-[04 SLO](./04-slo-design.md) / [07 インシデント対応](./07-incident-response.md) / [09 セキュリティ運用](./09-security-operations.md) の月次会議に **同一日に統合** する。形骸化防止と判断連動のため。
+[04 SLO](../server-monitor-improvements/04-slo-design.md) / [07 インシデント対応](07-incident-response.md) / [09 セキュリティ運用](09-security-operations.md) の月次会議に **同一日に統合** する。形骸化防止と判断連動のため。
 
 ```mermaid
 flowchart LR
@@ -213,7 +213,7 @@ flowchart LR
 | 1 | k6 をローカル / staging で動作確認、smoke / average シナリオ作成 |
 | 2 | k6-prometheus output 連携、Grafana ダッシュボード追加 |
 | 3 | stress / soak / spike シナリオ追加、初回のベースライン記録 |
-| 4 | スケール判断しきい値を [04 SLO](./04-slo-design.md) と整合させる |
+| 4 | スケール判断しきい値を [04 SLO](../server-monitor-improvements/04-slo-design.md) と整合させる |
 | 月次 | キャパシティレビューを SLO / IR / セキュリティと統合運用 |
 
 ---
@@ -231,9 +231,9 @@ flowchart LR
 
 ## 10. 関連設計書・ADR
 
-- [04 SLO 設計](./04-slo-design.md) — レイテンシ SLO とキャパ判断は連動
-- [07 インシデント対応](./07-incident-response.md) — キャパ枯渇は Sev 案件
-- [11 変更管理](./11-change-management.md) — スケール変更は Standard Change
+- [04 SLO 設計](../server-monitor-improvements/04-slo-design.md) — レイテンシ SLO とキャパ判断は連動
+- [07 インシデント対応](07-incident-response.md) — キャパ枯渇は Sev 案件
+- [11 変更管理](../server-monitor-improvements/11-change-management.md) — スケール変更は Standard Change
 - [13 FinOps](../roadmap/13-finops.md) — スケール判断はコスト判断と一体
 - [ADR-0001 Prometheus 採用](../adr/0001-monitoring-stack.md)
 

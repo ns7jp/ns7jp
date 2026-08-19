@@ -45,14 +45,14 @@
 
 - **求人マッチ**：Prometheus / Grafana は「Linux + Docker + 監視」案件で第一選択肢
 - **学習価値**：Pull モデル、多次元ラベル、PromQL、Recording Rules、Federation など、設計思想を体得できる
-- **拡張性**：Loki（ログ）/ Tempo（トレース）が同じ Grafana で統合可能（[01](../server-monitor-improvements/01-loki-log-aggregation.md) / [06](../server-monitor-improvements/06-observability-traces.md)）
-- **SLO 設計と直結**：histogram + Burn Rate アラート（[04](../server-monitor-improvements/04-slo-design.md)）が公式パターンとして確立
+- **拡張性**：Loki（ログ）/ Tempo（トレース）が同じ Grafana で統合可能（[01](../server-monitor-improvements/01-loki-log-aggregation.md) / [06](../roadmap/06-observability-traces.md)）
+- **SLO 設計とも相性がよい**：しきい値に近づく速さを見てアラートを出すような設計（[04](../server-monitor-improvements/04-slo-design.md)）にも histogram のデータがそのまま使える
 
 ### 4.2 悪い影響・制約
 
 - **長期保存に弱い**：Prometheus 単体では数週間が現実的、長期保存には Thanos / Mimir / Cortex が必要
 - **アラートの構築コスト**：SaaS なら標準テンプレで済む部分を、Recording / Alerting Rule で自分で書く必要
-- **モニタリングの監視（メタモニタリング）が課題**：Prometheus 自体が落ちた場合の検知設計が別途必要 → [12 メタモニタリング](../server-monitor-improvements/12-meta-monitoring.md) で対応
+- **モニタリングの監視（メタモニタリング）が課題**：Prometheus 自体が落ちた場合の検知設計が別途必要 → [12 メタモニタリング](../roadmap/12-meta-monitoring.md) で対応
 
 ### 4.3 将来の見直しトリガー
 

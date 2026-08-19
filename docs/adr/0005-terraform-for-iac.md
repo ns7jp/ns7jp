@@ -4,6 +4,9 @@
 - **Date**: 2026-04-05
 - **Deciders**: ns7jp（個人ポートフォリオ）
 
+> 公式ドキュメントや技術記事を調べて書いた学習目的の判断記録であり、
+> 実務でのAWS運用・チーム意思決定の経験に基づくものではない。
+
 ---
 
 ## 1. Context
@@ -72,10 +75,10 @@ State は S3 + DynamoDB Lock（後述。**2026-07 追記：S3 ネイティブロ
 | --- | --- |
 | PR 作成 | `terraform fmt -check` / `terraform validate` / `tfsec` / `checkov`（2026-07 追記：tfsec は Trivy misconfig スキャンへ更新、§8） |
 | PR レビュー | `terraform plan` の結果を PR コメントに自動投稿 |
-| Merge | 手動承認（Issue / Slack）後に `terraform apply` |
+| Merge | Issue / Slack の通知内容を自分で確認してから `terraform apply` |
 | State Drift | 週次で `terraform plan` をスケジュール実行、差分があれば Slack 通知 |
 
-→ [09 §3 セキュリティ CI](../server-monitor-improvements/09-security-operations.md) と統合運用。
+→ [09 §3 セキュリティ CI](../roadmap/09-security-operations.md) と統合運用。
 
 ---
 
@@ -85,7 +88,7 @@ State は S3 + DynamoDB Lock（後述。**2026-07 追記：S3 ネイティブロ
 
 - **「マネコンで作りました」の卒業**：採用面接で IaC 経験として語れる
 - **環境間の一貫性**：dev / staging / prod を同じコードで再現可能
-- **コードレビュー可**：インフラ変更が Pull Request の議論対象になる
+- **コードレビュー可**：インフラ変更を Pull Request 単位で見直せる
 - **災害復旧の保証**：State さえ残れば、AWS アカウントを失っても再構築可能
 
 ### 7.2 悪い影響・制約

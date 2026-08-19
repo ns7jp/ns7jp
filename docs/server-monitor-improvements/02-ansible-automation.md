@@ -240,11 +240,11 @@ flowchart LR
     Dev[ローカル<br/>編集] --> PR[Pull Request]
     PR --> Lint[ansible-lint]
     Lint --> Mole[Molecule テスト]
-    Mole --> Review[コードレビュー]
+    Mole --> Review[セルフレビュー]
     Review --> Merge[main へ merge]
     Merge --> Stg[staging へ自動デプロイ]
     Stg --> Smoke[スモークテスト]
-    Smoke --> Manual[手動承認]
+    Smoke --> Manual[最終確認]
     Manual --> Prod[production へデプロイ]
 ```
 
@@ -256,7 +256,7 @@ flowchart LR
 2. **Ansible playbook を書きながら、ステージング環境で再構築**
 3. **ステージングと本番の `diff` を取り、差異をゼロに**
 4. 本番に対しては最初は `--check --diff` モードで実行
-5. 問題なければ実適用、以後は手動変更を禁止
+5. 問題なければ実適用、以後は手動変更を避け、変更は極力 Ansible 経由で行うようにする
 
 ---
 
@@ -265,7 +265,7 @@ flowchart LR
 | リスク | 対策 |
 | --- | --- |
 | 既存環境との差異で予期せぬ変更 | `--check --diff` で事前差分確認、本番には段階適用 |
-| Vault パスワード紛失 | パスワードマネージャー保管 + 1Password などで複数人共有 |
+| Vault パスワード紛失 | パスワードマネージャー（1Password など）で保管 |
 | Ansible バージョン依存 | `requirements.yml` でバージョンピン留め、CI で同バージョン検証 |
 | 冪等でないタスクの混入 | Molecule の idempotence テストで検出 |
 

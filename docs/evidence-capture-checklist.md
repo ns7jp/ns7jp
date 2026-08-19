@@ -46,9 +46,9 @@
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
 | 3 | `docker compose up` 後の **Grafana 実画面**（CPU/メモリ/HTTP/アラート状態） | ローカル Linux + Docker | 0 円 | [アーキテクチャ図](./architecture-diagram.md) |
-| 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [07 インシデント対応](./server-monitor-improvements/07-incident-response.md) |
+| 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [07 インシデント対応](roadmap/07-incident-response.md) |
 | 5 | Loki + Grafana Alloy の **ログ検索実画面**（クエリ + 結果） | 同上 | 0 円 | [01 ログ集約](./server-monitor-improvements/01-loki-log-aggregation.md) |
-| 6 | **ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる） | 同上 | 0 円 | [15 ネットワーク運用](./server-monitor-improvements/15-network-operations.md) / [橋渡し](./career-bridge.md) |
+| 6 | **ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる） | 同上 | 0 円 | [15 ネットワーク運用](roadmap/15-network-operations.md) / [橋渡し](./career-bridge.md) |
 | 7 | **D-1 復旧演習の実測**（検知 → 復旧の各ステップを実時間で計測） | 同上 | 0 円 | [05 バックアップ・復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 
 > **優先 3 は単なるスクショ 1 枚ではありません。** 現在ポートフォリオ内に存在する唯一の画面キャプチャは
@@ -64,7 +64,7 @@
 
 > 優先 8 は、**トライアル就業先が Windows / AD 環境の場合に優先度を上げます**（実務と学習が同じ方向を向くため効率が良い）。
 > 優先 9 の AWS 検証は「最後」に回さず、グループ B を終えた直後の週に 1 日で plan → apply → destroy まで実施することを推奨します。
-> 数百円の実費と「即 destroy した」記録自体が、コスト意識（FinOps）の証跡になります。
+> 数百円の実費と「即 destroy した」記録自体が、コスト意識の証跡になります。
 
 ### デモ動画との順序
 
@@ -87,7 +87,7 @@
 | 結果 | 成功 / 失敗、所要時間、主要ログまたはスクリーンショットがある |
 | 安全性 | 秘密値、公開 IP、AWS account ID、個人名、webhook URL がマスク済み |
 | 導線 | `server-monitor/docs/evidence/README.md` または `docs/drills/logs/` から辿れる |
-| 変更管理 | PR 本文に確認結果、影響範囲、ロールバック、証跡リンクがある |
+| 変更の記録 | PR 本文に確認結果、影響範囲、ロールバック、証跡リンクがある |
 
 ---
 

@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-19（**D-1 復旧演習を実測し PASS を記録**。あわせて、実態と一致していなかった Dependabot の「残り 7 件」という記述を訂正し、安全な更新の取り込みと AWS provider メジャー更新の見送りを決定）
+最終更新：2026-08-19（**D-1 復旧演習を実測し PASS を記録**。あわせて、実態と一致していなかった Dependabot の「残り 7 件」という記述を訂正し、安全な更新の取り込みと AWS provider メジャー更新の見送りを決定。別セッションで、未経験者としての実際のスキル水準に対して内容が高度すぎるという自己評価を受けたポートフォリオ全体の難易度・スコープ引き下げも並行して実施）
 
 ---
 
@@ -26,6 +26,81 @@
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-19 の更新内容（追補：ADR・改善設計書・採用担当者向け文書に残っていた専門用語の言い換え）
+
+同日の下記の整理は「実装のない設計書の `docs/roadmap/` への移動」と一部文書のトリムが中心でしたが、
+その後改めて「未経験としての実力に対して内容が高度すぎる」という自己評価を受け、
+**実装が実在する文書に残っていた専門用語・組織規模を前提にした言い回し**を対象に、
+同日 2 回目の整理を行いました。
+
+| 観点 | 対応 |
+| --- | --- |
+| 調査範囲 | ADR 8 本、server-monitor-improvements の実装ありドキュメント 6 本、README・採用担当者向け導線 6 本、プロセス・可視化系文書 4 本、IT サポート・業務改善 5 本、学習プラン 5 本の計 29 ファイルを確認 |
+| 平易化した内容 | 「Burn Rate」「エラーバジェット」「FinOps」「CAB 相当の変更管理」「ITIL 用語」「メモリフォレンジック」等の専門用語、「複数人チームでのレビュー・承認」「経営層への報告」「勤務シフト」等の組織規模を前提にした表現 |
+| 保持した内容 | 実装事実・実測証跡・日付・リンク・見出しテキスト・使用ツール名（Ansible / Docker / Terraform 等）は一切削除・変更していない |
+| スコープ外とした範囲 | `docs/roadmap/` 配下（前回の整理で既に「将来構想・未着手」として隔離済みのため、今回は優先度を下げた）。`docs/learning-plan/` は学習計画としての性質上、学習項目自体は維持し説明文のみ軽く調整 |
+
+#### 対象と処置の内訳（21 ファイルを編集、8 ファイルは確認の上で変更不要と判断）
+
+| ファイル | 変更内容の要旨 |
+| --- | --- |
+| `docs/adr/0001` / `0003` / `0004` / `0005` / `0007` / `0008` | Burn Rate、DerivedFields、CAB 的な承認プロセス、Critical Sev、企業の雇用ライフサイクル用語などを平易な言い回しに置き換え |
+| `docs/server-monitor-improvements/01` / `02` / `04` / `05` | 高カーディナリティ、コードレビュー→セルフレビュー、手動承認→最終確認、複数人での Vault 共有、社内向け→個人ラボなどを修正 |
+| `README.md`、`docs/career-bridge.md` | SLO・エラーバジェット・経営層折衝を前提にした表現を、個人ラボ・一人称の運用として読める表現に修正 |
+| `docs/evidence-capture-checklist.md`、`docs/showcase/README.md`、`docs/architecture-diagram.md` | FinOps、分散トレーシング、SLA 議論などの専門用語をリンクラベル・注記から除去 |
+| `docs/it-support/faq.md` / `account-management.md` / `service-desk-metrics.md`、`docs/business-improvement/picking-improvement.md` | メモリフォレンジック、専任セキュリティ責任者、チケット承認ゲート、分単位 SLO、自動スケールなど、企業規模の体制を前提にした記述を緩和 |
+| `docs/learning-plan/02` / `04` | 未説明のまま使われていた「SLO」「キャパシティ管理」「ITIL 用語」を日本語の言い換えに |
+
+| 項目 | 状態 |
+| --- | --- |
+| 見出し（アンカー）の変更 | ✅ ゼロ件。他ファイルからのリンク切れリスクなし |
+| markdownlint | ✅ エラーなし（50 ファイル） |
+| Mermaid 構文チェック | ✅ 54 図すべてパース成功 |
+| ローカルリンク・アンカーの解決チェック | ✅ 独自スクリプトで確認、リンク切れなし |
+
+> **今回の範囲を広げて解釈しない。** 変更したのは言葉遣い・専門用語の密度であり、実装内容・実測証跡・スキル水準の自己申告は変えていません。
+> 文書の分量や設計そのものの範囲は、同日の下記の整理で対応済みです。
+> 本ラウンドは ns7jp/ns7jp のみを対象としました（server-monitor 側は別リポジトリのため本セッションでは対象外。必要であれば別セッションで同様の観点の確認を行います）。
+
+### 2026-08-19 の更新内容（ポートフォリオの難易度・スコープを引き下げる整理）
+
+**「未経験としての実力に対してポートフォリオの内容が高度すぎる」という自己評価に基づき、
+ns7jp/ns7jp と server-monitor の両リポジトリで、内容の難易度・範囲そのものを引き下げる
+整理を実施しました。**
+
+これまでの改善（実測証跡の採録、resume.md の記入）は「実態を正しく見せる」ための整理でしたが、
+今回は「示している範囲そのものが、未経験からのキャリアチェンジという実態に対して広すぎる・
+高度すぎる」という、一段別種の問題への対応です。
+
+| 観点 | 対応 |
+| --- | --- |
+| 実装が一切ない純粋な設計書 | 既存の[中長期ロードマップ](./docs/roadmap/README.md)の方針を踏襲し、物理的に `docs/roadmap/` へ移動（非破壊。実装フェーズが近づいた時点で一次導線へ戻す） |
+| 実装は実在するが説明が高度すぎる文書 | その場に残し、ガバナンス色の強い部分・専門用語の濃い部分だけをトリム |
+| README/STATUS の「実装したこと」テーブル | 行は削除せず、能力の実在を保ったまま平易な表現に言い換え |
+| resume.md のスキル評価 | STATUS.md 自身の「監視スタック全体の起動はまだ」という記載と矛盾していた ◎ 評価を ○ へ修正 |
+
+### 対象と処置の内訳
+
+**server-monitor 側**（別リポジトリ・[PR](https://github.com/ns7jp/server-monitor/pulls) 参照）
+
+- README.md: SLO / エラーバジェット・クラウド配備セクションの専門用語を削減、文書一覧を「まず読む文書」と「発展的な設計・将来構想」に分割
+- `docs/roadmap/` を新設し、実装のない 4 本（外部 probe 設計、SLO 月次レビュー、D-2 復旧演習、スナップショット復元ランブック）を移動
+- slo.md、aws-architecture.md、change-management.md、incident-comms.md、drills/D-1-process-down.md の専門用語密度を低減
+
+**ns7jp/ns7jp 側**（本 PR）
+
+- 実装のない設計書 6 本（06 分散トレーシング、07 インシデント対応、09 セキュリティ運用、10 キャパシティプランニング、12 メタモニタリング、15 ネットワーク運用）を `docs/roadmap/` へ移動
+- `server-monitor-improvements/11-change-management.md` を大幅に圧縮し、ITIL/CAB 相当の未実装部分を「設計サンプル」として明確に分離
+- `04-slo-design.md`、`03-terraform-aws.md`、`architecture-diagram.md` の専門用語密度を低減
+- `docs/showcase/README.md` の SLO ダッシュボード・インシデントタイムライン（IC ロール付き）・ポストモーテムのモックアップを縮小
+- `resume.md` のスキル評価矛盾を修正
+
+| 項目 | 状態 |
+| --- | --- |
+| 両リポジトリのリンク切れチェック | ✅ 独自スクリプトで全相対リンクの解決を確認 |
+| Mermaid 構文チェック | ✅ 全図がエラーなくパース |
+| markdownlint | ✅ エラーなし |
 
 ### 2026-08-17 の更新内容（追補：Molecule フル実行の完走と初の Linux 実測証跡）
 
@@ -258,25 +333,31 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 
 | # | テーマ | 状態 | 設計書 |
 | --- | --- | --- | --- |
-| v1.1 | 分散トレーシング（Tempo + OpenTelemetry） | ⬜ 設計サンプル | [06](./docs/server-monitor-improvements/06-observability-traces.md) |
-| v1.3 | インシデント対応プロセス・ポストモーテム | ⬜ 設計のみ・実装未着手 | [07](./docs/server-monitor-improvements/07-incident-response.md) |
-| v1.3 | セキュリティ運用プロセス | ⬜ 設計のみ・実装未着手 | [09](./docs/server-monitor-improvements/09-security-operations.md) |
 | v3.0 | Kubernetes / EKS 発展計画 | ⬜ 学習ロードマップ段階（就業後の資格計画と連動） | [08](./docs/server-monitor-improvements/08-kubernetes-roadmap.md) |
-| v1.1 | メタモニタリング（監視の監視） | ⬜ 設計のみ・実装未着手 | [12](./docs/server-monitor-improvements/12-meta-monitoring.md) |
 | v1.2 | 変更管理プロセス | ✅ PR / Issue テンプレートとミニ運用を server-monitor 側へ追加 | [11](./docs/server-monitor-improvements/11-change-management.md) |
-| v1.3 | キャパシティプランニング・負荷試験 | ⬜ 設計のみ・実装未着手 | [10](./docs/server-monitor-improvements/10-capacity-planning.md) |
-| v2.0 | ネットワーク・DNS 運用 | ⬜ 設計のみ・実装未着手 | [15](./docs/server-monitor-improvements/15-network-operations.md) |
 
-### 中長期ロードマップへ縮退（2026-07-03）
+### 中長期ロードマップへ縮退（2026-07-03、2026-08-19 追加）
 
-実装着手が 1 年以上先のテーマは、選考フェーズの一次導線から外し [docs/roadmap/](./docs/roadmap/README.md) で保管します（設計を捨てたのではなく、露出の優先順位を変更）。
+実装着手が 1 年以上先のテーマ、または実装のない純粋な設計サンプルは、選考フェーズの一次導線から外し [docs/roadmap/](./docs/roadmap/README.md) で保管します（設計を捨てたのではなく、露出の優先順位を変更）。
 
-| # | テーマ | 設計書 |
-| --- | --- | --- |
-| 13 | FinOps（コスト最適化運用） | [13](./docs/roadmap/13-finops.md) |
-| 14 | データベース運用設計 | [14](./docs/roadmap/14-database-operations.md) |
-| 16 | アイデンティティ運用 | [16](./docs/roadmap/16-identity-operations.md) |
-| 17 | カオスエンジニアリング / Game Day | [17](./docs/roadmap/17-chaos-engineering.md) |
+| # | テーマ | 設計書 | 縮退時期 |
+| --- | --- | --- | --- |
+| 13 | FinOps（コスト最適化運用） | [13](./docs/roadmap/13-finops.md) | 2026-07 |
+| 14 | データベース運用設計 | [14](./docs/roadmap/14-database-operations.md) | 2026-07 |
+| 16 | アイデンティティ運用 | [16](./docs/roadmap/16-identity-operations.md) | 2026-07 |
+| 17 | カオスエンジニアリング / Game Day | [17](./docs/roadmap/17-chaos-engineering.md) | 2026-07 |
+| 06 | 分散トレーシング（Tempo + OpenTelemetry） | [06](./docs/roadmap/06-observability-traces.md) | 2026-08 |
+| 07 | インシデント対応プロセス・ポストモーテム | [07](./docs/roadmap/07-incident-response.md) | 2026-08 |
+| 09 | セキュリティ運用プロセス | [09](./docs/roadmap/09-security-operations.md) | 2026-08 |
+| 10 | キャパシティプランニング・負荷試験 | [10](./docs/roadmap/10-capacity-planning.md) | 2026-08 |
+| 12 | メタモニタリング（監視の監視） | [12](./docs/roadmap/12-meta-monitoring.md) | 2026-08 |
+| 15 | ネットワーク・DNS 運用 | [15](./docs/roadmap/15-network-operations.md) | 2026-08 |
+
+> **2026-08-19 追記**: 06 / 07 / 09 / 10 / 12 / 15 は、実装着手時期の遠さに加えて、
+> 未経験からのキャリアチェンジという実際のスキル水準に対して内容が高度すぎる
+> （インシデントコマンダー制のポストモーテム、ITIL 準拠の変更管理相当の統制、
+> 分散トレーシングなど、組織規模や複数人チームを前提にした設計）と判断し、
+> ポートフォリオ全体の難易度・スコープを引き下げる整理の一環として追加で移動した。
 
 ### ADR（アーキテクチャ決定記録）
 

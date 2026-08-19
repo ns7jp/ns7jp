@@ -311,9 +311,9 @@ flowchart TD
 - [01 Loki](../server-monitor-improvements/01-loki-log-aggregation.md) — slow query log も Loki に集約
 - [04 SLO 設計](../server-monitor-improvements/04-slo-design.md) — DB レイテンシも SLI 候補
 - [05 復旧演習](../server-monitor-improvements/05-backup-recovery-drill.md) — DB 復旧演習を D-3 シナリオに追加
-- [07 インシデント対応](../server-monitor-improvements/07-incident-response.md) — DB 障害は Sev1-2
-- [09 セキュリティ運用](../server-monitor-improvements/09-security-operations.md) — DB シークレットローテーション
-- [10 キャパシティプランニング](../server-monitor-improvements/10-capacity-planning.md) — DB は典型的なキャパ枯渇箇所
+- [07 インシデント対応](07-incident-response.md) — DB 障害は Sev1-2
+- [09 セキュリティ運用](09-security-operations.md) — DB シークレットローテーション
+- [10 キャパシティプランニング](10-capacity-planning.md) — DB は典型的なキャパ枯渇箇所
 - [11 変更管理](../server-monitor-improvements/11-change-management.md) — スキーマ変更はすべて Normal Change
 - [16 ID 運用](./16-identity-operations.md) — DB 接続ユーザーのライフサイクル
 - [17 カオスエンジニアリング](./17-chaos-engineering.md) — DB プロセスキル演習
