@@ -5,7 +5,7 @@
 > 本ポートフォリオは設計資料が充実している一方で、**実機で動かして測った証跡が不足**しています（[STATUS.md](../STATUS.md) でも最優先の伸びしろと明記）。
 > このチェックリストは、**新規の設計を増やすのをやめ、既存の設計を「実物」に変換する**ための実行計画です。設計書ではなく作業手順として使います。
 
-最終更新: 2026-08-17（**優先 1（full `molecule test`）を採録完了**。あわせて**必要な環境**順への組み替えを実施）
+最終更新: 2026-08-19（**優先 1・3・5・7 を採録完了**。残るは優先 2・4・6・8・9）
 
 ---
 
@@ -45,15 +45,15 @@
 
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
-| 3 | `docker compose up` 後の **Grafana 実画面**（CPU/メモリ/HTTP/アラート状態） | ローカル Linux + Docker | 0 円 | [アーキテクチャ図](./architecture-diagram.md) |
+| ✅ 3 | ~~`docker compose up` 後の **Grafana 実画面**（CPU/メモリ/HTTP/アラート状態）~~ **2026-08-18 採録完了** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) | ローカル Linux + Docker | 0 円 | [アーキテクチャ図](./architecture-diagram.md) |
 | 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [07 インシデント対応](roadmap/07-incident-response.md) |
-| 5 | Loki + Grafana Alloy の **ログ検索実画面**（クエリ + 結果） | 同上 | 0 円 | [01 ログ集約](./server-monitor-improvements/01-loki-log-aggregation.md) |
+| ✅ 5 | ~~Loki + Grafana Alloy の **ログ検索実画面**（クエリ + 結果）~~ **2026-08-18 採録完了**（上記記録に含む） | 同上 | 0 円 | [01 ログ集約](./server-monitor-improvements/01-loki-log-aggregation.md) |
 | 6 | **ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる） | 同上 | 0 円 | [15 ネットワーク運用](roadmap/15-network-operations.md) / [橋渡し](./career-bridge.md) |
-| 7 | **D-1 復旧演習の実測**（検知 → 復旧の各ステップを実時間で計測） | 同上 | 0 円 | [05 バックアップ・復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
+| ✅ 7 | ~~**D-1 復旧演習の実測**（検知 → 復旧の各ステップを実時間で計測）~~ **2026-08-19 採録完了（PASS、RTO 13秒）** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) | 同上 | 0 円 | [05 バックアップ・復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 
-> **優先 3 は単なるスクショ 1 枚ではありません。** 現在ポートフォリオ内に存在する唯一の画面キャプチャは
-> **Windows 11 端末のもの**であり、Linux サーバー構築を志望する資料としては不利に働きます。
-> 優先 3 を採録した時点で `server-monitor/docs/screenshot.png` を差し替えてください。
+> **優先 3 は 2026-08-18 に採録完了しました。** あわせて `server-monitor/docs/screenshot.png` も
+> Windows 11 端末の画面から Linux（WSL2）上の実画面へ差し替え済みです。
+> **残るグループ B は優先 4（Alertmanager → Slack 通知）と優先 6（ネットワーク切り分けメモ）**です。
 
 ### グループ C — 追加の環境・費用が必要
 
@@ -71,8 +71,8 @@
 デモ動画（[台本](./demo-script.md)）は差別化効果が高い一方で、収録前チェック 6 項目を要する**最重量のタスク**です。「動画を撮るまで何も出せない」状態を避けるため、順序は次のとおり固定します。
 
 1. ~~**CI 証跡（優先 1〜2）** — ブラウザのみ~~ → 優先 1 は ✅ 採録済み。残るは優先 2（30 分）
-2. **スクショ 3 点（優先 3〜5）** — 1 晩で採録
-3. **演習・実測（優先 6〜7）** — 各半日
+2. ~~**スクショ 3 点（優先 3〜5）**~~ → 優先 3・5 は ✅ 採録済み（2026-08-18）。残るは優先 4（Alertmanager → Slack）
+3. ~~**演習・実測（優先 6〜7）**~~ → 優先 7（D-1）は ✅ 採録済み（2026-08-19、PASS）。残るは優先 6（ネットワーク切り分けメモ）
 4. **デモ動画** — 証跡が揃った後の**集大成**として収録（スクショはリハーサルの副産物として撮れるため、逆順にはしない）
 
 ---
