@@ -75,7 +75,7 @@ flowchart LR
 | --- | --- |
 | 数値を取って原因を絞る | metrics / logs / command output に基づく切り分け |
 | 作業を標準化する | 構築手順、試験項目、ランブックの整備 |
-| 変更後も効果を確認する | SLO、監視、復旧演習による継続確認 |
+| 変更後も効果を確認する | 目標値の確認、監視、復旧演習による継続確認 |
 | 属人化を減らす | Ansible、テンプレート、引き渡しチェックリスト |
 
 詳細：[業務改善レポート](./docs/business-improvement/picking-improvement.md) ／ [現場経験とインフラの橋渡し](./docs/career-bridge.md)

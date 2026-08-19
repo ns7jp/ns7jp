@@ -79,7 +79,7 @@ flowchart LR
 ### 5.1 良い影響
 
 - **再現性**：`ansible-playbook site.yml` で 0 から構築可能
-- **コードレビュー可**：構成変更が Pull Request で議論できる
+- **コードレビュー可**：構成変更を Pull Request 単位で見直せる（変更履歴として残せる）
 - **棚卸し**：Ansible inventory が現存ホスト台帳になる
 - **学習積み上げ**：Terraform への移行時、「これは TF / これは Ansible」の判断が自然に身につく
 

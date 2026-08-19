@@ -95,7 +95,7 @@
 ### 1.2 将来構想（v2.0）
 
 Metrics + Logs + Traces を 1 画面に統合する構想があるが、現時点では未着手
-（[分散トレーシング設計](../roadmap/06-observability-traces.md)）。
+（[ログ・メトリクス・トレースをまとめて見る構想](../roadmap/06-observability-traces.md)）。
 
 ---
 
