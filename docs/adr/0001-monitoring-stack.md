@@ -4,19 +4,17 @@
 - **Date**: 2026-01-15
 - **Deciders**: ns7jp（個人ポートフォリオ）
 
+> 公式ドキュメントや技術記事を調べて書いた学習目的の判断記録であり、
+> 実務での監視運用・チーム意思決定の経験に基づくものではない。
+> 代替案の比較も、深く使い込んだ上での判断ではなく、調べた範囲での判断である。
+
 ---
 
 ## 1. Context
 
 サーバー監視ラボの基盤を構築するにあたり、メトリクス収集・可視化・アラートのスタックを選定する必要があった。
 
-**要件：**
-
-- ホストメトリクス（CPU / Mem / Disk / NW）とアプリメトリクス（HTTP）を統合
-- 学習価値が高く、求人で出現頻度の高い OSS
-- 単一ホストで完結し、Docker Compose で再現できる
-- 将来 Kubernetes へ移行しても通用するメンタルモデル
-- 個人で運用できるコスト（実質ゼロ）
+単一ホストで完結し Docker Compose で再現できること、学習価値が高く求人で見かける頻度の高い OSS であることを重視した。
 
 ---
 
@@ -26,39 +24,21 @@
 
 ---
 
-## 3. Alternatives
+## 3. 他に見た選択肢
 
-| 選択肢 | 評価 | 不採用理由 |
-| --- | --- | --- |
-| **Zabbix** | エージェント型で歴史が長い、日本企業に多い | Pull モデル / PromQL / Kubernetes 親和性で Prometheus が現代の主流。学習投資対効果で劣後 |
-| **Datadog（SaaS）** | UI 完成度高、開封即利用、APM 統合 | コスト（ホスト 1 台でも $15+/月、本気で学ぶには複数台必要）。「自分で組み立てた」訴求が弱まる |
-| **New Relic（SaaS）** | 無料枠 100GB/月、観測性が広い | 同上、SaaS のため内部構造が見えず学習用途で不利 |
-| **CloudWatch のみ** | AWS と統合、コスト安 | オンプレ / マルチクラウド時に陳腐化、PromQL のような汎用クエリ言語が無い |
-| **Nagios / Zabbix 互換 OSS** | 古典的、業務系で残存 | 設計思想がモニタリングのモダンプラクティス（Pull / 多次元ラベル / SLO ベース）と乖離 |
-| **Grafana Cloud（マネージド Prometheus）** | OSS と互換、保守不要 | 無料枠は良いが「Prometheus を自分で運用できる」訴求が弱まる |
+- **Zabbix**: エージェント型の老舗 OSS。Prometheus の方が教材・情報が多く独学しやすいと感じた
+- **Datadog / New Relic（SaaS）**: 導入は早いが有料で、「自分で組み立てた」という学習の訴求が弱まると考えた
+- **CloudWatch のみ**: AWS 専用でオンプレでは使えないため見送った
+
+深い比較検討というより、「教材が多く独学しやすいか」を基準に選んだ。
 
 ---
 
 ## 4. Consequences
 
-### 4.1 良い影響
-
-- **求人マッチ**：Prometheus / Grafana は「Linux + Docker + 監視」案件で第一選択肢
-- **学習価値**：Pull モデル、多次元ラベル、PromQL、Recording Rules、Federation など、設計思想を体得できる
-- **拡張性**：Loki（ログ）/ Tempo（トレース）が同じ Grafana で統合可能（[01](../server-monitor-improvements/01-loki-log-aggregation.md) / [06](../roadmap/06-observability-traces.md)）
-- **SLO 設計とも相性がよい**：しきい値に近づく速さを見てアラートを出すような設計（[04](../server-monitor-improvements/04-slo-design.md)）にも histogram のデータがそのまま使える
-
-### 4.2 悪い影響・制約
-
-- **長期保存に弱い**：Prometheus 単体では数週間が現実的、長期保存には Thanos / Mimir / Cortex が必要
-- **アラートの構築コスト**：SaaS なら標準テンプレで済む部分を、Recording / Alerting Rule で自分で書く必要
-- **モニタリングの監視（メタモニタリング）が課題**：Prometheus 自体が落ちた場合の検知設計が別途必要 → [12 メタモニタリング](../roadmap/12-meta-monitoring.md) で対応
-
-### 4.3 将来の見直しトリガー
-
-- ホスト数が 20 台を超えたら：Thanos / Mimir 導入を検討
-- マルチクラウド / EKS 移行：Grafana Cloud or kube-prometheus-stack に再評価
-- 商用案件で SLA 必要：Datadog / New Relic SaaS への置換も比較対象
+- Prometheus / Grafana は監視系の求人でよく見かける組み合わせで、Pull モデルや PromQL など基本的な考え方を学べた
+- Loki（ログ）と同じ Grafana 上で統合できる（[01](../server-monitor-improvements/01-loki-log-aggregation.md)）
+- Prometheus 単体では長期保存に弱く、監視自体の死活監視（メタモニタリング）も別途必要（[12](../roadmap/12-meta-monitoring.md)）
 
 ---
 
