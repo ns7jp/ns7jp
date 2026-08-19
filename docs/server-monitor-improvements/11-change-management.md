@@ -9,7 +9,7 @@
 
 ## 1. 背景・課題
 
-server-monitor は **「障害対応プロセス」（[07](./07-incident-response.md)）** はあるが、**「平常時の変更」をどう統制するか** が定義されていない。
+server-monitor は **「障害対応プロセス」（[07](../roadmap/07-incident-response.md)）** はあるが、**「平常時の変更」をどう統制するか** が定義されていない。
 
 | 現状の課題 | リスク |
 | --- | --- |
@@ -87,7 +87,7 @@ flowchart TD
 | 障害中の hotfix（インシデント内変更） |
 | 攻撃対応（IP ブロック等） |
 
-→ **事前 CAB 省略可、事後 24 時間以内に変更ログと振り返り**。インシデント対応（[07](./07-incident-response.md)）と統合運用。
+→ **事前 CAB 省略可、事後 24 時間以内に変更ログと振り返り**。インシデント対応（[07](../roadmap/07-incident-response.md)）と統合運用。
 
 ---
 
@@ -237,7 +237,7 @@ flowchart LR
     Pre -->|Normal Change| Apply[実施]
 ```
 
-インシデントから出た「**恒久対策アクションアイテム**」（[07 §6](./07-incident-response.md)）は、必ず Normal Change として PR 化する。「次回は気を付けます」で終わらせない。
+インシデントから出た「**恒久対策アクションアイテム**」（[07 §6](../roadmap/07-incident-response.md)）は、必ず Normal Change として PR 化する。「次回は気を付けます」で終わらせない。
 
 ---
 
@@ -260,7 +260,7 @@ flowchart LR
 - [ ] `docs/change-management/calendar.md` に変更窓・凍結期間がある
 - [ ] `docs/changelog/YYYY-MM.md` が月次で自動更新される
 - [ ] 1 件以上の Normal Change が本プロセスで実施され、PIR 議事録が残っている
-- [ ] Emergency Change の事後 CAB プロセスが [07](./07-incident-response.md) と統合されている
+- [ ] Emergency Change の事後 CAB プロセスが [07](../roadmap/07-incident-response.md) と統合されている
 
 ---
 
@@ -270,8 +270,8 @@ flowchart LR
 | --- | --- |
 | Change Enablement | §2 種別 / §3 CAB / §5 凍結 |
 | Service Configuration Management | [02 Ansible](./02-ansible-automation.md) [03 Terraform](./03-terraform-aws.md) |
-| Incident Management | [07 IR](./07-incident-response.md) との §8 連動 |
-| Problem Management | §7 PIR / [07 §6](./07-incident-response.md) アクションアイテム |
+| Incident Management | [07 IR](../roadmap/07-incident-response.md) との §8 連動 |
+| Problem Management | §7 PIR / [07 §6](../roadmap/07-incident-response.md) アクションアイテム |
 | Continual Improvement | §10 月次レビュー |
 
 ITIL 4 Foundation 取得（[資格ロードマップ](../certifications/roadmap.md)）の知識を実運用設計に落とし込んでいる。
@@ -281,8 +281,8 @@ ITIL 4 Foundation 取得（[資格ロードマップ](../certifications/roadmap.
 ## 12. 関連設計書・ADR
 
 - [04 SLO 設計](./04-slo-design.md) — エラーバジェット消費で変更凍結を発動
-- [07 インシデント対応](./07-incident-response.md) — Emergency Change と直結
-- [09 セキュリティ運用](./09-security-operations.md) — パッチ管理サイクル
+- [07 インシデント対応](../roadmap/07-incident-response.md) — Emergency Change と直結
+- [09 セキュリティ運用](../roadmap/09-security-operations.md) — パッチ管理サイクル
 - [13 FinOps](../roadmap/13-finops.md) — コスト影響を変更レビューに組込む
 - [ADR-0004 Ansible 採用](../adr/0004-ansible-for-config.md)
 - [ADR-0005 Terraform 採用](../adr/0005-terraform-for-iac.md)

@@ -258,25 +258,31 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 
 | # | テーマ | 状態 | 設計書 |
 | --- | --- | --- | --- |
-| v1.1 | 分散トレーシング（Tempo + OpenTelemetry） | ⬜ 設計サンプル | [06](./docs/server-monitor-improvements/06-observability-traces.md) |
-| v1.3 | インシデント対応プロセス・ポストモーテム | ⬜ 設計のみ・実装未着手 | [07](./docs/server-monitor-improvements/07-incident-response.md) |
-| v1.3 | セキュリティ運用プロセス | ⬜ 設計のみ・実装未着手 | [09](./docs/server-monitor-improvements/09-security-operations.md) |
 | v3.0 | Kubernetes / EKS 発展計画 | ⬜ 学習ロードマップ段階（就業後の資格計画と連動） | [08](./docs/server-monitor-improvements/08-kubernetes-roadmap.md) |
-| v1.1 | メタモニタリング（監視の監視） | ⬜ 設計のみ・実装未着手 | [12](./docs/server-monitor-improvements/12-meta-monitoring.md) |
 | v1.2 | 変更管理プロセス | ✅ PR / Issue テンプレートとミニ運用を server-monitor 側へ追加 | [11](./docs/server-monitor-improvements/11-change-management.md) |
-| v1.3 | キャパシティプランニング・負荷試験 | ⬜ 設計のみ・実装未着手 | [10](./docs/server-monitor-improvements/10-capacity-planning.md) |
-| v2.0 | ネットワーク・DNS 運用 | ⬜ 設計のみ・実装未着手 | [15](./docs/server-monitor-improvements/15-network-operations.md) |
 
-### 中長期ロードマップへ縮退（2026-07-03）
+### 中長期ロードマップへ縮退（2026-07-03、2026-08-19 追加）
 
-実装着手が 1 年以上先のテーマは、選考フェーズの一次導線から外し [docs/roadmap/](./docs/roadmap/README.md) で保管します（設計を捨てたのではなく、露出の優先順位を変更）。
+実装着手が 1 年以上先のテーマ、または実装のない純粋な設計サンプルは、選考フェーズの一次導線から外し [docs/roadmap/](./docs/roadmap/README.md) で保管します（設計を捨てたのではなく、露出の優先順位を変更）。
 
-| # | テーマ | 設計書 |
-| --- | --- | --- |
-| 13 | FinOps（コスト最適化運用） | [13](./docs/roadmap/13-finops.md) |
-| 14 | データベース運用設計 | [14](./docs/roadmap/14-database-operations.md) |
-| 16 | アイデンティティ運用 | [16](./docs/roadmap/16-identity-operations.md) |
-| 17 | カオスエンジニアリング / Game Day | [17](./docs/roadmap/17-chaos-engineering.md) |
+| # | テーマ | 設計書 | 縮退時期 |
+| --- | --- | --- | --- |
+| 13 | FinOps（コスト最適化運用） | [13](./docs/roadmap/13-finops.md) | 2026-07 |
+| 14 | データベース運用設計 | [14](./docs/roadmap/14-database-operations.md) | 2026-07 |
+| 16 | アイデンティティ運用 | [16](./docs/roadmap/16-identity-operations.md) | 2026-07 |
+| 17 | カオスエンジニアリング / Game Day | [17](./docs/roadmap/17-chaos-engineering.md) | 2026-07 |
+| 06 | 分散トレーシング（Tempo + OpenTelemetry） | [06](./docs/roadmap/06-observability-traces.md) | 2026-08 |
+| 07 | インシデント対応プロセス・ポストモーテム | [07](./docs/roadmap/07-incident-response.md) | 2026-08 |
+| 09 | セキュリティ運用プロセス | [09](./docs/roadmap/09-security-operations.md) | 2026-08 |
+| 10 | キャパシティプランニング・負荷試験 | [10](./docs/roadmap/10-capacity-planning.md) | 2026-08 |
+| 12 | メタモニタリング（監視の監視） | [12](./docs/roadmap/12-meta-monitoring.md) | 2026-08 |
+| 15 | ネットワーク・DNS 運用 | [15](./docs/roadmap/15-network-operations.md) | 2026-08 |
+
+> **2026-08-19 追記**: 06 / 07 / 09 / 10 / 12 / 15 は、実装着手時期の遠さに加えて、
+> 未経験からのキャリアチェンジという実際のスキル水準に対して内容が高度すぎる
+> （インシデントコマンダー制のポストモーテム、ITIL 準拠の変更管理相当の統制、
+> 分散トレーシングなど、組織規模や複数人チームを前提にした設計）と判断し、
+> ポートフォリオ全体の難易度・スコープを引き下げる整理の一環として追加で移動した。
 
 ### ADR（アーキテクチャ決定記録）
 

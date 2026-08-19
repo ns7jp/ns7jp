@@ -75,7 +75,7 @@ State は S3 + DynamoDB Lock（後述。**2026-07 追記：S3 ネイティブロ
 | Merge | 手動承認（Issue / Slack）後に `terraform apply` |
 | State Drift | 週次で `terraform plan` をスケジュール実行、差分があれば Slack 通知 |
 
-→ [09 §3 セキュリティ CI](../server-monitor-improvements/09-security-operations.md) と統合運用。
+→ [09 §3 セキュリティ CI](../roadmap/09-security-operations.md) と統合運用。
 
 ---
 

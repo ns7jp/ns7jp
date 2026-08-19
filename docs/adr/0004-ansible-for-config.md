@@ -87,7 +87,7 @@ flowchart LR
 
 - **実行が遅い**：SSH 越し逐次実行のため、台数が増えると分単位で時間がかかる → 部分実行（`--tags`）で対処
 - **Pull 型ではない**：エージェント常駐がないため、「いま全ホストが宣言通りか」を継続検証する別の仕組みが必要 → CI で定期的に `--check` モード実行
-- **シークレット管理**：Ansible Vault は使いやすいが、商用では AWS Secrets Manager / SSM Parameter Store に寄せた方が長期的に良い → [09 §5](../server-monitor-improvements/09-security-operations.md)
+- **シークレット管理**：Ansible Vault は使いやすいが、商用では AWS Secrets Manager / SSM Parameter Store に寄せた方が長期的に良い → [09 §5](../roadmap/09-security-operations.md)
 
 ### 5.3 将来の発展
 

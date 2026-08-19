@@ -112,7 +112,7 @@ jobs:
 
 | ログ源 | 内容 | 保管先 | リテンション |
 | --- | --- | --- | --- |
-| CloudTrail（[03](./03-terraform-aws.md) 以降） | AWS API コール全件 | S3（バージョニング） | 1 年 |
+| CloudTrail（[03](../server-monitor-improvements/03-terraform-aws.md) 以降） | AWS API コール全件 | S3（バージョニング） | 1 年 |
 | Linux auditd | sudo / 設定変更 | journald → Loki | 30 日 |
 | SSH ログイン | 成功 / 失敗 | journald → Loki | 90 日 |
 | Nginx access.log | 全リクエスト | Loki | 14 日 |
@@ -150,7 +150,7 @@ sum by (host) (
 | Slack Webhook | GitHub Secrets + AWS Secrets Manager | 漏洩時即時 |
 | TLS 証明書（Let's Encrypt） | certbot 自動更新 | 90 日（自動） |
 | SSH 鍵 | 各自の YubiKey / `ssh-agent` | 年次 |
-| DB パスワード（将来） | AWS Secrets Manager（[03](./03-terraform-aws.md) で導入） | 半期 |
+| DB パスワード（将来） | AWS Secrets Manager（[03](../server-monitor-improvements/03-terraform-aws.md) で導入） | 半期 |
 
 ### 5.2 ローテーション手順テンプレ
 
@@ -187,7 +187,7 @@ sum by (host) (
 | --- | --- | --- |
 | Grafana | OIDC（第一候補：**Keycloak / Authentik**。自己ホスト・無料・自宅ラボで実構築可能） | v2.0。ラボ内での先行構築も可 |
 | アプリダッシュボード | OIDC（同上） | 同上 |
-| SSH | AWS SSM Session Manager（鍵レス） | [03](./03-terraform-aws.md) AWS 化と同時 |
+| SSH | AWS SSM Session Manager（鍵レス） | [03](../server-monitor-improvements/03-terraform-aws.md) AWS 化と同時 |
 
 > **注記（2026-07 見直し）**：AWS IAM Identity Center は **組織導入時の選択肢**。
 > カスタムアプリ連携は SAML 2.0 経由であり、Grafana の Generic OAuth と直接統合できる
@@ -219,7 +219,7 @@ Keycloak 側は realm `monitor` に confidential client を作成し、Group Mem
 
 ### 6.2 個人ラボでの読み替え
 
-[11 変更管理](./11-change-management.md) と同じ方式で、組織前提の記述は設計サンプルとして
+[11 変更管理](../server-monitor-improvements/11-change-management.md) と同じ方式で、組織前提の記述は設計サンプルとして
 残し、個人ラボでは以下の軽量版に読み替えて運用する。
 
 | 組織前提の記述 | 個人ラボでの運用 |
@@ -270,7 +270,7 @@ gantt
 | アカウント | アクティブユーザー棚卸し、退職者の残存確認 |
 | シークレット | ローテーション期限到来分の対応 |
 | パッチ | 適用率、未適用ホスト一覧 |
-| インシデント | セキュリティ起因の Sev 案件レビュー（[07](./07-incident-response.md)） |
+| インシデント | セキュリティ起因の Sev 案件レビュー（[07](07-incident-response.md)） |
 | 学習 | 直近の重大 CVE / 業界インシデントの社内共有 |
 
 「**SLO レビュー / インシデントレビューと同じ会議体に統合**」する。三つの月次レビューを別物にすると形骸化しがち。
@@ -285,7 +285,7 @@ gantt
 | 2 | Loki に auditd / SSH ログを取り込み、アラートルール追加 |
 | 3 | シークレット棚卸し → `docs/security/inventory.md` 整備、ローテーション計画策定 |
 | 4 | 月次レビュー会の枠を SLO / インシデントレビューと統合、初回開催 |
-| ... | [03](./03-terraform-aws.md) AWS 化と同時に CloudTrail / GuardDuty / SSO を投入 |
+| ... | [03](../server-monitor-improvements/03-terraform-aws.md) AWS 化と同時に CloudTrail / GuardDuty / SSO を投入 |
 
 ---
 
@@ -302,10 +302,10 @@ gantt
 
 ## 11. 関連設計書
 
-- [02. Ansible 自動化](./02-ansible-automation.md)（パッチ適用の実体）
-- [03. AWS + Terraform 化](./03-terraform-aws.md)（CloudTrail / GuardDuty / SSO 投入）
-- [05. 復旧演習](./05-backup-recovery-drill.md)（漏洩時シナリオ）
-- [07. インシデント対応](./07-incident-response.md)（セキュリティ Sev 対応）
+- [02. Ansible 自動化](../server-monitor-improvements/02-ansible-automation.md)（パッチ適用の実体）
+- [03. AWS + Terraform 化](../server-monitor-improvements/03-terraform-aws.md)（CloudTrail / GuardDuty / SSO 投入）
+- [05. 復旧演習](../server-monitor-improvements/05-backup-recovery-drill.md)（漏洩時シナリオ）
+- [07. インシデント対応](07-incident-response.md)（セキュリティ Sev 対応）
 
 ---
 

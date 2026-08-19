@@ -92,7 +92,7 @@
 
 **キャプチャ予定**：上記レイアウトのスクリーンショット（解像度 1920×1080）
 
-### 1.2 将来構想（v2.0 — [計画書](../server-monitor-improvements/01-loki-log-aggregation.md) [06](../server-monitor-improvements/06-observability-traces.md)）
+### 1.2 将来構想（v2.0 — [計画書](../server-monitor-improvements/01-loki-log-aggregation.md) [06](../roadmap/06-observability-traces.md)）
 
 Metrics + Logs + Traces を 1 画面に統合した姿。
 
@@ -194,7 +194,7 @@ SLO バーンレート通知（閾値型ではなく **バジェット消費速�
 
 ## 4. インシデントタイムライン
 
-[07. インシデント対応](../server-monitor-improvements/07-incident-response.md) 計画書の運用イメージ。
+[07. インシデント対応](../roadmap/07-incident-response.md) 計画書の運用イメージ。
 
 > **※ 以下は架空の運用イメージです**（実際に発生したインシデントではありません）。初回の実演習後、実測タイムラインへ差し替えます。
 
@@ -214,7 +214,7 @@ flowchart TD
 
 ## 5. ポストモーテム
 
-[07. インシデント対応 §6](../server-monitor-improvements/07-incident-response.md) のテンプレート出力例。
+[07. インシデント対応 §6](../roadmap/07-incident-response.md) のテンプレート出力例。
 
 > **※ INC-2026-0001 は架空の記入例です**（時刻・影響人数・アクションアイテムを含め、実際のインシデントではありません）。初回の実演習後、本物のポストモーテムへ差し替えます。
 

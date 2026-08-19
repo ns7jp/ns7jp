@@ -52,13 +52,13 @@ Basic 認証だけでは弱いため、以下で補強：
 - **TLS 必須**：Basic 認証は平文なので TLS 終端が前提
 - **`metrics` 用 Bearer Token を別チャネル**：Prometheus からのスクレイプは Bearer Token、人間は Basic と分離
 - **パスワード強度**：`pwgen -s 24 1` で 24 文字ランダム
-- **アクセスログ**：認証失敗は Loki に集約し、しきい値でアラート（[09 §4](../server-monitor-improvements/09-security-operations.md)）
+- **アクセスログ**：認証失敗は Loki に集約し、しきい値でアラート（[09 §4](../roadmap/09-security-operations.md)）
 
 ### 4.3 v2.0 での移行戦略
 
 | 対象 | 移行方法 |
 | --- | --- |
-| Grafana | OIDC Generic OAuth 設定（[09 §6](../server-monitor-improvements/09-security-operations.md)） |
+| Grafana | OIDC Generic OAuth 設定（[09 §6](../roadmap/09-security-operations.md)） |
 | Flask アプリ | `authlib` で OIDC クライアント実装 |
 | Prometheus / Alertmanager | リバースプロキシ（oauth2-proxy）経由 |
 | SSH | AWS SSM Session Manager で **SSH 鍵レス化** |
@@ -94,7 +94,7 @@ Basic 認証だけでは弱いため、以下で補強：
 ### 6.3 リスク低減策
 
 - v1.0 でも **「OIDC 移行が前提」** を README に明示し、本気の本番運用と混同されないようにする
-- 監査ログ（[09 §4](../server-monitor-improvements/09-security-operations.md)）で Basic 認証の失敗を可視化、攻撃検知の最低ラインを担保
+- 監査ログ（[09 §4](../roadmap/09-security-operations.md)）で Basic 認証の失敗を可視化、攻撃検知の最低ラインを担保
 
 ---
 
@@ -108,7 +108,7 @@ Status は Accepted のまま、**v2.0 の OIDC 移行先の選定** を見直�
   Grafana の Generic OAuth と直接統合する当初想定は成立しない
 - **見直し内容**：v2.0 の OIDC 移行先は **Keycloak / Authentik（自己ホスト・無料・
   実構築可能）+ oauth2-proxy** を第一候補とする。Grafana は Generic OAuth で Keycloak と
-  統合し（[09 §6](../server-monitor-improvements/09-security-operations.md)）、
+  統合し（[09 §6](../roadmap/09-security-operations.md)）、
   Prometheus / Alertmanager は oauth2-proxy 経由とする
 - **IAM Identity Center の位置付け**：組織導入時の選択肢として注記に降格。
   AWS アカウントアクセス（Console / CLI）の統合には引き続き有力で、カスタムアプリとは

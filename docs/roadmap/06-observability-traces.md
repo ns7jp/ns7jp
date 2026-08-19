@@ -2,16 +2,16 @@
 
 ## 1. 背景・課題
 
-現状の server-monitor は Prometheus（メトリクス）を採用し、[01](./01-loki-log-aggregation.md) で Loki（ログ）を追加する計画。
+現状の server-monitor は Prometheus（メトリクス）を採用し、[01](../server-monitor-improvements/01-loki-log-aggregation.md) で Loki（ログ）を追加する計画。
 これで **可観測性の三本柱** のうち 2 本（Metrics / Logs）が揃うが、**Traces（分散トレース）が欠けている**。
 
 | 観点 | 現状 / 計画 |
 | --- | --- |
 | Metrics | Prometheus + node-exporter（実装済み） |
-| Logs | Loki + Grafana Alloy（[01](./01-loki-log-aggregation.md) で追加済み） |
+| Logs | Loki + Grafana Alloy（[01](../server-monitor-improvements/01-loki-log-aggregation.md) で追加済み） |
 | Traces | **未整備** |
 
-トレースが無いと、レイテンシ悪化時に「Nginx か、Gunicorn か、アプリ内のどの処理か」を切り分けるために SSH + 個別ログ調査が必要になり、[04. SLO](./04-slo-design.md) で定義する `p95 < 500ms` の改善活動に時間がかかる。
+トレースが無いと、レイテンシ悪化時に「Nginx か、Gunicorn か、アプリ内のどの処理か」を切り分けるために SSH + 個別ログ調査が必要になり、[04. SLO](../server-monitor-improvements/04-slo-design.md) で定義する `p95 < 500ms` の改善活動に時間がかかる。
 
 > ポートフォリオ観点：SRE 求人で必ず聞かれる「Observability の三本柱」を **設計レベルで語れる** ことを示す。
 
@@ -236,7 +236,7 @@ flowchart TB
 2. サンプリング率・保存先・リテンションを調整（2 日）
 3. ステージング相当環境に反映、1 週間の挙動観察（並走）
 4. 本番反映（メンテナンスウィンドウ 1 時間）
-5. SLO ダッシュボード（[04](./04-slo-design.md)）に Exemplars を追加
+5. SLO ダッシュボード（[04](../server-monitor-improvements/04-slo-design.md)）に Exemplars を追加
 
 ---
 
@@ -264,9 +264,9 @@ flowchart TB
 
 ## 10. 関連設計書
 
-- [01. Loki ログ集約](./01-loki-log-aggregation.md)（ログ側の相関）
-- [04. SLO 設計](./04-slo-design.md)（Exemplars 連携先）
-- [07. インシデント対応プロセス](./07-incident-response.md)（解析動線として活用）
+- [01. Loki ログ集約](../server-monitor-improvements/01-loki-log-aggregation.md)（ログ側の相関）
+- [04. SLO 設計](../server-monitor-improvements/04-slo-design.md)（Exemplars 連携先）
+- [07. インシデント対応プロセス](07-incident-response.md)（解析動線として活用）
 
 ---
 
