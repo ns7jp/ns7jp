@@ -7,7 +7,7 @@
 > - **確定情報**（資格・学歴・職業訓練・ポートフォリオ）はそのまま記載しています
 > - 「設計サンプル」と「実績」を混同しない方針は、ポートフォリオ全体（[STATUS.md](../STATUS.md)）と同じです
 
-最終更新: 2026-08-17（派遣社員としてのトライアル就業開始を反映）
+最終更新: 2026-08-20（AD DS/DNS の取り組み事例を表から分離、スキル表を実測に合わせて更新）
 
 ---
 
@@ -34,12 +34,18 @@
 | 就業先 | 株式会社Changeup |
 | 業務内容 | WindowsサーバーとLinuxサーバーの構築研修、AWSとAzureの構築研修 |
 | 使用環境 | Windows 11、Active Directory、AWS、Azure |
-| 取り組み | 2026-08 Hyper-VでWindows Server評価版のAD DSを構築した際、DNSが名前解決できなかった |
-| 環境 | 社内PC、Hyper-V、Windows Server 2022、クライアント側はAlmaLinux 9.7。 |
-| 症状 | AD DS のセットアップ自体は完了したが、クライアントVMからドメインへ参加しようとすると ドメインが見つかりません というエラーが出た。 |
-| 原因 | クライアントVMのネットワークアダプタがHyper-VのNAT設定のままで、DNSサーバーとして外部(ルーター)を向いていた。ADのドメインコントローラをDNSとして参照する設定になっていなかった。 |
-| 対処 | Hyper-VのネットワークをNATからホストオンリー/内部ネットワークに変更し、クライアント側のDNS設定をドメインコントローラのIPへ手動で向けた。あわせて、ドメイン参加手順を再現できるよう、ネットワーク設定→DNS設定→ドメイン参加の順序をチェックリスト化した。 |
-| 学び | ADドメイン参加は「ドメインコントローラが動いていること」だけでなく「クライアントがそのDCをDNSとして見ていること」が前提条件だと分かった。LinuxでのdigによるDNS切り分けと同じ考え方がWindows側でも通用した。 |
+
+#### 取り組み事例: AD ドメイン参加時の名前解決障害（2026-08）
+
+Hyper-V で Windows Server 評価版の AD DS を構築した際、クライアント VM からドメインに参加できない事象に遭遇しました。
+
+- **環境**: 社内 PC、Hyper-V、Windows Server 2022、クライアント側は AlmaLinux 9.7
+- **症状**: AD DS のセットアップ自体は完了したが、クライアント VM からドメインへ参加しようとすると「ドメインが見つかりません」というエラーが出た
+- **原因**: クライアント VM のネットワークアダプタが Hyper-V の NAT 設定のままで、DNS サーバーとして外部（ルーター）を向いていた。AD のドメインコントローラを DNS として参照する設定になっていなかった
+- **対処**: Hyper-V のネットワークを NAT からホストオンリー / 内部ネットワークに変更し、クライアント側の DNS 設定をドメインコントローラの IP へ手動で向けた。あわせて、ドメイン参加手順を再現できるよう、ネットワーク設定 → DNS 設定 → ドメイン参加の順序をチェックリスト化した
+- **学び**: AD ドメイン参加は「ドメインコントローラが動いていること」だけでなく「クライアントがその DC を DNS として見ていること」が前提条件だと分かった。Linux での `dig` による DNS 切り分けと同じ考え方が Windows 側でも通用した
+
+（詳細な記録は [LEARNINGS.md](../LEARNINGS.md) 参照）
 
 ### 製造・物流（15 年以上）
 
@@ -95,11 +101,11 @@
 | --- | --- | --- |
 | OS | Linux サーバー運用 | ○ |
 | コンテナ | Docker / Docker Compose | ◎ |
-| Web / Proxy | Nginx（リバースプロキシ / TLS） | ○ |
-| 監視 | Prometheus / Grafana / Alertmanager | ○（コード・設定実装済み、実機起動は採録中） |
-| ログ | Loki / Grafana Alloy | ○ |
-| 構成管理 | Ansible | ○ |
-| IaC | Terraform（AWS） | △〜○（コード実装済み・実適用は検証中） |
+| Web / Proxy | Nginx（リバースプロキシ。TLS は設定例・自己署名証明書での確認まで） | ○ |
+| 監視 | Prometheus / Grafana / Alertmanager | ○（Linux(WSL2) 上で起動・実データ表示を確認済み。[証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)） |
+| ログ | Loki / Grafana Alloy | ○（LogQL によるログ検索を実機で確認済み） |
+| 構成管理 | Ansible | ○（4 ロールを molecule test で適用・冪等性確認、欠陥 2 件を自分で発見・修正。[証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)） |
+| IaC | Terraform（AWS） | △（`validate` / `fmt` まで。`apply` は未実施） |
 | CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○ |
 
 実装範囲と検証境界は [アーキテクチャ図](./architecture-diagram.md) を参照してください。

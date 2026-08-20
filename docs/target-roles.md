@@ -4,9 +4,9 @@
 
 | 優先 | 志望領域 | 想定する入口業務 | 提示する証拠 | 次に必要な実測 |
 | --- | --- | --- | --- | --- |
-| 1 | Linux サーバー構築・運用 | OS 初期設定、ミドルウェア配備、試験、手順・パラメータ更新 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、Ansible、Compose | Ubuntu 新規構築、冪等性、結合試験の実行ログ |
-| 2 | インフラ監視・運用 | 監視確認、一次切り分け、障害対応、定型作業 | Prometheus / Grafana / Loki、ランブック、[障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting) | Grafana / 通知 / D-1 / network drill の記録 |
-| 3 | IT サポート・社内 SE 補助 | 問い合わせ、キッティング、棚卸し、FAQ 更新 | [FAQ](./it-support/faq.md)、[アカウント管理](./it-support/account-management.md)、PowerShell scripts | 実機出力を添えた Windows / network 切り分け記録 |
+| 1 | Linux サーバー構築・運用 | OS 初期設定、ミドルウェア配備、試験、手順・パラメータ更新 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、Ansible（4 ロール冪等性確認済み）、Compose | `site.yml` を通した Ubuntu 新規構築、結合試験の実行ログ |
+| 2 | インフラ監視・運用 | 監視確認、一次切り分け、障害対応、定型作業 | Prometheus / Grafana / Loki（実データ表示済み）、ランブック、[障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)（PASS） | Alertmanager → Slack の実配信記録 |
+| 3 | IT サポート・社内 SE 補助 | 問い合わせ、キッティング、棚卸し、FAQ 更新 | [FAQ](./it-support/faq.md)、[アカウント管理](./it-support/account-management.md)（**設計サンプル。実務対応実績ではありません**） | 実機出力を添えた Windows / network 切り分け記録 |
 | 発展 | Cloud / IaC | Terraform の修正・レビュー、構築補助 | AWS Terraform modules、AWS / cost / backup 設計 | `plan / apply / destroy`、費用、復元 |
 
 ## 応募先別の最短導線

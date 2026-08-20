@@ -29,24 +29,17 @@
 
 | 区分 | 内容 | 状態 | 証跡 |
 | --- | --- | --- | --- |
-| 開発時の画面（**Windows 端末**） | Server Monitor UI | 掲載済み。**Linux サーバー構築の証跡ではない** | [server-monitor screenshot](https://github.com/ns7jp/server-monitor/blob/main/docs/screenshot.png) |
-| 実機予定（**Linux**） | Server Monitor UI を Linux ホストで起動した画面 | 採録待ち。**上の画像の差し替え対象** | `server-monitor/docs/evidence/` |
-| 実機予定 | Grafana 統合監視 dashboard | 採録待ち | `server-monitor/docs/evidence/` |
-| 実機予定 | Alertmanager / Slack 通知 | 採録待ち | `server-monitor/docs/evidence/` |
-| 実機予定 | D-1 / D-2 復旧演習ログ | テンプレート整備済み | `server-monitor/docs/drills/logs/` |
-| 実機予定 | AWS apply / destroy / Cost Explorer | テンプレート整備済み | `server-monitor/docs/evidence/` |
+| 実機（**Linux(WSL2)**） | Server Monitor UI | 掲載済み（2026-08-18 起動、2026-08-19 差し替え） | [server-monitor screenshot](https://github.com/ns7jp/server-monitor/blob/main/docs/screenshot.png) ／ [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
+| 実機 | Grafana 統合監視 dashboard（実データ表示） | 実測済み。ページ内スクリーンショットは未掲載 | [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
+| 実機予定 | Alertmanager / Slack 通知 | 設定は実装済み。**実配信は未採録** | `server-monitor/docs/evidence/` |
+| 実機 | D-1 復旧演習ログ（RTO 13 秒 PASS） | 実測済み | [D-1 演習記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
+| 実機予定 | D-2 復旧演習ログ | テンプレート整備済み・未実施 | `server-monitor/docs/drills/logs/` |
+| 実機予定 | AWS apply / destroy / Cost Explorer | テンプレート整備済み・未実施 | `server-monitor/docs/evidence/` |
 
-![Server Monitor Dashboard（Windows 端末での開発時画面）](https://raw.githubusercontent.com/ns7jp/server-monitor/main/docs/screenshot.png)
+![Server Monitor Dashboard（Linux(WSL2) 上での実行画面、2026-08-18）](https://raw.githubusercontent.com/ns7jp/server-monitor/main/docs/screenshot.png)
 
-> **この画像について（2026-08-17 追記）**
->
-> 上の画面は **Windows 11 端末で開発中に撮影したもの**です。アプリケーションが動作することは示しますが、
-> **Linux サーバーを構築・運用した証跡ではありません**。第一志望が Linux サーバー構築である以上、
-> この画像を主要キャプチャとして掲示し続けるのは適切でないため、
-> Linux ホストで起動した画面が採録でき次第、差し替えます（[チェックリスト優先 3](../evidence-capture-checklist.md)）。
->
-> 従来は本表で「実機 / 掲載済み」とだけ記載しており、**どの OS で撮ったものかが読み手に伝わらない状態**でした。
-> 「実物・設計サンプル・計画を混同しない」という本ページの方針に照らして、記載を訂正しています。
+> **この画像について**: 上の画面は **Linux(WSL2) 上で実際に起動して撮影したもの**（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)）。
+> Grafana / Loki のダッシュボード自体のスクリーンショットは、本ページにはまだ未掲載（[チェックリスト](../evidence-capture-checklist.md)）。
 
 採録時は秘密値、公開 IP、AWS account ID、個人名をマスクし、対象 commit と
 実行日時を必ず併記します。
@@ -66,9 +59,9 @@
 
 ## 1. 統合監視ダッシュボード（Grafana）
 
-### 1.1 現状（v1.0 — 実装済み）
+### 1.1 現状（v1.0 — 実装済み・実測済み）
 
-[server-monitor](https://github.com/ns7jp/server-monitor) で稼働中。
+[server-monitor](https://github.com/ns7jp/server-monitor) で稼働。Linux(WSL2) 上で実データ表示を確認済み（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)）。下記は数値をそのまま貼るのではなく、レイアウトを ASCII で示したモックアップ。
 
 ```text
 ┌──────────────────────────────────────────────────────────────────┐
@@ -101,9 +94,9 @@ Metrics + Logs + Traces を 1 画面に統合する構想があるが、現時�
 
 ## 2. アラート通知（Slack）
 
-### 2.1 現状（v1.0 — 実装済み）
+### 2.1 現状（v1.0 — 設定は実装済み。実配信は未採録）
 
-Alertmanager → Slack Webhook で稼働中。
+Alertmanager → Slack Webhook の連携は実装済みだが、Webhook 秘密値を Git にコミットしない設計のため、**実際の Slack 配信はまだ試していない**（Alertmanager UI 上での FIRING 表示は別途確認済み）。下記はメッセージ形式のモックアップで、数値は架空のもの。
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
