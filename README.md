@@ -12,7 +12,7 @@
 
 1. **[Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)** — 基本設計、詳細設計、パラメータ、ネットワーク、構築、試験、引き渡しを一つの案件として整理
 2. **[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)** — 実装済み・実測済み・未実測を明確に区別
-3. **[3 分デモ収録手順（動画は未収録）](https://github.com/ns7jp/server-monitor/blob/main/docs/demo-capture-guide.md)** ／ **[二セグメント通信障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)** — 正常確認、障害注入、切り分け、復旧を再現可能にした手順
+3. **[学習の一次記録（つまずきログ）](./LEARNINGS.md)** ／ **[二セグメント通信障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)** — 実際に詰まった症状・原因・対処・学びの記録と、障害注入から復旧までを再現可能にした手順
 
 補足：[採用ご担当者さま向け 1 ページ](./docs/overview-for-recruiters.md) ／ [職務経歴書・スキルシート](./docs/resume.md)
 
@@ -43,15 +43,15 @@ flowchart LR
 
 | 状態 | 現在確認できるもの |
 | --- | --- |
-| **Linux 上で実測済み** | **Ansible ロール 4 本（common / docker / nginx / monitoring）の適用・冪等性・適用結果の検証**（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／ [実行 URL](https://github.com/ns7jp/server-monitor/actions/runs/32031882695)） |
+| **Linux 上で実測済み** | **Ansible ロール 4 本（common / docker / nginx / monitoring）の適用・冪等性・適用結果の検証**（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／ [実行 URL](https://github.com/ns7jp/server-monitor/actions/runs/32031882695)）、**監視スタック 9 サービスの起動と Grafana / Loki 実データ表示**（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)）、**D-1 復旧演習 RTO 13 秒 PASS**（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)）、**二セグメント障害ラボ（障害注入→切り分け→復旧）PASS**（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md)） |
 | CI で継続的に自動検証している | Python tests、Compose / Prometheus / Loki 設定、Ansible lint・syntax、Terraform fmt / validate、Trivy による依存・秘密値・設定 scan、バックアップスクリプトの日次検証 |
 | コード・設定を実装済み | Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform |
-| **実機での実測はこれから** | **監視スタック全体の起動、Grafana / Loki / 通知の実画面、D-1 / D-2 復旧演習、二セグメント障害ラボ** |
+| **実機での実測はこれから** | **Alertmanager → Slack の実配信、D-2 復旧演習、`site.yml` を通した新規構築（IT-01/02）** |
 | AWS 実測が必要 | `plan / apply / destroy`、費用、AWS Backup 復元 |
 
 **Ansible ロールについては、実際に適用して 2 回目で `changed=0` になること（冪等性）まで確認済みです。** この検証では、静的検査では検出できなかった実際の欠陥を 2 件見つけて修正しました（`tzdata` の依存漏れ、および UFW の `allow` と `limit` が同一ポートを奪い合う不具合）。経緯は [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) に残しています。
 
-一方で、**監視スタック全体を起動した記録はまだありません。** [試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/build-package/06-test-specification.md)の結合試験・セキュリティ試験も大半が `NOT RUN` です。ここを埋めることを最優先の課題として [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) で管理しています。
+**監視スタック全体の起動、D-1 復旧演習、二セグメント障害ラボは、いずれも 2026-08-18〜19 に実測済みです。** [試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)の結合試験・セキュリティ試験は 21 項目中 11 項目が PASS、残りは `NOT RUN` です。ここを埋めることを最優先の課題として [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) で管理しています。
 
 自動検査で担保できる範囲（構文、設定の整合、秘密値の混入、依存の脆弱性）と、実機でしか確認できない範囲（起動、疎通、復旧時間）を区別すること自体を、運用設計の一部として扱っています。未収録の項目は「実装・手順作成済み」とし、実行日時、commit SHA、コマンド、結果、所要時間を記録して初めて「実測済み」へ変更します。
 
@@ -106,7 +106,7 @@ flowchart LR
 
 ## その他の成果物
 
-- [IT サポート資料](./docs/it-support/faq.md) — FAQ、一次切り分け、アカウント管理、Service Desk metrics
+- [IT サポート資料](./docs/it-support/faq.md) — FAQ、一次切り分け、アカウント管理、Service Desk metrics（**設計サンプル。実務対応実績ではありません**）
 - [post](https://github.com/ns7jp/post) — PHP / MySQL 掲示板（CSRF、bcrypt、PDO）
 - [pulse](https://github.com/ns7jp/pulse) — PHP / SQLite SNS アプリ
 - [works](https://github.com/ns7jp/works) — Python / HTML / CSS の学習作品
