@@ -49,12 +49,13 @@
 | ✅ 3 | ~~`docker compose up` 後の **Grafana 実画面**（CPU/メモリ/HTTP/アラート状態）~~ **2026-08-18 採録完了** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) | ローカル Linux + Docker | 0 円 | [アーキテクチャ図](./architecture-diagram.md) |
 | 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [07 インシデント対応](roadmap/07-incident-response.md) |
 | ✅ 5 | ~~Loki + Grafana Alloy の **ログ検索実画面**（クエリ + 結果）~~ **2026-08-18 採録完了**（上記記録に含む） | 同上 | 0 円 | [01 ログ集約](./server-monitor-improvements/01-loki-log-aggregation.md) |
-| 6 | **ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる） | 同上 | 0 円 | [15 ネットワーク運用](roadmap/15-network-operations.md) / [橋渡し](./career-bridge.md) |
+| ⚠ 6 | ~~**ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる）~~ **2026-08-21 一部実施** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)（`ss` / `docker port` / `docker inspect` で切り分け、`internal: true` ネットワークがホストへのポート公開を無効化する不具合を発見・原因特定。当初想定していたクライアント視点の dig / traceroute / tcpdump は未実施） | 同上 | 0 円 | [15 ネットワーク運用](roadmap/15-network-operations.md) / [橋渡し](./career-bridge.md) |
 | ✅ 7 | ~~**D-1 復旧演習の実測**（検知 → 復旧の各ステップを実時間で計測）~~ **2026-08-19 採録完了（PASS、RTO 13秒）** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) | 同上 | 0 円 | [05 バックアップ・復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 
 > **優先 3 は 2026-08-18 に採録完了しました。** あわせて `server-monitor/docs/screenshot.png` も
 > Windows 11 端末の画面から Linux（WSL2）上の実画面へ差し替え済みです。
-> **残るグループ B は優先 6（ネットワーク切り分けメモ）と優先 4（Alertmanager → Slack 通知）**です（所要時間の短い順に並べ替え済み。詳細は [STATUS.md](../STATUS.md) 参照）。
+> **優先 6 は 2026-08-21 に一部実施しました**（当初想定した dig / traceroute / tcpdump は未実施だが、その過程で見つかったポート公開の不具合を切り分け・原因特定）。
+> **残るグループ B は優先 4（Alertmanager → Slack 通知）**です。
 
 ### グループ C — 追加の環境・費用が必要
 
@@ -73,10 +74,10 @@
 
 1. ~~**CI 証跡（優先 1〜2）** — ブラウザのみ~~ → 優先 1・2 ともに ✅ 採録済み
 2. ~~**スクショ 3 点（優先 3〜5）**~~ → 優先 3・5 は ✅ 採録済み（2026-08-18）。残るは優先 4（Alertmanager → Slack）
-3. ~~**演習・実測（優先 6〜7）**~~ → 優先 7（D-1）は ✅ 採録済み（2026-08-19、PASS）。残るは優先 6（ネットワーク切り分けメモ）
+3. ~~**演習・実測（優先 6〜7）**~~ → 優先 7（D-1）は ✅ 採録済み（2026-08-19、PASS）。優先 6 は ⚠ 2026-08-21 に一部実施（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）
 4. **デモ動画** — 証跡が揃った後の**集大成**として収録（スクショはリハーサルの副産物として撮れるため、逆順にはしない）
 
-> 残る優先 4・6 の着手順は、2026-08-17 に [STATUS.md](../STATUS.md) で「所要時間の短い順」へ並べ替えたため **優先 6 → 優先 4** です。
+> 残るグループ B のタスクは優先 4（Alertmanager → Slack 通知）のみです。
 
 ---
 
