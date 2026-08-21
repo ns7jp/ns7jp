@@ -127,19 +127,19 @@ flowchart LR
 | **節約案（worker を spot + 夜間停止）** | | **約 12,000 円 / 月** |
 
 **判断**：[03](./03-terraform-aws.md) の VM 構成（月 4,000 円）の方が学習目的にはコスト効率が高い。
-EKS は **資格学習（CKA / AWS SAA Pro）と連動した期間集中型** で実施し、終了後は `terraform destroy` する運用にする。
+EKS は **資格学習（CKA / AWS SAA）と連動した期間集中型** で実施し、終了後は `terraform destroy` する運用にする。
 
 ---
 
 ## 6. 資格との連動
 
-| 時期 | 資格 | 本計画との対応 |
+| 資格 | 時期 | 本計画との対応 |
 | --- | --- | --- |
-| 2027 Q2 | **CKAD**（追加候補） | Phase 1〜2（kind / minikube / Helm） |
-| 2027 Q3 | **CKA**（追加候補） | Phase 3（EKS、クラスタ運用） |
-| 2027 Q4 | AWS SAA Professional（検討） | Phase 4（GitOps、本番設計） |
+| AWS SAA（Associate） | 2027 年後半（予定） | Phase 4（GitOps、本番設計） |
+| CKAD | 就業後に検討（配属領域に応じて選択） | Phase 1〜2（kind / minikube / Helm） |
+| CKA | 就業後に検討（配属領域に応じて選択） | Phase 3（EKS、クラスタ運用） |
 
-詳細は [資格取得ロードマップ](../certifications/roadmap.md) に反映する。
+詳細は [資格取得ロードマップ](../certifications/roadmap.md) を参照。
 
 ---
 

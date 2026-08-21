@@ -18,7 +18,7 @@
 
 ## 2. Decision
 
-**監視スタックを自前で運用する**（EC2 上に Prometheus / Grafana / Loki / Tempo / Alertmanager をホスト）。SaaS を否定するわけではなく、案件で SaaS が要件ならそちらを使う。
+**監視スタックを自前で運用する**（EC2 上に Prometheus / Grafana / Loki / Alertmanager をホスト。Tempo は設計のみで未着手 → [06 分散トレーシング](../roadmap/06-observability-traces.md)）。SaaS を否定するわけではなく、案件で SaaS が要件ならそちらを使う。
 
 ---
 
