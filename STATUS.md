@@ -334,6 +334,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 
 - [ ] **resume.md / overview の `〈 〉` 箇所を記入**（派遣元・就業先・トライアル期間・在籍年月・夜勤/交代制の可否）
 - [ ] **[#8](https://github.com/ns7jp/ns7jp/issues/8) に現況コメントを 1 件残す**（トライアル就業の開始と、証跡採録の再開予定。2026-07-12 以降が空白のままになっている）
+- [ ] **GitHub プロフィールの Bio・ピン留めリポジトリを設定**（[github-profile-settings.md](./docs/github-profile-settings.md) の推奨設定を適用。2026-08-21 時点で Bio・ピン留めともに未反映）
 
 #### 今月（1 晩〜半日・0 円）
 
