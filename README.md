@@ -1,10 +1,10 @@
 # 島田則幸 (Noriyuki Shimada)
 
-## Linux サーバー構築・インフラ運用エンジニア志望
+## サーバー設計・構築エンジニア志望
 
-製造・物流の現場で 15 年以上続けてきた「計測する・原因を絞る・手順化する・改善を定着させる」を、Linux サーバーの構築・監視・障害対応に生かします。
+製造・物流の現場で 15 年以上続けてきた「計測する・原因を絞る・手順化する・改善を定着させる」を、サーバーの構築・監視・障害対応に生かします。
 
-**現況（2026-08）**: 派遣社員としてトライアル就業中です。第一志望は **Linux サーバー構築・運用**、入口業務としてインフラ監視・運用、IT サポート、社内 SE 補助にも対応します。
+**現況（2026-08）**: 派遣社員としてトライアル就業中です。第一志望は **サーバー設計・構築**、入口業務としてインフラ監視・運用、IT サポート、社内 SE 補助にも対応します。
 
 ## 30 秒で確認する 4 点
 
@@ -55,7 +55,7 @@
 
 ## スキル・資格
 
-Linux、Docker Compose、Nginx、systemd、Prometheus、Grafana、Loki、Ansible、Terraform、GitHub Actions、Python、Flask、pytest。Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級を取得し、LPIC-1 を学習中です。
+Linux、Docker Compose、Nginx、systemd、Prometheus、Grafana、Loki、Ansible、Terraform、GitHub Actions、Python、Flask、pytest。Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級、ITパスポートを取得し、基本情報技術者を学習中です。
 
 応募先ごとの提示順は [志望トラックと証跡](./docs/target-roles.md)、学習計画と未実施項目は [STATUS](./STATUS.md) にまとめています。
 
