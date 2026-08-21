@@ -28,7 +28,7 @@ flowchart TB
 | Logs | Loki + Grafana Alloy を実装。Promtail は 2026-03-02 の EOL に伴い不採用 |
 | SLO | blackbox-exporter、burn-rate rules、dashboard を実装 |
 | 構成管理 | Ansible roles / playbook を実装 |
-| 実測 | Docker 起動、演習 RTO、full Molecule の採録は未収録 |
+| 実測 | Linux (WSL2) 上で 9 サービス起動、Grafana / Loki 表示、D-1 RTO 13 秒、4 ロールの full Molecule を採録済み。Slack 実配信、D-2、`site.yml` 一括適用は未収録 |
 
 blackbox-exporter は対象サービスと同じホスト内にあるため、ラボでのアプリ停止は測れるが、
 ホスト全停止を外部利用者の視点から測定できない。この SLO はラボ内観測として扱う。

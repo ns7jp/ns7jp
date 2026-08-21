@@ -1,8 +1,9 @@
 # 05. バックアップ・復旧演習
 
-> 状態更新（2026-05-27）: backup verification CI、D-1 script、D-2 runbook と
+> 状態更新（2026-08-19）: backup verification CI、D-1 script、D-2 runbook と
 > 記録テンプレートは [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
-> 実際の D-1 / D-2 実行ログおよび RTO / RPO 実測はまだ収録されていない。
+> D-1 は[実測済み（PASS、RTO 13 秒）](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)。
+> D-2 の実行ログと RTO / RPO 実測は未収録である。
 
 ## 1. 背景
 
