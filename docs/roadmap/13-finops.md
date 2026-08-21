@@ -2,7 +2,7 @@
 
 ## 1. 背景・課題
 
-[03 Terraform / AWS](../server-monitor-improvements/03-terraform-aws.md) で AWS 化するにあたり、**コスト** の議論が薄い。クラウド案件では「**コストに鈍感なインフラ運用** は実務で歓迎されない」のが現実。
+[03 Terraform / AWS](../server-monitor-improvements/03-terraform-aws.md) で AWS 化するにあたり、**コスト** の議論が薄い。クラウドは使った分だけ課金される以上、**コスト感覚を持たずに設計・運用する** のは避けたい。
 
 | 現状の課題 | リスク |
 | --- | --- |
@@ -12,7 +12,7 @@
 | Rightsizing の月次レビューが無い | 立ち上げ時のスペックを引きずる |
 | タグ規約が無い | コスト按分・棚卸しが不可能 |
 
-> ポートフォリオ観点：「**SLO・キャパ・コストの三角関係**」を語れることが、シニア寄りのインフラ運用に必須。
+> 学習メモ：「SLO・キャパシティ・コスト」は三点セットで考えるべきものだと理解している。ここでは三者の関係性を設計として一度整理しておく。
 
 ### 1.1 個人ラボでの読み替え
 
@@ -377,6 +377,4 @@ flowchart TD
 
 - [FinOps Foundation](https://www.finops.org/)
 - [AWS Well-Architected Cost Optimization Pillar](https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/)
-- [AWS Cost Optimization Hub](https://aws.amazon.com/aws-cost-management/cost-optimization-hub/)
 - [Infracost Documentation](https://www.infracost.io/docs/)
-- [J.R. Storment & Mike Fuller, "Cloud FinOps" 2nd ed.](https://www.oreilly.com/library/view/cloud-finops-2nd/9781492054610/)

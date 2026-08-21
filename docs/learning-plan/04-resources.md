@@ -37,65 +37,65 @@
 
 ### Phase 0-1: 全体像と Linux 基礎
 
-| 種別 | 教材の例 | 使い方 |
-| --- | --- | --- |
-| 書籍 | 『イラスト図解式 この一冊で全部わかるサーバーの基本』 | 最初の 1 週で通読し、用語の地図を作る |
-| 書籍 | 『インフラエンジニアの教科書』 | 職種と業務の全体像をつかむ |
-| 書籍 | 『新しいLinuxの教科書』 | **Phase 1 の主教材**。コマンドとシェルの基礎 |
-| 書籍 | 『［試して理解］Linuxのしくみ』 | プロセス・メモリ・ファイルシステムの理解を補強 |
-| 公式 | [Ubuntu Server ドキュメント](https://ubuntu.com/server/docs) | 実機設定時の正解の確認 |
-| 公式 | [AlmaLinux](https://almalinux.org/) | RHEL 系を触るときの導入元 |
+| 種別 | 教材の例 | 発行年 | 使い方 |
+| --- | --- | --- | --- |
+| 書籍 | 『イラスト図解式 この一冊で全部わかるサーバーの基本』 | 要確認 | 最初の 1 週で通読し、用語の地図を作る |
+| 書籍 | 『インフラエンジニアの教科書』 | 要確認 | 職種と業務の全体像をつかむ |
+| 書籍 | 『新しいLinuxの教科書』 | 2015 | **Phase 1 の主教材**。コマンドとシェルの基礎 |
+| 書籍 | 『［試して理解］Linuxのしくみ』 | 要確認 | プロセス・メモリ・ファイルシステムの理解を補強 |
+| 公式 | [Ubuntu Server ドキュメント](https://ubuntu.com/server/docs) | - (随時更新) | 実機設定時の正解の確認 |
+| 公式 | [AlmaLinux](https://almalinux.org/) | - (随時更新) | RHEL 系を触るときの導入元 |
 
 ### Phase 2: ネットワーク基礎
 
-| 種別 | 教材の例 | 使い方 |
-| --- | --- | --- |
-| 書籍 | 『ネットワークはなぜつながるのか』 | 通信の全体像を物語として理解する |
-| 書籍 | 『マスタリングTCP/IP 入門編』 | **Phase 2 の主教材**。プロトコルの体系的理解 |
-| 書籍 | 『インフラ／ネットワークエンジニアのためのネットワーク技術＆設計入門』 | 設計視点での読み方を学ぶ |
-| 演習 | [Cisco Networking Academy](https://www.netacad.com/) の Packet Tracer | 機器を持たずにルーティングを試す |
-| 演習 | 自ラボでの `tcpdump` 観察 | 教科書の図と実際のパケットを対応させる |
+| 種別 | 教材の例 | 発行年 | 使い方 |
+| --- | --- | --- | --- |
+| 書籍 | 『ネットワークはなぜつながるのか』 | 要確認 | 通信の全体像を物語として理解する |
+| 書籍 | 『マスタリングTCP/IP 入門編』 | 要確認 | **Phase 2 の主教材**。プロトコルの体系的理解 |
+| 書籍 | 『インフラ／ネットワークエンジニアのためのネットワーク技術＆設計入門』 | 要確認 | 設計視点での読み方を学ぶ |
+| 演習 | [Cisco Networking Academy](https://www.netacad.com/) の Packet Tracer | - | 機器を持たずにルーティングを試す |
+| 演習 | 自ラボでの `tcpdump` 観察 | - | 教科書の図と実際のパケットを対応させる |
 
 ### Phase 3: ミドルウェア構築
 
-| 種別 | 教材の例 | 使い方 |
-| --- | --- | --- |
-| 公式 | [Nginx ドキュメント](https://nginx.org/en/docs/) | 設定ディレクティブの正解 |
-| 公式 | [MySQL](https://dev.mysql.com/doc/) / [PostgreSQL](https://www.postgresql.org/docs/) | 権限・バックアップ・設定値の確認 |
-| 書籍 | Web サーバー／DB の入門書を各 1 冊 | 全体像の把握。設定値は公式で確認する |
-| 学習 | TLS は自ラボで証明書を作って確認 | 書籍だけでは理解しにくい領域 |
+| 種別 | 教材の例 | 発行年 | 使い方 |
+| --- | --- | --- | --- |
+| 公式 | [Nginx ドキュメント](https://nginx.org/en/docs/) | - (随時更新) | 設定ディレクティブの正解 |
+| 公式 | [MySQL](https://dev.mysql.com/doc/) / [PostgreSQL](https://www.postgresql.org/docs/) | - (随時更新) | 権限・バックアップ・設定値の確認 |
+| 書籍 | Web サーバー／DB の入門書を各 1 冊 | - (選定時に確認) | 全体像の把握。設定値は公式で確認する |
+| 学習 | TLS は自ラボで証明書を作って確認 | - | 書籍だけでは理解しにくい領域 |
 
 ### Phase 4: 構築工程の実務
 
-| 種別 | 教材の例 | 使い方 |
-| --- | --- | --- |
-| 本リポジトリ | [03 構築工程の実務ドキュメント](./03-build-process.md) | テンプレートをそのまま使う |
-| 書籍 | インフラ設計・運用の入門書 | 非機能要件と設計判断の考え方 |
-| 参考 | ITIL 4 の用語解説記事 | 現場でよく使われる運用ルールの言葉に慣れておく |
+| 種別 | 教材の例 | 発行年 | 使い方 |
+| --- | --- | --- | --- |
+| 本リポジトリ | [03 構築工程の実務ドキュメント](./03-build-process.md) | - | テンプレートをそのまま使う |
+| 書籍 | インフラ設計・運用の入門書 | - (選定時に確認) | 非機能要件と設計判断の考え方 |
+| 参考 | ITIL 4 の用語解説記事 | - (随時更新) | 現場でよく使われる運用ルールの言葉に慣れておく |
 
 > この領域は**書籍より実践が効きます**。テンプレートを埋めて、1 週間後の自分に再現させるのが最短です。
 
 ### Phase 5: 自動化・IaC
 
-| 種別 | 教材の例 | 使い方 |
-| --- | --- | --- |
-| 公式 | [Ansible ドキュメント](https://docs.ansible.com/) | モジュール選定と冪等性の確認 |
-| 書籍 | 『Ansible実践ガイド』 | role 設計と実務パターン |
-| 公式 | [Docker ドキュメント](https://docs.docker.com/) | Dockerfile と Compose の正解 |
-| 書籍 | 『Docker/Kubernetes 実践コンテナ開発入門』 | コンテナの考え方の整理 |
-| 公式 | [Terraform チュートリアル](https://developer.hashicorp.com/terraform/tutorials) | 手を動かしながら進められる |
-| 書籍 | 『詳解 Terraform』 | state・モジュール設計の理解 |
-| 公式 | [Pro Git](https://git-scm.com/book/ja/v2) | 日本語で無料。Git の基礎はここで足りる |
+| 種別 | 教材の例 | 発行年 | 使い方 |
+| --- | --- | --- | --- |
+| 公式 | [Ansible ドキュメント](https://docs.ansible.com/) | - (随時更新) | モジュール選定と冪等性の確認 |
+| 書籍 | 『Ansible実践ガイド』 | 要確認 | role 設計と実務パターン |
+| 公式 | [Docker ドキュメント](https://docs.docker.com/) | - (随時更新) | Dockerfile と Compose の正解 |
+| 書籍 | 『Docker/Kubernetes 実践コンテナ開発入門』 | 要確認 | コンテナの考え方の整理 |
+| 公式 | [Terraform チュートリアル](https://developer.hashicorp.com/terraform/tutorials) | - (随時更新) | 手を動かしながら進められる |
+| 書籍 | 『詳解 Terraform』 | 要確認 | state・モジュール設計の理解 |
+| 公式 | [Pro Git](https://git-scm.com/book/ja/v2) | - (随時更新) | 日本語で無料。Git の基礎はここで足りる |
 
 ### Phase 6: クラウド・監視
 
-| 種別 | 教材の例 | 使い方 |
-| --- | --- | --- |
-| 公式 | [AWS Skill Builder](https://skillbuilder.aws/) | 無料コースで基礎を押さえる |
-| 公式 | [AWS 無料利用枠](https://aws.amazon.com/jp/free/) | 対象範囲と期限を**着手前に確認する** |
-| 公式 | [Prometheus](https://prometheus.io/docs/) / [Grafana](https://grafana.com/docs/) | 監視の設定と可視化 |
-| 参考 | [Zabbix ドキュメント](https://www.zabbix.com/documentation) | 国内 SIer で採用例が多く、概念の対応付けに有効 |
-| 本リポジトリ | [改善設計一覧](../server-monitor-improvements/README.md) | 監視・サービス目標値・復旧演習の設計例 |
+| 種別 | 教材の例 | 発行年 | 使い方 |
+| --- | --- | --- | --- |
+| 公式 | [AWS Skill Builder](https://skillbuilder.aws/) | - (随時更新) | 無料コースで基礎を押さえる |
+| 公式 | [AWS 無料利用枠](https://aws.amazon.com/jp/free/) | - (随時更新) | 対象範囲と期限を**着手前に確認する** |
+| 公式 | [Prometheus](https://prometheus.io/docs/) / [Grafana](https://grafana.com/docs/) | - (随時更新) | 監視の設定と可視化 |
+| 参考 | [Zabbix ドキュメント](https://www.zabbix.com/documentation) | - (随時更新) | 国内 SIer で採用例が多く、概念の対応付けに有効 |
+| 本リポジトリ | [改善設計一覧](../server-monitor-improvements/README.md) | - | 監視・サービス目標値・復旧演習の設計例 |
 
 > 国内の運用現場では Zabbix や JP1 などの製品が使われることも多くあります。
 > ツールが違っても**監視の考え方は共通**です。対応関係は[現場経験とインフラ運用の橋渡し](../career-bridge.md)にも整理しています。

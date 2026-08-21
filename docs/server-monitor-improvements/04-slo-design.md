@@ -120,8 +120,8 @@ groups:
 ## 10. 完了条件（Definition of Done）
 
 - [ ] `docs/slo.md` に SLI / SLO 定義が文書化されている
-- [ ] Grafana に SLO 専用ダッシュボードがある
-- [ ] バーンレートアラートが Alertmanager に登録されている
+- [x] Grafana に SLO 専用ダッシュボードがある
+- [x] バーンレートアラートが Alertmanager に登録されている
 - [ ] 各アラートにランブック URL が annotation で紐付いている
 - [ ] 初回月次レビューを実施し、議事録を `docs/slo-reviews/YYYY-MM.md` に残す
 

@@ -17,7 +17,7 @@
 | 03 | [AWS + Terraform](./03-terraform-aws.md) | network / compute / alb / monitoring / backup modules、dev / prod | `apply` / `destroy` と実費は未収録 |
 | 04 | [SLO / SLI](./04-slo-design.md) | blackbox、recording / burn-rate rules、dashboard、runbooks | 同一ホスト内のラボ SLI。外部 probe による SLO は未実装。ダッシュボードの数値自体は[実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
 | 05 | [バックアップ・復旧演習](./05-backup-recovery-drill.md) | backup verification CI、D-1 script、D-2 runbook、templates | D-1 の RTO は[実測済み（13 秒）](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)。D-2 は未収録 |
-| 11 | [変更管理プロセス](./11-change-management.md) | PR テンプレート、Change request / Evidence capture Issue、変更管理ミニ運用 | PR ごとの検証・ロールバック・証跡リンクを蓄積する |
+| 11 | [変更管理プロセス](./11-change-management.md) | PR テンプレート、Change request / Evidence capture Issue、変更管理ミニ運用 | テンプレート整備済み・実例未収録 |
 
 ## 重要な更新
 
