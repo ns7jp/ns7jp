@@ -339,7 +339,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 #### 今月（1 晩〜半日・0 円）
 
 - [ ] **LEARNINGS.md にトライアル就業中のつまずきを追記**（機密・顧客情報に触れない範囲で。この項目のみ、まだ着手できていない）
-- [ ] **二セグメント障害ラボの実行ログ**（[優先 6](./docs/evidence-capture-checklist.md)、ネットワーク切り分けの一次メモ）
+- [x] ~~**ネットワーク切り分けの一次メモ**（[優先 6](./docs/evidence-capture-checklist.md)）~~ → **2026-08-21 一部実施**。`ss` / `docker port` / `docker inspect` で切り分け、`frontend` ネットワークの `internal: true` がホストへのポート公開を無効化する不具合を発見・原因特定した（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）。当初想定していたクライアント視点の dig / traceroute / tcpdump は未実施。なお、このタスク行の見出しは従来「二セグメント障害ラボの実行ログ」となっていたが、それは別タスク（[labs/network-troubleshooting](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)、2026-08-19 に別途採録済み）を指しており、優先6の内容と一致していなかったため見出しも訂正した
 - [ ] **Alertmanager → Slack の実通知配信**（[優先 4](./docs/evidence-capture-checklist.md)、Slack Webhook が必要）
 
 #### 継続
@@ -501,7 +501,7 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 **Linux + Docker が必要なもの**
 
 1. Grafana / Slack 通知 / Loki 検索の実画面（優先 3〜5。1 晩・0 円）
-2. ネットワーク切り分けの一次メモ（優先 6）
+2. ~~ネットワーク切り分けの一次メモ（優先 6）~~ → ⚠ **2026-08-21 一部実施**。当初想定の dig / traceroute / tcpdump は未実施だが、ポート公開の不具合を発見・原因特定（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）
 3. D-1 プロセス停止演習の RTO / 通知結果（優先 7）
 
 **追加環境が必要なもの**
