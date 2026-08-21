@@ -335,7 +335,7 @@ gantt
 | 手を動かした一次記録 | [LEARNINGS.md](../../LEARNINGS.md) |
 | 実機の画面・ログ・実測値 | [証跡採録チェックリスト](../evidence-capture-checklist.md)の該当項目 |
 | 構築ドキュメント一式 | [03 構築工程の実務ドキュメント](./03-build-process.md)のテンプレートを使い、server-monitor 側へ配置 |
-| 学習の進捗 | GitHub Issue（週 1 回更新） |
+| 学習の進捗 | GitHub Issue（月 1 回更新） |
 
 ### 本人の現在地（2026-08 時点の自己申告）
 
@@ -345,14 +345,14 @@ gantt
 | Phase | 状況 | 根拠 | 残っている差分 |
 | --- | --- | --- | --- |
 | 1 Linux 基礎 | おおむね通過 | server-monitor をローカル Linux + Docker で構築済み | LPIC-1 101 で体系の穴を埋める |
-| 2 ネットワーク | **弱点** | 設計書はあるが実機調査の記録がない | [優先 4](../evidence-capture-checklist.md) の切り分け一次メモが未採録 |
+| 2 ネットワーク | 障害ラボ実測済み・コマンド範囲は補強中 | [二セグメント障害ラボ](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md)で経路・名前解決の障害注入から復旧まで PASS | `ss` / `dig` / `tcpdump` を含む切り分け一次メモを追加する |
 | 3 ミドルウェア | Web / AP は通過 | Nginx / Gunicorn / TLS を実装済み | DB は[設計のみ](../roadmap/14-database-operations.md)。リストア試験が未実施 |
-| 4 構築工程 | **最大の空白** | ランブック・[変更管理](../server-monitor-improvements/11-change-management.md)はあるが、パラメータシート・試験項目書がない | 構築職を狙うなら本プラン Phase 4 を優先 |
-| 5 自動化・IaC | コード実装済み・実行証跡待ち | [Ansible](../server-monitor-improvements/02-ansible-automation.md) / [Terraform](../server-monitor-improvements/03-terraform-aws.md) のコードあり | full `molecule test` ログが未採録 |
-| 6 クラウド・監視 | 監視は実装済み | Prometheus / Grafana / Loki / Alertmanager 実装済み | AWS の `apply` / 実費、[復旧演習](../server-monitor-improvements/05-backup-recovery-drill.md)の実測が未採録 |
+| 4 構築工程 | 成果物作成済み・試験継続中 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)と[試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)を作成（11/21 PASS） | `site.yml` の新規構築・冪等性と残り 10 項目を実施する |
+| 5 自動化・IaC | Ansible ロール実測済み・Terraform 適用待ち | [4 ロールの full Molecule](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)は PASS。Terraform コードあり | `site.yml` 一括適用、AWS `plan / apply / destroy` を採録する |
+| 6 クラウド・監視 | ローカル監視・D-1 実測済み | Prometheus / Grafana / Loki の実データ表示、D-1 RTO 13 秒を採録 | Slack 実配信、D-2、AWS 適用を採録する |
 
-> **この表の読み方**: Phase 2 と Phase 4 が、構築エンジニアを志望する場合の優先補強点です。
-> どちらも追加費用ゼロ・ローカル完結で着手できます。
+> **この表の読み方**: 次の優先補強点は、Phase 4 の `site.yml` 一括適用と未実施試験、
+> Phase 2 の切り分けコマンドを増やした一次メモです。どちらも追加費用ゼロ・ローカル完結で着手できます。
 
 ---
 

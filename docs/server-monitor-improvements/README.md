@@ -76,8 +76,8 @@
 
 ## 証跡追加の順序
 
-1. Linux Docker host で Loki / Alloy の収集と D-1 復旧時間を記録する。
-2. 手動 CI または Linux host で Ansible の full Molecule 結果を記録する。
+1. ✅ Linux (WSL2) 上で Loki / Alloy の収集と D-1 復旧時間を記録済み（2026-08-18〜19）。
+2. ✅ GitHub Actions 上で Ansible 4 ロールの full Molecule 結果を記録済み（2026-08-17）。次は `site.yml` の一括適用を採録する。
 3. 承認された短時間 AWS 検証で `apply` / `destroy` と Cost Explorer 実費を記録する。
 4. 外部 probe と中央 telemetry の構成を追加した後、AWS 向け SLO を再定義する。
 
