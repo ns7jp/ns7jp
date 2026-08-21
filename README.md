@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | **[主作品：server-monitor](https://github.com/ns7jp/server-monitor)** | Ubuntu 上の構築、監視、ログ、障害復旧を一つにしたラボ | コード・設定・文書を公開 |
 | **[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)** | 実行日時、環境、commit、コマンド、結果と未実施項目 | Linux 実測 4 件を公開 |
-| **[2〜3 分デモ](./docs/demo-script.md)** | 構築 → 障害注入 → 検知 → 復旧を見せる台本 | **動画は未公開（収録準備中）** |
+| **[2〜3 分デモ](./docs/demo-script.md)** | 構築 → 障害注入 → 検知 → 復旧を見せる台本 | **動画は未公開** |
 | **[Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)** | 要件、設計、パラメータ、構築、試験、変更、ネットワーク、引き渡し | 工程別成果物 10 点を公開 |
 
 採用ご担当者さま向けの要約は [1 ページ版](./docs/overview-for-recruiters.md)、経歴とスキルは [職務経歴書・スキルシート](./docs/resume.md) にまとめています。
