@@ -345,7 +345,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 #### 継続
 
 - [ ] **Issue #5〜#8 の月次更新**（§0 ルール 2。週 1 回から緩和済み）
-- [ ] **ポートフォリオサイト（ns7jp.github.io）を本 README の構成へ同期**（志望順位・経験年数・現況表記の整合。全面同期は未完了）
+- [ ] **ポートフォリオサイト（ns7jp.github.io）を本 README の構成へ同期**（志望順位・経験年数・現況表記の整合。全面同期は未完了） → **2026-08-21 一部完了**（[ns7jp.github.io#21](https://github.com/ns7jp/ns7jp.github.io/pull/21)）。現況表記（「転職活動中」→トライアル就業中）と資格の優先順位（LPIC-1優先→FE優先）を同期。`contact.html` / `skills.html` / `works.html` / `cloud-lab.html` / `infra-lab.html` / `linux-lab.html` 等、その他ページの全面点検は未実施
 - [ ] 業務改善レポートの **想定値部分を実数に置き換え**（記憶 / 当時の上長への確認次第）
 
 #### 就業内容が固まってから
@@ -521,7 +521,7 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 | [post](https://github.com/ns7jp/post) | 学習作品（PHP / MySQL、CSRF / bcrypt / PDO） | 完成・公開中。DB 運用設計（[14](./docs/roadmap/14-database-operations.md)）の題材 |
 | [pulse](https://github.com/ns7jp/pulse) | 学習作品（PHP / SQLite） | 完成・公開中 |
 | [works](https://github.com/ns7jp/works) | 学習作品集（Python / HTML / CSS） | 公開中（学習過程の記録） |
-| [ns7jp.github.io](https://ns7jp.github.io/) | ポートフォリオサイト | 🔄 同期作業中（志望順位・経験年数・実績数値等の整合を本 PR で対応） |
+| [ns7jp.github.io](https://ns7jp.github.io/) | ポートフォリオサイト | 🔄 同期作業中（現況表記・資格優先順位を[ns7jp.github.io#21](https://github.com/ns7jp/ns7jp.github.io/pull/21)で対応。その他ページの全面点検は未実施） |
 
 ---
 
