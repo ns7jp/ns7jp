@@ -12,7 +12,7 @@ server-monitor は Nginx + TLS で前段を構築しているが、**それ以�
 | VPN 接続設計が無い | 商用案件で必須要件に対応不可 |
 | ネットワーク監視が「ping 通る」だけ | 帯域 / レイテンシ / パケットロスを定量化できない |
 
-> ポートフォリオ観点：CCNA 取得（[資格ロードマップ](../certifications/roadmap.md)）と連動した「**ネットワーク運用** が分かるインフラ運用担当」訴求の設計書。
+> 学習メモ：CCNA 学習（[資格ロードマップ](../certifications/roadmap.md)）と連動させて、知識だけで終わらせず **実際の運用設計に落とし込む** 練習として書いている。
 
 ---
 
@@ -339,7 +339,7 @@ host = monitor.example.com
 | Security Fundamentals | §5 SG、§6 VPN / SSM、§4 TLS |
 | Automation and Programmability | Terraform / Ansible 全般 |
 
-CCNA の知識を「**実運用設計に落とす**」訴求が本ドキュメントの狙い。
+CCNA で学んだ知識を「**実運用設計に落とし込んでみる**」のが本ドキュメントの狙い。
 
 ---
 

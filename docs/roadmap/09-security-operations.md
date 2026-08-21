@@ -22,7 +22,7 @@
 | パッチ管理サイクル | 更新が属人化、放置リスク |
 | 認証統合（SSO） | 退職者アカウントの取り残し |
 
-> ポートフォリオ観点：「セキュリティを **運用プロセス** として継続できる」ことは社内 SE / インフラ運用で必ず問われる。
+> 学習メモ：セキュリティは一度設定して終わりではなく、**運用プロセスとして継続すること** が本質だと理解している。個人ラボでも継続運用の型だけは作っておきたい。
 
 ---
 
@@ -311,8 +311,6 @@ gantt
 
 ## 12. 参考
 
-- [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks)
-- [NIST SP 800-53 セキュリティ統制](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final)
-- [AWS Well-Architected Security Pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/)
 - [Trivy Documentation](https://trivy.dev/)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+- [AWS Well-Architected Security Pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/)

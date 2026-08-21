@@ -12,7 +12,7 @@ server-monitor 本体や周辺アプリ（[掲示板](https://github.com/ns7jp/p
 | 性能問題への切り分け手順が無い | アプリ遅延の原因が分からない |
 | PITR（Point-in-Time Recovery）の理解が無い | 「直前 5 分前に戻したい」要求に応えられない |
 
-> ポートフォリオ観点：監視・運用とセットで **DB 運用設計（バックアップ・監視・チューニング）** を語れると、社内 SE / インフラ運用の幅が広がる。
+> 学習メモ：監視・運用の延長として **DB 運用（バックアップ・監視・チューニング）** も理解しておきたい領域。障害対応の幅を広げるために、設計だけでも一度整理しておく。
 
 ---
 
@@ -327,4 +327,3 @@ flowchart TD
 - [pt-online-schema-change](https://docs.percona.com/percona-toolkit/pt-online-schema-change.html)
 - [gh-ost（GitHub）](https://github.com/github/gh-ost)
 - [AWS RDS User Guide](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/)
-- [Baron Schwartz et al., "High Performance MySQL" 4th ed.](https://www.oreilly.com/library/view/high-performance-mysql/9781492080503/)

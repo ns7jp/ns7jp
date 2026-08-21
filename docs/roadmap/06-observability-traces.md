@@ -13,7 +13,7 @@
 
 トレースが無いと、レイテンシ悪化時に「Nginx か、Gunicorn か、アプリ内のどの処理か」を切り分けるために SSH + 個別ログ調査が必要になり、[04. SLO](../server-monitor-improvements/04-slo-design.md) で定義する `p95 < 500ms` の改善活動に時間がかかる。
 
-> ポートフォリオ観点：SRE 求人で必ず聞かれる「Observability の三本柱」を **設計レベルで語れる** ことを示す。
+> 学習メモ：Observability の三本柱（Metrics / Logs / Traces）のうち Traces だけが手つかずなので、実装はしなくても設計レベルで一度考え方を整理しておきたい。
 
 ---
 

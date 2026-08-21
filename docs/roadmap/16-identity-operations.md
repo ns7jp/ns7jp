@@ -22,7 +22,7 @@
 | AD / LDAP / IdP の選定とグループ設計が無い | グループ命名が属人化、棚卸し不可能 |
 | アカウント棚卸しの頻度・手段が無い | 半年後に「これ誰のアカウント？」状態 |
 
-> ポートフォリオ観点：社内 SE 補助・インフラ運用で **必ず問われる** 領域。実体験前提ではなく、設計サンプルとして整備する。
+> 学習メモ：ID ライフサイクル管理は社内 SE 補助・インフラ運用の基礎領域だと理解している。実体験は無いので、まずは設計サンプルとして考え方を整理する。
 
 ### 1.1 個人ラボでの読み替え
 
@@ -116,9 +116,11 @@ flowchart TD
 IAM Identity Center のカスタムアプリ連携は SAML 2.0 経由になるため、Grafana の
 Generic OAuth との直接統合には使えない。
 
-### 3.2 採用面接での説明軸
+### 3.2 学習として押さえておきたい観点
 
-「IdP は **AWS アカウントアクセスには AWS IAM Identity Center、Grafana 等カスタムアプリの OIDC には Keycloak** という役割分担にしました。IAM Identity Center のカスタムアプリ連携は SAML 2.0 経由で、Grafana の Generic OAuth とは直接つながらないためです。Google Workspace や Okta も候補に挙がりましたが、コストと学習投資効果で本構成にしました。商用案件で Okta / Azure AD（Entra ID）が指定されれば、SAML / SCIM / OIDC の概念は同じなので即対応可能です。」
+- IdP を役割で分けた理由：AWS アカウントアクセスは AWS IAM Identity Center、Grafana 等カスタムアプリの OIDC は Keycloak。両者を混同すると SAML と OIDC の違いでつまずくので、ここを切り分けて理解しておく
+- SAML 2.0 と OIDC はどちらも認証連携の規格だが別物で、IAM Identity Center のカスタムアプリ連携は SAML 経由のため Grafana の Generic OAuth と直接は繋がらない、という制約は実際に調べて初めて分かった
+- Okta / Azure AD（Entra ID）など他の IdP も SCIM・SAML・OIDC という共通概念の上に乗っているため、構成が変わっても考え方は転用できるはず
 
 ---
 
@@ -331,7 +333,5 @@ v1.0 は Basic 認証なので、上記の多くは設計のみ。最低限以�
 ## 12. 参考
 
 - [AWS IAM Identity Center User Guide](https://docs.aws.amazon.com/singlesignon/)
-- [NIST SP 800-63B: Digital Identity Guidelines](https://pages.nist.gov/800-63-3/sp800-63b.html)
 - [OWASP Identity and Access Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
-- [Google BeyondCorp Whitepaper](https://cloud.google.com/beyondcorp)
 - [SCIM 2.0 Specification (RFC 7644)](https://datatracker.ietf.org/doc/html/rfc7644)

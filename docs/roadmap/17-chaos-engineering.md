@@ -10,7 +10,7 @@
 | RTO / RPO は守れる | 監視は本当に検知するか |
 | バックアップは使える | 自動復旧 / フェイルオーバーは本当に動くか |
 
-> ポートフォリオ観点：「**Game Day を運用に組み込んでいる**」訴求は、シニア寄り（SRE / インフラリード）の役職で強い差別化要因。
+> 学習メモ：「想定外」の事象にも仕組みで気付けるようにする、という Game Day の考え方を知り、自分の運用にも取り入れておきたいと思って設計した。
 
 ---
 
@@ -269,8 +269,6 @@ docker stop server-monitor-prometheus
 ## 14. 参考
 
 - [Principles of Chaos Engineering](https://principlesofchaos.org/)
-- [Netflix Chaos Monkey & Chaos Engineering 論文](https://netflixtechblog.com/the-netflix-simian-army-16e57fbab116)
-- [Casey Rosenthal & Nora Jones, "Chaos Engineering"（O'Reilly）](https://www.oreilly.com/library/view/chaos-engineering/9781492043850/)
 - [pumba（Docker Chaos）](https://github.com/alexei-led/pumba)
 - [AWS Fault Injection Simulator](https://aws.amazon.com/fis/)
 - [Chaos Mesh（K8s）](https://chaos-mesh.org/)
