@@ -253,10 +253,10 @@ PR → lint / Molecule が CI で通る → セルフレビューして merge、
 
 ## 8. 完了条件（Definition of Done）
 
-- [ ] `ansible/` ディレクトリ配下に全ロールが揃っている
+- [x] `ansible/` ディレクトリ配下に全ロールが揃っている
 - [ ] `ansible-playbook -i inventory/staging.yml playbooks/site.yml` で 0 台から構築可能
 - [ ] 2 回連続実行で `changed=0` になる（冪等性）
-- [ ] CI で lint + molecule が緑
+- [x] CI で lint + molecule が緑
 - [ ] `docs/deployment-ansible.md` に Ansible 版手順を記載
 - [ ] 旧手順書（`deployment.md`）に「Ansible 版へ移行済み」の注記を追加
 
