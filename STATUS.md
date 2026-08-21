@@ -333,7 +333,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 #### 今週（本人作業・Linux 環境不要）
 
 - [x] ~~**resume.md / overview の `〈 〉` 箇所を記入**（派遣元・就業先・トライアル期間・在籍年月・夜勤/交代制の可否）~~ → **2026-08-17 完了**（[ac4197e](https://github.com/ns7jp/ns7jp/commit/ac4197e7c72b1e45bb9fc7d2864c6851f3245162)）。このタスク行だけ更新が追随していなかった。resume.md / overview-for-recruiters.md に `〈 〉` は現存しないことを 2026-08-21 に再確認済み
-- [ ] **[#8](https://github.com/ns7jp/ns7jp/issues/8) に現況コメントを 1 件残す**（トライアル就業の開始と、証跡採録の再開予定。2026-07-12 以降が空白のままになっている）
+- [x] ~~**[#8](https://github.com/ns7jp/ns7jp/issues/8) に現況コメントを 1 件残す**（トライアル就業の開始と、証跡採録の再開予定。2026-07-12 以降が空白のままになっている）~~ → **2026-08-21 完了**。トライアル就業の詳細（就業先・研修内容・期間）を明記し、証跡採録の残項目（優先 2・優先 8）と本日の整合性修正 PR（[#37](https://github.com/ns7jp/ns7jp/pull/37) / [#38](https://github.com/ns7jp/ns7jp/pull/38)）を[コメント](https://github.com/ns7jp/ns7jp/issues/8#issuecomment-5365515734)に反映
 - [ ] **GitHub プロフィールの Bio・ピン留めリポジトリを設定**（[github-profile-settings.md](./docs/github-profile-settings.md) の推奨設定を適用。2026-08-21 時点で Bio・ピン留めともに未反映）
 
 #### 今月（1 晩〜半日・0 円）
