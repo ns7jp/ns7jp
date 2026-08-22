@@ -1,73 +1,73 @@
-# デモ動画台本（2〜3 分「壊して直す」スクリーンキャスト）
+# 2 分 15 秒デモとライブデモ案内
 
-> **本ドキュメントの位置付け**
+> **現在の公開状態**
 >
-> 採用ご担当者様が**数十秒で**実行の流れを確認できるよう、server-monitor を題材にした短尺デモの**収録台本**です。
-> **2026-08-21 時点で公開動画はありません。** Alertmanager → Slack の実配信を確認し、秘密値のマスキングを点検してから収録します。収録後は [ビジュアルショーケース](./showcase/README.md) 冒頭と [README](../README.md) に掲載します。
+> 2026-08-22 時点で、[2 分 15 秒の実測証跡リプレイ](https://ns7jp.github.io/demo.html)を公開しています。これは実操作の連続録画ではなく、2026-08-18・19 に保存した実測スクリーンショットと D-1 復旧ログを時系列で再構成した映像です。
 
-最終更新: 2026-08-21
+最終更新: 2026-08-22
 
----
+## いま確認できるもの
 
-## 位置付けと目的
+| 項目 | 状態 | 確認先 |
+| --- | --- | --- |
+| 実測結果 | 公開済み | [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
+| 実測証跡リプレイ | **公開済み** | [字幕・文字起こし・一次記録付きデモページ](https://ns7jp.github.io/demo.html) |
+| 自動デモ | 実装済み・実行結果は E2E 証跡で確認 | [`scripts/demo/run-demo.sh`](https://github.com/ns7jp/server-monitor/blob/main/scripts/demo/run-demo.sh) |
+| 一気通貫の構成検証 | 実装済み・実行結果は E2E 証跡で確認 | [`scripts/e2e/run-full-stack.sh`](https://github.com/ns7jp/server-monitor/blob/main/scripts/e2e/run-full-stack.sh) / [説明](https://github.com/ns7jp/server-monitor/blob/main/docs/e2e-validation.md) |
+| 実操作の連続録画 | **未公開** | E2E を実行した端末 cast は GitHub Actions artifact として保存 |
 
-- **目的**: 「デプロイ → わざと壊す → アラート発火 → ランブックで復旧」までの一連を、自分の手で通せることを示す。
-- **長さ**: 2〜3 分（採用担当が最後まで見られる上限）。
-- **形式**: 画面録画（OBS / QuickTime）または `asciinema`。音声ナレーションは任意、字幕推奨。
+証跡リプレイとライブ実行は混同しません。自動デモの実行結果は、日時・環境・commit・終了コードを含む E2E artifact が生成された場合だけ成功と扱います。
 
----
+## デモで伝えること
 
-## 収録の準備
+「設計資料がある」だけでなく、同じ commit から次の流れを再現できることを 3 分以内で示します。
 
-1. ローカルで `docker compose up -d` が**通る状態**にしておく（事前にリハーサル）。
-2. Slack 通知先を用意（テスト用チャンネルで可）。
-3. ターミナルのフォントを**大きめ**にし、プロンプトから個人情報・ホスト名を消す。
-4. ブラウザのブックマーク・タブ・拡張機能を隠し、Grafana だけを表示する。
-5. 障害注入コマンドを用意（例: `stress-ng --cpu 4` / 監視対象プロセスの停止）。
+1. 構成コードから環境を起動する
+2. 正常性と監視データを確認する
+3. app プロセスを意図的に停止する
+4. 異常を検知し、ログと状態を確認する
+5. 自動復旧と最終的な正常性を確認する
+6. コマンド、時刻、結果を証跡として残す
 
----
+Slack 通知は実配信の証跡がまだないため、動画の必須条件にしません。実配信を確認できた場合だけ追加カットとして掲載します。
 
-## 台本（2〜3 分）
+## 2〜3 分の収録台本
 
-| 時間 | シーン | 画面 / 操作 | 字幕（一言） |
-| --- | --- | --- | --- |
-| 0:00–0:20 | つかみ | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)の構成図を 1 枚表示 | 「Linux サーバーを、設計・構築・試験・障害対応まで扱います」 |
-| 0:20–0:50 | デプロイ | Ansible の recap と `docker compose ps` を表示 | 「手順と構成コードから再現可能に構築」 |
-| 0:50–1:20 | 正常状態 | Grafana で CPU/メモリ/HTTP ステータス/SLO を一巡 | 「メトリクスとログを 1 画面で可視化」 |
-| 1:20–1:50 | 障害注入 | `stress-ng` で負荷 or プロセス停止 → グラフが跳ねる | 「ここでわざと異常を起こします」 |
-| 1:50–2:20 | 検知・通知 | Alertmanager が FIRING → Slack に通知が届く瞬間 | 「閾値超過を検知し、自動で Slack へ通知」 |
-| 2:20–2:45 | 復旧 | [ランブック](https://github.com/ns7jp/server-monitor/blob/main/docs/runbooks/service-down.md)に沿って対処 → RESOLVED | 「手順書に沿って復旧、復旧通知まで確認」 |
-| 2:45–3:00 | 締め | 試験結果票と「設計 → 構築 → 試験 → 復旧」の一言 | 「コマンドと結果は概要欄の証跡から確認できます」 |
+| 時間 | 画面・操作 | 伝えること |
+| --- | --- | --- |
+| 0:00–0:20 | [構成図](./architecture-diagram.md) | 「構成管理、監視、障害復旧を一つのラボで扱う」 |
+| 0:20–0:50 | 自動デモまたは構成検証を開始し、対象 commit を表示 | 「同じ手順から再現できる」 |
+| 0:50–1:15 | サービス一覧、health check、Grafana / Loki | 「正常状態をメトリクスとログで確認する」 |
+| 1:15–1:40 | app プロセスを停止 | 「意図的に異常を起こす」 |
+| 1:40–2:10 | プロセス状態、ログ、health check の失敗を表示 | 「状態とログから影響を確認する」 |
+| 2:10–2:35 | 自動復旧、再度 health check | 「復旧後の正常性まで確認する」 |
+| 2:35–3:00 | 実行結果と証跡ファイル | 「成功・失敗を commit と時刻付きで残す」 |
 
-> **撮り方のコツ**: 1 テイクで通そうとせず、シーンごとに録って編集でつなぐと失敗が減ります。最重要カットは **1:50–2:20 の「異常 → Slack 通知」** です。ここだけは確実に映してください。
+既存の D-1 演習では、app プロセス停止から 13 秒での自動復旧を実測済みです。動画では、数値だけを字幕にせず、開始・復旧時刻が分かる出力も同じ画面に含めます。
 
----
+## 実操作の連続録画を常設公開する前の合格条件
 
-## 撮影と公開のコツ
+- [ ] server-monitor の自動デモがクリーンな環境で完走する
+- [ ] 2 回目の構成適用結果を含め、成功・失敗が終了コードで判別できる
+- [ ] 実行 commit、開始・終了時刻、環境情報を記録する
+- [ ] 障害注入前後の health check と復旧後の確認を映す
+- [ ] webhook、公開 IP、ホスト名などの秘密値・個人情報をマスクする
+- [ ] 音声なしでも分かる一行字幕を付ける
+- [ ] 公開 URL を確認してから README の「証跡リプレイ」リンクを連続録画へ差し替えるか判断する
 
-1. **マスキング**: webhook URL・実ホスト名・public IP・個人名は映さない（[証跡採録チェックリスト](./evidence-capture-checklist.md) のマスク規則に従う）。
-2. **公開方法**: YouTube 限定公開（URL を知る人だけ視聴可）/ `asciinema` / GIF のいずれか。重い動画より GIF の方が GitHub では再生されやすい。
-3. **貼る場所**: [ショーケース](./showcase/README.md) の冒頭と README 上部。サムネイルに「2 分で分かるデモ」と書く。
-4. **字幕**: 音声なしでも理解できるよう、各シーンに 1 行字幕を必ず入れる。
+## 連続録画を常設公開した場合の更新
 
----
+実操作の連続録画を常設公開した時だけ、次を同じ commit で更新します。
 
-## 収録前チェックリスト
-
-- [ ] `docker compose up -d` がクリーンな状態から通ることをリハーサルした
-- [ ] Slack 通知がテストチャンネルに届くことを確認した
-- [ ] 障害注入 → アラート発火までの所要時間を把握した（待ち時間が長いなら編集でカット）
-- [ ] 画面に秘密値・個人情報・実ホスト名が映っていない
-- [ ] 各シーンの字幕（一言）を用意した
-- [ ] 復旧通知（RESOLVED）まで撮れている
-
----
+1. [プロフィール README](../README.md) のリンクを公開動画へ変更
+2. [採用担当者向け 1 ページ版](./overview-for-recruiters.md) の状態を「公開済み」へ変更
+3. [ビジュアルショーケース](./showcase/README.md) にサムネイルと実行証跡を掲載
+4. [STATUS](../STATUS.md) に公開日、対象 commit、収録環境を記録
 
 ## 関連ドキュメント
 
+- [実測証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
+- [構成図](./architecture-diagram.md)
 - [証跡採録チェックリスト](./evidence-capture-checklist.md)
 - [ビジュアルショーケース](./showcase/README.md)
-- [アーキテクチャ図](./architecture-diagram.md)
-- [server-monitor 障害対応ランブック](https://github.com/ns7jp/server-monitor/blob/main/docs/runbooks/service-down.md)
-- [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)
-- [二セグメント通信障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)
+- [D-1 復旧演習（RTO 13 秒）](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)

@@ -1,10 +1,14 @@
 # 02. Ansible による構成管理自動化
 
-> 状態更新（2026-08-17）: roles / playbooks と通常 CI の構文検証は
+> 状態更新（2026-08-22）: roles / playbooks と通常 CI の構文検証は
 > [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
 > 4 ロールの full `molecule test`（converge → idempotence → verify）は
-> [実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)。
-> `site.yml` を通した複数ロールの一括適用と 2 回目の冪等性は未実測である。
+> [2026-08-17 に実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)。
+> [2026-08-22 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)では、
+> disposable Ubuntu 24.04 へ `site.yml` を一括適用し、2 回目 `changed=0` を含む 23/23 ID を PASS とした。
+> 同 run の network / UFW、3 volumes の backup / restore、D-1 RTO 1 秒、local webhook の
+> FIRING / RESOLVED も runner 内の一気通貫確認として記録している。
+> ただし、Slack 実配信、AWS、D-2、長期稼働、独立した管理端末・引き渡し対象ホストは未実測である。
 
 ## 1. 背景・課題
 
@@ -254,11 +258,16 @@ PR → lint / Molecule が CI で通る → セルフレビューして merge、
 ## 8. 完了条件（Definition of Done）
 
 - [x] `ansible/` ディレクトリ配下に全ロールが揃っている
-- [ ] `ansible-playbook -i inventory/staging.yml playbooks/site.yml` で 0 台から構築可能
-- [ ] 2 回連続実行で `changed=0` になる（冪等性）
+- [x] disposable Ubuntu 24.04 runner へ `site.yml` で一括構築できる
+- [x] 同じ runner で 2 回連続実行し、2 回目が `changed=0` になる
 - [x] CI で lint + molecule が緑
-- [ ] `docs/deployment-ansible.md` に Ansible 版手順を記載
-- [ ] 旧手順書（`deployment.md`）に「Ansible 版へ移行済み」の注記を追加
+- [x] `docs/deployment-ansible.md` に Ansible 版手順を記載
+- [x] 旧手順書（`deployment.md`）に「Ansible 版へ移行済み」の注記を追加
+- [ ] Docker 未導入の最小 OS から同じ一括構築を実測する（2026-08-22 runner は Docker 導入済み）
+- [ ] 独立した管理端末・引き渡し対象ホストで `site.yml`、冪等性、network / UFW を再実測する
+
+上の完了チェックは、明記したとおり使い捨て runner の範囲である。独立した対象ホストの
+チェックが残るため、production 相当または引き渡し完了とは扱わない。
 
 ---
 

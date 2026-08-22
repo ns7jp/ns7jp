@@ -2,18 +2,19 @@
 
 ## サーバー設計・構築エンジニア志望
 
+主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元までを一気通貫で検証し、23/23 ID PASS を採録したインフラ構築ラボです。
+
+## 30 秒で確認する 3 点
+
+| [2 分 15 秒デモ（証跡リプレイ）](https://ns7jp.github.io/demo.html) | [構成図](./docs/architecture-diagram.md) | [実測証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
+| --- | --- | --- |
+| 保存済み実測画面と復旧ログを時系列で確認 | 実装済み構成と実測・未実測の境界 | 日時、環境、commit、コマンド、結果 |
+
+## 志望と現況
+
 製造・物流の現場で 15 年以上続けてきた「計測する・原因を絞る・手順化する・改善を定着させる」を、サーバーの構築・監視・障害対応に生かします。
 
 **現況（2026-08）**: 派遣社員としてトライアル就業中です。第一志望は **サーバー設計・構築**、入口業務としてインフラ監視・運用、IT サポート、社内 SE 補助にも対応します。
-
-## 30 秒で確認する 4 点
-
-| 確認先 | 分かること | 公開状態 |
-| --- | --- | --- |
-| **[主作品：server-monitor](https://github.com/ns7jp/server-monitor)** | Ubuntu 上の構築、監視、ログ、障害復旧を一つにしたラボ | コード・設定・文書を公開 |
-| **[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)** | 実行日時、環境、commit、コマンド、結果と未実施項目 | Linux 実測 4 件を公開 |
-| **[2〜3 分デモ](./docs/demo-script.md)** | 構築 → 障害注入 → 検知 → 復旧を見せる台本 | **動画は未公開** |
-| **[Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)** | 要件、設計、パラメータ、構築、試験、変更、ネットワーク、引き渡し | 工程別成果物 10 点を公開 |
 
 採用ご担当者さま向けの要約は [1 ページ版](./docs/overview-for-recruiters.md)、経歴とスキルは [職務経歴書・スキルシート](./docs/resume.md) にまとめています。
 
@@ -21,25 +22,19 @@
 
 | 実施した検証 | 結果・証跡 |
 | --- | --- |
+| 使い捨て Ubuntu 24.04 への Full-stack E2E | [`site.yml` 適用、2 回目 `changed=0`、network / UFW、local webhook の FIRING / RESOLVED、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md) |
 | Ansible 4 ロールを Linux 上で適用し、2 回目の冪等性と期待状態を確認 | [`molecule test` 4 ロール PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)。途中で静的検査では見つからなかった欠陥 2 件を修正 |
 | 監視スタック 9 サービスを Linux (WSL2) 上で起動 | [Grafana の実データ表示、Loki のログ取得を確認](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
-| app プロセスを意図的に停止し、自動復旧を計測 | [D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
+| app プロセスを意図的に停止し、自動復旧を計測 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
 | client → proxy → app の二セグメント構成で通信断を注入 | [障害再現 → 経路・名前解決の切り分け → 復旧まで PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md) |
 
-一方、**Alertmanager → Slack の実配信、D-2 復旧演習、`site.yml` を通した新規構築、AWS の `apply / destroy` は未実測**です。[試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)も 21 項目中 11 項目が PASS、10 項目が `NOT RUN` のため、現時点では「構築完了」と判定していません。
+[2026-08-19 の試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（21 項目中 11 項目 PASS、10 項目 `NOT RUN`）は当時の履歴として保持しています。その後、上記 Full-stack E2E で 23/23 ID PASS を採録しました。一方、**Alertmanager → Slack の実配信、AWS の `apply / destroy`、D-2 復旧演習、独立した管理端末・引き渡し対象ホストでの確認は未実測**です。local webhook の通知試験を Slack 実配信、使い捨て runner 内の network / UFW 試験を独立環境の証跡とは扱いません。
 
-## 主作品で扱った範囲
+## 主作品の読み方
 
-| 工程 | 実装・作成したもの |
-| --- | --- |
-| 設計 | 基本・詳細設計、構成図、OS / ミドルウェアパラメータ、IP アドレス表 |
-| 構築 | Ubuntu 初期設定、Ansible roles、Docker Compose、Nginx、Gunicorn、systemd |
-| 監視・ログ | Prometheus、Grafana、Alertmanager、Loki、Grafana Alloy |
-| 試験 | pytest、構成検証 CI、試験仕様書、認証・非 root・公開範囲の確認項目 |
-| 障害対応 | CPU 高負荷、プロセス停止、二セグメント通信断、ランブック、復旧判定 |
-| 引き渡し | 構築手順、試験結果票、チェックリスト、変更・ロールバック手順 |
+この README では、実機で確認した結果と未実施項目を中心に示します。設計、構築、試験、変更、引き渡しまでの成果物一覧は [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、実装・CI・実測の境界は [構成図](./docs/architecture-diagram.md) と [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) にまとめています。
 
-実装、CI、実機実測の境界を含む詳しい構成は [アーキテクチャ図](./docs/architecture-diagram.md) と [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) に委ねています。
+使用技術の一覧、資格、他の学習作品は [職務経歴書・スキルシート](./docs/resume.md)、未着手を含む学習計画は [STATUS](./STATUS.md) に分離しています。README の項目数を増やすより、主作品で実際に構築・検証・復旧した結果を優先して更新します。
 
 ## AI の利用について
 
@@ -53,13 +48,9 @@
 
 詳細：[業務改善レポート](./docs/business-improvement/picking-improvement.md) ／ [現場経験とインフラの橋渡し](./docs/career-bridge.md)
 
-## スキル・資格
+## 経歴・資格・その他の作品
 
-Linux、Docker Compose、Nginx、systemd、Prometheus、Grafana、Loki、Ansible、Terraform、GitHub Actions、Python、Flask、pytest。Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級、ITパスポートを取得し、基本情報技術者を学習中です。
-
-応募先ごとの提示順は [志望トラックと証跡](./docs/target-roles.md)、学習計画と未実施項目は [STATUS](./STATUS.md) にまとめています。
-
-その他の作品：[post](https://github.com/ns7jp/post)（PHP / MySQL）／ [pulse](https://github.com/ns7jp/pulse)（PHP / SQLite）／ [works](https://github.com/ns7jp/works)（学習作品）／ [ポートフォリオサイト](https://ns7jp.github.io/)
+Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級、IT パスポートを取得し、基本情報技術者を学習中です。技術ごとの習熟度、職歴、他の作品は [職務経歴書・スキルシート](./docs/resume.md)、応募先ごとの提示順は [志望トラックと証跡](./docs/target-roles.md) を参照してください。
 
 ## Contact
 

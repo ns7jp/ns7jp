@@ -28,7 +28,9 @@ flowchart TB
 | Logs | Loki + Grafana Alloy を実装。Promtail は 2026-03-02 の EOL に伴い不採用 |
 | SLO | blackbox-exporter、burn-rate rules、dashboard を実装 |
 | 構成管理 | Ansible roles / playbook を実装 |
-| 実測 | Linux (WSL2) 上で 9 サービス起動、Grafana / Loki 表示、D-1 RTO 13 秒、4 ロールの full Molecule を採録済み。Slack 実配信、D-2、`site.yml` 一括適用は未収録 |
+| Full-stack E2E | [2026-08-22](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md) に使い捨て Ubuntu 24.04 上で `site.yml` を 2 回適用し、2 回目 `changed=0`、network / UFW、local webhook の FIRING / RESOLVED、D-1 RTO 1 秒、3 volumes の backup / restore を確認。23/23 ID PASS |
+| 既存の実測履歴 | Linux (WSL2) 上で 9 サービス起動、Grafana / Loki 表示、2026-08-19 の D-1 RTO 13 秒、4 ロールの full Molecule を採録済み |
+| 未実測の境界 | Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホストでの確認。local webhook と runner 内 network / UFW の結果をこれらの代替にはしない |
 
 blackbox-exporter は対象サービスと同じホスト内にあるため、ラボでのアプリ停止は測れるが、
 ホスト全停止を外部利用者の視点から測定できない。この SLO はラボ内観測として扱う。

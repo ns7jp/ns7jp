@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-20（**README・overview 等の「実測はこれから」という古い記述を、既に採録済みの実測（監視スタック起動・D-1・二セグメント障害ラボ）に合わせて更新**。試験仕様書は二セグメント障害ラボ（IT-11）を PASS へ訂正し 11/21 PASS。LEARNINGS.md を README の主要導線へ昇格、resume.md の表崩れ・スキル表を実測に合わせて修正、showcase / target-roles の過大申告表現を是正。ポートフォリオレビューで見つかった不整合の修正ラウンド）
+最終更新：2026-08-22（採用担当者向けの入口を、主作品の価値を示す一文と「2 分 15 秒の実測証跡リプレイ・構成図・実測証跡」の 3 リンクへ整理。リプレイと実操作の連続録画を区別し、広い技術一覧は職務経歴書、設計範囲は構築案件パック、計画は本 STATUS へ分離）
 
 ---
 
@@ -26,6 +26,18 @@
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-22 の更新内容（採用担当者向けの最短導線）
+
+| 観点 | 対応 |
+| --- | --- |
+| README 冒頭 | 主作品の価値を「Ansible による構成管理、監視スタック 9 サービス、障害注入後 13 秒での自動復旧」という実測中心の一文に集約 |
+| 最短確認先 | 「2 分 15 秒の実測証跡リプレイ」「構成図」「実測証跡」の 3 リンクに限定。設計・試験・引き渡しの詳細は構築案件パックへ誘導 |
+| 動画の公開状態 | 保存済み実測画面と D-1 復旧ログを再構成した証跡リプレイを公開。**実操作の連続録画ではない**ことを映像内・ページ上・プロフィールで明記 |
+| 技術範囲の見せ方 | README と採用担当者向け 1 ページ版では実測 4 件を優先。技術ごとの習熟度、資格、他作品は `docs/resume.md` へ分離 |
+| 関連文書 | `docs/overview-for-recruiters.md`、`docs/demo-script.md`、`docs/showcase/README.md` の表現を同期 |
+
+この整理では実測結果そのものを追加・変更していません。試験結果は引き続き 21 項目中 11 項目 PASS、10 項目 `NOT RUN` です。新しい実行結果は、日時・環境・commit・コマンド・終了コードを採録してから README へ反映します。
 
 ### 2026-08-19 の更新内容（追補2：説明できない深さの内容そのものを圧縮）
 
@@ -363,30 +375,30 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 加え、ログ集約、構成管理、SLO、復旧手順、AWS IaC のコードが実装されている。
 コード実装と実行実績は区別して表示する。
 
-> **実測証跡の現状（2026-08-17 更新）**
+> **実測証跡の現状（2026-08-22 更新）**
 >
-> **Ansible ロール 4 本（common / docker / nginx / monitoring）について、Linux 上で
-> 適用・冪等性・適用結果まで検証した実測証跡がある**
-> （[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／
-> [実行 URL](https://github.com/ns7jp/server-monitor/actions/runs/32031882695)、0 円・2 分 42 秒）。
+> **使い捨て Ubuntu 24.04 の GitHub-hosted runner で Full-stack E2E 23/23 PASS**
+> （[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)）。
+> `site.yml` の一括適用と 2 回目 `changed=0`、監視スタックの稼働、runner 内の network / UFW、
+> 3 volumes の backup / restore、D-1 自動復旧（RTO 1 秒）、Alertmanager から local webhook への
+> FIRING / RESOLVED 配送まで、同一 run で確認した。
 >
-> 一方、**監視スタック全体を起動した記録はまだ無い**。
-> [試験仕様書](https://github.com/ns7jp/server-monitor/blob/main/docs/build-package/06-test-specification.md)の
-> IT-01〜IT-11 および ST-01〜ST-05 も大半が `NOT RUN` のまま。
+> これは [2026-08-17 の Molecule 4 ロール完走](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)と、
+> [2026-08-19 のローカル D-1（RTO 13 秒）](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)とは別の実測記録であり、いずれも履歴として保持する。
 >
-> **この証跡の範囲を広げて解釈しない。** 確認できたのは「ロールが適用でき、冪等で、
-> 期待した状態になる」ところまでで、実 VM での挙動、複数ホスト間の疎通、
-> スタック全体の動作、復旧時間（RTO）は含まない。
+> **この証跡の範囲を広げて解釈しない。** local webhook は Slack 実配信ではなく、
+> runner 内の network / UFW 検証は独立した管理端末や引き渡し対象ホストでの検証を代替しない。
+> AWS `apply / destroy`、D-2、Slack 実配信も引き続き未実測である。
 
 ### 実装済み / 証跡待ち
 
 | # | テーマ | 状態 | 設計書 |
 | --- | --- | --- | --- |
-| v1.0 | 基本構成（Linux + Docker + Prometheus + Grafana + Nginx + Alertmanager） | ✅ 実装済み（server-monitor 本体） | — |
+| v1.0 | 基本構成（Linux + Docker + Prometheus + Grafana + Nginx + Alertmanager） | ✅ 実装済み。2026-08-22 の Full-stack E2E で core 9 services と検証用 sink の稼働を確認 | — |
 | v1.1 | Loki + Grafana Alloy ログ集約 | ✅ 構成実装済み（Promtail EOL に伴い移行） | [01](./docs/server-monitor-improvements/01-loki-log-aggregation.md) |
-| v1.2 | Ansible 構成管理 | ✅ roles / playbook 実装済み。**full `molecule test` 4 ロール完走を [2026-08-17 に採録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)** | [02](./docs/server-monitor-improvements/02-ansible-automation.md) |
-| v1.3 | SLO / バーンレートアラート | ✅ rules / dashboard 実装済み。ラボ内 SLI として扱う | [04](./docs/server-monitor-improvements/04-slo-design.md) |
-| v1.3 | バックアップ・復旧演習 | ✅ 手順・自動化実装済み。**D-1 実測を2026-08-19に採録**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)、RTO 13秒でPASS）。D-2 は未収録 | [05](./docs/server-monitor-improvements/05-backup-recovery-drill.md) |
+| v1.2 | Ansible 構成管理 | ✅ roles / playbook 実装済み。**full `molecule test` 4 ロール完走を [2026-08-17 に採録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)**。さらに [2026-08-22 の Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)で `site.yml` 一括適用・2 回目 `changed=0` を含む 23/23 PASS | [02](./docs/server-monitor-improvements/02-ansible-automation.md) |
+| v1.3 | SLO / バーンレートアラート | ✅ rules / dashboard 実装済み。2026-08-22 E2E で local webhook の FIRING / RESOLVED を実測。Slack 実配信は未採録 | [04](./docs/server-monitor-improvements/04-slo-design.md) |
+| v1.3 | バックアップ・復旧演習 | ✅ 手順・自動化実装済み。**ローカル D-1 を 2026-08-19 に採録**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)、RTO 13 秒で PASS）。[2026-08-22 E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)でも D-1 RTO 1 秒と 3 volumes の backup / restore を PASS。D-2 は未収録 | [05](./docs/server-monitor-improvements/05-backup-recovery-drill.md) |
 | v2.0 | AWS + Terraform 化 | ✅ IaC 実装済み。`apply` / Cost Explorer 証跡は未収録 | [03](./docs/server-monitor-improvements/03-terraform-aws.md) |
 
 ### 設計済み / 順次実装
@@ -493,21 +505,23 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 
 順序・手順は [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) に一元化（2026-08-17 に「必要な環境」順へ組み替え）。
 
-**Linux 環境が不要なもの（先にこちらを消化する）**
+**GitHub Actions で採録済み**
 
 1. ~~full `molecule test` の実行ログ（優先 1）~~ → ✅ **2026-08-17 採録済み**
-2. 既存 CI の成功ログを証跡台帳へ記録（優先 2。Backup verify は毎日実行され成功が蓄積しているのに、台帳に一度も記載されていない）
+2. ~~既存 CI の成功ログを証跡台帳へ記録（優先 2）~~ → ✅ **2026-08-19 採録済み**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md)）
+3. ~~新規構築から冪等性・network / UFW・障害復旧・backup / restoreまでの Full-stack E2E~~ → ✅ **2026-08-22 に23/23 PASS**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)）
 
-**Linux + Docker が必要なもの**
+**次に採録するもの**
 
-1. Grafana / Slack 通知 / Loki 検索の実画面（優先 3〜5。1 晩・0 円）
+1. Alertmanager → Slack の実通知配信（local webhook の FIRING / RESOLVED は2026-08-22に採録済みだが、Slack Webhook は別途必要）
 2. ~~ネットワーク切り分けの一次メモ（優先 6）~~ → ✅ **2026-08-21 実質完了**。ポート公開の不具合を発見・原因特定し、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてをコンテナ IP 直接指定・`docker compose exec` 経由で確認できた（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）
-3. D-1 プロセス停止演習の RTO / 通知結果（優先 7）
+3. 独立した管理端末と引き渡し対象ホストを使った network / UFW / 待受・SSH tunnel の実機検証
 
 **追加環境が必要なもの**
 
 1. Windows / AD 最小ラボの PowerShell 実行ログ（優先 8。就業先が Windows 環境の場合のみ優先度を上げる）
-2. 承認された AWS 検証で `plan` / `apply` / `destroy` と Cost Explorer 実費（優先 9）
+2. D-2 ホスト障害復旧演習
+3. 承認された AWS 検証で `plan` / `apply` / `destroy` と Cost Explorer 実費（優先 9）
 
 ---
 
@@ -530,12 +544,12 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 - 本リポジトリの **IT サポート系ドキュメント**（FAQ / TS / Account / Service Desk Metrics）は実体験ではなく業務設計サンプルです（各文書冒頭にも明記）
 - **業務改善レポート** はコア事実（約 1 時間短縮）以外は再構成した想定値を含みます
 - **資格ロードマップ** の日程は現時点での計画案であり、確約ではありません（変更は[見直し記録](./docs/certifications/roadmap.md)に残します）
-- **server-monitor の改善コード 01-05 は別リポジトリに実装済み**。ただし AWS 稼働、費用、
-  復元演習など実行を要する内容は、その証跡が追加されるまで実績として扱いません
+- **server-monitor の改善コード 01-05 は別リポジトリに実装済み**。Full-stack E2E の範囲は
+  2026-08-22 に実測済みですが、AWS 稼働・費用、Slack 実配信、D-2、独立管理端末・引き渡し対象ホストの検証は、その証跡が追加されるまで実績として扱いません
 - **06 以降は設計サンプル / ロードマップ** であり、実装コードや実測証跡と混同しません
 - **ビジュアルショーケース** は実機キャプチャ枠とテキストモックアップを分離し、採録後に順次差し替えます
 - **[学習プラン](./docs/learning-plan/README.md) は計画** であり実績ではありません。同ページの「本人の現在地」は自己申告であり、実測証跡の有無は本ファイルと[証跡採録チェックリスト](./docs/evidence-capture-checklist.md)を一次情報とします
 - **ドキュメント整備には AI を活用**しています（役割分担は [README の開示セクション](./README.md#ai-の利用について) を参照）
-- **設計書の分量に対して実測証跡が極端に少ない**（設計・手順書 40 本超に対し実測記録 1 件）。AI 活用を開示している以上、**実測 1 件あたりの重みは通常より大きい**と考え、新規の設計追加より採録を優先します
+- **実測証跡は複数件へ増加**し、2026-08-22 には Full-stack E2E 23/23 PASS まで採録済みです。一方、Slack 実配信、AWS、D-2、独立管理端末・引き渡し対象ホストは未実測のため、新規の設計追加より残る証跡の採録を優先します
 
 これらは採用面接などで実物を見せる際に、**「設計力」と「実績」を明確に区別** して説明してください。
