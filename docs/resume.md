@@ -7,7 +7,7 @@
 > - **確定情報**（資格・学歴・職業訓練・ポートフォリオ）はそのまま記載しています
 > - 「設計サンプル」と「実績」を混同しない方針は、ポートフォリオ全体（[STATUS.md](../STATUS.md)）と同じです
 
-最終更新: 2026-08-20（AD DS/DNS の取り組み事例を表から分離、スキル表を実測に合わせて更新。資格取得計画をFE優先の実態に合わせて修正）
+最終更新: 2026-08-22（第一志望と Full-stack E2E 23/23 PASS、使い捨て runner の検証境界を反映）
 
 ---
 
@@ -15,7 +15,7 @@
 
 製造・物流の現場で 15 年以上、在庫管理・ピッキング工程を担当してきました。作業時間ログの計測からボトルネックを特定し、動線改善・標準化によって **1 日あたり約 1 時間の作業短縮** を実現しています。
 
-この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を自作・運用してきました。IT サポート / 社内 SE 補助 / インフラ運用の領域で、**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
+この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を構築・検証してきました。第一志望は **サーバー設計・構築** です。入口業務としてインフラ監視・運用、IT サポート、社内 SE 補助にも対応し、**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
 
 **現況**: 派遣社員としてトライアル就業中（アデコ株式会社より株式会社Changeupへ就業。2026/07〜、トライアル期間2か月）。
 仮想化マシンを構築して、WindowsサーバーとLinuxサーバーの構築練習をしました。そのうえで、AWSとAzureの構築練習をしました。
@@ -80,11 +80,13 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 詳細: [現場経験 ↔ インフラ運用の橋渡し](./career-bridge.md)
 
+主作品では、Docker 導入済みの使い捨て Ubuntu 24.04 runner に `site.yml` を一括適用し、2 回目 `changed=0`、core 9 services + CI webhook sink、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を含む [Full-stack E2E 23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md) を採録しました。Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、長期稼働も未実測です。
+
 ---
 
 ## 5. テクニカルスキル
 
-> レベルの目安: ◎ 自作・運用できる / ○ 構築・設定できる / △ 学習中・基礎
+> レベルの目安: ◎ 自作物で反復利用・検証している / ○ 構築・設定経験あり / △ 学習中・基礎。長期運用や本番環境での実務経験を示す記号ではありません。
 
 ### プログラミング / スクリプト
 
@@ -100,13 +102,13 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 | 分類 | 項目 | レベル |
 | --- | --- | --- |
 | OS | Linux サーバー運用 | ○ |
-| コンテナ | Docker / Docker Compose | ◎ |
+| コンテナ | Docker / Docker Compose | ○（WSL2 と使い捨て runner で構築・検証。独立した長期稼働ホストは未実測） |
 | Web / Proxy | Nginx（リバースプロキシ。TLS は設定例・自己署名証明書での確認まで） | ○ |
 | 監視 | Prometheus / Grafana / Alertmanager | ○（Linux(WSL2) 上で起動・実データ表示を確認済み。[証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)） |
 | ログ | Loki / Grafana Alloy | ○（LogQL によるログ検索を実機で確認済み） |
-| 構成管理 | Ansible | ○（4 ロールを molecule test で適用・冪等性確認、欠陥 2 件を自分で発見・修正。[証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)） |
+| 構成管理 | Ansible | ○（4 ロールの Molecule に加え、使い捨て Ubuntu 24.04 への `site.yml` 一括適用と 2 回目 `changed=0` を確認。[証跡](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md)） |
 | IaC | Terraform（AWS） | △（`validate` / `fmt` まで。`apply` は未実施） |
-| CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○ |
+| CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（Full-stack E2E 23/23 ID PASS。Docker は runner に事前導入済み） |
 
 実装範囲と検証境界は [アーキテクチャ図](./architecture-diagram.md) を参照してください。
 
@@ -140,7 +142,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 | 作品 | 技術・取り組み | リンク |
 | --- | --- | --- |
-| サーバー監視・運用ラボ（主作品） | Linux / Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform | [server-monitor](https://github.com/ns7jp/server-monitor) |
+| サーバー監視・運用ラボ（主作品） | Linux / Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform | [案件概要](https://ns7jp.github.io/project-brief.html) ／ [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) ／ [server-monitor](https://github.com/ns7jp/server-monitor) |
 | 掲示板アプリ | PHP / MySQL / CSRF 対策 / bcrypt / PDO | [post](https://github.com/ns7jp/post) |
 | SNS アプリ「Pulse」 | PHP / SQLite | [pulse](https://github.com/ns7jp/pulse) |
 | 学習作品集 | Python / HTML / CSS | [works](https://github.com/ns7jp/works) |
