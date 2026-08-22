@@ -2,7 +2,7 @@ name: docs-check
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/profile-server-build-focus-20260822]
   pull_request:
 
 jobs:
