@@ -2,13 +2,13 @@
 
 ## サーバー設計・構築エンジニア志望
 
-主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元までを一気通貫で検証し、23/23 ID PASS を採録したインフラ構築ラボです。
+主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、2026-08-22 時点の構成を使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元まで一気通貫で検証し、23/23 ID PASS を採録したインフラ構築ラボです。
 
 ## 30 秒で確認する 3 点
 
-| [2 分 15 秒デモ（証跡リプレイ）](https://ns7jp.github.io/demo.html) | [構成図](./docs/architecture-diagram.md) | [実測証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
+| [案件概要](https://ns7jp.github.io/project-brief.html) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [2 分 15 秒デモ（証跡リプレイ）](https://ns7jp.github.io/demo.html) |
 | --- | --- | --- |
-| 保存済み実測画面と復旧ログを時系列で確認 | 実装済み構成と実測・未実測の境界 | 日時、環境、commit、コマンド、結果 |
+| 設計から構築・試験・引き渡しまでの全体像 | 2026-08-22 の 23/23 PASS と未実測範囲 | 2026-08-18・19 の保存済み画面と復旧ログを再構成 |
 
 ## 志望と現況
 
@@ -22,17 +22,17 @@
 
 | 実施した検証 | 結果・証跡 |
 | --- | --- |
-| 使い捨て Ubuntu 24.04 への Full-stack E2E | [`site.yml` 適用、2 回目 `changed=0`、network / UFW、local webhook の FIRING / RESOLVED、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md) |
+| 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 9 services + CI webhook sink、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md) |
 | Ansible 4 ロールを Linux 上で適用し、2 回目の冪等性と期待状態を確認 | [`molecule test` 4 ロール PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)。途中で静的検査では見つからなかった欠陥 2 件を修正 |
 | 監視スタック 9 サービスを Linux (WSL2) 上で起動 | [Grafana の実データ表示、Loki のログ取得を確認](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
 | app プロセスを意図的に停止し、自動復旧を計測 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
 | client → proxy → app の二セグメント構成で通信断を注入 | [障害再現 → 経路・名前解決の切り分け → 復旧まで PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md) |
 
-[2026-08-19 の試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（21 項目中 11 項目 PASS、10 項目 `NOT RUN`）は当時の履歴として保持しています。その後、上記 Full-stack E2E で 23/23 ID PASS を採録しました。一方、**Alertmanager → Slack の実配信、AWS の `apply / destroy`、D-2 復旧演習、独立した管理端末・引き渡し対象ホストでの確認は未実測**です。local webhook の通知試験を Slack 実配信、使い捨て runner 内の network / UFW 試験を独立環境の証跡とは扱いません。
+[2026-08-19 の試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（21 項目中 11 項目 PASS、10 項目 `NOT RUN`）は当時の履歴として保持しています。その後、上記 Full-stack E2E で 23/23 ID PASS を採録しました。一方、**Alertmanager → Slack の実配信、AWS の `apply / destroy`、D-2 復旧演習、独立した管理端末・引き渡し対象ホスト、組織 DNS、長期稼働の確認は未実測**です。local webhook の通知試験を Slack 実配信、使い捨て runner 内の network / UFW 試験を独立環境の証跡とは扱いません。また、runner には Docker が事前導入済みだったため、最小 OS への Docker 新規導入実績とも表現しません。
 
 ## 主作品の読み方
 
-この README では、実機で確認した結果と未実施項目を中心に示します。設計、構築、試験、変更、引き渡しまでの成果物一覧は [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、実装・CI・実測の境界は [構成図](./docs/architecture-diagram.md) と [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) にまとめています。
+この README では、実行して確認した結果と未実施項目を中心に示します。採用ご担当者向けの全体像は [案件概要](https://ns7jp.github.io/project-brief.html)、最新結果は [実測証跡ダイジェスト](https://ns7jp.github.io/evidence-demo.html) に整理しています。設計、構築、試験、変更、引き渡しまでの成果物一覧は [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、実装・CI・実測の境界は [構成図](./docs/architecture-diagram.md) と [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) にまとめています。
 
 使用技術の一覧、資格、他の学習作品は [職務経歴書・スキルシート](./docs/resume.md)、未着手を含む学習計画は [STATUS](./STATUS.md) に分離しています。README の項目数を増やすより、主作品で実際に構築・検証・復旧した結果を優先して更新します。
 

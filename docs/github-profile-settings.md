@@ -1,21 +1,21 @@
 # GitHub プロフィール表示設定
 
-> この文書は、リポジトリのファイル編集では変更できない GitHub アカウント設定の適用チェックリストです。
-> **設定済みの実績を示す文書ではありません。** 2026-08-21 に公開プロフィールを確認した時点では、Bio とピン留めは下記の推奨状態へ未変更でした。
+> この文書は、リポジトリのファイル編集では変更できない GitHub アカウント設定の適用記録です。
+> **2026-08-22 にログアウト状態の公開プロフィールを確認し、Bio とピン留めが下記の状態へ反映済みであることを確認しました。**
 
 ## Bio
 
-次の文面へ統一します。
+現在の公開文面です（2026-08-22 確認）。
 
-> Linux サーバー構築・運用エンジニア志望｜Ubuntu / Ansible / Docker / Prometheus / Grafana｜構築・試験・障害復旧の実測記録を公開
+> サーバー設計・構築エンジニア志望｜Ubuntu / Ansible / Docker / Prometheus / Grafana｜構築・試験・障害復旧の実測記録を公開｜Python・PHP・ITパスポート（公共職業訓練修了・4資格取得）
 
-README の第一志望と同じ「Linux サーバー構築・運用」を先頭に置きます。「IT 技術系へキャリアチェンジ中」のような広い表現より、採用担当者が対象職種を判断しやすくします。
+README と同じくサーバー設計・構築を第一志望として先頭に置いています。「IT 技術系へキャリアチェンジ中」のような広い表現より、採用担当者が対象職種を判断しやすい文面です。
 
 Web サイト欄は `https://ns7jp.github.io/` を維持します。
 
 ## ピン留めするリポジトリ
 
-上から次の優先順にします。
+2026-08-22 にログアウト状態で確認した表示順です。
 
 1. `server-monitor` — 第一志望に直結する主作品
 2. `ns7jp` — プロフィール README、経歴、証跡への入口
@@ -24,29 +24,31 @@ Web サイト欄は `https://ns7jp.github.io/` を維持します。
 5. `works` — Python / HTML / CSS の学習過程
 6. `ns7jp.github.io` — ブラウザ向けポートフォリオ
 
-`server-monitor` が先頭に表示されない状態では、学習期の Web 作品が第一印象になります。ピン留め後はログアウト状態でも `server-monitor` が最初に見えることを確認します。
+`server-monitor` を先頭にして、学習期の Web 作品よりサーバー設計・構築の主作品を先に示しています。
 
-## リポジトリ説明
+## リポジトリ説明と Topics
 
-`server-monitor` の About / Description は次を推奨します。
+`server-monitor` の公開 About / Description は、2026-08-22 時点で次の文面です。
 
-> Ubuntu / Ansible / Docker / Prometheus / Grafana で、設計・構築・試験・障害復旧を実測するインフララボ
+> Ubuntu サーバーの構築〜監視〜障害復旧を Ansible / Prometheus / Grafana / Loki で実装した Linux インフラ運用ラボ（実測証跡付き）
 
-Topics は次を候補とします。
+Topics は未設定です。次を候補とし、GitHub の About 設定から別途適用します。
 
 `linux`, `ansible`, `docker`, `prometheus`, `grafana`, `loki`, `terraform`, `monitoring`, `infrastructure-as-code`
 
-プロフィールリポジトリ `ns7jp` の Description は次を推奨します。
+プロフィールリポジトリ `ns7jp` の公開 Description は、2026-08-22 時点で次の文面です。
 
-> Linux サーバー構築・運用エンジニア志望｜実測証跡と学習の一次記録
+> サーバー設計・構築エンジニア志望｜実測証跡と学習の一次記録
 
-## 適用後の確認
+## 適用後の確認（2026-08-22）
 
-- Bio、README 見出し、`docs/overview-for-recruiters.md` の第一志望が一致している
-- `server-monitor` がピン留めの先頭にある
-- `server-monitor` の説明だけで「設計・構築・試験・復旧」が分かる
-- 公開動画がない間は、デモを「動画」ではなく「収録台本・準備中」と表示している
-- ログアウト状態またはシークレットウィンドウで、30 秒以内に主作品と実測証跡へ移動できる
+- [x] Bio、README 見出し、`docs/overview-for-recruiters.md` がサーバー設計・構築を第一志望として示している
+- [x] `server-monitor` がピン留めの先頭にある
+- [x] `server-monitor` の公開 Description で Ubuntu サーバーの構築・監視・障害復旧と実測証跡を示している
+- [x] `ns7jp` の公開 Description でサーバー設計・構築を第一志望として示している
+- [ ] `server-monitor` の Topics を設定する（2026-08-22 時点では空）
+- [x] 保存済み実測証跡の編集リプレイを公開し、実操作の連続録画ではないことを明記している
+- [x] ログアウト状態で、ピン留め先頭の `server-monitor` とプロフィール README から主作品・実測証跡へ移動できる
 
 ## 関連ドキュメント
 
