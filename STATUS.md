@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-22（使い捨て Ubuntu 24.04 の Full-stack E2E 23/23 PASS、案件概要・最新証跡・歴史的リプレイの役割分離、ポートフォリオサイト PR #24 までの同期、プロフィール main SHA `0987289` の docs-check 成功を反映）
+最終更新：2026-08-22（server-monitor PR #75 の hardened Full-stack E2E 23/23 PASS、ポートフォリオサイト PR #25、プロフィール PR #46 の main マージを反映）
 
 ---
 
@@ -27,19 +27,20 @@
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
 
-### 2026-08-22 の更新内容（Full-stack E2E・採用担当者向け導線の同期）
+### 2026-08-22 の更新内容（hardened Full-stack E2E・3 リポジトリ同期）
 
 | 観点 | 対応 |
 | --- | --- |
 | README 冒頭 | 主作品の価値を「使い捨て Ubuntu 24.04 への新規構築から監視・障害復旧・backup / restoreまでを一気通貫で検証し、23/23 ID PASS」と明示 |
 | 最短確認先 | [案件概要](https://ns7jp.github.io/project-brief.html)・[最新の実測証跡](https://ns7jp.github.io/evidence-demo.html)・[2 分 15 秒の歴史的証跡リプレイ](https://ns7jp.github.io/demo.html)の3役割に分離 |
 | 動画の公開状態 | 保存済み実測画面と D-1 復旧ログを再構成した証跡リプレイを公開。**実操作の連続録画ではない**ことを映像内・ページ上・プロフィールで明記 |
-| 実測範囲 | Docker 導入済み runner で `site.yml` 2 回目 `changed=0`、core 9 services + CI sink、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes restoreをPASS |
-| 未実測境界 | Slack 実配信、AWS、D-2、独立管理端末・引き渡し対象ホスト、組織 DNS、長期稼働。runner 内の結果をこれらへ読み替えない |
+| 実測範囲 | runtime commit `7622a9d`を Docker 導入済み runner で検証。`site.yml` 2 回目 `changed=0`、core 10 services + CI sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes restore を23/23 PASS |
+| 未実測境界 | Slack 実配信、AWS、D-2、Docker 未導入の引き渡し対象ホストと別の独立管理端末、組織 DNS、ホスト再起動後の永続性、24時間・72時間の継続稼働。runner 内の結果をこれらへ読み替えない |
 | 関連文書 | README、採用担当者向け1ページ版、職務経歴書、証跡採録チェックリスト、ビジュアルショーケースを同期 |
-| docs CI | profile main SHA [`0987289dbf0331f75a901b2f04a7afd8be03c03b`](https://github.com/ns7jp/ns7jp/commit/0987289dbf0331f75a901b2f04a7afd8be03c03b) の [docs-check run 32566226565](https://github.com/ns7jp/ns7jp/actions/runs/32566226565) が SUCCESS |
+| 3 リポジトリの公開状態 | [server-monitor PR #75](https://github.com/ns7jp/server-monitor/pull/75)（main `4a292026`）、[site PR #25](https://github.com/ns7jp/ns7jp.github.io/pull/25)（main `5ab3367b`）、[profile PR #46](https://github.com/ns7jp/ns7jp/pull/46)（main `c360f84a`）をマージ済み |
+| profile docs CI | PR #46 head `20ec405`の [docs-check run 32571600184](https://github.com/ns7jp/ns7jp/actions/runs/32571600184) が SUCCESS。後続変更は改めて検証する |
 
-[2026-08-19 の 11/21 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)と[D-1 RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)は当時の履歴として保持します。最新の完走記録は [2026-08-22 Full-stack E2E の23/23 PASS](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md)です。
+[2026-08-19 の 11/21 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)と[D-1 RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)は当時の履歴として保持します。最新のruntime完走記録は [PR #75 の Full-stack E2E 23/23 PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)です。実測対象 `7622a9d`、証跡文書更新 `cf9419b`、main merge `4a292026`を区別します。
 
 ### 2026-08-19 の更新内容（追補2：説明できない深さの内容そのものを圧縮）
 
@@ -321,7 +322,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 | ビジュアルショーケース | ✅ 実機キャプチャ枠とテキストモックアップを分離 |
 | 採用ご担当者向け 1 枚サマリ | ✅ 完了（非技術者向け） |
 | 学習ログ Issue（#5-#7）/ 実証トラッキング Issue（#8） | ✅ 作成済み（**運用はこれから**。週 1 回更新を上記ルールで開始する） |
-| docs CI（markdownlint / Mermaid 構文 / リンク） | ✅ 完了（2026-07 にリンクチェックを強化。2026-08-22 の main SHA `0987289` でも SUCCESS） |
+| docs CI（markdownlint / Mermaid 構文 / リンク） | ✅ 完了（2026-07 にリンクチェックを強化。PR #46 head `20ec405`の [run 32571600184](https://github.com/ns7jp/ns7jp/actions/runs/32571600184)でも SUCCESS、main merge `c360f84a`） |
 | デモ動画台本 | ✅ 整備済み。2026-08-22 に歴史的証跡リプレイを公開（実操作の連続録画は未公開） |
 | 志望トラックと証跡の対応 | ✅ 完了（Linux サーバー構築・運用を第一志望として明示） |
 | 変更管理の実物化 | ✅ server-monitor 側に PR テンプレート / 変更管理ミニ運用を追加 |
@@ -351,20 +352,20 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 
 #### 今月（1 晩〜半日・0 円）
 
-- [ ] **LEARNINGS.md にトライアル就業中のつまずきを追記**（機密・顧客情報に触れない範囲で。この項目のみ、まだ着手できていない）
+- [x] ~~**LEARNINGS.md にトライアル就業中のつまずきを追記**~~ → **2026-08-22 完了**。研修中の AD ドメイン参加時に、クライアント DNS が DC を向いていなかった問題を、機密情報を含めず症状 → 原因 → 対処 → 学びで記録
 - [x] ~~**ネットワーク切り分けの一次メモ**（[優先 6](./docs/evidence-capture-checklist.md)）~~ → **2026-08-21 実質完了**。`ss` / `docker port` / `docker inspect` で切り分け、`frontend` ネットワークの `internal: true` がホストへのポート公開を無効化する不具合を発見・原因特定した（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）。当初想定していたホスト公開ポート経由ではなく、`docker compose exec` 経由・コンテナ IP を直接指定する方法で、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてを `internal: true` の制約を受けずに確認できた。なお、このタスク行の見出しは従来「二セグメント障害ラボの実行ログ」となっていたが、それは別タスク（[labs/network-troubleshooting](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)、2026-08-19 に別途採録済み）を指しており、優先6の内容と一致していなかったため見出しも訂正した
 - [ ] **Alertmanager → Slack の実通知配信**（[優先 4](./docs/evidence-capture-checklist.md)、Slack Webhook が必要）
 
 #### 継続
 
 - [ ] **Issue #5〜#8 の月次更新**（§0 ルール 2。週 1 回から緩和済み）
-- [x] ~~**ポートフォリオサイト（ns7jp.github.io）を本 README の構成へ同期**~~ → **2026-08-22 完了**。[PR #23](https://github.com/ns7jp/ns7jp.github.io/pull/23)で採用担当者向け階層と `project-brief.html` / `evidence-demo.html` を追加し、[PR #24](https://github.com/ns7jp/ns7jp.github.io/pull/24)で `demo.html` と2026-08-22 E2E現況を統合。site main SHAは [`0c6a698`](https://github.com/ns7jp/ns7jp.github.io/commit/0c6a698867acccf2ed42f51ef98dba80b1e881bf)
+- [x] ~~**ポートフォリオサイト（ns7jp.github.io）を本 README の構成へ同期**~~ → **2026-08-22 完了**。[PR #23](https://github.com/ns7jp/ns7jp.github.io/pull/23)で採用担当者向け階層、[PR #24](https://github.com/ns7jp/ns7jp.github.io/pull/24)で証跡リプレイとE2E現況、[PR #25](https://github.com/ns7jp/ns7jp.github.io/pull/25)で証跡整合性とアクセシビリティを改善。site main SHAは [`5ab3367`](https://github.com/ns7jp/ns7jp.github.io/commit/5ab3367b6c8b298d62ee786bb23a3392ec3040c6)
 - [ ] 業務改善レポートの **想定値部分を実数に置き換え**（記憶 / 当時の上長への確認次第）
 
 #### 就業内容が固まってから
 
 - [ ] 実操作の連続録画を常設公開（2026-08-18・19 の保存済み証跡を再構成した2分15秒リプレイは公開済み。E2E artifact の terminal cast は全工程の連続動画ではない）
-- [ ] 就業先が Windows / AD 環境なら **Windows / AD 最小証跡を採録**（優先 8）
+- [ ] **Windows / AD の公開可能な再現証跡を採録**（旧優先 8）。研修での AD DS 構築・DNS 障害切り分けは [LEARNINGS.md](./LEARNINGS.md) に記録済みだが、PowerShell のユーザー作成・棚卸し一次出力は未採録
 - [ ] `terraform apply` → `destroy` の実費と Cost Explorer 記録（優先 9）
 - [ ] IT サポート資料を **実体験ベース** に書き換え（該当業務に従事してから）
 
@@ -378,28 +379,28 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 
 > **実測証跡の現状（2026-08-22 更新）**
 >
-> **使い捨て Ubuntu 24.04 の GitHub-hosted runner で Full-stack E2E 23/23 PASS**
-> （[記録](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md)）。
-> `site.yml` の一括適用と 2 回目 `changed=0`、監視スタックの稼働、runner 内の network / UFW、
-> 3 volumes の backup / restore、D-1 自動復旧（RTO 1 秒）、Alertmanager から local webhook への
-> FIRING / RESOLVED 配送まで、同一 run で確認した。
+> **PR #75 の runtime 最終 commit `7622a9d`を使い捨て Ubuntu 24.04 runner で Full-stack E2E 23/23 PASS**
+> （[記録](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)）。
+> `site.yml` の一括適用と 2 回目 `changed=0`、計 11 containers、Docker API proxy の GET 成功・
+> POST 拒否・固有 Nginx log の Loki 到達、runner 内の network / UFW、3 volumes の backup / restore、
+> D-1 自動復旧（RTO 1 秒）、Alertmanager から local webhook への FIRING / RESOLVED 配送まで、同一 run で確認した。
 >
 > これは [2026-08-17 の Molecule 4 ロール完走](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)と、
 > [2026-08-19 のローカル D-1（RTO 13 秒）](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)とは別の実測記録であり、いずれも履歴として保持する。
 >
 > **この証跡の範囲を広げて解釈しない。** local webhook は Slack 実配信ではなく、
 > runner 内の network / UFW 検証は独立した管理端末、引き渡し対象ホスト、組織 DNS での検証を代替しない。
-> Docker も runner に事前導入済みだった。AWS `apply / destroy`、D-2、Slack 実配信、長期稼働は引き続き未実測である。
+> Docker も runner に事前導入済みだった。AWS `apply / destroy`、D-2、Slack 実配信、Docker 未導入の独立対象ホスト、ホスト再起動後の永続性、長期稼働は引き続き未実測である。
 
 ### 実装済み / 証跡待ち
 
 | # | テーマ | 状態 | 設計書 |
 | --- | --- | --- | --- |
-| v1.0 | 基本構成（Linux + Docker + Prometheus + Grafana + Nginx + Alertmanager） | ✅ 実装済み。2026-08-22 の Full-stack E2E で core 9 services と検証用 sink の稼働を確認 | — |
-| v1.1 | Loki + Grafana Alloy ログ集約 | ✅ 構成実装済み（Promtail EOL に伴い移行） | [01](./docs/server-monitor-improvements/01-loki-log-aggregation.md) |
-| v1.2 | Ansible 構成管理 | ✅ roles / playbook 実装済み。**full `molecule test` 4 ロール完走を [2026-08-17 に採録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)**。さらに [2026-08-22 の Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md)で `site.yml` 一括適用・2 回目 `changed=0` を含む 23/23 PASS | [02](./docs/server-monitor-improvements/02-ansible-automation.md) |
+| v1.0 | 基本構成（Linux + Docker + Prometheus + Grafana + Nginx + Alertmanager） | ✅ 実装済み。PR #75 E2E で core 10 services + 検証用 sink（計 11 containers）の稼働を確認 | — |
+| v1.1 | Loki + Grafana Alloy ログ集約 | ✅ 構成実装済み。Promtail EOL に伴い移行し、Docker API は GET / HEAD 限定 proxy 経由に制限。E2E で固有 Nginx log の Loki 到達を確認 | [01](./docs/server-monitor-improvements/01-loki-log-aggregation.md) |
+| v1.2 | Ansible 構成管理 | ✅ roles / playbook 実装済み。**full `molecule test` 4 ロール完走を [2026-08-17 に採録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)**。さらに [PR #75 の Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で `site.yml` 一括適用・2 回目 `changed=0` を含む 23/23 PASS | [02](./docs/server-monitor-improvements/02-ansible-automation.md) |
 | v1.3 | SLO / バーンレートアラート | ✅ rules / dashboard 実装済み。2026-08-22 E2E で local webhook の FIRING / RESOLVED を実測。Slack 実配信は未採録 | [04](./docs/server-monitor-improvements/04-slo-design.md) |
-| v1.3 | バックアップ・復旧演習 | ✅ 手順・自動化実装済み。**ローカル D-1 を 2026-08-19 に採録**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)、RTO 13 秒で PASS）。[2026-08-22 E2E](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md)でも D-1 RTO 1 秒と 3 volumes の backup / restore を PASS。D-2 は未収録 | [05](./docs/server-monitor-improvements/05-backup-recovery-drill.md) |
+| v1.3 | バックアップ・復旧演習 | ✅ 手順・自動化実装済み。**ローカル D-1 を 2026-08-19 に採録**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)、RTO 13 秒で PASS）。[PR #75 E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)でも D-1 RTO 1 秒と 3 volumes の backup / restore を PASS。D-2 は未収録 | [05](./docs/server-monitor-improvements/05-backup-recovery-drill.md) |
 | v2.0 | AWS + Terraform 化 | ✅ IaC 実装済み。`apply` / Cost Explorer 証跡は未収録 | [03](./docs/server-monitor-improvements/03-terraform-aws.md) |
 
 ### 設計済み / 順次実装
@@ -510,17 +511,18 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 
 1. ~~full `molecule test` の実行ログ（優先 1）~~ → ✅ **2026-08-17 採録済み**
 2. ~~既存 CI の成功ログを証跡台帳へ記録（優先 2）~~ → ✅ **2026-08-19 採録済み**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md)）
-3. ~~新規構築から冪等性・network / UFW・障害復旧・backup / restoreまでの Full-stack E2E~~ → ✅ **2026-08-22 に23/23 PASS**（[記録](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md)）
+3. ~~新規構築から冪等性・network / UFW・Docker API proxy・障害復旧・backup / restoreまでの Full-stack E2E~~ → ✅ **2026-08-22 に23/23 PASS**（[PR #75 記録](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)）
 
 **次に採録するもの**
 
-1. Alertmanager → Slack の実通知配信（local webhook の FIRING / RESOLVED は2026-08-22に採録済みだが、Slack Webhook は別途必要）
-2. ~~ネットワーク切り分けの一次メモ（優先 6）~~ → ✅ **2026-08-21 実質完了**。ポート公開の不具合を発見・原因特定し、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてをコンテナ IP 直接指定・`docker compose exec` 経由で確認できた（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）
-3. 独立した管理端末と引き渡し対象ホストを使った network / UFW / 待受・SSH tunnel、組織 DNS、長期稼働の実機検証
+1. Docker 未導入の独立した対象ホストと別管理端末を使った新規構築、network / UFW、待受、SSH tunnel、受け入れ・引き渡し確認
+2. 同じ対象ホストの再起動後の永続性と、24時間後・72時間後の継続稼働
+3. Alertmanager → Slack の実通知配信（local webhook の FIRING / RESOLVED は2026-08-22に採録済みだが、Slack Webhook は別途必要）
+4. ~~ネットワーク切り分けの一次メモ（優先 6）~~ → ✅ **2026-08-21 実質完了**。ポート公開の不具合を発見・原因特定し、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてをコンテナ IP 直接指定・`docker compose exec` 経由で確認できた（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）
 
 **追加環境が必要なもの**
 
-1. Windows / AD 最小ラボの PowerShell 実行ログ（優先 8。就業先が Windows 環境の場合のみ優先度を上げる）
+1. Windows / AD の公開可能な PowerShell 実行ログ（研修での AD DS 構築・DNS 切り分けは記録済み。自宅ラボ等で再現する）
 2. D-2 ホスト障害復旧演習
 3. 承認された AWS 検証で `plan` / `apply` / `destroy` と Cost Explorer 実費（優先 9）
 
@@ -532,11 +534,11 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 
 | リポジトリ / サイト | 位置付け | 状態 |
 | --- | --- | --- |
-| [server-monitor](https://github.com/ns7jp/server-monitor) | 主作品（インフラ運用） | §2 のとおり |
+| [server-monitor](https://github.com/ns7jp/server-monitor) | 主作品（Linux サーバー構築・運用） | [PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へマージ済み。§2 のとおり |
 | [post](https://github.com/ns7jp/post) | 学習作品（PHP / MySQL、CSRF / bcrypt / PDO） | 完成・公開中。DB 運用設計（[14](./docs/roadmap/14-database-operations.md)）の題材 |
 | [pulse](https://github.com/ns7jp/pulse) | 学習作品（PHP / SQLite） | 完成・公開中 |
 | [works](https://github.com/ns7jp/works) | 学習作品集（Python / HTML / CSS） | 公開中（学習過程の記録） |
-| [ns7jp.github.io](https://ns7jp.github.io/) | ポートフォリオサイト | ✅ 同期済み（[PR #23](https://github.com/ns7jp/ns7jp.github.io/pull/23)で採用担当者向け階層を追加し、[PR #24](https://github.com/ns7jp/ns7jp.github.io/pull/24)で証跡リプレイと最新E2Eを統合。main SHA `0c6a698`） |
+| [ns7jp.github.io](https://ns7jp.github.io/) | ポートフォリオサイト | ✅ 同期済み（PR #23〜#24で採用担当者向け階層・証跡リプレイ・E2Eを統合し、[PR #25](https://github.com/ns7jp/ns7jp.github.io/pull/25)で証跡整合性とアクセシビリティを改善。main SHA `5ab3367`） |
 
 ---
 
@@ -546,11 +548,11 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 - **業務改善レポート** はコア事実（約 1 時間短縮）以外は再構成した想定値を含みます
 - **資格ロードマップ** の日程は現時点での計画案であり、確約ではありません（変更は[見直し記録](./docs/certifications/roadmap.md)に残します）
 - **server-monitor の改善コード 01-05 は別リポジトリに実装済み**。Full-stack E2E の範囲は
-  2026-08-22 に実測済みですが、AWS 稼働・費用、Slack 実配信、D-2、独立管理端末・引き渡し対象ホスト、組織 DNS、長期稼働の検証は、その証跡が追加されるまで実績として扱いません
+  2026-08-22 に実測済みですが、AWS 稼働・費用、Slack 実配信、D-2、Docker 未導入の引き渡し対象ホストと別の独立管理端末、組織 DNS、ホスト再起動後の永続性、24時間・72時間の継続稼働の検証は、その証跡が追加されるまで実績として扱いません
 - **06 以降は設計サンプル / ロードマップ** であり、実装コードや実測証跡と混同しません
 - **ビジュアルショーケース** は公開済み実機キャプチャとテキストモックアップを分離しています。未実測項目は採録できた場合だけ追加します
 - **[学習プラン](./docs/learning-plan/README.md) は計画** であり実績ではありません。同ページの「本人の現在地」は自己申告であり、実測証跡の有無は本ファイルと[証跡採録チェックリスト](./docs/evidence-capture-checklist.md)を一次情報とします
 - **ドキュメント整備には AI を活用**しています（役割分担は [README の開示セクション](./README.md#ai-の利用について) を参照）
-- **実測証跡は複数件へ増加**し、2026-08-22 には Full-stack E2E 23/23 PASS まで採録済みです。一方、Slack 実配信、AWS、D-2、独立管理端末・引き渡し対象ホスト、組織 DNS、長期稼働は未実測のため、新規の設計追加より残る証跡の採録を優先します
+- **実測証跡は複数件へ増加**し、2026-08-22 には PR #75 の Full-stack E2E 23/23 PASS まで採録済みです。一方、Slack 実配信、AWS、D-2、Docker 未導入の引き渡し対象ホストと別の独立管理端末、組織 DNS、ホスト再起動後の永続性、24時間・72時間の継続稼働は未実測のため、新規の設計追加より残る証跡の採録を優先します
 
 これらは採用面接などで実物を見せる際に、**「設計力」と「実績」を明確に区別** して説明してください。

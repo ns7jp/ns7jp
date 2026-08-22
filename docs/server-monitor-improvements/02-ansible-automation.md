@@ -4,7 +4,7 @@
 > [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
 > 4 ロールの full `molecule test`（converge → idempotence → verify）は
 > [2026-08-17 に実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)。
-> [2026-08-22 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)では、
+> [PR #75 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)では、
 > disposable Ubuntu 24.04 へ `site.yml` を一括適用し、2 回目 `changed=0` を含む 23/23 ID を PASS とした。
 > 同 run の network / UFW、3 volumes の backup / restore、D-1 RTO 1 秒、local webhook の
 > FIRING / RESOLVED も runner 内の一気通貫確認として記録している。

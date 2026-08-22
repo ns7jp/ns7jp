@@ -20,7 +20,7 @@
 | 区分 | 内容 | 状態 |
 | --- | --- | --- |
 | 証跡リプレイ | 保存済み実測画面と復旧ログ、字幕、文字起こし | **公開済み** |
-| 自動デモ | 起動、障害注入、検知、復旧、証跡保存 | server-monitor に実装済み。[2026-08-22 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md)は23/23 PASS |
+| 自動デモ | 起動、障害注入、検知、復旧、証跡保存 | server-monitor に実装済み。[PR #75 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)は23/23 PASS |
 | terminal cast | 成功後 stack で採録した端末セッション | GitHub Actions artifact として保存。E2E 全工程の連続録画ではなく、常設公開も未実施 |
 
 > 編集済み動画だけを実測根拠にはしません。デモページから元のスクリーンショット、D-1 ログ、証跡台帳へ移動できます。
@@ -34,8 +34,8 @@
 | 実機（**Linux(WSL2)**） | Server Monitor UI | 掲載済み（2026-08-18 起動、2026-08-19 差し替え） | [server-monitor screenshot](https://github.com/ns7jp/server-monitor/blob/main/docs/screenshot.png) ／ [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
 | 実機 | Grafana 統合監視 dashboard（実データ表示） | 実測・公開済み | [公開画像](https://ns7jp.github.io/media/demo-sources/grafana-server-monitor_aab2fcc_20260818.png) ／ [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
 | 実機 | Grafana SLO dashboard（実データ表示） | 実測・公開済み | [公開画像](https://ns7jp.github.io/media/demo-sources/grafana-slo_aab2fcc_20260818.png) ／ [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
-| 自動実測（使い捨て Ubuntu 24.04） | Full-stack E2E | **23/23 PASS**。`site.yml` 2 回目 `changed=0`、network / UFW、3 volumes の backup / restore、D-1 RTO 1 秒を確認 | [2026-08-22 実行記録](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md) |
-| 自動実測（local webhook） | Alertmanager 通知経路 | FIRING / RESOLVED を実測済み。**Slack 実配信ではない** | [2026-08-22 実行記録](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md) |
+| 自動実測（使い捨て Ubuntu 24.04） | Full-stack E2E | **23/23 PASS**。`site.yml` 2 回目 `changed=0`、計 11 containers、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、network / UFW、3 volumes の backup / restore、D-1 RTO 1 秒を確認 | [PR #75 実行記録](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
+| 自動実測（local webhook） | Alertmanager 通知経路 | FIRING / RESOLVED を実測済み。**Slack 実配信ではない** | [PR #75 実行記録](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
 | 実機予定 | Alertmanager / Slack 通知 | 設定は実装済み。**実配信は未採録** | `server-monitor/docs/evidence/` |
 | 実機 | D-1 復旧演習ログ（RTO 13 秒 PASS） | 実測済み | [D-1 演習記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
 | 実機予定 | D-2 復旧演習ログ | テンプレート整備済み・未実施 | `server-monitor/docs/drills/logs/` |
@@ -101,7 +101,7 @@ Metrics + Logs + Traces を 1 画面に統合する構想があるが、現時�
 
 ### 2.1 現状（v1.0 — 設定は実装済み。実配信は未採録）
 
-Alertmanager → Slack Webhook の連携は実装済みだが、Webhook 秘密値を Git にコミットしない設計のため、**実際の Slack 配信はまだ試していない**。[2026-08-22 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md)では local webhook への FIRING / RESOLVED 配送を確認したが、これは Slack 実配信の証跡ではない。下記はメッセージ形式のモックアップで、数値は架空のもの。
+Alertmanager → Slack Webhook の連携は実装済みだが、Webhook 秘密値を Git にコミットしない設計のため、**実際の Slack 配信はまだ試していない**。[PR #75 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)では local webhook への FIRING / RESOLVED 配送を確認したが、これは Slack 実配信の証跡ではない。下記はメッセージ形式のモックアップで、数値は架空のもの。
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
