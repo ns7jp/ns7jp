@@ -6,7 +6,7 @@
 > - 対象は **未経験からサーバー構築（インフラ構築）を目指す初心者**です。本人の学習設計であると同時に、同じ立場の人がそのまま使える形で書いています
 > - 本リポジトリの「[新規設計を増やさない運用ルール](../evidence-capture-checklist.md)」の対象は **server-monitor の改善設計 06 以降**です。本書は改善設計ではなく学習計画であり、成果物は既存の証跡採録項目へ寄せています（[本ポートフォリオとの接続](#10-本ポートフォリオとの接続)）
 
-最終更新: 2026-08-11（新規作成）
+最終更新: 2026-08-22（server-monitor Full-stack E2E 実測を反映）
 
 ---
 
@@ -347,14 +347,15 @@ gantt
 | Phase | 状況 | 根拠 | 残っている差分 |
 | --- | --- | --- | --- |
 | 1 Linux 基礎 | おおむね通過 | server-monitor をローカル Linux + Docker で構築済み | LPIC-1 101 で体系の穴を埋める |
-| 2 ネットワーク | 障害ラボ実測済み・コマンド範囲は補強中 | [二セグメント障害ラボ](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md)で経路・名前解決の障害注入から復旧まで PASS | `ss` / `dig` / `tcpdump` を含む切り分け一次メモを追加する |
+| 2 ネットワーク | 障害ラボと使い捨て runner 内の境界検証は実測済み | [二セグメント障害ラボ](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md)に加え、[2026-08-22 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)で network / UFW、loopback bind、別 Docker namespace からの直接遮断と SSH tunnel を PASS | 独立した管理端末・引き渡し対象ホスト・組織 DNS で同じ試験を採録する |
 | 3 ミドルウェア | Web / AP は通過 | Nginx / Gunicorn / TLS を実装済み | DB は[設計のみ](../roadmap/14-database-operations.md)。リストア試験が未実施 |
-| 4 構築工程 | 成果物作成済み・試験継続中 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)と[試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)を作成（11/21 PASS） | `site.yml` の新規構築・冪等性と残り 10 項目を実施する |
-| 5 自動化・IaC | Ansible ロール実測済み・Terraform 適用待ち | [4 ロールの full Molecule](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)は PASS。Terraform コードあり | `site.yml` 一括適用、AWS `plan / apply / destroy` を採録する |
-| 6 クラウド・監視 | ローカル監視・D-1 実測済み | Prometheus / Grafana / Loki の実データ表示、D-1 RTO 13 秒を採録 | Slack 実配信、D-2、AWS 適用を採録する |
+| 4 構築工程 | 成果物作成済み・使い捨て runner の一気通貫試験は完了 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)を作成。2026-08-19 の[試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（11/21 PASS）は履歴として保持し、[2026-08-22 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)は disposable Ubuntu 24.04 上で 23/23 PASS | 独立した引き渡し対象ホストで構築・受入試験を採録する |
+| 5 自動化・IaC | Ansible の runner 実測済み・Terraform 適用待ち | [4 ロールの full Molecule](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)に加え、[2026-08-22 E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)で `site.yml` 一括適用と 2 回目 `changed=0` を PASS。Terraform コードあり | 独立対象ホストへの適用と AWS `plan / apply / destroy` を採録する |
+| 6 クラウド・監視 | ローカル監視・runner 内 D-1 / restore 実測済み | D-1 は[2026-08-19 の RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)を履歴として保持。[2026-08-22 E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)では RTO 1 秒、local webhook の FIRING / RESOLVED、3 volumes の backup / restore を PASS | Slack 実配信、D-2、AWS 適用、長期稼働ホストを採録する |
 
-> **この表の読み方**: 次の優先補強点は、Phase 4 の `site.yml` 一括適用と未実施試験、
-> Phase 2 の切り分けコマンドを増やした一次メモです。どちらも追加費用ゼロ・ローカル完結で着手できます。
+> **この表の読み方**: 2026-08-22 の完了範囲は使い捨て GitHub-hosted runner 内に限ります。
+> Slack 実配信、AWS、D-2、独立した管理端末・引き渡し対象ホストでの試験を完了扱いにはしません。
+> 次の優先補強点は、独立対象環境での再実施と未実測項目の採録です。
 
 ---
 

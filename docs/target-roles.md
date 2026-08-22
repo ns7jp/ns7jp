@@ -4,8 +4,8 @@
 
 | 優先 | 志望領域 | 想定する入口業務 | 提示する証拠 | 次に必要な実測 |
 | --- | --- | --- | --- | --- |
-| 1 | Linux サーバー構築・運用 | OS 初期設定、ミドルウェア配備、試験、手順・パラメータ更新 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、Ansible（4 ロール冪等性確認済み）、Compose | `site.yml` を通した Ubuntu 新規構築、結合試験の実行ログ |
-| 2 | インフラ監視・運用 | 監視確認、一次切り分け、障害対応、定型作業 | Prometheus / Grafana / Loki（実データ表示済み）、ランブック、[障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)（PASS） | Alertmanager → Slack の実配信記録 |
+| 1 | Linux サーバー構築・運用 | OS 初期設定、ミドルウェア配備、試験、手順・パラメータ更新 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、[使い捨て Ubuntu 24.04 の Full-stack E2E（23/23 ID PASS）](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md) | 独立した管理端末・引き渡し対象ホストでの network / UFW・受け入れ確認 |
+| 2 | インフラ監視・運用 | 監視確認、一次切り分け、障害対応、定型作業 | Prometheus / Grafana / Loki（実データ表示済み）、local webhook の FIRING / RESOLVED、ランブック、[障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)（PASS） | Alertmanager → Slack の実配信記録 |
 | 3 | IT サポート・社内 SE 補助 | 問い合わせ、キッティング、棚卸し、FAQ 更新 | [FAQ](./it-support/faq.md)、[アカウント管理](./it-support/account-management.md)（**設計サンプル。実務対応実績ではありません**） | 実機出力を添えた Windows / network 切り分け記録 |
 | 発展 | Cloud / IaC | Terraform の修正・レビュー、構築補助 | AWS Terraform modules、AWS / cost / backup 設計 | `plan / apply / destroy`、費用、復元 |
 
@@ -22,5 +22,8 @@
 
 - 実務でのサーバー構築・大規模インフラ運用経験はこれからです。
 - `server-monitor` は単一ホスト中心の学習ラボで、本番冗長化の実績ではありません。
-- Linux (WSL2) 上の監視スタック起動、D-1、二セグメント障害ラボ、4 ロールの full Molecule は実測済みです。一方、`site.yml` の一括適用、Slack 実配信、D-2、AWS 適用は未実測です。
+- 2026-08-22 の Full-stack E2E では、使い捨て Ubuntu 24.04 上の `site.yml` 一括適用、2 回目 `changed=0`、network / UFW、local webhook 通知、D-1 RTO 1 秒、3 volumes の backup / restore を実測し、23/23 ID PASS でした。
+- Linux (WSL2) 上の監視スタック起動、2026-08-19 の D-1 RTO 13 秒、二セグメント障害ラボ、4 ロールの full Molecule も実測履歴として保持しています。
+- local webhook の FIRING / RESOLVED は Slack 実配信ではなく、runner 内の network / UFW は独立した管理端末・引き渡し対象ホストの証跡ではありません。
+- Slack 実配信、D-2、AWS `apply / destroy`、独立環境での確認は未実測です。
 - 計画や資格数を増やすより、既存の一構成を新規構築し、試験し、壊して直した証跡を優先します。

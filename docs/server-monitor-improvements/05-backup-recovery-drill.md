@@ -1,14 +1,19 @@
 # 05. バックアップ・復旧演習
 
-> 状態更新（2026-08-19）: backup verification CI、D-1 script、D-2 runbook と
+> 状態更新（2026-08-22）: backup verification CI、D-1 script、D-2 runbook と
 > 記録テンプレートは [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
-> D-1 は[実測済み（PASS、RTO 13 秒）](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)。
-> D-2 の実行ログと RTO / RPO 実測は未収録である。
+> D-1 は[2026-08-19 の RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)を
+> 履歴として保持している。[2026-08-22 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)では、
+> disposable Ubuntu 24.04 上で D-1 RTO 1 秒、Prometheus / Grafana / Loki の 3 volumes の
+> checksum 付き backup と別 volumes への restore、local webhook の FIRING / RESOLVED を含む
+> 23/23 ID を PASS とした。Slack 実配信、AWS、D-2、長期稼働、独立した管理端末・
+> 引き渡し対象ホストでの復旧は未実測である。
 
 ## 1. 背景
 
-現状の server-monitor には `docs/architecture.md` 配下に **バックアップ復旧設計** が記載されているが、これは **「設計だけ」** の段階。
-実際に復旧できることを **演習で実証** していない限り、「いざというとき動かない手順書」になりがち。
+初期設計時の server-monitor は **バックアップ復旧設計だけ** の段階だった。
+現在は使い捨て runner 内で 3 volumes の backup / restore を実証済みだが、独立した引き渡し対象ホストや
+D-2 の実証は残っている。「いざというとき動かない手順書」に戻さないため、環境を分けて演習を継続する。
 
 本ドキュメントでは、復旧演習の計画・実施・記録までを設計する。
 
@@ -333,11 +338,17 @@ jobs:
 ## 8. 完了条件（Definition of Done）
 
 - [x] バックアップ取得が自動化され、毎日成功している（CI で監視）
-- [ ] D-1 演習を月次で実施し、ログを蓄積
+- [x] disposable Ubuntu 24.04 runner で 3 volumes の checksum 付き backup / restore が成功する
+- [x] D-1 を実測し、2026-08-19 の RTO 13 秒と 2026-08-22 runner の RTO 1 秒を記録する
+- [ ] D-1 演習を月次で継続し、長期ログを蓄積
 - [ ] D-2 演習を初回実施し、RTO 60 分以内を達成
+- [ ] 独立した引き渡し対象ホストで backup / restore を実施し、RTO / RPO を採録する
 - [ ] 演習で発見された改善アクションが全て対応済み
 - [ ] `runbooks/restore-from-snapshot.md` が最新化されている
 - [x] 演習記録のフォーマットが `docs/drill-template.md` に整備されている
+
+ここで完了したのは使い捨て runner 内の D-1 と Docker volume restore である。
+Slack 実配信、AWS snapshot、D-2、長期稼働、独立対象ホストの復旧完了を意味しない。
 
 ---
 

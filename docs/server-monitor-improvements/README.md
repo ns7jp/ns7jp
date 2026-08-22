@@ -13,16 +13,18 @@
 | # | テーマ | server-monitor 側の反映 | 証跡状態 |
 | --- | --- | --- | --- |
 | 01 | [Loki + ログ収集](./01-loki-log-aggregation.md) | Loki + Grafana Alloy、Grafana query / dashboard | Promtail 設計は EOL により Alloy へ置換。Linux(WSL2) 上での実行ログ・LogQL 検索は[実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
-| 02 | [Ansible 構成管理](./02-ansible-automation.md) | roles、playbooks、構文 CI、手動 full Molecule workflow | 4 ロールの `molecule test` は[実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)。`site.yml` を通した複数ロール一括適用は未収録 |
+| 02 | [Ansible 構成管理](./02-ansible-automation.md) | roles、playbooks、構文 CI、手動 full Molecule workflow | 4 ロールの `molecule test` に加え、[2026-08-22 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)で disposable Ubuntu 24.04 への `site.yml` 一括適用と 2 回目 `changed=0` を含む 23/23 PASS。独立した引き渡し対象ホストは未実測 |
 | 03 | [AWS + Terraform](./03-terraform-aws.md) | network / compute / alb / monitoring / backup modules、dev / prod | `apply` / `destroy` と実費は未収録 |
 | 04 | [SLO / SLI](./04-slo-design.md) | blackbox、recording / burn-rate rules、dashboard、runbooks | 同一ホスト内のラボ SLI。外部 probe による SLO は未実装。ダッシュボードの数値自体は[実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
-| 05 | [バックアップ・復旧演習](./05-backup-recovery-drill.md) | backup verification CI、D-1 script、D-2 runbook、templates | D-1 の RTO は[実測済み（13 秒）](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)。D-2 は未収録 |
+| 05 | [バックアップ・復旧演習](./05-backup-recovery-drill.md) | backup verification CI、D-1 script、D-2 runbook、templates | [2026-08-19 の D-1 RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)を履歴として保持。[2026-08-22 E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)では D-1 RTO 1 秒、3 volumes の backup / restore、local webhook の FIRING / RESOLVED を PASS。D-2 は未収録 |
 | 11 | [変更管理プロセス](./11-change-management.md) | PR テンプレート、Change request / Evidence capture Issue、変更管理ミニ運用 | テンプレート整備済み・実例未収録 |
 
 ## 重要な更新
 
 - Promtail は 2026 年 3 月 2 日に EOL となったため、実装は Grafana Alloy に移行した。
 - AWS Terraform はコードとして用意されているが、稼働中の環境や費用実績を示すものではない。
+- 2026-08-22 の 23/23 PASS は使い捨て GitHub-hosted runner 内の実測である。Slack 実配信、
+  AWS `apply / destroy`、D-2、長期稼働、独立した管理端末・引き渡し対象ホストは含まない。
 - AWS の本番相当 SLO では、対象 EC2 外からの synthetic probe と中央 metrics / logs
   保存先が必要であり、現時点では追加実装・検証対象である。
 - 変更管理は CAB など組織前提の部分を設計サンプルとして残しつつ、個人ラボでは
@@ -76,10 +78,12 @@
 
 ## 証跡追加の順序
 
-1. ✅ Linux (WSL2) 上で Loki / Alloy の収集と D-1 復旧時間を記録済み（2026-08-18〜19）。
-2. ✅ GitHub Actions 上で Ansible 4 ロールの full Molecule 結果を記録済み（2026-08-17）。次は `site.yml` の一括適用を採録する。
-3. 承認された短時間 AWS 検証で `apply` / `destroy` と Cost Explorer 実費を記録する。
-4. 外部 probe と中央 telemetry の構成を追加した後、AWS 向け SLO を再定義する。
+1. ✅ Linux (WSL2) 上で Loki / Alloy の収集と D-1 RTO 13 秒を記録済み（2026-08-18〜19、履歴として保持）。
+2. ✅ GitHub Actions 上で Ansible 4 ロールの full Molecule 結果を記録済み（2026-08-17）。
+3. ✅ disposable Ubuntu 24.04 上で `site.yml`、2 回目 `changed=0`、network / UFW、D-1 RTO 1 秒、3-volume restore、local webhook を 23/23 PASS として[記録済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)。
+4. 独立した管理端末・引き渡し対象ホストで構築と network 試験を採録する。
+5. 承認された短時間 AWS 検証で `apply` / `destroy` と Cost Explorer 実費を記録する。
+6. Slack 実配信と D-2 を採録し、外部 probe と中央 telemetry の追加後に AWS 向け SLO を再定義する。
 
 ## 主要リンク
 

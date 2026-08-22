@@ -2,7 +2,7 @@
 
 ## 30 秒の結論
 
-主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、Ubuntu 向け構成を Ansible で管理し、Linux 上で監視スタック 9 サービスの稼働と、障害注入後 13 秒での自動復旧を実測したインフラ構築ラボです。
+主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元までを一気通貫で検証し、23/23 ID PASS を採録したインフラ構築ラボです。
 
 | [2 分 15 秒デモ（証跡リプレイ）](https://ns7jp.github.io/demo.html) | [構成図](./architecture-diagram.md) | [実測証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
 | --- | --- | --- |
@@ -25,9 +25,10 @@
 
 | 検証 | 結果 |
 | --- | --- |
+| 使い捨て Ubuntu 24.04 への Full-stack E2E | [`site.yml` 適用、2 回目 `changed=0`、network / UFW、local webhook の FIRING / RESOLVED、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md) |
 | Ansible 4 ロールの適用・2 回目の冪等性・期待状態 | [全ロール PASS、欠陥 2 件を修正](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) |
 | 監視スタック 9 サービスの起動と実データ表示 | [Grafana / Loki を Linux (WSL2) 上で確認](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
-| app プロセス停止からの自動復旧 | [D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
+| app プロセス停止からの自動復旧 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
 | 二セグメント構成の通信断 | [再現、切り分け、復旧まで PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md) |
 
 設計、パラメータ、構築、試験、変更、引き渡しの成果物は [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) に分離しています。このページでは技術名を広く並べるより、実際に実行して結果を残した項目を優先します。
@@ -51,11 +52,12 @@
 
 実務での大規模インフラ経験はこれからです。コードや設計書の存在と、実環境で成功した結果を混同しないよう、[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) で区別しています。
 
-**未実測**: Alertmanager → Slack の実配信、D-2 復旧演習、`site.yml` を通した新規構築、AWS の `apply / destroy` は採録前です。
+**Full-stack E2E 実測済み**: 2026-08-22 に使い捨て Ubuntu 24.04 上で、`site.yml` の新規構築、2 回目 `changed=0`、network / UFW、local webhook の FIRING / RESOLVED、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、[23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md) を採録しました。
 
-- 未実施項目は「実装・手順作成済み」と表現
-- [試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)は 21 項目中 11 項目が PASS、残りは `NOT RUN`
-- 実行日時、commit SHA、コマンド、結果、所要時間を残してから「実測済み」へ変更
+- [2026-08-19 の試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（21 項目中 11 項目 PASS、残り `NOT RUN`）は当時の履歴として保持
+- local webhook の通知試験であり、Alertmanager → Slack の実配信証跡ではない
+- runner 内の network / UFW 試験であり、独立した管理端末・引き渡し対象ホストの証跡ではない
+- Slack 実配信、AWS の `apply / destroy`、D-2 復旧演習、独立環境での確認は未実測
 
 「動くはず」と「動くことを確認した」を区別し、未実測項目が完了した時だけ証跡台帳とこのページを更新します。
 
