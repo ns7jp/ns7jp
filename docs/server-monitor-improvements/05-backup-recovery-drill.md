@@ -3,7 +3,7 @@
 > 状態更新（2026-08-22）: backup verification CI、D-1 script、D-2 runbook と
 > 記録テンプレートは [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
 > D-1 は[2026-08-19 の RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)を
-> 履歴として保持している。[2026-08-22 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)では、
+> 履歴として保持している。[PR #75 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)では、
 > disposable Ubuntu 24.04 上で D-1 RTO 1 秒、Prometheus / Grafana / Loki の 3 volumes の
 > checksum 付き backup と別 volumes への restore、local webhook の FIRING / RESOLVED を含む
 > 23/23 ID を PASS とした。Slack 実配信、AWS、D-2、長期稼働、独立した管理端末・

@@ -17,7 +17,9 @@ flowchart TB
         Probe --> Prom
         Prom --> Alert[Alertmanager]
         Prom --> Grafana[Grafana]
-        Alloy[Grafana Alloy] -->|logs| Loki[Loki]
+        Alloy[Grafana Alloy] -->|GET / HEAD| Proxy[Docker API read-only proxy]
+        Proxy -->|private network| Engine[(Docker Engine API)]
+        Alloy -->|logs| Loki[Loki]
         Loki --> Grafana
     end
 ```
@@ -25,12 +27,12 @@ flowchart TB
 | 観点 | 状態 |
 | --- | --- |
 | Metrics / alerts | Prometheus、Alertmanager、rules を実装 |
-| Logs | Loki + Grafana Alloy を実装。Promtail は 2026-03-02 の EOL に伴い不採用 |
+| Logs | Loki + Grafana Alloy を実装。Docker API は GET / HEAD 限定 proxy 経由。Promtail は 2026-03-02 の EOL に伴い不採用 |
 | SLO | blackbox-exporter、burn-rate rules、dashboard を実装 |
 | 構成管理 | Ansible roles / playbook を実装 |
-| Full-stack E2E | [2026-08-22](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md) に使い捨て Ubuntu 24.04 上で `site.yml` を 2 回適用し、2 回目 `changed=0`、network / UFW、local webhook の FIRING / RESOLVED、D-1 RTO 1 秒、3 volumes の backup / restore を確認。23/23 ID PASS |
+| Full-stack E2E | [2026-08-22](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) に使い捨て Ubuntu 24.04 上で `site.yml` を 2 回適用し、2 回目 `changed=0`、計 11 containers、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、network / UFW、local webhook、D-1 RTO 1 秒、3 volumes の backup / restore を確認。23/23 ID PASS |
 | 既存の実測履歴 | Linux (WSL2) 上で 9 サービス起動、Grafana / Loki 表示、2026-08-19 の D-1 RTO 13 秒、4 ロールの full Molecule を採録済み |
-| 未実測の境界 | Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホストでの確認。local webhook と runner 内 network / UFW の結果をこれらの代替にはしない |
+| 未実測の境界 | Slack 実配信、AWS `apply / destroy`、D-2、Docker 未導入の引き渡し対象ホストと別の独立管理端末、組織 DNS、ホスト再起動後の永続性、24時間・72時間の継続稼働。local webhook と runner 内 network / UFW の結果をこれらの代替にはしない |
 
 blackbox-exporter は対象サービスと同じホスト内にあるため、ラボでのアプリ停止は測れるが、
 ホスト全停止を外部利用者の視点から測定できない。この SLO はラボ内観測として扱う。
@@ -53,32 +55,23 @@ blackbox-exporter は対象サービスと同じホスト内にあるため、�
 
 ---
 
-## 段階的移行計画
+## 実装済み構成から次の実測へ
 
 ```mermaid
 flowchart LR
-    V10[v1.0<br/>単一ホスト<br/>Docker Compose] --> V11
+    Current["実装・runner実測済み<br/>単一host Docker Compose<br/>Ansible + 監視 + 復旧"] --> Next["次の実測<br/>Docker未導入の対象host + 別管理端末<br/>再起動・72時間・受け入れ・引き渡し"]
+    Next --> AWS["将来<br/>AWS + Terraform<br/>apply / destroyを採録"]
+    AWS --> K8s["中長期学習<br/>Kubernetes / EKS"]
 
-    V11[v1.1<br/>+ Loki<br/>+ Tempo / OTel] --> V12
-    V12[v1.2<br/>+ Ansible 化] --> V13
-    V13[v1.3<br/>+ SLO<br/>+ インシデント運用<br/>+ 復旧演習<br/>+ セキュリティ運用] --> V20
-
-    V20[v2.0<br/>AWS + Terraform<br/>2 AZ 冗長化] --> V30
-
-    V30[v3.0<br/>Kubernetes / EKS<br/>学習ロードマップ]
-
-    style V10 fill:#e0e0e0
-    style V20 fill:#ffd700
-    style V30 stroke-dasharray: 3 3
+    style Current fill:#d9ead3
+    style Next fill:#fff2cc
+    style AWS stroke-dasharray: 3 3
+    style K8s stroke-dasharray: 3 3
 ```
 
-**優先順位の根拠**
-
-1. **Tempo + 監視の監視追加（v1.1）** — 既存の metrics / logs に traces と監視の監視を加える。
-2. **Ansible 化（v1.2）** — 手順書をコード化することで、v2.0 への移行コストを下げる。
-3. **SLO / インシデント運用 / 復旧演習 / セキュリティ運用（v1.3）** — 既存構成のまま「運用品質」を可視化できるようになる。これがあれば AWS 移行後にどの程度の可用性・性能を保てているかを自分で説明しやすくなる。
-4. **AWS + Terraform（v2.0）** — Ansible が出来てから着手することで、クラウド固有部分（Terraform）と OS 内設定（Ansible）を綺麗に分離できる。
-5. **Kubernetes / EKS（v3.0）** — VM ベース AWS 環境を運用したうえで、CKAD / CKA と連動した段階的習得へ進む。
+現在は機能追加より、同じ構成を Docker 未導入の独立ホストへ構築し、再起動後の状態と
+受け入れ試験を採録することを優先する。AWS と Kubernetes はコードまたは学習計画であり、
+実環境の結果を採録するまで実績として扱わない。
 
 ALB の背後で node-local Grafana を複数台運用しても履歴は統合されないため、
 監視データの正本とは扱わない。本番相当へ進める際は外部 probe と AMP / CloudWatch

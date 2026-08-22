@@ -13,7 +13,7 @@
 | 実測結果 | 公開済み | [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
 | 実測証跡リプレイ | **公開済み** | [字幕・文字起こし・一次記録付きデモページ](https://ns7jp.github.io/demo.html) |
 | 自動デモ | 実装済み・実行結果は E2E 証跡で確認 | [`scripts/demo/run-demo.sh`](https://github.com/ns7jp/server-monitor/blob/main/scripts/demo/run-demo.sh) |
-| 一気通貫の構成検証 | 実装済み・実行結果は E2E 証跡で確認 | [`scripts/e2e/run-full-stack.sh`](https://github.com/ns7jp/server-monitor/blob/main/scripts/e2e/run-full-stack.sh) / [説明](https://github.com/ns7jp/server-monitor/blob/main/docs/e2e-validation.md) |
+| 一気通貫の構成検証 | 実装済み・PR #75 で 23/23 ID PASS | [`scripts/e2e/run-full-stack.sh`](https://github.com/ns7jp/server-monitor/blob/main/scripts/e2e/run-full-stack.sh) / [実測記録](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
 | 実操作の連続録画 | **未公開** | E2E を実行した端末 cast は GitHub Actions artifact として保存 |
 
 証跡リプレイとライブ実行は混同しません。自動デモの実行結果は、日時・環境・commit・終了コードを含む E2E artifact が生成された場合だけ成功と扱います。
@@ -43,15 +43,16 @@ Slack 通知は実配信の証跡がまだないため、動画の必須条件�
 | 2:10–2:35 | 自動復旧、再度 health check | 「復旧後の正常性まで確認する」 |
 | 2:35–3:00 | 実行結果と証跡ファイル | 「成功・失敗を commit と時刻付きで残す」 |
 
-既存の D-1 演習では、app プロセス停止から 13 秒での自動復旧を実測済みです。動画では、数値だけを字幕にせず、開始・復旧時刻が分かる出力も同じ画面に含めます。
+2026-08-19 の WSL2 演習では app プロセス停止から 13 秒、PR #75 の使い捨て runner E2E では 1 秒での自動復旧を実測済みです。環境が異なるため優劣比較には使いません。動画では、数値だけを字幕にせず、開始・復旧時刻が分かる出力も同じ画面に含めます。
 
 ## 実操作の連続録画を常設公開する前の合格条件
 
-- [ ] server-monitor の自動デモがクリーンな環境で完走する
-- [ ] 2 回目の構成適用結果を含め、成功・失敗が終了コードで判別できる
-- [ ] 実行 commit、開始・終了時刻、環境情報を記録する
-- [ ] 障害注入前後の health check と復旧後の確認を映す
-- [ ] webhook、公開 IP、ホスト名などの秘密値・個人情報をマスクする
+- [x] server-monitor の自動デモが使い捨て runner で完走する（PR #75 E2E artifact）
+- [x] 2 回目の構成適用 `changed=0` と成功・失敗を終了コードで判別できる
+- [x] 実行 commit、開始・終了時刻、環境情報を artifact に記録する
+- [x] 障害注入前後の health check と復旧後の確認を terminal cast / raw log に残す
+- [x] credential、token、webhook secret を artifact へ記録しない
+- [ ] 常設公開前に公開 IP、ホスト名、個人情報が映っていないかを最終確認する
 - [ ] 音声なしでも分かる一行字幕を付ける
 - [ ] 公開 URL を確認してから README の「証跡リプレイ」リンクを連続録画へ差し替えるか判断する
 

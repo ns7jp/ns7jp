@@ -7,7 +7,7 @@
 > - **確定情報**（資格・学歴・職業訓練・ポートフォリオ）はそのまま記載しています
 > - 「設計サンプル」と「実績」を混同しない方針は、ポートフォリオ全体（[STATUS.md](../STATUS.md)）と同じです
 
-最終更新: 2026-08-22（第一志望と Full-stack E2E 23/23 PASS、使い捨て runner の検証境界を反映）
+最終更新: 2026-08-22（第一志望、PR #75 の Full-stack E2E 23/23 PASS、使い捨て runner の検証境界を反映）
 
 ---
 
@@ -15,10 +15,10 @@
 
 製造・物流の現場で 15 年以上、在庫管理・ピッキング工程を担当してきました。作業時間ログの計測からボトルネックを特定し、動線改善・標準化によって **1 日あたり約 1 時間の作業短縮** を実現しています。
 
-この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を構築・検証してきました。第一志望は **サーバー設計・構築** です。入口業務としてインフラ監視・運用、IT サポート、社内 SE 補助にも対応し、**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
+この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を構築・検証してきました。第一志望は **Linux サーバー設計・構築** です。入口業務としてインフラ監視・運用にも対応し、IT サポート・社内 SE 補助は応募先に応じた補助トラックと位置付けています。**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
 
 **現況**: 派遣社員としてトライアル就業中（アデコ株式会社より株式会社Changeupへ就業。2026/07〜、トライアル期間2か月）。
-仮想化マシンを構築して、WindowsサーバーとLinuxサーバーの構築練習をしました。そのうえで、AWSとAzureの構築練習をしました。
+研修では仮想マシン上の Windows Server / Linux サーバーと AWS / Azure の構築演習に取り組みました。これは研修での経験であり、顧客環境の設計・構築を担当した実績とは区別しています。
 職業訓練修了（2026-01）後、サーバー構築へのキャリア移行を目標に学習とポートフォリオ制作を継続しています。**就業しながらインフラ領域の実務経験を積み、サーバー構築・運用のポジションへ移ることを希望しています。**
 
 ---
@@ -63,7 +63,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 | 項目 | 内容 |
 | --- | --- |
-| 志望領域 | 第一志望: サーバー設計・構築。入口としてインフラ監視・運用、IT サポート、社内 SE 補助にも対応 |
+| 志望領域 | 第一志望: Linux サーバー設計・構築。入口としてインフラ監視・運用にも対応。IT サポート、社内 SE 補助は補助トラック |
 | 夜勤・交代制 | 24/365 監視業務のシフト勤務に対応可能 |
 | 勤務開始時期 | トライアル期間満了の 2026/09 以降 / 相談のうえ 1 か月以内 |
 | 現在の就業との関係 | トライアル期間満了後の移籍を希望 |
@@ -76,11 +76,11 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 - **数値で語る業務改善** — 計測 → ボトルネック特定 → 仮説 → 検証 → 標準化のサイクルを回せる
 - **属人化の排除** — 手順書・チェックリスト・マップ整備、IaC によるコード化
 - **現場と管理側の翻訳** — 現場の困りごとを数値に変えて上長へ橋渡しした経験
-- **継続学習** — 未経験から Linux / Docker / 監視基盤を自作できるレベルまで独学
+- **継続学習** — Linux / Docker / 監視基盤を個人ラボで構築し、実行結果と失敗修正を継続して記録
 
 詳細: [現場経験 ↔ インフラ運用の橋渡し](./career-bridge.md)
 
-主作品では、Docker 導入済みの使い捨て Ubuntu 24.04 runner に `site.yml` を一括適用し、2 回目 `changed=0`、core 9 services + CI webhook sink、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を含む [Full-stack E2E 23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md) を採録しました。Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、長期稼働も未実測です。
+主作品では、runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server-monitor/commit/7622a9da974f694ae75e0173135923701be9e5a5)を対象に、Docker 導入済みの使い捨て Ubuntu 24.04 runner へ `site.yml` を一括適用しました。2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を含む [Full-stack E2E 23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)を採録しました。Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働は未実測です。
 
 ---
 
@@ -101,14 +101,14 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 | 分類 | 項目 | レベル |
 | --- | --- | --- |
-| OS | Linux サーバー運用 | ○ |
+| OS | Linux サーバー構築・基本運用 | ○（個人ラボと研修での構築・確認。実務としての本番運用は未経験） |
 | コンテナ | Docker / Docker Compose | ○（WSL2 と使い捨て runner で構築・検証。独立した長期稼働ホストは未実測） |
 | Web / Proxy | Nginx（リバースプロキシ。TLS は設定例・自己署名証明書での確認まで） | ○ |
 | 監視 | Prometheus / Grafana / Alertmanager | ○（Linux(WSL2) 上で起動・実データ表示を確認済み。[証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)） |
 | ログ | Loki / Grafana Alloy | ○（LogQL によるログ検索を実機で確認済み） |
-| 構成管理 | Ansible | ○（4 ロールの Molecule に加え、使い捨て Ubuntu 24.04 への `site.yml` 一括適用と 2 回目 `changed=0` を確認。[証跡](https://github.com/ns7jp/server-monitor/blob/53e885742593c4f5d96b8a8038e234f9a69947e0/docs/evidence/2026-08-22-full-stack-e2e.md)） |
+| 構成管理 | Ansible | ○（4 ロールの Molecule に加え、使い捨て Ubuntu 24.04 への `site.yml` 一括適用と 2 回目 `changed=0` を確認。[証跡](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)） |
 | IaC | Terraform（AWS） | △（`validate` / `fmt` まで。`apply` は未実施） |
-| CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（Full-stack E2E 23/23 ID PASS。Docker は runner に事前導入済み） |
+| CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（[PR #75 の 5 workflow が success](https://github.com/ns7jp/server-monitor/pull/75)。Docker は runner に事前導入済み） |
 
 実装範囲と検証境界は [アーキテクチャ図](./architecture-diagram.md) を参照してください。
 
@@ -170,5 +170,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 - [プロフィール / ポートフォリオ README](../README.md)
 - [採用ご担当者さまへ（1 枚サマリ）](./overview-for-recruiters.md)
+- [志望トラックと証跡](./target-roles.md)
+- [証跡採録チェックリスト](./evidence-capture-checklist.md)
 - [現場経験 ↔ インフラ運用の橋渡し](./career-bridge.md)
 - [ポートフォリオ進捗 STATUS](../STATUS.md)
