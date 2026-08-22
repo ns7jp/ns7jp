@@ -1,6 +1,14 @@
 # 採用ご担当者さまへ — 島田則幸
 
-## ひとことで
+## 30 秒の結論
+
+主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、Ubuntu 向け構成を Ansible で管理し、Linux 上で監視スタック 9 サービスの稼働と、障害注入後 13 秒での自動復旧を実測したインフラ構築ラボです。
+
+| [2 分 15 秒デモ（証跡リプレイ）](https://ns7jp.github.io/demo.html) | [構成図](./architecture-diagram.md) | [実測証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
+| --- | --- | --- |
+| 保存済み実測画面と復旧ログを時系列で確認 | 実装済み構成と検証済み範囲 | 日時、環境、commit、コマンド、結果 |
+
+## 志望と現況
 
 製造・物流の現場で 15 年以上続けてきた「測る・原因を絞る・手順化する・定着させる」を、Linux サーバーの構築・運用に生かすエンジニア志望です。
 
@@ -13,18 +21,16 @@
 
 第一志望は **Linux サーバー構築・運用**。入口としてインフラ監視・運用、IT サポート、社内 SE 補助にも対応します。
 
-## 何を作ったか
+## 実測したこと
 
-主作品の [Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor) では、Ubuntu サーバーの構築案件を想定し、次を作成しました。
+| 検証 | 結果 |
+| --- | --- |
+| Ansible 4 ロールの適用・2 回目の冪等性・期待状態 | [全ロール PASS、欠陥 2 件を修正](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) |
+| 監視スタック 9 サービスの起動と実データ表示 | [Grafana / Loki を Linux (WSL2) 上で確認](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
+| app プロセス停止からの自動復旧 | [D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
+| 二セグメント構成の通信断 | [再現、切り分け、復旧まで PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md) |
 
-- 基本・詳細設計、パラメータシート、ネットワーク・IP 設計
-- Ansible による OS / Docker / 監視基盤の構成管理
-- Nginx、Flask、Prometheus、Grafana、Alertmanager、Loki、Alloy
-- 構築手順、単体・結合試験、引き渡しチェックリスト
-- サービス停止、CPU 高負荷、二セグメント通信断の障害・復旧手順
-- Terraform による AWS 構成コードと CI
-
-採用時の最短確認先は [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) です。
+設計、パラメータ、構築、試験、変更、引き渡しの成果物は [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) に分離しています。このページでは技術名を広く並べるより、実際に実行して結果を残した項目を優先します。
 
 ## 入社後に任せやすいこと
 
@@ -45,19 +51,13 @@
 
 実務での大規模インフラ経験はこれからです。コードや設計書の存在と、実環境で成功した結果を混同しないよう、[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) で区別しています。
 
-実測済みの範囲と、未実測の範囲を分けて記載します。
-
-**実測済み**: Ansible ロール 4 本を Linux 上で実際に適用し、冪等性（2 回目で `changed=0`）と適用結果まで検証しました（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)）。この検証で、静的検査では見つからなかった実際の欠陥を 2 件検出・修正しています。
-
-監視スタック全体の起動、Grafana / Loki の実画面、D-1 復旧演習（RTO 13 秒 PASS）、二セグメント障害ラボ（PASS）も 2026-08-18〜19 に実測済みです（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)）。
-
-**未実測**: Alertmanager → Slack の実配信、D-2 復旧演習、AWS 適用は採録前です。
+**未実測**: Alertmanager → Slack の実配信、D-2 復旧演習、`site.yml` を通した新規構築、AWS の `apply / destroy` は採録前です。
 
 - 未実施項目は「実装・手順作成済み」と表現
 - [試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)は 21 項目中 11 項目が PASS、残りは `NOT RUN`
 - 実行日時、commit SHA、コマンド、結果、所要時間を残してから「実測済み」へ変更
 
-この区別を曖昧にしないこと自体を、運用職に必要な姿勢として重視しています。「動くはず」と「動くことを確認した」の差は、障害対応で最も重い差になるためです。
+「動くはず」と「動くことを確認した」を区別し、未実測項目が完了した時だけ証跡台帳とこのページを更新します。
 
 ## 経歴・学習
 
