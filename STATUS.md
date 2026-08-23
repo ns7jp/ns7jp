@@ -27,6 +27,46 @@
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
 
+### 2026-08-23 の更新内容（追補：構築の基礎を埋める・RHEL 系対応・提示の整理）
+
+ポートフォリオ全体のレビューで挙がった穴のうち、**コードで埋められるもの**を実装した。
+
+| 対応 | 内容 | リポジトリ |
+| --- | --- | --- |
+| RHEL 系対応 | `common` / `docker` / `nginx` role を Debian 系 / RHEL 系の両対応に再構成（`dnf`、firewalld の rich rule + rate limit、SELinux、dnf-automatic、`sshd_config.d` の上書き検査）。Molecule に `el9` シナリオを追加 | server-monitor |
+| ディスク設計 | `storage` role を新設（LVM の VG / LV / filesystem / fstab / online 拡張）。安全装置の negative test を 7 ケース実装 | server-monitor |
+| 3 層構成 | `labs/three-tier`（nginx / gunicorn / PostgreSQL、層を分離）。層別 health endpoint、障害切り分け演習、DB 復元演習 | server-monitor |
+| L2 / L3 | `labs/routing`（静的ルート、`ip_forward`、802.1Q VLAN）。default route を持たない構成 | server-monitor |
+| 証跡の自動生成 | B-1〜B-4 の演習スクリプトが実行結果から証跡を生成する。判定は期待値との比較で、手で PASS を書けない | server-monitor |
+| 手順書のずれ修正 | パラメータシートの時刻同期が `systemd-timesyncd` のままだった（実装は chrony）。ディスク・ユーザー・SELinux の欄を追加し、ずれを検出する回帰テストを追加 | server-monitor |
+| 試験仕様書の見え方 | 全項目 `NOT RUN` の理由と、実測済み範囲への索引を冒頭に追加 | server-monitor |
+| AI 開示の修正 | 「文書の整形」だけでなく**実装コードの生成にも使っている**ことを明記。`git log` の `Author: Claude` と整合させた | 3 リポジトリ |
+| 免責の圧縮 | 1 ページ版・target-roles で 4 重複していた未実測リストを、証跡台帳へのリンク 1 か所に集約 | ns7jp |
+| 自己採点 | 学習プランの G1〜G6 に本人の到達状況（○ / △）と、残る 3 つの穴を明記 | ns7jp |
+| 重複の解消 | ポートフォリオサイトに残っていた Promtail 版監視スタックをアーカイブ扱いに（server-monitor 側は Alloy へ移行済みで、記述が矛盾していた） | ns7jp.github.io |
+
+#### 実装しただけで、まだ実測していないもの
+
+**これらは「動くはず」であって「動くことを確認した」ではない。**
+実行すると証跡が自動生成されるので、生成物を確認してから採録する。
+
+- AlmaLinux / Rocky 実機への `site.yml` 適用
+- B-1 ディスク設計・LVM 拡張演習（`losetup` と device-mapper が要る）
+- B-2 3 層構成の障害切り分け演習
+- B-3 DB バックアップ・復元演習
+- B-4 L2 / L3 切り分け演習
+
+#### コードでは埋められない、残っている穴
+
+1. **恒久ホストが 1 台も無い。** 再起動後の永続性、24 / 72 時間稼働、
+   Slack 実配信、実 DNS / TLS、インターネット越しの UFW がここで止まっている。
+   VPS 1 台で大半が解決する。
+2. **空の VM に OS を入れるところからやっていない。** 3 層ラボはコンテナ構成。
+3. **物理層（L1）に触っていない。** スイッチ、ケーブル、ポート VLAN。
+4. **Terraform 約 3,000 行が `apply` 0 回。**
+5. **研修で触っている Windows Server / AD / AlmaLinux が portfolio に出ていない。**
+   一番の差別化材料が `LEARNINGS.md` の 1 エントリに留まっている。
+
 ### 2026-08-23 の更新内容（Git SHA 指定rollback CI）
 
 | 観点 | 対応 |

@@ -86,6 +86,18 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 ---
 
+## 4-b. ポートフォリオにおける AI 支援の範囲
+
+文書の構成・整形・調査に加えて、**実装コード（Ansible role、Terraform module、
+CI workflow、テスト、ラボの雛形）の生成にも AI を使っています**。
+`server-monitor` の履歴には `Author: Claude` のコミットが含まれます。
+
+AI が生成した手順やコードを、本人が実行・理解していない状態で実績にはしません。
+実機の操作、結果の採録、技術選定の最終判断、面接での説明は本人が担当します。
+自分で説明できない深さのコードは、面接前に読み直すか、削って単純化する方針です。
+
+---
+
 ## 5. テクニカルスキル
 
 > レベルの目安: ◎ 自作物で反復利用・検証している / ○ 構築・設定経験あり / △ 学習中・基礎。長期運用や本番環境での実務経験を示す記号ではありません。
@@ -98,18 +110,22 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 | 言語 | PHP | ○（認定初級 取得） |
 | Web | HTML / CSS / JavaScript | ○ |
 | データベース | SQL（SQLite / MySQL） | ○ |
+ | データベース | PostgreSQL（3 層構成での接続、`pg_dump` / `pg_restore`） | △（[3 層ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier)として実装。復元演習の実行証跡は未採録） |
 
 ### インフラ / 運用
 
 | 分類 | 項目 | レベル |
 | --- | --- | --- |
-| OS | Linux サーバー構築・基本運用 | ○（個人ラボと研修での構築・確認。実務としての本番運用は未経験） |
+| OS | Linux サーバー構築・基本運用（Ubuntu） | ○（個人ラボと研修での構築・確認。実務としての本番運用は未経験） |
+ | OS | RHEL 系（AlmaLinux / Rocky 9） | △（Ansible role を `dnf` / firewalld / SELinux / dnf-automatic 対応にし、Molecule `el9` シナリオで検証。**実機ホストへの適用は未実施**） |
+ | ストレージ | LVM（VG / LV / ファイルシステム / fstab / online 拡張） | △（[storage role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/storage) と演習スクリプトを実装。安全装置の negative test は 7 ケース PASS。**実ディスクでの実施証跡は未採録**） |
 | コンテナ | Docker / Docker Compose | ○（WSL2 と使い捨て runner で構築・検証。独立した長期稼働ホストは未実測） |
 | Web / Proxy | Nginx（リバースプロキシ。TLS は設定例・自己署名証明書での確認まで） | ○ |
 | 監視 | Prometheus / Grafana / Alertmanager | ○（Linux(WSL2) 上で起動・実データ表示を確認済み。[証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)） |
 | ログ | Loki / Grafana Alloy | ○（LogQL によるログ検索を実機で確認済み） |
 | 構成管理 | Ansible | ○（4 ロールの Molecule に加え、使い捨て Ubuntu 24.04 への `site.yml` 一括適用と 2 回目 `changed=0` を確認。[証跡](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)） |
 | IaC | Terraform（AWS） | △（`validate` / `fmt` まで。`apply` は未実施） |
+ | ネットワーク | 静的ルーティング / `ip_forward` / 802.1Q VLAN | △（[L2 / L3 ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/routing)として実装。物理スイッチ・ケーブル・ポート VLAN は未着手） |
 | CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（[PR #75 の 5 workflow が success](https://github.com/ns7jp/server-monitor/pull/75)。[PR #77 で Git SHA 指定の変更・ロールバック CI が success](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)。Docker は runner に事前導入済み） |
 
 実装範囲と検証境界は [アーキテクチャ図](./architecture-diagram.md) を参照してください。

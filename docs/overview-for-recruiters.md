@@ -35,12 +35,30 @@
 
 設計、パラメータ、構築、試験、変更、引き渡しの成果物は [案件概要](https://ns7jp.github.io/project-brief.html) と [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) に分離しています。このページでは技術名を広く並べるより、実際に実行して結果を残した項目を優先します。
 
+## その場で実演できること
+
+証跡としては未採録ですが、面接の場で実行して結果をお見せできます。
+判定はスクリプトが期待値と実測値を比較した結果で、証跡ファイルも自動生成されます。
+
+| 演習 | 実演内容 | 所要 |
+| --- | --- | --- |
+| B-1 | LVM で VG / LV を作り、容量を使い切らせ、PV を足して online 拡張する | 10 分 |
+| B-2 | Web / AP / DB の 3 層構成で、どの層が原因かを層別 health から絞り込む | 10 分 |
+| B-3 | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | 10 分 |
+| B-4 | 静的ルート、`ip_forward`、VLAN ID 不一致の 3 パターンを切り分ける | 10 分 |
+
+Ansible role は Ubuntu に加えて **AlmaLinux / Rocky 9** に対応しています
+（`dnf`、firewalld、SELinux、dnf-automatic、`sshd_config.d` の上書き検査）。
+[Molecule の `el9` シナリオ](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common/molecule/el9)
+で RHEL 系コンテナへの適用を検証しています。実機の AlmaLinux ホストへ適用した
+証跡はまだありません。
+
 ## 入社後に任せやすいこと
 
 | 領域 | 最初に貢献できること |
 | --- | --- |
-| サーバー構築 | 手順に沿った設定、チェックリスト確認、単体試験、パラメータ・手順書更新 |
-| インフラ運用 | アラート確認、コマンドとログによる一次切り分け、エスカレーション |
+| サーバー構築 | 手順に沿った設定、チェックリスト確認、単体試験、パラメータ・手順書更新。Ubuntu / RHEL 系の差分、ディスク（LVM）設計 |
+| インフラ運用 | アラート確認、コマンドとログによる一次切り分け（L2 / L3 / 層別 health）、エスカレーション |
 | 自動化補助 | Ansible / shell / Python の小さな定型作業、CI の結果確認 |
 | IT サポート | 再現条件と影響範囲の整理、キッティング、FAQ・台帳整備 |
 
@@ -52,18 +70,15 @@
 
 ## 正直な境界
 
-実務での大規模インフラ経験はこれからです。コードや設計書の存在と、実環境で成功した結果を混同しないよう、[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) で区別しています。
+実務での大規模インフラ経験はこれからです。**コードや設計書があること**と、
+**実環境で成功した結果があること**を混同しないよう、
+[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
+の 1 か所で区別しています。上の「実測したこと」はすべて、使い捨て runner または
+WSL2 上での結果です。
 
-**Full-stack E2E 実測済み**: 2026-08-22 に runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server-monitor/commit/7622a9da974f694ae75e0173135923701be9e5a5)を Docker 導入済みの使い捨て Ubuntu 24.04 runner で検証しました。`site.yml` の新規構築、2 回目 `changed=0`、計 11 containers、network / UFW、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook の FIRING / RESOLVED、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、[23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)を採録しました。証跡文書だけを更新した後続 commit `cf9419b`と runtime の実測対象は区別しています。
-
-- [2026-08-19 の試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（21 項目中 11 項目 PASS、残り `NOT RUN`）は当時の履歴として保持
-- local webhook の通知試験であり、Alertmanager → Slack の実配信証跡ではない
-- runner 内の network / UFW 試験であり、独立した管理端末・引き渡し対象ホストの証跡ではない
-- [PR #77 の Git ロールバック実演](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)は成功したが、PR の main 反映、永続ホストでの変更・再起動・24 / 72 時間監視の証跡ではない
-- Slack 実配信、AWS の `apply / destroy`、D-2 復旧演習、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働、Windows / AD・winget 公開再現ラボは未実測
-- runner には Docker が事前導入済みであり、最小 OS への Docker 新規導入実績ではない
-
-「動くはず」と「動くことを確認した」を区別し、未実測項目が完了した時だけ証跡台帳とこのページを更新します。
+未実測の主なもの: Slack 実配信、AWS `apply / destroy`、D-2 復旧演習、
+独立した管理端末・引き渡し対象ホスト、組織 DNS、再起動後の永続性、長期稼働、
+AlmaLinux 実機への適用。**実行ログが無い項目を実績として書くことはしません。**
 
 ## 経歴・学習
 
