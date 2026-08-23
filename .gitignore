@@ -2,3 +2,8 @@ node_modules/
 package-lock.json
 package.json
 .lycheecache
+
+# 一次採録にはホスト名・SID・ユーザー名等が含まれ得るため、raw 証跡は公開しない。
+docs/evidence/raw/
+docs/evidence/**/raw/
+docs/evidence/**/*.raw.*
