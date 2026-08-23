@@ -5,7 +5,7 @@
 > 本ポートフォリオは、使い捨て Ubuntu 24.04 上の Full-stack E2E まで実測済みです。一方で、**独立した引き渡し対象ホストや外部サービスを使う証跡は不足**しています（[STATUS.md](../STATUS.md) でも次の伸びしろと明記）。
 > このチェックリストは、**新規の設計を増やすのをやめ、既存の設計を「実物」に変換する**ための実行計画です。設計書ではなく作業手順として使います。
 
-最終更新: 2026-08-22（**優先 1・2・3・5・6・7 と PR #75 の Full-stack E2E を採録完了**。Windows / AD は研修中の構築・名前解決トラブルを記録済み。独立した対象ホスト、Slack 実配信、公開可能な Windows / AD 実行ログ、AWS、D-2、長期稼働は未採録）
+最終更新: 2026-08-23（**優先 1・2・3・5・6・7、PR #75 の Full-stack E2E、PR #77 の Git SHA 指定ロールバック CI を採録完了**。Windows / AD は研修中の構築・名前解決トラブルを記録済み。独立した対象ホスト、Slack 実配信、公開可能な Windows / AD・winget 実行ログ、AWS、D-2、再起動・24 / 72 時間、長期稼働は未採録）
 
 ## 現在の残タスク（Linux サーバー構築を最優先）
 
@@ -16,7 +16,8 @@
 | 1 | Docker 未導入の独立した Ubuntu 対象ホスト + 別の管理端末 | Docker 導入を含む `site.yml` 初回適用、2 回目 `changed=0`、network / UFW、受け入れ試験、引き渡し資料を同じ commit で採録 |
 | 2 | 対象ホストの再起動・継続稼働 | 再起動直後の自動起動・監視復帰・バックアップに加え、24時間後と72時間後の正常性を時刻付きで採録 |
 | 3 | Alertmanager → Slack 実配信 | FIRING / RESOLVED の両方を秘密値を伏せて採録 |
-| 4 | Windows / AD の公開可能な再現ログ | 研修先情報を含めず、ユーザー作成・棚卸し・名前解決確認のコマンドと結果を自宅ラボ等で再実施 |
+| 4a | Windows / AD の公開可能な再現ログ | 隔離ラボでユーザー作成、棚卸し、DNS 障害から domain 参加復旧までを再実施 |
+| 4b | Windows / winget 端末セットアップ | 使い捨て test VM で導入、2 回目実行、rollback、package ごとの exit code を採録 |
 | 5 | D-2 ホスト障害復旧 | 別ホストへの復旧、RTO / RPO、失敗箇所を採録 |
 | 6 | 承認済み AWS 短時間検証 | `plan / apply / destroy`、疎通、実費を採録 |
 
@@ -30,10 +31,10 @@
    「必要な環境」順でLinux不要項目を先に進めたが、その項目は採録済みになった。
    2026-08-22以降は第一志望に直結する独立Ubuntu対象ホストの構築・再起動・引き渡しを先に採録し、
    旧優先番号とグループ分けは完了履歴としてだけ参照する。
-2. 採録物は **server-monitor 側の [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)** に集約し、本リポジトリからリンクする。
+2. Linux サーバーの採録物は **server-monitor 側の [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)** に集約する。Windows / AD・winget のプロフィール固有証跡は、本リポジトリの[補助トラック証跡台帳](./evidence/README.md)に保存する。
 3. **実物が貯まるまで、改善設計 06–17 に新規テーマを追加しない**（[新規設計を増やさない運用ルール](#新規設計を増やさない運用ルール)）。
 4. 「設計サンプル」と「実測証跡」を**絶対に混同しない**（既存の honesty 方針を踏襲）。
-5. 証跡を追加する変更は、server-monitor の PR テンプレートに沿って、変更理由・確認結果・ロールバック・証跡リンクを残す。
+5. 証跡を追加する変更は、保存先リポジトリの PR テンプレートに沿って、変更理由・確認結果・ロールバック・証跡リンクを残す。
 
 ---
 
@@ -58,6 +59,8 @@
 > [server-monitor 側の記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md)に採録した。
 >
 > **2026-08-22 に PR #75 の Full-stack E2E も採録しました。** runtime 最終 commit `7622a9d`を Docker 導入済みの disposable Ubuntu 24.04 runner で検証し、`site.yml` の一括適用と 2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認して[23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)でした。Slack 実配信、AWS、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、再起動後、長期稼働の証跡へは読み替えません。
+>
+> **2026-08-23 に PR #77 の Git モード変更・ロールバック CI も採録しました。** [run 32611251044](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)で候補 SHA `84e1492` を `/opt/server-monitor` へ配備し、旧 SHA `59aa88e` へ復帰した後、revision marker、runtime manifest、app container 再生成、不要ファイル除去、loopback bind、Loki 取り込みを確認して PASS しました。これは使い捨て runner と PR ブランチの結果であり、main 反映、永続ホスト、再起動・24 / 72 時間、Slack、AWS、D-2 の証跡へは読み替えません。詳細は[プロフィール側の索引メモ](./evidence/2026-08-23-server-monitor-git-rollback-ci.md)に残しています。
 
 ### グループ B — Linux + Docker が必要（WSL2 で可）
 
@@ -78,12 +81,13 @@
 
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
-| △ 8 | **Windows / AD 公開用再現ラボ**（評価版 AD DS でユーザー作成〜棚卸し、PowerShell 実行ログ） | 自宅 PC + Hyper-V / VirtualBox（評価版） | 0 円 | [アカウント管理](./it-support/account-management.md) |
+| △ 8a | **Windows / AD 公開用再現ラボ**（評価版 AD DS でユーザー作成〜棚卸し、DNS 障害復旧） | 自宅 PC + Hyper-V / VirtualBox（評価版） | 0 円 | [アカウント管理](./it-support/account-management.md) |
+| 8b | **Windows / winget 端末セットアップ**（導入・再実行・rollback） | 使い捨て Windows test VM | 0 円 | [アカウント管理](./it-support/account-management.md) |
 | 9 | `terraform apply` → `destroy` と **Cost Explorer の実費** | 承認済み AWS アカウント | 数十〜数百円 | [03 AWS + Terraform](./server-monitor-improvements/03-terraform-aws.md) |
 
-> 優先 8 は**部分実施**です。トライアル就業先の研修で AD DS を構築し、クライアントの DNS 設定が原因だったドメイン参加障害を切り分けた経験は [LEARNINGS.md](../LEARNINGS.md) に記録しました。ただし、研修先の情報を含まない PowerShell のユーザー作成・棚卸しログは未採録です。公開実績にする場合は、自宅ラボ等で再現して機密情報を含まない一次出力を残します。
+> 優先 8a は**部分実施**です。トライアル就業先の研修で AD DS を構築し、クライアントの DNS 設定が原因だったドメイン参加障害を切り分けた経験は [LEARNINGS.md](../LEARNINGS.md) に記録しました。ただし、研修先の情報を含まない PowerShell のユーザー作成・棚卸し・domain 参加復旧ログは未採録です。公開実績にする場合は、隔離した自宅ラボ等で再現して機密情報を含まない一次出力を残します。優先 8b の winget 実行ログも未採録で、AD ラボとは別の端末セットアップ証跡として扱います。
 > 旧優先 9 の AWS 検証は、現在は冒頭表の順位 6 です。独立対象ホスト、再起動・72時間継続、
-> Slack、Windows / AD、D-2 の順に採録した後、承認済みアカウントで 1 日に
+> Slack、Windows / AD、winget、D-2 の順に採録した後、承認済みアカウントで 1 日に
 > plan → apply → destroy まで実施します。数百円の実費と「即 destroy した」記録自体が、
 > コスト意識の証跡になります。
 
@@ -110,7 +114,7 @@
 | 再現性 | 実行コマンド、対象 commit、環境、実行日時が残っている |
 | 結果 | 成功 / 失敗、所要時間、主要ログまたはスクリーンショットがある |
 | 安全性 | 秘密値、公開 IP、AWS account ID、個人名、webhook URL がマスク済み |
-| 導線 | `server-monitor/docs/evidence/README.md` または `docs/drills/logs/` から辿れる |
+| 導線 | Linux は `server-monitor/docs/evidence/README.md` または `docs/drills/logs/`、Windows は本リポジトリの `docs/evidence/README.md` から辿れる |
 | 変更の記録 | PR 本文に確認結果、影響範囲、ロールバック、証跡リンクがある |
 
 ---
@@ -182,14 +186,38 @@
 3. 演習ログ（コマンド履歴 + 時刻）を `server-monitor/docs/drills/logs/` に保存する。
 4. この実測値を元に、ショーケースの「？分」を実数へ差し替える。
 
-### 8. Windows / AD 公開用再現ラボ（部分実施）
+### 8a. Windows / AD 公開用再現ラボ（部分実施）
 
 > 研修では AD DS の構築と名前解決障害の切り分けまで経験済みです。以下は、研修先の情報を
 > 持ち出さずに、アカウント操作の一次出力を公開可能な形で再現するための未実施手順です。
+> 実行時は[公開再現ラボの記録テンプレート](./evidence/templates/windows-ad-lab.md)を
+> `docs/evidence/YYYY-MM-DD-windows-ad-lab.md` へコピーし、一次出力と判定を保存します。
 
-1. VirtualBox に Windows Server 評価版（180 日無料）を入れ、AD DS をセットアップする。
-2. [アカウント管理手順](./it-support/account-management.md) の OU 設計・ユーザー作成・「90 日未ログインの棚卸し」PowerShell サンプルを**実際に実行**し、コマンドと出力（マスク済み）を採録する。
-3. 手元の Windows で winget 一括インストールスクリプトの実行ログも採録する。
+1. Hyper-V / VirtualBox の Host-only または Internal switch 上に、Windows Server 評価版と
+   Windows client の使い捨て VM を作り、外部 inbound・port forwarding・bridge を無効にする。
+2. DC promotion 前 checkpoint、standalone / role 未導入、固定 domain / NetBIOS、internal
+   interface / static IPv4 / gateway なしを fail-closed で確認し、AD DS / DNS role install、
+   DSRM secure prompt、forest promotion、明示的な再起動を採録する。
+3. promotion 後の domain / role / service を確認してから、ラボ専用 OU・group・test user だけを
+   作成する。
+4. 90 日棚卸しは検索範囲、基準日時、期待件数、実件数を記録する。自然に 90 日経過した
+   user がなければ positive detection は `NOT RUN` とし、短縮時間の機能試験と区別する。
+5. client checkpoint と正常 DNS を保存し、誤 DNS → SRV / DC 探索失敗 → DNS 復元 →
+   domain 参加 → 再起動 → secure channel / domain user sign-in まで採録する。
+6. raw transcript は Git 管理外へ置き、マスク済み公開コピーの SHA-256 と再確認結果を残す。
+
+### 8b. Windows / winget 端末セットアップ（未実施）
+
+> winget は AD / DNS とは別の端末キッティング証跡です。実行時は
+> [winget 端末セットアップの記録テンプレート](./evidence/templates/windows-winget-provisioning.md)を
+> `docs/evidence/YYYY-MM-DD-windows-winget-provisioning.md` へコピーします。
+
+1. 使い捨て Windows test VM の checkpoint と実行前 package 一覧を保存する。
+2. package ID、source、license、再起動要否を確認し、承認済み無償 package だけを対象にする。
+3. package ごとの install 出力・exit code、導入後確認、2 回目実行を採録する。
+4. 実行前から存在した package は残し、新規導入分だけを uninstall した後、checkpoint 復元で
+   実行前状態へ戻ったことを確認する。
+5. raw transcript は Git 管理外へ置き、公開用コピーのマスクと SHA-256 を記録する。
 
 ### 9. AWS apply / destroy と実費
 
@@ -207,9 +235,9 @@
 
 | 項目 | ルール |
 | --- | --- |
-| マスク対象 | 秘密値 / 公開 IP / AWS account ID / 個人名 / webhook URL |
+| マスク対象 | 秘密値 / 公開 IP / AWS account ID / 個人名 / webhook URL / 実在 domain / SID / machine GUID / MAC address |
 | 必須メタ情報 | 対象 commit の短縮ハッシュ・実行日時（JST）・実行環境 |
-| 保存先 | `server-monitor/docs/evidence/`（演習ログは `docs/drills/logs/`） |
+| 保存先 | Linux は `server-monitor/docs/evidence/`、Windows 補助証跡は本リポジトリの `docs/evidence/`、raw は両リポジトリの外 |
 | 公開導線 | 実物採録後、ショーケースの ASCII モックアップから実画像へリンクするか、実画像へ置換 |
 
 ---
@@ -219,9 +247,10 @@
 以前は Windows / ネットワーク系の証跡を「応募先次第の保険」に分類していましたが、ネットワークは Linux サーバー構築の中核、Windows / AD は補助トラックの証跡として整理し直しました。
 
 - **ネットワーク切り分け（優先 6）**は、第一志望（Linux サーバー構築・運用）で疎通確認と障害一次対応を行うための中核スキルです。
-- **Windows / AD（旧優先 8）**は IT サポート / 社内 SE 補助へ応募する場合の補助証跡です。研修中の AD DS 構築・名前解決の切り分けは記録済みですが、公開可能な一次出力はまだ不足しています。
+- **Windows / AD（旧優先 8a）**は IT サポート / 社内 SE 補助へ応募する場合の補助証跡です。研修中の AD DS 構築・名前解決の切り分けは記録済みですが、公開可能な一次出力はまだ不足しています。
+- **winget（旧優先 8b）**は端末セットアップの補助証跡です。AD / DNS の達成条件には混ぜず、別記録で導入・再実行・rollback を判定します。
 
-> **進め方の判断**: Linux サーバー構築・運用を主軸とし、まず独立対象ホストの新規構築・受け入れ・再起動後確認を採録します。Windows / AD は研修内容を外部公開せず、自宅ラボ等で安全に再現できる範囲を補助証跡にします。
+> **進め方の判断**: Linux サーバー構築・運用を主軸とし、まず独立対象ホストの新規構築・受け入れ・再起動後確認を採録します。Windows / AD と winget は研修内容を外部公開せず、隔離した自宅ラボ等で安全に再現できる範囲を補助証跡にします。
 
 ---
 
@@ -246,6 +275,7 @@
 - [デモ動画台本](./demo-script.md)
 - [学習の一次記録（つまずきログ）](../LEARNINGS.md)
 - [改善設計の実装対応表](./server-monitor-improvements/README.md)
+- [Windows 補助トラック証跡台帳](./evidence/README.md)
 - [server-monitor 検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
 - [server-monitor ローカル証跡採録ガイド](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/local-evidence-quickstart.md)
 - [server-monitor 変更管理ミニ運用](https://github.com/ns7jp/server-monitor/blob/main/docs/change-management.md)

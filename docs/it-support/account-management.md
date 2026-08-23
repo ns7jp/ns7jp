@@ -199,15 +199,38 @@ WHERE
 **PowerShell 例（90 日以上未ログインの抽出）**
 
 ```powershell
+$expectedDomain = "ad.example.test"
+$targetOu = "OU=PortfolioLab,DC=ad,DC=example,DC=test"
 $inactiveDays = 90
-$threshold = (Get-Date).AddDays(-$inactiveDays)
+$referenceTime = Get-Date
+$threshold = $referenceTime.AddDays(-$inactiveDays)
 
-Get-ADUser -Filter {Enabled -eq $true} -Properties LastLogonDate, Department |
-    Where-Object { $_.LastLogonDate -lt $threshold } |
-    Select-Object SamAccountName, DisplayName, Department, LastLogonDate |
+$domain = Get-ADDomain -ErrorAction Stop
+if ($domain.DNSRoot -ne $expectedDomain) {
+    throw "承認済み test domain 以外では実行しません。"
+}
+if ($targetOu -notlike "*,$($domain.DistinguishedName)") {
+    throw "検索 OU が承認済み test domain の外です。"
+}
+
+Get-ADUser -SearchBase $targetOu -Filter {Enabled -eq $true} `
+    -Properties LastLogonDate, whenCreated, Department |
+    Where-Object {
+        ($_.LastLogonDate -and $_.LastLogonDate -lt $threshold) -or
+        (-not $_.LastLogonDate -and $_.whenCreated -lt $threshold)
+    } |
+    Select-Object SamAccountName, Department, LastLogonDate, whenCreated |
     Sort-Object LastLogonDate |
     Export-Csv -Path "inactive_users.csv" -NoTypeInformation -Encoding UTF8
 ```
+
+`LastLogonDate` が空のアカウントは、作成日時 `whenCreated` も 90 日より前の場合だけ対象に
+します。実環境で使う場合は組織の承認済み OU へ読み替え、出力 CSV を公開しません。公開
+再現ラボでは[専用テンプレート](../evidence/templates/windows-ad-lab.md)の期待値・実値・
+`NOT RUN` 境界に従います。
+
+`LastLogonDate` はリアルタイムの監査ログではないため、この一覧だけでアカウントを自動無効化
+しません。境界付近の対象は別ログと利用部門への確認を経て判定します。
 
 ### 5.2 端末棚卸し
 

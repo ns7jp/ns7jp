@@ -17,7 +17,7 @@
 | 03 | [AWS + Terraform](./03-terraform-aws.md) | network / compute / alb / monitoring / backup modules、dev / prod | `apply` / `destroy` と実費は未収録 |
 | 04 | [SLO / SLI](./04-slo-design.md) | blackbox、recording / burn-rate rules、dashboard、runbooks | 同一ホスト内のラボ SLI。外部 probe による SLO は未実装。ダッシュボードの数値自体は[実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
 | 05 | [バックアップ・復旧演習](./05-backup-recovery-drill.md) | backup verification CI、D-1 script、D-2 runbook、templates | [2026-08-19 の D-1 RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)を履歴として保持。[PR #75 E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)では D-1 RTO 1 秒、3 volumes の backup / restore、local webhook の FIRING / RESOLVED を PASS。D-2 は未収録 |
-| 11 | [変更管理プロセス](./11-change-management.md) | PR テンプレート、Change request / Evidence capture Issue、変更管理ミニ運用 | テンプレート整備済み・実例未収録 |
+| 11 | [変更管理プロセス](./11-change-management.md) | PR テンプレート、Change request / Evidence capture Issue、変更管理ミニ運用 | テンプレート整備済み。[PR #77のGit rollback CI](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)を実例として採録。永続hostでの変更記録は未収録 |
 
 ## 重要な更新
 
@@ -25,6 +25,8 @@
 - AWS Terraform はコードとして用意されているが、稼働中の環境や費用実績を示すものではない。
 - 2026-08-22 の 23/23 PASS は使い捨て GitHub-hosted runner 内の実測である。Slack 実配信、
   AWS `apply / destroy`、D-2、長期稼働、独立した管理端末・引き渡し対象ホストは含まない。
+- 2026-08-23 のPR #77では、使い捨てrunner上のcandidateから前版へのGit rollbackを実測した。
+  永続host、再起動・24 / 72時間、Slack、AWS、D-2の実績へは読み替えない。
 - AWS の本番相当 SLO では、対象 EC2 外からの synthetic probe と中央 metrics / logs
   保存先が必要であり、現時点では追加実装・検証対象である。
 - 変更管理は CAB など組織前提の部分を設計サンプルとして残しつつ、個人ラボでは

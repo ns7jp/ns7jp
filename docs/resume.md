@@ -7,7 +7,7 @@
 > - **確定情報**（資格・学歴・職業訓練・ポートフォリオ）はそのまま記載しています
 > - 「設計サンプル」と「実績」を混同しない方針は、ポートフォリオ全体（[STATUS.md](../STATUS.md)）と同じです
 
-最終更新: 2026-08-22（第一志望、PR #75 の Full-stack E2E 23/23 PASS、使い捨て runner の検証境界を反映）
+最終更新: 2026-08-23（第一志望、PR #75 の Full-stack E2E 23/23 PASS、PR #77 の Git ロールバック CI、使い捨て runner の検証境界を反映）
 
 ---
 
@@ -82,6 +82,8 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 主作品では、runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server-monitor/commit/7622a9da974f694ae75e0173135923701be9e5a5)を対象に、Docker 導入済みの使い捨て Ubuntu 24.04 runner へ `site.yml` を一括適用しました。2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を含む [Full-stack E2E 23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)を採録しました。Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働は未実測です。
 
+2026-08-23 の [PR #77 CI](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)では、候補 SHA `84e1492` の配備後、旧版 `59aa88e` へ戻し、稼働中の版番号と実行ファイルのハッシュ、app コンテナの再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで再確認して PASS しました。これは PR ブランチ上の使い捨て Ubuntu runner での実演であり、main 反映や永続ホストでの本番変更実績ではありません。Slack 実配信、AWS `apply / destroy`、D-2、再起動・24 / 72 時間監視、Windows / AD・winget 公開再現ラボも `NOT RUN` のままです。
+
 ---
 
 ## 5. テクニカルスキル
@@ -108,7 +110,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 | ログ | Loki / Grafana Alloy | ○（LogQL によるログ検索を実機で確認済み） |
 | 構成管理 | Ansible | ○（4 ロールの Molecule に加え、使い捨て Ubuntu 24.04 への `site.yml` 一括適用と 2 回目 `changed=0` を確認。[証跡](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)） |
 | IaC | Terraform（AWS） | △（`validate` / `fmt` まで。`apply` は未実施） |
-| CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（[PR #75 の 5 workflow が success](https://github.com/ns7jp/server-monitor/pull/75)。Docker は runner に事前導入済み） |
+| CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（[PR #75 の 5 workflow が success](https://github.com/ns7jp/server-monitor/pull/75)。[PR #77 で Git SHA 指定の変更・ロールバック CI が success](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)。Docker は runner に事前導入済み） |
 
 実装範囲と検証境界は [アーキテクチャ図](./architecture-diagram.md) を参照してください。
 

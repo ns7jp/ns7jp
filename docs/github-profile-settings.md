@@ -1,7 +1,7 @@
 # GitHub プロフィール表示設定
 
 > この文書は、リポジトリのファイル編集では変更できない GitHub アカウント設定の適用記録です。
-> **2026-08-22 にログアウト状態の公開プロフィールを確認し、Bio とピン留めが下記の状態へ反映済みであることを確認しました。**
+> **2026-08-22 にログアウト状態の公開プロフィールを確認し、Bio とピン留めが下記の状態へ反映済みであることを確認しました。Topics は2026-08-23にGitHub APIで再確認しました。**
 
 ## Bio
 
@@ -32,13 +32,21 @@ Web サイト欄は `https://ns7jp.github.io/` を維持します。
 
 > Ubuntu サーバーの構築〜監視〜障害復旧を Ansible / Prometheus / Grafana / Loki で実装した Linux インフラ運用ラボ（実測証跡付き）
 
-Topics は未設定です。次を候補とし、GitHub の About 設定から別途適用します。
+Topics は2026-08-23に適用・再確認済みです。
 
-`linux`, `ansible`, `docker`, `prometheus`, `grafana`, `loki`, `terraform`, `monitoring`, `infrastructure-as-code`
+`ansible`, `docker`, `grafana`, `infrastructure-as-code`, `linux`, `loki`, `monitoring`, `prometheus`, `terraform`, `alertmanager`, `aws`, `backup`, `disaster-recovery`, `observability`, `ubuntu-server`
 
 プロフィールリポジトリ `ns7jp` の公開 Description は、2026-08-22 時点で次の文面です。
 
 > サーバー設計・構築エンジニア志望｜実測証跡と学習の一次記録
+
+`ns7jp` の Topics も2026-08-23に適用・再確認済みです。
+
+`active-directory`, `ansible`, `career-change`, `github-profile`, `infrastructure`, `it-support`, `linux`, `portfolio`, `powershell`, `windows-server`
+
+ポートフォリオサイト `ns7jp.github.io` の Topics も同日に適用・再確認済みです。
+
+`ansible`, `docker`, `github-pages`, `grafana`, `infrastructure`, `it-support`, `linux`, `monitoring`, `portfolio`, `prometheus`, `terraform`
 
 ## 適用後の確認（2026-08-22）
 
@@ -46,7 +54,7 @@ Topics は未設定です。次を候補とし、GitHub の About 設定から�
 - [x] `server-monitor` がピン留めの先頭にある
 - [x] `server-monitor` の公開 Description で Ubuntu サーバーの構築・監視・障害復旧と実測証跡を示している
 - [x] `ns7jp` の公開 Description でサーバー設計・構築を第一志望として示している
-- [ ] `server-monitor` の Topics を設定する（2026-08-22 時点では空）
+- [x] `server-monitor`、`ns7jp`、`ns7jp.github.io` の Topics を設定し、GitHub APIで反映を確認した（2026-08-23）
 - [x] 保存済み実測証跡の編集リプレイを公開し、実操作の連続録画ではないことを明記している
 - [x] ログアウト状態で、ピン留め先頭の `server-monitor` とプロフィール README から主作品・実測証跡へ移動できる
 

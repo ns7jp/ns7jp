@@ -2,7 +2,7 @@
 
 ## 30 秒の結論
 
-主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元まで一気通貫で検証し、23/23 ID PASS を採録したインフラ構築ラボです。[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映済みです。
+主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元まで一気通貫で検証し、23/23 ID PASS を採録したインフラ構築ラボです。[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映済みです。PR #77 では、Git SHA を固定した変更・ロールバック実演も CI で PASS しています（PR ブランチ・使い捨て runner の結果）。
 
 | [案件概要](https://ns7jp.github.io/project-brief.html) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [2 分 15 秒デモ（証跡リプレイ）](https://ns7jp.github.io/demo.html) |
 | --- | --- | --- |
@@ -26,6 +26,7 @@
 | 検証 | 結果 |
 | --- | --- |
 | 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
+| Git SHA を固定した変更・ロールバック | [候補 `84e1492` → 旧版 `59aa88e` の配備・復帰後に、稼働中の版番号、実行ファイルのハッシュ、app コンテナ再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みを確認](./evidence/2026-08-23-server-monitor-git-rollback-ci.md) |
 | Docker API の権限制御とログ経路 | [read-only proxy の GET 成功、POST 拒否、固有 Nginx log の Alloy 経由 Loki 到達を確認](https://github.com/ns7jp/server-monitor/actions/runs/32572409469) |
 | Ansible 4 ロールの適用・2 回目の冪等性・期待状態 | [全ロール PASS、欠陥 2 件を修正](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) |
 | 監視スタック 9 サービスの起動と実データ表示 | [Grafana / Loki を Linux (WSL2) 上で確認](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
@@ -58,7 +59,8 @@
 - [2026-08-19 の試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（21 項目中 11 項目 PASS、残り `NOT RUN`）は当時の履歴として保持
 - local webhook の通知試験であり、Alertmanager → Slack の実配信証跡ではない
 - runner 内の network / UFW 試験であり、独立した管理端末・引き渡し対象ホストの証跡ではない
-- Slack 実配信、AWS の `apply / destroy`、D-2 復旧演習、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働の確認は未実測
+- [PR #77 の Git ロールバック実演](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)は成功したが、PR の main 反映、永続ホストでの変更・再起動・24 / 72 時間監視の証跡ではない
+- Slack 実配信、AWS の `apply / destroy`、D-2 復旧演習、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働、Windows / AD・winget 公開再現ラボは未実測
 - runner には Docker が事前導入済みであり、最小 OS への Docker 新規導入実績ではない
 
 「動くはず」と「動くことを確認した」を区別し、未実測項目が完了した時だけ証跡台帳とこのページを更新します。

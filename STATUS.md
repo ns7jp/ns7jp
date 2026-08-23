@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-22（server-monitor PR #75 の hardened Full-stack E2E 23/23 PASS、ポートフォリオサイト PR #25、プロフィール PR #46 の main マージを反映）
+最終更新：2026-08-23（server-monitor PR #77 の Git SHA 指定rollback CI PASSと、使い捨てrunner／永続hostの証跡境界を反映）
 
 ---
 
@@ -27,6 +27,18 @@
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
 
+### 2026-08-23 の更新内容（Git SHA 指定rollback CI）
+
+| 観点 | 対応 |
+| --- | --- |
+| 追加実測 | [server-monitor PR #77 / run 32611251044](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)でcandidate `84e1492`を配備・検証後、前版`59aa88e`へrollbackしてPASS |
+| 合格条件 | revision marker、runtime manifest、app container再作成、stale file除去、loopback bind、Loki取り込みまで再確認 |
+| 実行範囲 | GitHub-hostedの使い捨てUbuntu runner、`/opt/server-monitor`、immutable Git SHA |
+| 未実測境界 | PR #77のmain反映、永続hostのrollback・再起動・24 / 72時間、Slack実配信、AWS apply / destroy / restore、D-2、Windows / AD・winget公開再現ラボは`NOT RUN` |
+| 関連文書 | README、採用担当者向け1ページ版、職務経歴書、証跡索引、採録チェックリストを同期 |
+
+2026-08-22のFull-stack baselineは[PR #75の23/23 PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で、実測対象`7622a9d`、証跡文書更新`cf9419b`、main merge`4a292026`を区別して保持します。最新の追加runtime実測はPR #77のrollback CIですが、PR branch上の結果でありmain統合済みとは扱いません。
+
 ### 2026-08-22 の更新内容（hardened Full-stack E2E・3 リポジトリ同期）
 
 | 観点 | 対応 |
@@ -40,7 +52,7 @@
 | 3 リポジトリの公開状態 | [server-monitor PR #75](https://github.com/ns7jp/server-monitor/pull/75)（main `4a292026`）、[site PR #25](https://github.com/ns7jp/ns7jp.github.io/pull/25)（main `5ab3367b`）、[profile PR #46](https://github.com/ns7jp/ns7jp/pull/46)（main `c360f84a`）をマージ済み |
 | profile docs CI | PR #46 head `20ec405`の [docs-check run 32571600184](https://github.com/ns7jp/ns7jp/actions/runs/32571600184) が SUCCESS。後続変更は改めて検証する |
 
-[2026-08-19 の 11/21 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)と[D-1 RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)は当時の履歴として保持します。最新のruntime完走記録は [PR #75 の Full-stack E2E 23/23 PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)です。実測対象 `7622a9d`、証跡文書更新 `cf9419b`、main merge `4a292026`を区別します。
+[2026-08-19 の 11/21 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)と[D-1 RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)は当時の履歴として保持します。この節の次に完了したruntime実測は、上記2026-08-23節のPR #77 rollback CIとして別管理します。
 
 ### 2026-08-19 の更新内容（追補2：説明できない深さの内容そのものを圧縮）
 
