@@ -5,7 +5,7 @@
 > 本ポートフォリオは、使い捨て Ubuntu 24.04 上の Full-stack E2E まで実測済みです。一方で、**独立した引き渡し対象ホストや外部サービスを使う証跡は不足**しています（[STATUS.md](../STATUS.md) でも次の伸びしろと明記）。
 > このチェックリストは、**新規の設計を増やすのをやめ、既存の設計を「実物」に変換する**ための実行計画です。設計書ではなく作業手順として使います。
 
-最終更新: 2026-08-23（**優先 1・2・3・5・6・7 と PR #75 の Full-stack E2E を採録完了**。Windows / AD は研修中の構築・名前解決トラブルを記録済み。独立した対象ホスト、Slack 実配信、公開可能な Windows / AD・winget 実行ログ、AWS、D-2、長期稼働は未採録）
+最終更新: 2026-08-23（**優先 1・2・3・5・6・7、PR #75 の Full-stack E2E、PR #77 の Git SHA 指定ロールバック CI を採録完了**。Windows / AD は研修中の構築・名前解決トラブルを記録済み。独立した対象ホスト、Slack 実配信、公開可能な Windows / AD・winget 実行ログ、AWS、D-2、再起動・24 / 72 時間、長期稼働は未採録）
 
 ## 現在の残タスク（Linux サーバー構築を最優先）
 
@@ -59,6 +59,8 @@
 > [server-monitor 側の記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md)に採録した。
 >
 > **2026-08-22 に PR #75 の Full-stack E2E も採録しました。** runtime 最終 commit `7622a9d`を Docker 導入済みの disposable Ubuntu 24.04 runner で検証し、`site.yml` の一括適用と 2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認して[23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)でした。Slack 実配信、AWS、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、再起動後、長期稼働の証跡へは読み替えません。
+>
+> **2026-08-23 に PR #77 の Git モード変更・ロールバック CI も採録しました。** [run 32611251044](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)で候補 SHA `84e1492` を `/opt/server-monitor` へ配備し、旧 SHA `59aa88e` へ復帰した後、revision marker、runtime manifest、app container 再生成、不要ファイル除去、loopback bind、Loki 取り込みを確認して PASS しました。これは使い捨て runner と PR ブランチの結果であり、main 反映、永続ホスト、再起動・24 / 72 時間、Slack、AWS、D-2 の証跡へは読み替えません。詳細は[プロフィール側の索引メモ](./evidence/2026-08-23-server-monitor-git-rollback-ci.md)に残しています。
 
 ### グループ B — Linux + Docker が必要（WSL2 で可）
 

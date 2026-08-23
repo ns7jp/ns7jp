@@ -4,6 +4,8 @@
 
 主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元まで一気通貫で検証し、23/23 ID PASS を採録したインフラ構築ラボです。2026-08-22 に[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映しました。
 
+2026-08-23 には [PR #77 の GitHub Actions](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)で、候補版を変更されない Git SHA で配備した後、指定した旧版へ戻して再検証するロールバック実演も PASS しました。これは使い捨て runner 上の CI 結果で、PR #77 の main 反映や永続ホストでの変更作業を示すものではありません。
+
 ## 30 秒で確認する 3 点
 
 | [案件概要](https://ns7jp.github.io/project-brief.html) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [2 分 15 秒デモ（証跡リプレイ）](https://ns7jp.github.io/demo.html) |
@@ -23,13 +25,14 @@
 | 実施した検証 | 結果・証跡 |
 | --- | --- |
 | 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
+| Git SHA を指定した変更・ロールバック実演 | [候補 `84e1492` を配備後、旧版 `59aa88e` へ復帰し、稼働中の版番号、実行ファイルのハッシュ、app コンテナ再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで PASS](./docs/evidence/2026-08-23-server-monitor-git-rollback-ci.md) |
 | Docker API の権限制御とログ経路 | [read-only proxy の GET 成功、POST 拒否、固有 Nginx log の Alloy 経由 Loki 到達を同じ E2E で確認](https://github.com/ns7jp/server-monitor/actions/runs/32572409469) |
 | Ansible 4 ロールを Linux 上で適用し、2 回目の冪等性と期待状態を確認 | [`molecule test` 4 ロール PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)。途中で静的検査では見つからなかった欠陥 2 件を修正 |
 | 監視スタック 9 サービスを Linux (WSL2) 上で起動 | [Grafana の実データ表示、Loki のログ取得を確認](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
 | app プロセスを意図的に停止し、自動復旧を計測 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
 | client → proxy → app の二セグメント構成で通信断を注入 | [障害再現 → 経路・名前解決の切り分け → 復旧まで PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md) |
 
-[2026-08-19 の試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（21 項目中 11 項目 PASS、10 項目 `NOT RUN`）は当時の履歴として保持しています。その後、runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server-monitor/commit/7622a9da974f694ae75e0173135923701be9e5a5)を対象とする [PR #75 の E2E](https://github.com/ns7jp/server-monitor/actions/runs/32572409469)で 23/23 ID PASS を採録し、証跡文書を更新して main へマージしました。一方、**Alertmanager → Slack の実配信、AWS の `apply / destroy`、D-2 復旧演習、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働の確認は未実測**です。local webhook の通知試験を Slack 実配信、使い捨て runner 内の network / UFW 試験を独立環境の証跡とは扱いません。また、runner には Docker が事前導入済みだったため、最小 OS への Docker 新規導入実績とも表現しません。
+[2026-08-19 の試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（21 項目中 11 項目 PASS、10 項目 `NOT RUN`）は当時の履歴として保持しています。その後、runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server-monitor/commit/7622a9da974f694ae75e0173135923701be9e5a5)を対象とする [PR #75 の E2E](https://github.com/ns7jp/server-monitor/actions/runs/32572409469)で 23/23 ID PASS を採録し、証跡文書を更新して main へマージしました。さらに、[PR #77 の CI](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)で Git SHA を指定した candidate → rollback の復帰手順を実測しましたが、これは PR ブランチ上の使い捨て runner の結果です。一方、**Alertmanager → Slack の実配信、AWS の `apply / destroy`、D-2 復旧演習、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、24 / 72 時間の長期稼働、Windows / AD・winget 公開再現ラボは未実測**です。local webhook の通知試験を Slack 実配信、使い捨て runner 内の network / UFW・ロールバック試験を独立環境の証跡とは扱いません。また、runner には Docker が事前導入済みだったため、最小 OS への Docker 新規導入実績とも表現しません。
 
 ## 主作品の読み方
 
