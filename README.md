@@ -32,7 +32,20 @@
 | app プロセスを意図的に停止し、自動復旧を計測 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
 | client → proxy → app の二セグメント構成で通信断を注入 | [障害再現 → 経路・名前解決の切り分け → 復旧まで PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md) |
 
-[2026-08-19 の試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（21 項目中 11 項目 PASS、10 項目 `NOT RUN`）は当時の履歴として保持しています。その後、runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server-monitor/commit/7622a9da974f694ae75e0173135923701be9e5a5)を対象とする [PR #75 の E2E](https://github.com/ns7jp/server-monitor/actions/runs/32572409469)で 23/23 ID PASS を採録し、証跡文書を更新して main へマージしました。さらに、[PR #77 の CI](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)で Git SHA を指定した candidate → rollback の復帰手順を実測しましたが、これは PR ブランチ上の使い捨て runner の結果です。一方、**Alertmanager → Slack の実配信、AWS の `apply / destroy`、D-2 復旧演習、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、24 / 72 時間の長期稼働、Windows / AD・winget 公開再現ラボは未実測**です。local webhook の通知試験を Slack 実配信、使い捨て runner 内の network / UFW・ロールバック試験を独立環境の証跡とは扱いません。また、runner には Docker が事前導入済みだったため、最小 OS への Docker 新規導入実績とも表現しません。
+上記はいずれも**使い捨て runner または WSL2 上の実測**です。独立した引き渡し対象ホスト、組織 DNS、Slack 実配信、AWS `apply`、長期稼働は未実測で、何がどこまで確認済みかは[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)に 1 か所へまとめています。実行ログのない項目を実績として書くことはしません。
+
+## 手を動かして実演できること
+
+証跡としてはまだ採録していませんが、**その場で実行して結果を出せる**演習です。スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。
+
+| 演習 | 内容 |
+| --- | --- |
+| [B-1 ディスク設計・LVM 拡張](https://github.com/ns7jp/server-monitor/blob/main/scripts/labs/lvm-drill.sh) | VG / LV を作り、容量を使い切り、PV を足して online 拡張する |
+| [B-2 3 層構成の障害切り分け](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier) | Web / AP / DB のどの層で止まっているかを層別 health で絞り込む |
+| [B-3 DB バックアップ・復元](https://github.com/ns7jp/server-monitor/blob/main/labs/three-tier/run-restore-drill.sh) | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる |
+| [B-4 L2 / L3 切り分け](https://github.com/ns7jp/server-monitor/tree/main/labs/routing) | 静的ルート、`ip_forward`、802.1Q VLAN ID 不一致を切り分ける |
+
+Ansible role は Ubuntu 22.04 / 24.04 に加えて **AlmaLinux / Rocky 9** に対応しています（`dnf`、firewalld、SELinux、dnf-automatic）。実機の AlmaLinux ホストへ適用した証跡はまだありません。
 
 ## 主作品の読み方
 
@@ -42,9 +55,19 @@
 
 ## AI の利用について
 
-文書の構成・整形・調査、コードレビュー、リンクや表記の確認には AI 支援を使っています。AI が生成した手順や説明を、本人が実行・理解していない状態で実績にはしません。
+AI 支援を使っている範囲を、`git log` で確認できる実態に合わせて書きます。
 
-本人が実機を操作し、仮説を外した経緯も含めて記録したものが [学習の一次記録（つまずきログ）](./LEARNINGS.md) と [server-monitor の証跡](https://github.com/ns7jp/server-monitor/tree/main/docs/evidence) です。たとえば、UFW の競合、Molecule 上の systemd に対する誤診、`docker kill` と再起動ポリシーの違いを、症状 → 原因 → 対処 → 学びの順で残しています。技術選定の最終判断、実機操作、結果の採録、機密情報のマスク、面接での説明は本人が担当します。
+| 範囲 | 具体例 |
+| --- | --- |
+| 文書の構成・整形・調査 | README、設計書、ランブックの下書きと推敲 |
+| **実装コードの生成** | Ansible role、Terraform module、CI workflow、テスト、ラボの雛形 |
+| コードレビュー、リンク・表記の確認 | PR 上でのレビューと修正提案 |
+
+`server-monitor` の履歴には `Author: Claude <noreply@anthropic.com>` のコミットが含まれます。上表の「実装コードの生成」がそれにあたります。文書の整形だけでなく、実装コードの生成にも使っている、という意味です。
+
+**AI が生成した手順や説明を、本人が実行・理解していない状態で実績にはしません。** 実機の操作、結果の採録、機密情報のマスク、技術選定の最終判断、面接での説明は本人が担当します。
+
+本人が実機を操作し、仮説を外した経緯も含めて記録したものが [学習の一次記録（つまずきログ）](./LEARNINGS.md) と [server-monitor の証跡](https://github.com/ns7jp/server-monitor/tree/main/docs/evidence) です。たとえば、UFW の競合、Molecule 上の systemd に対する誤診、`docker kill` と再起動ポリシーの違い、Hyper-V 上の AD ドメイン参加での DNS 向き先を、症状 → 原因 → 対処 → 学びの順で残しています。
 
 ## 現場経験から生かせること
 
