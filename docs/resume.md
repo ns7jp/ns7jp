@@ -118,7 +118,7 @@ AI が生成した手順やコードを、本人が実行・理解していな�
 | --- | --- | --- |
 | OS | Linux サーバー構築・基本運用（Ubuntu） | ○（個人ラボと研修での構築・確認。実務としての本番運用は未経験） |
  | OS | RHEL 系（AlmaLinux / Rocky 9） | △（Ansible role を `dnf` / firewalld / SELinux / dnf-automatic 対応にし、Molecule `el9` シナリオで検証。**実機ホストへの適用は未実施**） |
- | ストレージ | LVM（VG / LV / ファイルシステム / fstab / online 拡張） | △（[storage role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/storage) と演習スクリプトを実装。安全装置の negative test は 7 ケース PASS。**実ディスクでの実施証跡は未採録**） |
+ | ストレージ | LVM（VG / LV / ファイルシステム / fstab / online 拡張） | ○（[storage role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/storage) を [実機（loop device）で実行](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md)。VG/LV/fstab 作成、冪等性、PV 追加による online 拡張（220M→457M、mount 維持）を実測、5 PASS。安全装置の negative test も 7 ケース PASS） |
 | コンテナ | Docker / Docker Compose | ○（WSL2 と使い捨て runner で構築・検証。独立した長期稼働ホストは未実測） |
 | Web / Proxy | Nginx（リバースプロキシ。TLS は設定例・自己署名証明書での確認まで） | ○ |
 | 監視 | Prometheus / Grafana / Alertmanager | ○（Linux(WSL2) 上で起動・実データ表示を確認済み。[証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)） |

@@ -37,15 +37,15 @@
 
 ## その場で実演できること
 
-証跡としては未採録ですが、面接の場で実行して結果をお見せできます。
+2026-08-24 にすべて実機で実行し、証跡を採録しました。面接の場でも再実行して結果をお見せできます。
 判定はスクリプトが期待値と実測値を比較した結果で、証跡ファイルも自動生成されます。
 
-| 演習 | 実演内容 | 所要 |
-| --- | --- | --- |
-| B-1 | LVM で VG / LV を作り、容量を使い切らせ、PV を足して online 拡張する | 10 分 |
-| B-2 | Web / AP / DB の 3 層構成で、どの層が原因かを層別 health から絞り込む | 10 分 |
-| B-3 | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | 10 分 |
-| B-4 | 静的ルート、`ip_forward`、VLAN ID 不一致の 3 パターンを切り分ける | 10 分 |
+| 演習 | 実演内容 | 所要 | 結果 |
+| --- | --- | --- | --- |
+| B-1 | LVM で VG / LV を作り、容量を使い切らせ、PV を足して online 拡張する | 10 分 | [5 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md) |
+| B-2 | Web / AP / DB の 3 層構成で、どの層が原因かを層別 health から絞り込む | 10 分 | [9 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md) |
+| B-3 | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | 10 分 | [7 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒） |
+| B-4 | 静的ルート、`ip_forward`、VLAN ID 不一致の 3 パターンを切り分ける | 10 分 | [6 PASS / 3 SKIP-ENV](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md) |
 
 Ansible role は Ubuntu に加えて **AlmaLinux / Rocky 9** に対応しています
 （`dnf`、firewalld、SELinux、dnf-automatic、`sshd_config.d` の上書き検査）。

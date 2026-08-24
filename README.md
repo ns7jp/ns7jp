@@ -34,16 +34,18 @@
 
 上記はいずれも**使い捨て runner または WSL2 上の実測**です。独立した引き渡し対象ホスト、組織 DNS、Slack 実配信、AWS `apply`、長期稼働は未実測で、何がどこまで確認済みかは[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)に 1 か所へまとめています。実行ログのない項目を実績として書くことはしません。
 
-## 手を動かして実演できること
+## 手を動かして実演できること（実機で実行済み）
 
-証跡としてはまだ採録していませんが、**その場で実行して結果を出せる**演習です。スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。
+**2026-08-24 にすべて実機で実行し、証跡を採録しました。** スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。
 
-| 演習 | 内容 |
-| --- | --- |
-| [B-1 ディスク設計・LVM 拡張](https://github.com/ns7jp/server-monitor/blob/main/scripts/labs/lvm-drill.sh) | VG / LV を作り、容量を使い切り、PV を足して online 拡張する |
-| [B-2 3 層構成の障害切り分け](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier) | Web / AP / DB のどの層で止まっているかを層別 health で絞り込む |
-| [B-3 DB バックアップ・復元](https://github.com/ns7jp/server-monitor/blob/main/labs/three-tier/run-restore-drill.sh) | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる |
-| [B-4 L2 / L3 切り分け](https://github.com/ns7jp/server-monitor/tree/main/labs/routing) | 静的ルート、`ip_forward`、802.1Q VLAN ID 不一致を切り分ける |
+| 演習 | 内容 | 結果 |
+| --- | --- | --- |
+| [B-1 ディスク設計・LVM 拡張](https://github.com/ns7jp/server-monitor/blob/main/scripts/labs/lvm-drill.sh) | VG / LV を作り、容量を使い切り、PV を足して online 拡張する | [5 PASS / 0 FAIL](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md)（220M→457M） |
+| [B-2 3 層構成の障害切り分け](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier) | Web / AP / DB のどの層で止まっているかを層別 health で絞り込む | [9 PASS / 0 FAIL](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md) |
+| [B-3 DB バックアップ・復元](https://github.com/ns7jp/server-monitor/blob/main/labs/three-tier/run-restore-drill.sh) | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | [7 PASS / 0 FAIL](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒） |
+| [B-4 L2 / L3 切り分け](https://github.com/ns7jp/server-monitor/tree/main/labs/routing) | 静的ルート、`ip_forward`、802.1Q VLAN ID 不一致を切り分ける | [6 PASS / 0 FAIL / 3 SKIP-ENV](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md)（VLAN 部は kernel 都合で未検証） |
+
+実行して初めて見つかった実バグは通算 19 件（うち 11 件は静的検査では捕まえられなかった）。すべて [server-monitor #83〜#90](https://github.com/ns7jp/server-monitor/pulls?q=is%3Apr+is%3Amerged) で修正済みです。
 
 Ansible role は Ubuntu 22.04 / 24.04 に加えて **AlmaLinux / Rocky 9** に対応しています（`dnf`、firewalld、SELinux、dnf-automatic）。実機の AlmaLinux ホストへ適用した証跡はまだありません。
 
