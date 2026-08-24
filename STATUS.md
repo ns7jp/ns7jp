@@ -45,16 +45,36 @@
 | 自己採点 | 学習プランの G1〜G6 に本人の到達状況（○ / △）と、残る 3 つの穴を明記 | ns7jp |
 | 重複の解消 | ポートフォリオサイトに残っていた Promtail 版監視スタックをアーカイブ扱いに（server-monitor 側は Alloy へ移行済みで、記述が矛盾していた） | ns7jp.github.io |
 
-#### 実装しただけで、まだ実測していないもの
+#### 2026-08-24 の更新：B-1〜B-4 をすべて実機で実行し、証跡を採録した
 
-**これらは「動くはず」であって「動くことを確認した」ではない。**
-実行すると証跡が自動生成されるので、生成物を確認してから採録する。
+上で「動くはず」と書いていた B シリーズ 4 本を、実際に実行して確認した。
+device-mapper が無い環境では qemu で Ubuntu 24.04 を起動し、コンテナが
+使えない環境では `docker` をスタブに置き換えて script の判定ロジックを
+先に検証してから実機で走らせる、という手順を踏んだ。
 
-- AlmaLinux / Rocky 実機への `site.yml` 適用
-- B-1 ディスク設計・LVM 拡張演習（`losetup` と device-mapper が要る）
-- B-2 3 層構成の障害切り分け演習
-- B-3 DB バックアップ・復元演習
-- B-4 L2 / L3 切り分け演習
+| 演習 | 結果 | 証跡 |
+| --- | --- | --- |
+| B-1 ディスク設計・LVM 拡張 | 5 PASS / 0 FAIL | [`2026-08-24-B-1.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md) |
+| B-2 3 層構成の障害切り分け | 9 PASS / 0 FAIL | [`2026-08-24-B-2.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md) |
+| B-3 DB バックアップ・復元 | 7 PASS / 0 FAIL（RTO 0.149 秒 / RPO 2.344 秒） | [`2026-08-24-B-3.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md) |
+| B-4 L2 / L3 切り分け | 6 PASS / 0 FAIL / 3 SKIP-ENV（VLAN 部は kernel 都合で未検証） | [`2026-08-24-B-4.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md) |
+
+**実行して初めて見つかった実バグは通算 19 件。うち 11 件は静的検査
+（shellcheck / ansible-lint / molecule / 構文検査）のどれも捕まえていない。**
+特に重かったもの:
+
+- 3 層ラボの層分離チェックが `set -e` に巻き込まれ、**遮断できているときにだけ**
+  演習が中断していた（壊れている環境の方が完走する、という逆転現象）
+- `storage` role が対象 OS（Ubuntu 24.04 の既定 Ansible）で play ごと失敗していた
+- `storage` role が冪等でなく、`site.yml` を 2 回目に流すと自分が作った LV を
+  自分の安全装置が拒否していた
+- B-4 の routing ラボは Docker の network 設計と衝突し、**一度も起動できて
+  いなかった**（router 用の `.1` が bridge の既定アドレスと衝突）
+
+いずれも [server-monitor #83〜#90](https://github.com/ns7jp/server-monitor/pulls?q=is%3Apr+is%3Amerged) で修正済み。
+
+このセッションで新しく実測を増やせる範囲はここまで。残るのは次の
+「コードでは埋められない、残っている穴」のみ。
 
 #### コードでは埋められない、残っている穴
 

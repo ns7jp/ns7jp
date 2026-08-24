@@ -61,11 +61,11 @@
 
 | # | ゴール | 状況 | 根拠 / 残っていること |
 | --- | --- | --- | --- |
-| G1 | 空の VM から Web / AP / DB の 3 層構成を単独で構築 | △ | [3 層ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier)を実装（nginx / gunicorn / PostgreSQL、層を分離）。**コンテナ上の構成であり、空の VM に OS を入れて組んだ実績ではない** |
+| G1 | 空の VM から Web / AP / DB の 3 層構成を単独で構築 | △ | [3 層ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier)を[実コンテナで実行](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md)（nginx / gunicorn / PostgreSQL、層を分離、9 PASS）。**コンテナ上の構成であり、空の VM に OS を入れて組んだ実績ではない** |
 | G2 | パラメータシート・構築手順書・試験項目書として文書化 | ○ | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)。試験項目書の原本は引き渡し対象ホスト未定のため `NOT RUN`。記入済みの見本は演習の証跡が担当 |
-| G3 | 「つながらない」を L1 から L7 まで順番に切り分け | △ | [L2 / L3 ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/routing)で静的ルート・`ip_forward`・VLAN ID 不一致を切り分け。**物理スイッチ・ケーブル・ポート VLAN は未着手（L1 が残っている）** |
+| G3 | 「つながらない」を L1 から L7 まで順番に切り分け | △ | [L2 / L3 ラボ](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md)で静的ルート・`ip_forward`を実機実行（6 PASS）。VLAN ID 不一致は kernel が `CONFIG_VLAN_8021Q` を無効化していたため未検証。**物理スイッチ・ケーブル・ポート VLAN は未着手（L1 が残っている）** |
 | G4 | Ansible / Terraform でコード化し、再実行できる | ○ | `site.yml` の一括適用と 2 回目 `changed=0` を[実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)。**Terraform は `validate` まで。`apply` は未実施** |
-| G5 | 監視・バックアップを設定し、壊して復旧する演習を実測 | ○ | D-1 復旧演習 RTO 13 秒 / 1 秒を実測。DB の復元は B-3 として実装済みだが**実行証跡はまだ無い** |
+| G5 | 監視・バックアップを設定し、壊して復旧する演習を実測 | ○ | D-1 復旧演習 RTO 13 秒 / 1 秒を実測。DB の復元は [B-3 として実行済み](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md)（7 PASS、RTO 0.149 秒）。**B-1〜B-4 は全て実機実行済み** |
 | G6 | 面接で自分の言葉で説明できる | △ | [つまずきログ](../../LEARNINGS.md)に症状 → 原因 → 対処 → 学びを記録。**AI 生成コードのうち、自分で説明できない深さのものを減らす作業が継続中** |
 
 凡例: ○ = 根拠を出せる / △ = 一部のみ / × = 未着手
