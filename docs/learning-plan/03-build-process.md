@@ -342,6 +342,7 @@ Phase 3 で作ったラボを「案件」に見立て、次を作成します。
 
 - [学習プラン 全体像](./README.md)
 - [02 フェーズ別カリキュラム](./02-curriculum.md)
+- [05 Phase 1 演習設計](./05-phase1-exercise-design.md)（本ページのテンプレートを実値で埋めた記入例）
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [変更管理の設計](../server-monitor-improvements/11-change-management.md)
 - [インシデント対応の設計](../roadmap/07-incident-response.md)

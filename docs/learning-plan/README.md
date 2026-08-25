@@ -19,6 +19,7 @@
 | [02 フェーズ別カリキュラム](./02-curriculum.md) | 週単位の学習項目・ハンズオン課題・到達確認・つまずきやすい点 |
 | [03 構築工程の実務ドキュメント](./03-build-process.md) | パラメータシート / 構築手順書 / 試験項目書 / 移行・切り戻しのテンプレート |
 | [04 教材と資格の対応](./04-resources.md) | 書籍・無料教材・資格の対応表と費用の目安 |
+| [05 Phase 1 演習設計](./05-phase1-exercise-design.md) | 03 のテンプレートを Phase 1（空の VM からの初期構築）へ適用した具体設計。**設計のみ・未実施** |
 
 ---
 
@@ -61,7 +62,7 @@
 
 | # | ゴール | 状況 | 根拠 / 残っていること |
 | --- | --- | --- | --- |
-| G1 | 空の VM から Web / AP / DB の 3 層構成を単独で構築 | △ | [3 層ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier)を[実コンテナで実行](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md)（nginx / gunicorn / PostgreSQL、層を分離、9 PASS）。**コンテナ上の構成であり、空の VM に OS を入れて組んだ実績ではない** |
+| G1 | 空の VM から Web / AP / DB の 3 層構成を単独で構築 | △ | [3 層ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier)を[実コンテナで実行](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md)（nginx / gunicorn / PostgreSQL、層を分離、9 PASS）。**コンテナ上の構成であり、空の VM に OS を入れて組んだ実績ではない**。この差分を埋める演習は [05 Phase 1 演習設計](./05-phase1-exercise-design.md)に設計済み（未実施） |
 | G2 | パラメータシート・構築手順書・試験項目書として文書化 | ○ | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)。試験項目書の原本は引き渡し対象ホスト未定のため `NOT RUN`。記入済みの見本は演習の証跡が担当 |
 | G3 | 「つながらない」を L1 から L7 まで順番に切り分け | △ | [L2 / L3 ラボ](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md)で静的ルート・`ip_forward`を実機実行（6 PASS）。VLAN ID 不一致は kernel が `CONFIG_VLAN_8021Q` を無効化していたため未検証。**物理スイッチ・ケーブル・ポート VLAN は未着手（L1 が残っている）** |
 | G4 | Ansible / Terraform でコード化し、再実行できる | ○ | `site.yml` の一括適用と 2 回目 `changed=0` を[実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)。**Terraform は `validate` まで。`apply` は未実施** |
@@ -395,6 +396,7 @@ gantt
 - [02 フェーズ別カリキュラム](./02-curriculum.md)
 - [03 構築工程の実務ドキュメント](./03-build-process.md)
 - [04 教材と資格の対応](./04-resources.md)
+- [05 Phase 1 演習設計](./05-phase1-exercise-design.md)
 - [資格取得ロードマップ](../certifications/roadmap.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [志望トラックと証跡の対応](../target-roles.md)
