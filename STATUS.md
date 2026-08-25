@@ -105,8 +105,9 @@ device-mapper が無い環境では qemu で Ubuntu 24.04 を起動し、コン�
 | B-3 DB バックアップ・復元 | 7 PASS / 0 FAIL（RTO 0.149 秒 / RPO 2.344 秒） | [`2026-08-24-B-3.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md) |
 | B-4 L2 / L3 切り分け | 6 PASS / 0 FAIL / 3 SKIP-ENV（VLAN 部は kernel 都合で未検証） | [`2026-08-24-B-4.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md) |
 
-**実行して初めて見つかった実バグは通算 26 件（2026-08-25 に台帳を起こして数え直した。
-それ以前は「19 件・うち 11 件」と書いていたが、根拠にたどり着けなかったため実数へ改めた）。
+**実行して初めて見つかった実バグは通算 29 件（2026-08-25 に台帳を起こして数え直した。
+それ以前は「19 件・うち 11 件」と書いていたが、根拠にたどり着けなかったため実数へ改めた。
+うち 3 件は同日、el9 の Molecule シナリオを初めて実行して見つけた）。
 静的検査（shellcheck / ansible-lint / molecule / 構文検査）で捕まえられたものは 0 件、
 うち 6 件は「壊れているのに PASS」する偽 PASS だった。**
 1 件ずつの症状・発見方法・修正 PR は

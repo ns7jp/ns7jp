@@ -17,7 +17,7 @@
 | サーバー構築 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | Ansible の check / apply / 2 回目の冪等性、試験結果 |
 | インフラ運用・監視 | [server-monitor](https://github.com/ns7jp/server-monitor) | Grafana → alert → logs → recovery |
 | ネットワークを含む運用 | [L2 / L3 切り分けラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/routing) | 静的ルート、`ip_forward`、VLAN ID 不一致の切り分け |
-| RHEL 系が主な現場 | [AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common) | `dnf` / firewalld / SELinux の差分と、Molecule `el9` シナリオ（**実行証跡は未採録**） |
+| RHEL 系が主な現場 | [AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common) | `dnf` / firewalld / SELinux の差分と、[Molecule `el9` シナリオの実行証跡](https://github.com/ns7jp/server-monitor/actions/runs/32811100007) |
 | IT サポート・社内 SE | [IT サポート資料](./it-support/faq.md) | 問い合わせの再現条件、影響範囲、確認順、記録方法 |
 
 ## 現時点の境界
