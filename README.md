@@ -51,7 +51,7 @@
 
 実行して初めて見つかった実バグは、1 件ずつ「症状 / 原因 / どの静的検査が見逃したか / 修正 PR」を [欠陥台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/defects-found.md) に起こしました。件数はこの台帳が正本です。
 
-Ansible role は Ubuntu 22.04 / 24.04 に加えて **AlmaLinux / Rocky 9** に対応しています（`dnf`、firewalld、SELinux、dnf-automatic）。Molecule の `el9` シナリオを用意していますが、**実行証跡は未採録**で、実機の AlmaLinux ホストへ適用した証跡もありません。
+Ansible role は Ubuntu 22.04 / 24.04 に加えて **AlmaLinux / Rocky 9** に対応しています（`dnf`、firewalld、SELinux、dnf-automatic）。Molecule の `el9` シナリオは [2026-08-25 に実行証跡を採録しました](https://github.com/ns7jp/server-monitor/actions/runs/32811100007)（コンテナ上での検証）。実機の AlmaLinux ホストへ適用した証跡はまだありません。
 
 ## 詰まった記録
 

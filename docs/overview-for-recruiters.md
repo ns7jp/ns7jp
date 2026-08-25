@@ -53,7 +53,8 @@
 Ansible role は Ubuntu に加えて **AlmaLinux / Rocky 9** に対応しています
 （`dnf`、firewalld、SELinux、dnf-automatic、`sshd_config.d` の上書き検査）。
 [Molecule の `el9` シナリオ](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common/molecule/el9)
-を用意していますが、**実行証跡は未採録**です（CI は `workflow_dispatch` のみで、
+は [2026-08-25 に実行証跡を採録](https://github.com/ns7jp/server-monitor/actions/runs/32811100007)しました
+（コンテナ上での検証。CI は `workflow_dispatch` のみで、
 push / PR では走りません）。実機の AlmaLinux ホストへ適用した証跡もありません。
 
 ## 入社後に任せやすいこと
@@ -81,7 +82,7 @@ WSL2 上での結果です。
 
 未実測の主なもの: Slack 実配信、AWS `apply / destroy`、D-2 復旧演習、
 独立した管理端末・引き渡し対象ホスト、組織 DNS、再起動後の永続性、長期稼働、
-AlmaLinux 実機への適用、Molecule `el9` の実行証跡。**実行ログが無い項目を実績として書くことはしません。**
+AlmaLinux 実機への適用。**実行ログが無い項目を実績として書くことはしません。**
 
 **AI 支援の範囲も同じ基準で開示しています。** 文書だけでなく実装コード（Ansible role、
 Terraform module、CI workflow、テスト、ラボ）の生成にも AI を使っており、3 リポジトリの
