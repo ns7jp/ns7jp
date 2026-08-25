@@ -22,7 +22,7 @@ v2.0 で server-monitor を AWS へ移行するにあたり、インフラ構築
 
 **HashiCorp Terraform** を採用する（[03 設計書](../server-monitor-improvements/03-terraform-aws.md)）。
 
-State は S3 に置く（**2026-07 追記：ロック方式を見直し、§6 参照**）。モジュールは `network / compute / monitoring / iam` で分ける。
+State は S3 に置く（**2026-07 追記：ロック方式を見直し、§6 参照**）。モジュールは `network / compute / alb / monitoring / backup` の 5 つに分ける（**2026-08-25 訂正：当初 `iam` を独立モジュールとする想定だったが、実装では IAM リソースを `compute` モジュール内に置いた。実装は [`terraform/modules/`](https://github.com/ns7jp/server-monitor/tree/main/terraform/modules) が正本**）。
 
 ---
 
@@ -44,7 +44,7 @@ State は S3 に置く（**2026-07 追記：ロック方式を見直し、§6 �
 | Lock | 2026-07 に S3 ネイティブロックへ変更（§6） |
 | 暗号化 | KMS で暗号化 |
 | バージョニング | S3 Versioning を有効化 |
-| State 分割 | 環境別 + 機能別（4 モジュール） |
+| State 分割 | 環境別 + 機能別（5 モジュール: network / compute / alb / monitoring / backup） |
 
 ---
 
@@ -62,7 +62,7 @@ State は S3 に置く（**2026-07 追記：ロック方式を見直し、§6 �
 
 - **良い影響**: コードとして残るので、同じ構成を何度でも再現できる。変更を Pull Request 単位で見直せる
 - **悪い影響・注意点**: HCL やモジュール設計、State の扱いを覚える必要がある。Lock を取らずに手作業で AWS を変更すると state とズレる
-- **対策**: 重要リソースには `prevent_destroy` を設定し、`terraform plan` の内容を確認してから apply する
+- **対策**: `terraform plan` の内容を確認してから apply する。**`prevent_destroy` は 2026-08-25 時点で未設定です**（`grep -rn prevent_destroy terraform/` は 0 件）。`apply` を未実施のため設定していません。実運用へ持ち込む前に、S3 バケットと KMS キーへ設定します
 
 ---
 

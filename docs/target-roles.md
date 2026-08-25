@@ -17,7 +17,7 @@
 | サーバー構築 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | Ansible の check / apply / 2 回目の冪等性、試験結果 |
 | インフラ運用・監視 | [server-monitor](https://github.com/ns7jp/server-monitor) | Grafana → alert → logs → recovery |
 | ネットワークを含む運用 | [L2 / L3 切り分けラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/routing) | 静的ルート、`ip_forward`、VLAN ID 不一致の切り分け |
-| RHEL 系が主な現場 | [AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common) | `dnf` / firewalld / SELinux の差分と、Molecule `el9` シナリオ |
+| RHEL 系が主な現場 | [AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common) | `dnf` / firewalld / SELinux の差分と、Molecule `el9` シナリオ（**実行証跡は未採録**） |
 | IT サポート・社内 SE | [IT サポート資料](./it-support/faq.md) | 問い合わせの再現条件、影響範囲、確認順、記録方法 |
 
 ## 現時点の境界
@@ -34,6 +34,15 @@
 - 使い捨て runner 内の結果は、独立した管理端末・引き渡し対象ホストの証跡ではありません
 - local webhook の通知試験は Slack 実配信ではありません
 - role として実装済みでも、実機で適用していなければ実績としません（AlmaLinux 対応が該当）
+- B-1〜B-4 の演習は **AI 支援セッションの作業環境上での実行**で、独立した物理／VPS ホストや
+  手元 WSL2 での再実行証跡ではありません（[README](../README.md#手を動かして実演できること2026-08-24-に実行採録)に実行環境を明記）
+
+## AI 支援の範囲と、本人が書いた部分
+
+文書だけでなく実装コードの生成にも AI を使っています（[内訳](../README.md#ai-の利用について)）。
+**その中で、実機を触って外した仮説の一次記録
+[LEARNINGS.md](../LEARNINGS.md) は本人が書いています。** 面接では、成果物の網羅性より
+こちらを起点にご質問いただくのが、現在地を正確にお伝えする近道だと考えています。
 
 計画や資格数を増やすより、既存の一構成を新規構築し、試験し、壊して直した証跡を優先します。
 

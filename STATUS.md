@@ -16,12 +16,58 @@
 4. 現在形で「〜しています」と書くのは、**実際に運用が回っているものだけ**。始める前のものは「〜します（予定）」と書く。
 5. ~~**応募開始を証跡・資格の完成と連動させない**（2026-07-12 制定、期限 2026-07-19）~~ → **2026-08-17 に役割を終えた**。派遣社員としてのトライアル就業が始まり、「最初の応募を出す」という当初の目的は達成された。後継は下記ルール 6。
 6. **証跡採録を「就業の合間の余暇」にしない**（2026-08-17 制定）。トライアル就業中は学習時間が減るため、**月あたり最低 1 件の実測証跡**を採録することを下限とする。達成できなかった月は、本ファイルに理由を記録する。
+7. **`LEARNINGS.md` は本人のみが編集する**（2026-08-25 制定）。実機で外した仮説の一次記録は、このポートフォリオで唯一 AI に代替できない資産であり、AI に書かせた時点で価値がゼロになる。それ以前に AI が「学び」欄を代筆したコミットが履歴に残っているが、**消さずに残したうえで本人の記述へ置き換える**。
+8. **「正本」を決め、他は同期先とする**（2026-08-25 制定）。同じ事実が 5 か所に散って毎回ズレていたため、次を正本とする。
+
+   | 対象 | 正本 |
+   | --- | --- |
+   | 資格・職歴・希望条件 | [`docs/resume.md`](./docs/resume.md) |
+   | 実測値（23/23・RTO・SHA・run ID・PR 番号） | [server-monitor 検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
+   | 実行して見つかった欠陥の件数 | [server-monitor 欠陥台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/defects-found.md) |
+   | 採録の優先順位 | [`docs/evidence-capture-checklist.md`](./docs/evidence-capture-checklist.md) の「現在の残タスク」表 |
+   | AI 支援の範囲 | [`README.md` の AI の利用について](./README.md#ai-の利用について) |
+
+   ポートフォリオサイト（ns7jp.github.io）は**常に同期先**であり、正本にはしない。
+9. **証跡には実行環境と実行者を必ず書く**（2026-08-25 制定）。「実機」という語は、何の上で動かしたのかを特定できる場合にのみ使う。使い捨て runner、コンテナ、network namespace、qemu ゲスト、AI 支援セッションの作業環境は、それぞれそのまま書く。**証跡を自動生成するスクリプトは `uname` と実行者を出力に含める。**
 
 ### 守れなかったルールの扱い（2026-08-17）
 
 ルール 2 は「週 1 回更新」で制定したが、**2026-07-12 の初回コメント以降、5 週間更新されなかった**（[#8](https://github.com/ns7jp/ns7jp/issues/8) のコメントは 1 件のみ）。
 
 本ポートフォリオの中心的な主張は「宣言と実態の乖離を作らない」である。守れなかったルールを掲げ続けることは、その主張自体への反証になる。したがって**ルールを守れなかった事実を消さずに残したうえで、守れる粒度（月 1 回）へ引き下げる**。頻度を落とすことは後退ではなく、宣言を実態に合わせる作業である。
+
+---
+
+## 0-b. LEARNINGS.md 記入待ちリスト（本人が書く）
+
+[STATUS §0 ルール 7](#0-更新の運用ルール2026-07-03-制定) により、`LEARNINGS.md` は本人のみが編集します。
+**題材（事実）はここに置き、書き終えたものだけを `LEARNINGS.md` へ移します。**
+必要なのは「学び」を自分の言葉で 2〜3 行書くことだけで、事実部分は下に揃っています。
+
+### 優先（2026-08-24 の B-1〜B-4 実行で見つかった欠陥。一次記録に 1 件も入っていない）
+
+| # | 症状（事実） | どの静的検査が見逃したか | 学び |
+| --- | --- | --- | --- |
+| 1 | 3 層ラボの層分離チェックが `set -e` に巻き込まれ、**遮断できているときにだけ**演習が中断していた（壊れている環境の方が完走する逆転現象） | shellcheck / ansible-lint / molecule いずれも検出せず | （記入） |
+| 2 | `storage` role が対象 OS（Ubuntu 24.04 の既定 Ansible）で play ごと失敗していた | 同上 | （記入） |
+| 3 | `storage` role が冪等でなく、`site.yml` の 2 回目で自分が作った LV を自分の安全装置が拒否した | 同上 | （記入） |
+| 4 | `labs/routing` が Docker の network 設計と衝突し、**一度も起動できていなかった**（router 用の `.1` が bridge の既定アドレスと衝突） | 同上 | （記入） |
+
+> **#1 は面接映えします。**「テストが、壊れている環境でだけ通る」状態は、
+> 試験設計の話として一般化でき、実務でも起こります。
+
+### 次点（題材が揃っているもの）
+
+| # | 症状（事実） | 学び |
+| --- | --- | --- |
+| 5 | Terraform AWS provider の制約が複数ファイルに分散し、Dependabot PR が必ず CI を落ちた（`no available releases match the given constraints ~> 5.50, ~> 6.58`）。原因は `dependabot.yml` の `directories` の列挙漏れ | （記入）**「網羅すべき集合を手で列挙した時点で、次に漏れる」**という因果まで書けると、指摘が加点に変わります |
+| 6 | 依存更新 PR を 3 か月放置した。ADR に「見直しトリガー」を書く運用にしたのに、運用そのものが回っていなかった | （記入）設計と運用の差を実体験として語れる材料 |
+
+### 実施待ち
+
+- LPIC-1 学習でつまずいた箇所（[#5](https://github.com/ns7jp/ns7jp/issues/5) と連動）
+- 就業先で遭遇した障害・問い合わせのうち、技術的な学びとして一般化できるもの
+  （社名・システム名・IP・アカウント名は書かない。判断に迷う場合は書かない）
 
 ---
 
@@ -426,7 +472,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 
 - [x] ~~**LEARNINGS.md にトライアル就業中のつまずきを追記**~~ → **2026-08-22 完了**。研修中の AD ドメイン参加時に、クライアント DNS が DC を向いていなかった問題を、機密情報を含めず症状 → 原因 → 対処 → 学びで記録
 - [x] ~~**ネットワーク切り分けの一次メモ**（[優先 6](./docs/evidence-capture-checklist.md)）~~ → **2026-08-21 実質完了**。`ss` / `docker port` / `docker inspect` で切り分け、`frontend` ネットワークの `internal: true` がホストへのポート公開を無効化する不具合を発見・原因特定した（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）。当初想定していたホスト公開ポート経由ではなく、`docker compose exec` 経由・コンテナ IP を直接指定する方法で、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてを `internal: true` の制約を受けずに確認できた。なお、このタスク行の見出しは従来「二セグメント障害ラボの実行ログ」となっていたが、それは別タスク（[labs/network-troubleshooting](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)、2026-08-19 に別途採録済み）を指しており、優先6の内容と一致していなかったため見出しも訂正した
-- [ ] **Alertmanager → Slack の実通知配信**（[優先 4](./docs/evidence-capture-checklist.md)、Slack Webhook が必要）
+- [ ] **Alertmanager → Slack の実通知配信**（[現行順位 3](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)、Slack Webhook が必要）
 
 #### 継続
 
@@ -438,7 +484,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 
 - [ ] 実操作の連続録画を常設公開（2026-08-18・19 の保存済み証跡を再構成した2分15秒リプレイは公開済み。E2E artifact の terminal cast は全工程の連続動画ではない）
 - [ ] **Windows / AD の公開可能な再現証跡を採録**（旧優先 8）。研修での AD DS 構築・DNS 障害切り分けは [LEARNINGS.md](./LEARNINGS.md) に記録済みだが、PowerShell のユーザー作成・棚卸し一次出力は未採録
-- [ ] `terraform apply` → `destroy` の実費と Cost Explorer 記録（優先 9）
+- [ ] `terraform apply` → `destroy` の実費と Cost Explorer 記録（[現行順位 6](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)）
 - [ ] IT サポート資料を **実体験ベース** に書き換え（該当業務に従事してから）
 
 ---
@@ -596,7 +642,7 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 
 1. Windows / AD の公開可能な PowerShell 実行ログ（研修での AD DS 構築・DNS 切り分けは記録済み。自宅ラボ等で再現する）
 2. D-2 ホスト障害復旧演習
-3. 承認された AWS 検証で `plan` / `apply` / `destroy` と Cost Explorer 実費（優先 9）
+3. 承認された AWS 検証で `plan` / `apply` / `destroy` と Cost Explorer 実費（[現行順位 6](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)）
 
 ---
 

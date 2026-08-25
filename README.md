@@ -8,9 +8,11 @@
 
 ## 30 秒で確認する 3 点
 
-| [案件概要](https://ns7jp.github.io/project-brief.html) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [2 分 15 秒デモ（証跡リプレイ）](https://ns7jp.github.io/demo.html) |
+| [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [詰まった記録](./LEARNINGS.md) |
 | --- | --- | --- |
-| 設計から構築・試験・引き渡しまでの全体像 | 2026-08-22 の 23/23 PASS と未実測範囲 | 2026-08-18・19 の保存済み画面と復旧ログを再構成 |
+| 要件定義から引き渡しまでの成果物 12 本（1,242 行） | 2026-08-22 の 23/23 PASS と未実測範囲 | 実機で外した仮説を、症状 → 原因 → 対処 → 学びで記録 |
+
+[案件概要（1 枚）](https://ns7jp.github.io/project-brief.html) ／ [2 分 15 秒デモ（保存済み画面の証跡リプレイ）](https://ns7jp.github.io/demo.html)
 
 ## 志望と現況
 
@@ -34,9 +36,11 @@
 
 上記はいずれも**使い捨て runner または WSL2 上の実測**です。独立した引き渡し対象ホスト、組織 DNS、Slack 実配信、AWS `apply`、長期稼働は未実測で、何がどこまで確認済みかは[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)に 1 か所へまとめています。実行ログのない項目を実績として書くことはしません。
 
-## 手を動かして実演できること（実機で実行済み）
+## 手を動かして実演できること（2026-08-24 に実行・採録）
 
-**2026-08-24 にすべて実機で実行し、証跡を採録しました。** スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。
+スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。
+
+**実行環境を正確に書きます。** B-1 は仮想ディスク（loop device）を割り当てた Ubuntu 24.04 ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace 上での実行です。**いずれも AI 支援セッションの作業環境上で実行しており、独立した物理／VPS ホストや、私の手元の WSL2 上での再実行証跡ではありません。** 証跡ファイルの「実施環境」欄に採録時の `uname` をそのまま残しています（B-2 / B-3 / B-4 は `Linux 6.18.44-fc-v21`）。手元での再実行と、実行者欄を含む再採録は着手予定です（[STATUS](./STATUS.md) 参照）。
 
 | 演習 | 内容 | 結果 |
 | --- | --- | --- |
@@ -45,9 +49,22 @@
 | [B-3 DB バックアップ・復元](https://github.com/ns7jp/server-monitor/blob/main/labs/three-tier/run-restore-drill.sh) | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | [7 PASS / 0 FAIL](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒） |
 | [B-4 L2 / L3 切り分け](https://github.com/ns7jp/server-monitor/tree/main/labs/routing) | 静的ルート、`ip_forward`、802.1Q VLAN ID 不一致を切り分ける | [6 PASS / 0 FAIL / 3 SKIP-ENV](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md)（VLAN 部は kernel 都合で未検証） |
 
-実行して初めて見つかった実バグは通算 19 件（うち 11 件は静的検査では捕まえられなかった）。すべて [server-monitor #83〜#90](https://github.com/ns7jp/server-monitor/pulls?q=is%3Apr+is%3Amerged) で修正済みです。
+実行して初めて見つかった実バグは、1 件ずつ「症状 / 原因 / どの静的検査が見逃したか / 修正 PR」を [欠陥台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/defects-found.md) に起こしました。件数はこの台帳が正本です。
 
-Ansible role は Ubuntu 22.04 / 24.04 に加えて **AlmaLinux / Rocky 9** に対応しています（`dnf`、firewalld、SELinux、dnf-automatic）。実機の AlmaLinux ホストへ適用した証跡はまだありません。
+Ansible role は Ubuntu 22.04 / 24.04 に加えて **AlmaLinux / Rocky 9** に対応しています（`dnf`、firewalld、SELinux、dnf-automatic）。Molecule の `el9` シナリオを用意していますが、**実行証跡は未採録**で、実機の AlmaLinux ホストへ適用した証跡もありません。
+
+## 詰まった記録
+
+うまくいった結果より、**外した仮説**のほうが読んでいただく価値があると考えています。実機を触って初めて分かったことを、症状 → 原因 → 対処 → 学びの順で [LEARNINGS.md](./LEARNINGS.md) に残しています。
+
+| 症状 | 何を取り違えていたか |
+| --- | --- |
+| UFW を設定する playbook が、2 回目に必ず `changed` になる | `allow` と `limit` が同じ port を奪い合っていた。静的検査は通っていた |
+| 「コンテナだから systemd が動かせない」と診断した | 診断そのものが誤りだった。動かせない理由は別にあった |
+| `docker kill` したのにコンテナが戻ってこない | `restart: unless-stopped` の対象外になる操作だと分かっていなかった |
+| Hyper-V 上の AD ドメイン参加で「ドメインが見つかりません」 | DC が動いていることと、クライアントがその DC を DNS として見ていることは別だった |
+
+**この 4 件を含む一次記録は、私が実機を触って書いたものです。**[AI の利用について](#ai-の利用について)のとおり、このリポジトリの他の文書には AI 支援が広く入っていますが、`LEARNINGS.md` だけは 2026-08-25 以降、本人のみが編集します（[STATUS §0](./STATUS.md) のルール 7）。
 
 ## 主作品の読み方
 
@@ -65,7 +82,15 @@ AI 支援を使っている範囲を、`git log` で確認できる実態に合�
 | **実装コードの生成** | Ansible role、Terraform module、CI workflow、テスト、ラボの雛形 |
 | コードレビュー、リンク・表記の確認 | PR 上でのレビューと修正提案 |
 
-`server-monitor` の履歴には `Author: Claude <noreply@anthropic.com>` のコミットが含まれます。上表の「実装コードの生成」がそれにあたります。文書の整形だけでなく、実装コードの生成にも使っている、という意味です。
+**範囲は `server-monitor` に限りません。3 リポジトリすべての履歴に `Author: Claude <noreply@anthropic.com>` または `Co-Authored-By: Claude` のコミットが含まれます。** この職務経歴書・この README 自体も対象です。マージコミットを除いた実作業コミットに占める割合は次のとおりです（2026-08-25 時点、`git log --no-merges` で再現できます）。
+
+| リポジトリ | Claude が著者または共同著者 | 実作業コミット総数 |
+| --- | --- | --- |
+| [ns7jp/ns7jp](https://github.com/ns7jp/ns7jp)（このプロフィール） | 42 | 71 |
+| [ns7jp/server-monitor](https://github.com/ns7jp/server-monitor)（主作品） | 49 | 95 |
+| [ns7jp/ns7jp.github.io](https://github.com/ns7jp/ns7jp.github.io)（サイト） | 19 | 77 |
+
+文書の整形だけでなく、実装コードの生成にも使っている、という意味です。
 
 **AI が生成した手順や説明を、本人が実行・理解していない状態で実績にはしません。** 実機の操作、結果の採録、機密情報のマスク、技術選定の最終判断、面接での説明は本人が担当します。
 
