@@ -11,10 +11,12 @@
 （付録、31/49 項目）を追加し、Windows 側・実機（lab-base01 / LAB-WINOPS1）実施用のキット（python-ops-kit、
 未実行の雛形）を準備。Phase 1 演習の実施キット（Hyper-V 向け雛形）を準備し、本人が実機（Hyper-V ホスト）で
 初回実行して見つけた実バグ 2 件（誤成功表示、UTF-8 BOM 無しによる Windows PowerShell 5.1 での文字化け・
-構文エラー）を修正。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18
-を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。続けて、windows-ad-lab.md のフォレスト昇格・
-最小 OU 構成の先を、OU 階層・AGDLP グループ戦略・GPO・パスワードポリシー・FSMO・システム状態バックアップ／
-権威復元まで具体化した 08 AD構築演習設計を新規作成）
+構文エラー）を修正。06 シェルスクリプト演習設計の Windows/PowerShell 側（Level 1・2・演習A
+`Backup-Rotate.ps1`）を、Linux コンテナへ導入した PowerShell 7 で実行し、演習B〜E は windows-ps-kit
+（構文検証済みの実施キット）として準備。windows-ad-lab.md のフォレスト昇格・最小 OU 構成の先を、
+OU 階層・AGDLP グループ戦略・GPO・パスワードポリシー・FSMO・システム状態バックアップ／権威復元まで
+具体化した 08 AD構築演習設計を新規作成。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18
+を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
 
 ---
 
@@ -122,6 +124,20 @@ GPO の作成とリンク・パスワードポリシー（既定 + 細分化）�
 
 削除した設計は破棄したのではなく、実装が伴わないまま個別ページとして積み上がっていた状態を、
 実際の到達度に合わせて縮小したものである。着手時期が近づいた際は、改めて一次導線へ追加する。
+
+### 2026-08-26 の更新内容（追補4：06 Windows/PowerShell 側 Level 1・2・演習A の実行、演習B〜E の実施キット準備）
+
+[06 シェルスクリプト演習設計](./docs/learning-plan/06-shell-scripting-exercise-design.md)の 4 章
+（Windows／PowerShell）に着手した。この AI 支援セッションには Windows 実行環境は無いが、Linux
+コンテナへ PowerShell 7.4.6（公式 tar.gz）を導入できたため、クロスプラットフォームに動作する範囲
+（Level 1・Level 2、演習A `Backup-Rotate.ps1`）は Bash 側と同様に**実際に実行**して確認した。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 実行できた範囲 | 4.1 Level 1（L1-1〜L1-5）・4.2 Level 2（L2-1〜L2-5、L2-2 は `Get-Service` が Linux 版に無いため `Get-Item` で代替）・4.3 演習A `Backup-Rotate.ps1`（A-1〜A-4：圧縮バックアップの展開一致、世代管理、Mutex による排他制御、異常系での transcript 終了と Mutex 解放）を、Linux コンテナ上の PowerShell 7.4.6 で実際に実行し確認した |
+| 実行できなかった範囲 | 演習B（サービス操作）・演習C（イベントログ）・演習C フラッグシップ `Invoke-EnvironmentCheck.ps1`・演習D（AD 基礎操作）・演習E フラッグシップ `New-LabUserBatch.ps1` は、`Get-Service` コマンドレット自体が Linux 版 PowerShell 7 に存在しない、`*-EventLog` 系コマンドレットが Windows PowerShell 5.1 専用、`ActiveDirectory` モジュールが無いため、いずれも実行できなかった |
+| 実施キットの準備 | 実行できなかった範囲は、[05 の phase1-kit](./docs/learning-plan/phase1-kit/README.md)・[07 の python-ops-kit](./docs/learning-plan/python-ops-kit/README.md)と同じ考え方で [windows-ps-kit](./docs/learning-plan/windows-ps-kit/README.md) として実装した。既存 2 キットの「目視のみ」より一段階踏み込み、PowerShell の構文パーサー（`[System.Management.Automation.Language.Parser]::ParseFile()`）で構文エラーが無いことを確認し、さらに AD/Windows 非依存の部分（ディスク使用率チェック関数、CSV 読み込み・列検証・グループ名導出・`-WhatIf` 既定化ロジック）は関数単体で切り出して実行し、意図どおりの結果を確認した |
+| 状態 | **本人が実機（Windows）で再現・検証した記録ではない**。AD ラボドメインの構築自体も [Windows / AD 公開再現ラボ](./docs/evidence/templates/windows-ad-lab.md)側で引き続き `NOT RUN` |
 
 ### 2026-08-26 の更新内容（追補：06 Bash 側 Level 1・2・演習B の実行）
 
