@@ -53,3 +53,11 @@
 一度も実行していない。PowerShell の構文は目視で確認したが、cmdlet の実際の挙動・エラーメッセージ・
 Windows/Hyper-V のバージョン差は未検証（[付録 A の冒頭注記](../05-phase1-exercise-design.md#付録-a-hyper-v-版の差分)と同じ制約）。
 実施時に画面の表記やエラーが異なる場合は、実際の表記を優先し、差分を本人が [LEARNINGS.md](../../../LEARNINGS.md) へ残す。
+
+**2026-08-26 に本人の実機（Hyper-V ホスト）で `00-create-internal-switch.ps1` を初回実行し、
+実バグが 1 件見つかった。** `New-VMSwitch` が権限不足（`VirtualizationException`）で失敗しても、
+PowerShell の既定動作（非終了エラー）のままだと後続の行がそのまま実行され、失敗したのに
+成功したかのようなメッセージ（`スイッチ 'lab-internal'（Internal）を作成しました。`）が出ていた。
+`hyperv/*.ps1` 全 5 本に `$ErrorActionPreference = 'Stop'` と `try/catch` を追加し、
+実際の成否を判定してから成功メッセージを出すよう修正した。元の権限エラー自体（Hyper-V の
+実行権限・グループ設定の問題）はスクリプトの不具合ではなく、実施者側の環境の問題として残っている。
