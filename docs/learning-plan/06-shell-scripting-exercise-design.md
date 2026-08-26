@@ -8,7 +8,7 @@
 >
 > Windows（PowerShell）を扱う理由は、[STATUS.md](../../STATUS.md) が「コードでは埋められない、残っている穴」に挙げる**研修で触れている Windows Server / AD が実測に出ていないこと**に対応するためです。本書はそのうち、Active Directory のユーザー・グループ操作、Windows サービス、イベントログという**運用スクリプトの基礎**を演習として 1 から組み立てます。ドメインコントローラの構築そのもの（forest promotion）は引き続き [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)の領域とし、本書はそのラボが構築済みであることを前提にした操作スクリプトを対象にします。
 >
-> 本ドキュメントは主に**設計**です。3 章（Bash：Level 1・Level 2・演習A `backup-rotate.sh`・演習B `env-check.sh`）は、AI 支援セッションの作業環境で実行し記述に反映済みですが、これは**本人が実機で再現・検証した記録ではありません**。4 章（Windows）は未実施です。詳細は [8. 実施ステータス](#8-実施ステータスと次のアクション)を参照してください。
+> 本ドキュメントは主に**設計**です。3 章（Bash：Level 1・Level 2・演習A `backup-rotate.sh`・演習B `env-check.sh`）と、4 章のうち Level 1・Level 2・演習A `Backup-Rotate.ps1`（4.1〜4.3 演習Aまで）は、AI 支援セッションの作業環境（Linux コンテナに PowerShell 7 を導入したもの）で実行し記述に反映済みですが、これは**本人が実機（Windows を含む）で再現・検証した記録ではありません**。4 章のうち `Get-Service`／`*-EventLog`／`ActiveDirectory` モジュールに依存する範囲（演習B・演習C・演習D・演習E）は、Windows 実行環境が無いこの AI 支援セッションでは原理的に実行できないため、実施キット（[windows-ps-kit](./windows-ps-kit/README.md)、構文検証済み・機能未実行）としてのみ用意しています。詳細は [8. 実施ステータス](#8-実施ステータスと次のアクション)を参照してください。
 
 最終更新: 2026-08-26
 
@@ -229,6 +229,8 @@ flowchart LR
 
 ### 4.1 Level 1 基礎文法
 
+> **実施記録（2026-08-26）**: AI 支援セッションの作業環境（Linux コンテナに PowerShell 7.4.6 を導入したもの。[4.3 演習A の実施記録](#43-level-3-システム操作サービスイベントログ)と同一環境）で L1-1〜L1-5 のハンズオンをすべて実行し、各行の到達確認どおりの結果を確認しました（**本人による実機（Windows）再現ではありません**）。L1-2 の「配列との `-eq $null` 比較」は、要素数 2 以上の配列に `$null` を含む場合にのみ `if` が常に真になることを、複数パターンで実際に確認しました（含まない場合は正しく偽になります）。
+
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
 | L1-1 | 変数・型 | `$today = Get-Date -Format 'yyyyMMdd'` のように変数へ代入し、`"今日は $today"` で文字列展開する。`(Get-Date).GetType()` も試し、`-Format` の有無で型が変わることを比較する | `Get-Date -Format ...` は文字列（`String`）を返すため `$today.GetType()` は `String` になることを確認できる。`-Format` を外した `(Get-Date).GetType()` は `DateTime` になり、変数が文字列だけでなくオブジェクトも保持できることを確認できる | `$today` のようにドル記号が変数名の一部（Bash の `$name` が「参照時にだけ付く記号」なのに対し PowerShell は「変数名そのものに含まれる」という違い）。`-Format` を付けると戻り値の型が `DateTime` から `String` に変わる点を混同しない |
@@ -238,6 +240,8 @@ flowchart LR
 | L1-5 | 配列・ハッシュテーブル | サービス名の配列を `$services = @('W32Time', 'Spooler')` で作る。名前 → 説明の対応をハッシュテーブル `@{}` で持つ | `$arr.Count` と `$hash.Keys` の取得ができる | 要素数 1 の配列はパイプラインを通ると単一オブジェクトとして扱われることがある（`,$arr` で強制的に配列として扱う場面がある） |
 
 ### 4.2 Level 2 制御・入出力・エラー処理
+
+> **実施記録（2026-08-26）**: [4.1 と同じ実施記録](#41-level-1-基礎文法)のとおり、L2-1〜L2-5 のハンズオンをすべて実行し確認しました。ただし L2-2 は、`Get-Service` コマンドレット自体が Linux 版 PowerShell 7 に存在しない（Windows 専用）ため、`Get-Item -Path <存在しないパス>` に置き換えて実行しました。終端エラー・非終端エラーの一般的な挙動（`-ErrorAction Stop` の有無で `try`/`catch` に捕捉されるかどうか）は `Get-Service` と同じ PowerShell 共通のエラーモデルによるものなので確認できていますが、`Get-Service` 固有のエラーメッセージ・型は未確認です。
 
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
@@ -255,6 +259,8 @@ flowchart LR
 
 [3.3 演習 A](#演習-aフラッグシップ-backup-rotatesh)の PowerShell 版を、通常のハンズオン粒度で設計します。
 
+> **実施記録（2026-08-26）**: AI 支援セッションの作業環境（Linux コンテナに PowerShell 7.4.6 を導入したもの）で A-1〜A-4 のとおりに実装・実行し、生成物を `Expand-Archive` で展開して元と一致すること（A-1）、`Keep` を超えた世代だけが削除されること（A-2）、2 重起動時に 2 つ目のインスタンスが `Mutex.WaitOne(0)` で `$false` を受け取り安全に終了すること（A-3）、`SourcePath` 不正時の異常系でも `finally` により transcript が閉じられ Mutex が解放され、直後の実行に影響しないこと（A-4）を確認しました（**本人による実機（Windows）再現ではありません**）。`Compress-Archive`／`[System.Threading.Mutex]`／`Start-Transcript` はいずれも Linux 版 PowerShell 7 でも動作するクロスプラットフォームな機能のため、この確認は成立します。実装は [windows-ps-kit](./windows-ps-kit/README.md) の `backup-rotate/Backup-Rotate.ps1` を参照してください。
+
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
 | A-1 | 圧縮バックアップ | `Compress-Archive -Path $src -DestinationPath "backup-$(Get-Date -Format yyyyMMdd-HHmmss).zip"` | 生成物を `Expand-Archive` で展開し元と一致することを確認する | `Compress-Archive` は既定で対象フォルダ名を zip 内の最上位に含める（Bash の `tar -C` によるパス制御と挙動が異なる） |
@@ -263,6 +269,8 @@ flowchart LR
 | A-4 | ログ記録 | `Start-Transcript` で開始し、`finally` ブロックで `Stop-Transcript` を呼ぶ | スクリプトを異常終了させても transcript が正しく閉じることを確認する | `Start-Transcript` を多重に開始しようとすると `Transcription has already been started. Use the -Force parameter to start a new transcript.` というエラーになる（既定では非終端エラーのため `-ErrorAction Stop` を付けないと `try`/`catch` で捕まらない）。`try`/`finally` の対で管理する |
 
 #### 演習 B: Windows サービスの操作
+
+> **未実施**: `Get-Service`／`Set-Service` 等はコマンドレット自体が Linux 版 PowerShell 7 に存在しないため、AI 支援セッションでは実行できません。[windows-ps-kit](./windows-ps-kit/README.md)を参照してください。
 
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
@@ -287,6 +295,8 @@ flowchart LR
 #### 演習 C（フラッグシップ）: `Invoke-EnvironmentCheck.ps1`
 
 演習 B・演習 C（サービス・イベントログ）と、Bash 側 [演習 B](#演習-b-env-checksh) の PowerShell 版（ディスク使用率・証明書残日数）を統合します。
+
+> **実施記録（2026-08-26）**: 実装は [windows-ps-kit](./windows-ps-kit/README.md) の `flagship/Invoke-EnvironmentCheck.ps1` に用意しました。`Get-Service`（C-3）・`Write-EventLog`（C-6）・`Cert:` ドライブ（C-4）は AI 支援セッションの Linux コンテナでは利用できないため未実行です。ディスク使用率チェック（C-2、`Get-PSDrive -PSProvider FileSystem` を利用）だけは関数を単体で切り出して実行し、しきい値超過時に `WARN` になることを確認しました。スクリプト全体は PowerShell の構文パーサーでエラーが無いことを確認済みですが、Windows 実機での通し実行（C-1・C-5・C-7・C-8、[試験項目書](#試験項目書)の T-01〜T-14）は未実施です。
 
 ##### 仕様
 
@@ -336,9 +346,11 @@ flowchart LR
 
 ### 4.4 Level 4: Active Directory 運用スクリプト
 
-前提: [Windows / AD 公開再現ラボ §4](../evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)の Greenfield 手順でラボドメイン（`ad.example.test` / `ADLAB`）を構築済みであること。**本書はドメインコントローラの構築（forest promotion）を対象にしません。** 同じラボ専用 OU（`PortfolioLab`）・接頭辞（`pf-`）をここでも使い、リポジトリ内で規約を二重化しません。
+前提: [Windows / AD 公開再現ラボ §4](../evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)の Greenfield 手順でラボドメイン（`ad.example.test` / `ADLAB`）を構築済みであること。**本書はドメインコントローラの構築（forest promotion）を対象にしません。** 同じラボ専用 OU（`PortfolioLab`）・接頭辞（`pf-`）をここでも使い、リポジトリ内で規約を二重化しません。OU 階層の設計、AGDLP グループ戦略、GPO・パスワードポリシー・FSMO・バックアップは[08 AD構築演習設計](./08-ad-exercise-design.md)が扱うため、本節は CSV からのユーザー一括作成という**スクリプト側**に閉じます。
 
 Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transcript、事前確認の考え方）を、AD 操作という書き込みを伴う対象に適用する演習です。入社時のアカウント作成・棚卸しという、社内 SE 補助業務で典型的な運用作業を題材に、CSV 一括操作のスクリプトとして 1 から組み立てます。
+
+> **未実施**: `ActiveDirectory` モジュール（Windows Server の RSAT 機能）が無いと `Get-ADDomain`/`New-ADUser` 等のコマンドレット自体が存在しないため、AI 支援セッションでは実行できません。ラボドメインの構築自体も [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)側で `NOT RUN` のままです。[windows-ps-kit](./windows-ps-kit/README.md)を参照してください。
 
 #### 演習 D: AD オブジェクトの読み取り・作成の基礎
 
@@ -351,6 +363,8 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 | D-5 | OU 間の移動 | `Move-ADObject` でユーザーをラボ OU 内の別サブ OU へ移動する | 移動前後で `DistinguishedName` が変わることを確認できる | 移動先が想定したラボ OU の配下であることを、移動前に文字列一致で確認する（[Level 2 の事前検証](#42-level-2-制御入出力エラー処理)と同じ考え方） |
 
 #### 演習 E（フラッグシップ）: `New-LabUserBatch.ps1`
+
+> **実施記録（2026-08-26）**: 実装は [windows-ps-kit](./windows-ps-kit/README.md) の `flagship/New-LabUserBatch.ps1` に用意しました。AD に依存する経路（E-2〜E-6 の `Get-ADDomain`/`New-ADUser`/`Add-ADGroupMember` 等）は AI 支援セッションでは実行できません。CSV 読み込み・必須列検証・接頭辞判定・部署名からのグループ名導出（E-1 の AD 非依存部分）、および「既定は `-WhatIf` 相当、`-WhatIf:$false` で明示的に書き込む」という安全策の既定値切り替えロジックは、`windows-ps-kit/sample-data/new-lab-users.csv`（接頭辞のない行を 1 件含む）を使って単体で実行し、意図どおりの結果を確認しました。スクリプト全体は構文パーサーでエラーが無いことを確認済みです。
 
 ##### 仕様
 
@@ -482,10 +496,13 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 
 ## 8. 実施ステータスと次のアクション
 
-- **現在の状態**: Bash 側（3 章）を、AI 支援セッションの作業環境ですべて実行した（Level 1・Level 2 のハンズオン全項目、演習 A `backup-rotate.sh` 12/12 OK、演習 B `env-check.sh`。2026-08-26）。4 章（Windows／PowerShell）は未実施（このセッションが Linux コンテナのため実行不可）。**本人が実機（`lab-base01` 等）で再現・検証した記録ではない**点、[7 章](#7-証跡採録計画)が想定する `server-monitor` 側への一次証跡保存がまだの点、演習 B の B-1・B-4 がコンテナに systemd が無いため十分に検証できていない点は、各節の実施記録の注記のとおり
+- **現在の状態**:
+  - Bash 側（3 章）を、AI 支援セッションの作業環境ですべて実行した（Level 1・Level 2 のハンズオン全項目、演習 A `backup-rotate.sh` 12/12 OK、演習 B `env-check.sh`。2026-08-26）
+  - Windows 側（4 章）は、AI 支援セッションの作業環境（Linux コンテナに PowerShell 7.4.6 を導入したもの）で Level 1・Level 2・演習A `Backup-Rotate.ps1`（4.1〜4.3 演習Aまで）を実行した（2026-08-26）。演習B（サービス）・演習C（イベントログ）・演習C フラッグシップ `Invoke-EnvironmentCheck.ps1`・演習D（AD）・演習E フラッグシップ `New-LabUserBatch.ps1` は、`Get-Service`/`*-EventLog`/`ActiveDirectory` モジュールがこの環境に存在しないため未実行。実装は [windows-ps-kit](./windows-ps-kit/README.md) として用意し、構文パーサーでの検証と、AD/Windows 非依存部分（ディスク使用率チェック、CSV 読み込み・検証ロジック）の実行確認は済ませた
+  - いずれも **本人が実機（`lab-base01`／Windows 実機等）で再現・検証した記録ではない**点、[7 章](#7-証跡採録計画)が想定する `server-monitor` 側への一次証跡保存がまだの点、演習 B（Bash）の B-1・B-4 がコンテナに systemd が無いため十分に検証できていない点は、各節の実施記録の注記のとおり
 - **次のアクション**:
   1. [1 章の前提条件](#前提条件)の Linux VM（`lab-base01`）が整い次第、本人の実機で 3 章（Level 1・2・演習 A・演習 B）を再現し、AI 実行との差分（特に演習 B の B-1・B-4 は systemd が動く実機でなければ検証できない）があれば記録する
-  2. Windows 側（4 章）は補助トラックのため、[01 学習環境 §6](./01-environment.md#6-windows-server-の学習環境任意)の VM を用意したタイミングで着手する。Level 1〜3（4.1〜4.3）から始める
+  2. Windows 実機（[01 学習環境 §6](./01-environment.md#6-windows-server-の学習環境任意)）が整い次第、本人が 4.1〜4.3 演習Aを再実施して AI 実行との差分を確認し、[windows-ps-kit](./windows-ps-kit/README.md) の演習B・演習C・演習C フラッグシップを実施する
   3. Level 4（AD 操作、4.4）は、[Windows / AD 公開再現ラボ §4](../evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)のラボドメイン構築が先行条件になる。**このラボ自体、本書執筆時点で `NOT RUN`** のため、Level 4 の着手はさらにその後になる
 - **完了後に更新するもの**:
   - [02 フェーズ別カリキュラム W4 / W18](./02-curriculum.md#w4-ディスクファイルシステムシェルスクリプト) の該当ハンズオンから、本書の実施記録へのリンク
@@ -501,6 +518,7 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 - [02 フェーズ別カリキュラム](./02-curriculum.md)
 - [03 構築工程の実務ドキュメント](./03-build-process.md)
 - [05 Phase 1 演習設計](./05-phase1-exercise-design.md)
+- [windows-ps-kit（Windows/PowerShell 側 実施キット）](./windows-ps-kit/README.md)
 - [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [学習の一次記録（つまずきログ）](../../LEARNINGS.md)

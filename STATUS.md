@@ -10,10 +10,14 @@
 演習B）を AI 支援セッションで実行。07 Python 運用自動化演習設計に、この作業環境での Linux 側実行記録
 （付録、31/49 項目）を追加し、Windows 側・実機（lab-base01 / LAB-WINOPS1）実施用のキット（python-ops-kit、
 未実行の雛形）を準備。Phase 1 演習の実施キット（Hyper-V 向け雛形）を準備し、本人が実機（Hyper-V ホスト）で
-初回実行して見つけた実バグ 1 件を修正。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18
-を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。さらに、career-bridge.md の Zabbix 概念対応表を
-実機で検証する補完演習として 09 Zabbix 監視基盤構築演習設計を新規作成（設計のみ・未実施、ADR-0001 の主系統
-は変更しない）
+初回実行して見つけた実バグ 1 件を修正。06 シェルスクリプト演習設計の Windows/PowerShell 側
+（Level 1・2・演習A `Backup-Rotate.ps1`）を、Linux コンテナへ導入した PowerShell 7 で実行し、
+演習B〜E は windows-ps-kit（構文検証済みの実施キット）として準備。windows-ad-lab.md のフォレスト
+昇格・最小 OU 構成の先を、OU 階層・AGDLP グループ戦略・GPO・パスワードポリシー・FSMO・システム
+状態バックアップ／権威復元まで具体化した 08 AD構築演習設計を新規作成。career-bridge.md の Zabbix
+概念対応表を実機で検証する補完演習として 09 Zabbix 監視基盤構築演習設計も新規作成（設計のみ・未実施、
+ADR-0001 の主系統は変更しない）。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18
+を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
 
 ---
 
@@ -86,7 +90,7 @@
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
 
-### 2026-08-26 の更新内容（追補4：09 Zabbix 監視基盤構築演習設計の新規作成）
+### 2026-08-26 の更新内容（09 Zabbix 監視基盤構築演習設計：Prometheus 概念対応表の実機検証設計）
 
 [career-bridge.md §2.6](./docs/career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)が示す Prometheus → Zabbix の概念対応表は、これまで「調べて書いた対応関係」に留まっていた。国内 SIer・受託運用の求人で Zabbix の実務経験が問われることが多い（[ADR-0001](./docs/adr/0001-monitoring-stack.md)、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)）ことを踏まえ、この対応表を実際に構築・設定・障害検知まで動かして検証するための演習設計を、[05](./docs/learning-plan/05-phase1-exercise-design.md)・[06](./docs/learning-plan/06-shell-scripting-exercise-design.md)・[07](./docs/learning-plan/07-python-ops-automation-exercise-design.md)と同水準の具体性で新規作成した。
 
@@ -94,10 +98,29 @@
 | --- | --- |
 | 新規作成 | [09 Zabbix 監視基盤構築演習設計](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)（`lab-ops01` 1 台での Zabbix 7.0 LTS + PostgreSQL + Nginx/PHP-FPM 構築、Agent2 導入、Item/Trigger/Action/Template/LLD の監視設計、障害演習、バックアップ・リストア試験まで。設計のみ・未実施） |
 | ADR との関係 | [ADR-0001](./docs/adr/0001-monitoring-stack.md)（Prometheus + Grafana 採用）を変更するものではなく、独立した補完演習として追加。本ラボの主監視スタックは変更していない |
-| 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[07](./docs/learning-plan/07-python-ops-automation-exercise-design.md)と同じ位置付け）のため対象外 |
+| 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[08](./docs/learning-plan/08-ad-exercise-design.md)と同じ位置付け）のため対象外 |
 | 技術情報の裏取り | AI 支援セッションで Zabbix 公式ドキュメントを調査。セッションのネットワーク方針により直接アクセスが遮断されたため、検索エンジンのスニペットと GitHub 公式リポジトリのタグ一覧を突き合わせて裏付けを取った（バージョン番号は GitHub タグで直接確認済み、コマンド細部は実施前に公式ドキュメントでの再確認を前提とする旨を明記） |
 | 相互参照の追加 | [学習プラン README](./docs/learning-plan/README.md)、[02 W23](./docs/learning-plan/02-curriculum.md#w23-監視バックアップ復旧演習)、[career-bridge.md §2.6](./docs/career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)から本書へのリンクを追加 |
 | 整合性チェック | markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェックをいずれも実行し、0 件を確認 |
+
+### 2026-08-26 の更新内容（08 AD構築演習設計：OU・グループ・GPO・パスワードポリシー・ヘルスチェック・バックアップ）
+
+[01 学習環境 §6](./docs/learning-plan/01-environment.md#6-windows-server-の学習環境任意)が学習範囲に挙げながら、
+どの資料にも詳細設計がなかった「OU 設計」「グループポリシーの基本」を埋めるため、
+[docs/learning-plan/08-ad-exercise-design.md](./docs/learning-plan/08-ad-exercise-design.md) を新規作成した。
+[Windows / AD 公開再現ラボ](./docs/evidence/templates/windows-ad-lab.md)のフォレスト昇格・単一 OU・単一グループという
+最小構成を起点にし、そこで終わっていた設計を、実務の AD 構築案件が扱う範囲（OU 階層・AGDLP グループ戦略・
+GPO の作成とリンク・パスワードポリシー（既定 + 細分化）・FSMO 確認・`dcdiag`/`repadmin` によるヘルスチェック・
+システム状態バックアップと権威復元）まで拡張する。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 演習設計 | [03 構築工程の実務ドキュメント](./docs/learning-plan/03-build-process.md)の様式（パラメータシート・構築手順書・試験項目書）で、OU 階層 6 個・AGDLP グループ 3 個・GPO 2 個（Computer/User Configuration を分離）・細分化パスワードポリシー（PSO）1 個・システム状態バックアップと `ntdsutil` による権威復元までコマンドと想定結果を具体化した。試験項目書は単体 12 件・結合 4 件・総合 2 件・異常系 8 件の計 26 件（異常系 31%） |
+| 重複の排除 | windows-ad-lab.md §4（フォレスト昇格）・§8（90 日棚卸し）・§9（DNS 障害注入・ドメイン参加）、[06 §4.4](./docs/learning-plan/06-shell-scripting-exercise-design.md#44-level-4-active-directory-運用スクリプト)（CSV 一括ユーザー作成）とは範囲を分け、本書はそれらが作った状態を前提条件として使うのみで再掲しない。役割分担は本書の付録 B に一覧化した |
+| 基礎解説 | 「基礎から」の演習にするため、フォレスト/ドメイン/サイトの階層、FSMO 5 ロール、グループの種類とスコープ・AGDLP 戦略、GPO の処理順序（LSDOU）と Computer/User Configuration の適用範囲の違い、SYSVOL/DFSR、AD ごみ箱と tombstone を付録 A にまとめた |
+| 整合性チェック | markdownlint（49 ファイル、0 件）、Mermaid 構文検証（19 図、全パース成功）、`github-slugger`（GitHub と同じ見出しアンカー生成ライブラリ）を使って自作したリポジトリ内リンク・アンカーの解決チェック（49 ファイル、0 件切れ）をローカルで実行した。このチェックで本書内の誤ったアンカー参照 3 件（`06`・windows-ad-lab.md への参照）を発見し修正した |
+| 技術精査 | AD DS / PowerShell / GPO / FSMO / DSRM 権威復元のコマンドと挙動を Microsoft Learn 等の一次情報と突き合わせる独立レビューを実施。致命的な誤りは無かったが、`wbadmin` の `-backupTarget:E:\` を公式サンプルどおりの `-backupTarget:E:`（末尾バックスラッシュなし）へ統一し、付録 A のユニバーサルグループの説明を「Linked Value Replication により差分レプリケートだが、メンバー一覧はグローバルカタログへ可視化される」という現行のドメイン機能レベルに即した記述へ訂正した |
+| 状態 | **設計のみ・未実施**。前提となる windows-ad-lab.md §4 のフォレスト昇格自体が本書執筆時点で `NOT RUN` のため、本書のいずれの手順も未着手。試験項目書 T-01〜T-26 の実測結果欄はすべて空欄 |
 
 ### 2026-08-26 の更新内容（追補3：網羅範囲の縮小 — IT サポート・Windows 補助証跡・中長期ロードマップの整理）
 
@@ -114,6 +137,20 @@
 
 削除した設計は破棄したのではなく、実装が伴わないまま個別ページとして積み上がっていた状態を、
 実際の到達度に合わせて縮小したものである。着手時期が近づいた際は、改めて一次導線へ追加する。
+
+### 2026-08-26 の更新内容（追補4：06 Windows/PowerShell 側 Level 1・2・演習A の実行、演習B〜E の実施キット準備）
+
+[06 シェルスクリプト演習設計](./docs/learning-plan/06-shell-scripting-exercise-design.md)の 4 章
+（Windows／PowerShell）に着手した。この AI 支援セッションには Windows 実行環境は無いが、Linux
+コンテナへ PowerShell 7.4.6（公式 tar.gz）を導入できたため、クロスプラットフォームに動作する範囲
+（Level 1・Level 2、演習A `Backup-Rotate.ps1`）は Bash 側と同様に**実際に実行**して確認した。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 実行できた範囲 | 4.1 Level 1（L1-1〜L1-5）・4.2 Level 2（L2-1〜L2-5、L2-2 は `Get-Service` が Linux 版に無いため `Get-Item` で代替）・4.3 演習A `Backup-Rotate.ps1`（A-1〜A-4：圧縮バックアップの展開一致、世代管理、Mutex による排他制御、異常系での transcript 終了と Mutex 解放）を、Linux コンテナ上の PowerShell 7.4.6 で実際に実行し確認した |
+| 実行できなかった範囲 | 演習B（サービス操作）・演習C（イベントログ）・演習C フラッグシップ `Invoke-EnvironmentCheck.ps1`・演習D（AD 基礎操作）・演習E フラッグシップ `New-LabUserBatch.ps1` は、`Get-Service` コマンドレット自体が Linux 版 PowerShell 7 に存在しない、`*-EventLog` 系コマンドレットが Windows PowerShell 5.1 専用、`ActiveDirectory` モジュールが無いため、いずれも実行できなかった |
+| 実施キットの準備 | 実行できなかった範囲は、[05 の phase1-kit](./docs/learning-plan/phase1-kit/README.md)・[07 の python-ops-kit](./docs/learning-plan/python-ops-kit/README.md)と同じ考え方で [windows-ps-kit](./docs/learning-plan/windows-ps-kit/README.md) として実装した。既存 2 キットの「目視のみ」より一段階踏み込み、PowerShell の構文パーサー（`[System.Management.Automation.Language.Parser]::ParseFile()`）で構文エラーが無いことを確認し、さらに AD/Windows 非依存の部分（ディスク使用率チェック関数、CSV 読み込み・列検証・グループ名導出・`-WhatIf` 既定化ロジック）は関数単体で切り出して実行し、意図どおりの結果を確認した |
+| 状態 | **本人が実機（Windows）で再現・検証した記録ではない**。AD ラボドメインの構築自体も [Windows / AD 公開再現ラボ](./docs/evidence/templates/windows-ad-lab.md)側で引き続き `NOT RUN` |
 
 ### 2026-08-26 の更新内容（追補：06 Bash 側 Level 1・2・演習B の実行）
 
