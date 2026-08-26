@@ -2,17 +2,13 @@
 
 ## Linux サーバー設計・構築エンジニア志望
 
-主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元まで一気通貫で検証し、23/23 ID PASS を採録したインフラ構築ラボです。2026-08-22 に[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映しました。
-
-2026-08-23 には [PR #77 の GitHub Actions](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)で、候補版を変更されない Git SHA で配備した後、指定した旧版へ戻して再検証するロールバック実演も PASS しました。これは使い捨て runner 上の CI 結果で、PR #77 の main 反映や永続ホストでの変更作業を示すものではありません。
+Ubuntu サーバーを設計書から構築し、監視を載せ、わざと壊して復旧させ、バックアップから復元するところまでを一人で通しました。試験項目 23 件すべてに合格しています（詳細は下記「実測できていること」）。作品は主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** です。
 
 ## 30 秒で確認する 3 点
 
-| [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [詰まった記録](./LEARNINGS.md) |
+| [2 分 15 秒デモ（保存済み画面の証跡リプレイ）](https://ns7jp.github.io/demo.html) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [詰まった記録](./LEARNINGS.md) |
 | --- | --- | --- |
-| 要件定義から引き渡しまでの成果物 12 本（1,242 行） | 2026-08-22 の 23/23 PASS と未実測範囲 | 実機で外した仮説を、症状 → 原因 → 対処 → 学びで記録 |
-
-[案件概要（1 枚）](https://ns7jp.github.io/project-brief.html) ／ [2 分 15 秒デモ（保存済み画面の証跡リプレイ）](https://ns7jp.github.io/demo.html)
+| 2026-08-18・19 の保存済み画面と復旧ログを再構成 | 2026-08-22 の 23/23 PASS と未実測範囲 | 実機で外した仮説を、症状 → 原因 → 対処 → 学びで記録 |
 
 ## 志望と現況
 
@@ -26,21 +22,31 @@
 
 | 実施した検証 | 結果・証跡 |
 | --- | --- |
-| 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
-| Git SHA を指定した変更・ロールバック実演 | [候補 `84e1492` を配備後、旧版 `59aa88e` へ復帰し、稼働中の版番号、実行ファイルのハッシュ、app コンテナ再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで PASS](./docs/evidence/2026-08-23-server-monitor-git-rollback-ci.md) |
+| 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、試験項目 23 件中 23 件合格](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)（[PR #75](https://github.com/ns7jp/server-monitor/pull/75)、2026-08-22 に main 反映済み） |
+| Git SHA を指定した変更・ロールバック実演 | [候補 `84e1492` を配備後、旧版 `59aa88e` へ復帰し、稼働中の版番号、実行ファイルのハッシュ、app コンテナ再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで PASS](./docs/evidence/2026-08-23-server-monitor-git-rollback-ci.md)（[PR #77](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)、PR ブランチ上の使い捨て runner での結果） |
 | Docker API の権限制御とログ経路 | [read-only proxy の GET 成功、POST 拒否、固有 Nginx log の Alloy 経由 Loki 到達を同じ E2E で確認](https://github.com/ns7jp/server-monitor/actions/runs/32572409469) |
 | Ansible 4 ロールを Linux 上で適用し、2 回目の冪等性と期待状態を確認 | [`molecule test` 4 ロール PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)。途中で静的検査では見つからなかった欠陥 2 件を修正 |
 | 監視スタック 9 サービスを Linux (WSL2) 上で起動 | [Grafana の実データ表示、Loki のログ取得を確認](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
 | app プロセスを意図的に停止し、自動復旧を計測 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
 | client → proxy → app の二セグメント構成で通信断を注入 | [障害再現 → 経路・名前解決の切り分け → 復旧まで PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md) |
 
-上記はいずれも**使い捨て runner または WSL2 上の実測**です。独立した引き渡し対象ホスト、組織 DNS、Slack 実配信、AWS `apply`、長期稼働は未実測で、何がどこまで確認済みかは[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)に 1 か所へまとめています。実行ログのない項目を実績として書くことはしません。
+## 実行環境と未実測の範囲
+
+すべて使い捨て環境上の実測です。独立した引き渡し対象ホストでの実績ではありません。
+
+| 検証項目 | 実行環境 |
+| --- | --- |
+| Full-stack E2E ／ Git SHA ロールバック ／ Docker API 検証 | 使い捨て GitHub Actions runner（Ubuntu 24.04、Docker 導入済み） |
+| 監視スタック起動 ／ D-1 復旧演習 | 手元 WSL2（Ubuntu 24.04） |
+| B-1 ディスク設計・LVM 拡張 | AI 支援セッション上の qemu ゲスト（loop device） |
+| B-2 3 層切り分け ／ B-3 DB 復元 | 同上の Docker コンテナ。**面接の場での再実演は、手元の WSL2 + Docker で再現できるこの 2 演習に限りお約束できます** |
+| B-4 L2 / L3 切り分け | 同上の network namespace |
+
+未実測: 独立した引き渡し対象ホスト、組織 DNS、Slack 実配信、AWS `apply`、ホスト再起動後の永続性、長期稼働、AlmaLinux 実機への適用。何がどこまで確認済みかは[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)に 1 か所へまとめています。実行ログのない項目を実績として書くことはしません。
 
 ## 手を動かして実演できること（2026-08-24 に実行・採録）
 
-スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。
-
-**実行環境を正確に書きます。** B-1 は仮想ディスク（loop device）を割り当てた Ubuntu 24.04 ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace 上での実行です。**いずれも AI 支援セッションの作業環境上で実行しており、独立した物理／VPS ホストや、私の手元の WSL2 上での再実行証跡ではありません。** 証跡ファイルの「実施環境」欄に採録時の `uname` をそのまま残しています（B-2 / B-3 / B-4 は `Linux 6.18.44-fc-v21`）。手元での再実行と、実行者欄を含む再採録は着手予定です（[STATUS](./STATUS.md) 参照）。
+スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。証跡ファイルの「実施環境」欄に採録時の `uname` をそのまま残しています（B-2 / B-3 / B-4 は `Linux 6.18.44-fc-v21`）。手元での再実行と、実行者欄を含む再採録は着手予定です（[STATUS](./STATUS.md) 参照）。
 
 | 演習 | 内容 | 結果 |
 | --- | --- | --- |
@@ -64,7 +70,7 @@ Ansible role は Ubuntu 22.04 / 24.04 に加えて **AlmaLinux / Rocky 9** に�
 | `docker kill` したのにコンテナが戻ってこない | `restart: unless-stopped` の対象外になる操作だと分かっていなかった |
 | Hyper-V 上の AD ドメイン参加で「ドメインが見つかりません」 | DC が動いていることと、クライアントがその DC を DNS として見ていることは別だった |
 
-**この 4 件を含む一次記録は、私が実機を触って書いたものです。**[AI の利用について](#ai-の利用について)のとおり、このリポジトリの他の文書には AI 支援が広く入っていますが、`LEARNINGS.md` だけは 2026-08-25 以降、本人のみが編集します（[STATUS §0](./STATUS.md) のルール 7）。
+**この 4 件のうち、UFW の競合と systemd の誤診は、事実（環境・症状・原因・対処）を AI 支援で下書きしたのち、学びの言語化は私自身が書きました。docker kill の 2 件は、私が伝えた核心の一文を AI が文章に起こしたもの、Hyper-V AD の 1 件は研修中の作業メモを AI が本文化したものです**（`git log -- LEARNINGS.md` で確認できます）。[AI の利用について](#ai-の利用について)のとおり、このリポジトリの他の文書には AI 支援が広く入っており、`LEARNINGS.md` も例外ではありませんでした。2026-08-25 以降は、新規エントリも含めすべて本人のみが編集します（[STATUS §0](./STATUS.md) のルール 7）。
 
 ## 主作品の読み方
 

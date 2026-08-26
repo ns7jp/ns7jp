@@ -2,7 +2,7 @@
 
 ## 30 秒の結論
 
-主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元まで一気通貫で検証し、23/23 ID PASS を採録したインフラ構築ラボです。[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映済みです。PR #77 では、Git SHA を固定した変更・ロールバック実演も CI で PASS しています（PR ブランチ・使い捨て runner の結果）。
+主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元まで一気通貫で検証し、試験項目 23 件中 23 件合格を採録したインフラ構築ラボです。[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映済みです。PR #77 では、Git SHA を固定した変更・ロールバック実演も CI で PASS しています（PR ブランチ・使い捨て runner の結果）。
 
 | [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [詰まった記録](../LEARNINGS.md) |
 | --- | --- | --- |
@@ -27,7 +27,7 @@
 
 | 検証 | 結果 |
 | --- | --- |
-| 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
+| 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、試験項目 23 件中 23 件合格](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
 | Git SHA を固定した変更・ロールバック | [候補 `84e1492` → 旧版 `59aa88e` の配備・復帰後に、稼働中の版番号、実行ファイルのハッシュ、app コンテナ再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みを確認](./evidence/2026-08-23-server-monitor-git-rollback-ci.md) |
 | Docker API の権限制御とログ経路 | [read-only proxy の GET 成功、POST 拒否、固有 Nginx log の Alloy 経由 Loki 到達を確認](https://github.com/ns7jp/server-monitor/actions/runs/32572409469) |
 | Ansible 4 ロールの適用・2 回目の冪等性・期待状態 | [全ロール PASS、欠陥 2 件を修正](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) |
@@ -88,7 +88,9 @@ AlmaLinux 実機への適用。**実行ログが無い項目を実績として�
 Terraform module、CI workflow、テスト、ラボ）の生成にも AI を使っており、3 リポジトリの
 実作業コミット 243 件のうち 110 件が Claude を著者または共同著者に含みます
 （[内訳](../README.md#ai-の利用について)）。**その中で、実機を触って外した仮説の一次記録
-[LEARNINGS.md](../LEARNINGS.md) だけは本人が書いています。** 技術的な深さより、ここを
+[LEARNINGS.md](../LEARNINGS.md) は、2026-08-25 以降、新規エントリを本人のみが書く
+運用にしています**（それ以前の各エントリで AI がどこまで下書きしたかは
+[README](../README.md#詰まった記録)参照）。技術的な深さより、ここを
 読んでいただくのが、私の現在地を最も正確に伝える方法だと考えています。
 
 ## 経歴・学習

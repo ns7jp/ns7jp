@@ -1,4 +1,4 @@
-# 06 Python 運用自動化演習設計：定型作業・バックアップ・監視チェック（lab-base01 / LAB-WINOPS1）
+# 07 Python 運用自動化演習設計：定型作業・バックアップ・監視チェック（lab-base01 / LAB-WINOPS1）
 
 > **本ドキュメントの位置付け**
 >
@@ -12,10 +12,15 @@
 > （パラメータシート・構築手順書・試験項目書）に沿っています。**本ドキュメントは設計であり、実施記録ではありません。**
 > 実施したら [8. 実施ステータス](#8-実施ステータスと次のアクション)を更新します。
 >
+> **[06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)との関係**: 06 は同じ W4 / W18 の題材（定型作業・
+> バックアップスクリプト）を Bash / PowerShell で扱い、AD 操作・サービス・イベントログ操作まで踏み込んでいます。
+> 本書はその Python 版で、両者は同じ課題への言語別の別解として並行に存在し、どちらか一方が他方を置き換えるものではありません。
+> 本書は AD 操作を扱わず、standalone（workgroup）のホスト上で完結するローカル自動化のみを対象にします。
+>
 > **誤解を避けるための注記**: 本演習が対象とする Windows ラボは [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)とは別物です。
 > AD へは一切昇格せず、standalone（workgroup）状態のまま、そのホスト自身の上で完結するローカル自動化だけを扱います。
 > [STATUS.md](../../STATUS.md)の「コードでは埋められない、残っている穴」5 番目（Windows Server / AD が portfolio に出ていない）を
-> 埋めるのは AD ラボ側の役割であり、本演習を実施しても AD 側の穴は埋まりません。
+> 埋めるのは AD ラボ側と 06 側の役割であり、本演習を実施してもその穴は埋まりません。
 
 最終更新: 2026-08-26
 
@@ -1659,6 +1664,7 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
 - [02 フェーズ別カリキュラム](./02-curriculum.md)
 - [03 構築工程の実務ドキュメント](./03-build-process.md)
 - [05 Phase 1 演習設計](./05-phase1-exercise-design.md)
+- [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)
 - [Windows / AD 公開再現ラボ テンプレート](../evidence/templates/windows-ad-lab.md)
 - [Windows / winget 端末セットアップ テンプレート](../evidence/templates/windows-winget-provisioning.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
