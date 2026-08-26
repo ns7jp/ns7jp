@@ -720,6 +720,11 @@ Hyper-V ではスナップショットを「チェックポイント」と呼ぶ
 | 7 | [3-10-2〜3-10-3](#3-10-os-の最新化自動更新とログの確認) `unattended-upgrades` の既定状態 | `dpkg -s unattended-upgrades` / `cat /etc/apt/apt.conf.d/20auto-upgrades` | 導入済み、2 行とも `"1"`。設計書の記述と一致 |
 | 8 | [3-4-4](#3-4-初期ログインとホスト名時刻設定) `locale -a` の表記 | `locale-gen ja_JP.UTF-8` 後に `locale -a` | `ja_JP.utf8`（`UTF-8` ではなく小文字・ハイフン無し）で一致。設計書の記述と一致 |
 | 9 | [3-5-4](#3-5-固定-ip-の設定) netplan YAML の構文 | Python の `yaml` モジュールで構文解析のみ確認（下記「確認できなかったこと」参照） | 構文エラー無し |
+| 10 | [T-08](#5-試験項目書) root ログイン拒否 | 上記と同じループバック環境で `ssh root@127.0.0.1` を試行 | `Permission denied (publickey)`。設計書の記述と一致 |
+| 11 | [T-07](#5-試験項目書) パスワード認証拒否 | 有効なユーザーに対しパスワード認証のみ（`PubkeyAuthentication=no`）で接続を試行 | `Permission denied`。パスワードプロンプトが出る前に拒否され、設計書の記述と一致 |
+| 12 | [T-15](#5-試験項目書) SSH 設定の構文エラー検出 | `00-lab-hardening.conf` に存在しないディレクティブを追記して `sshd -t` を実行 | `Bad configuration option: ...` で構文エラーを検出。復元後は正常に戻ることも確認 |
+| 13 | [T-16](#5-試験項目書) 自動更新設定ファイルの欠落検知 | `20auto-upgrades` を退避してから `cat` | ファイル欠落（`No such file or directory`）を検知でき、復元で `"1"` が 2 行とも戻ることを確認 |
+| 14 | [T-21](#5-試験項目書) root アカウントのロック状態 | `passwd -S root` | 2 列目が `L`。設計書の記述と一致 |
 
 ### 見つかった不整合と対応（設計を訂正した）
 
@@ -731,8 +736,8 @@ Hyper-V ではスナップショットを「チェックポイント」と呼ぶ
 
 | 項目 | 制約 |
 | --- | --- |
-| `hostnamectl` / `timedatectl` / `systemctl`（[3-4](#3-4-初期ログインとホスト名時刻設定)・[3-8-3〜3-8-4](#3-8-パスワード認証root-ログインの禁止)・[T-01〜T-03](#5-試験項目書)・[T-10](#5-試験項目書) 等） | このコンテナは systemd を PID 1 として起動していない（`Failed to connect to bus`）。実機 VM では systemd が起動するため対象外の制約だが、この環境では確認できない |
-| `netplan generate` / `netplan try`（[3-5](#3-5-固定-ip-の設定)） | このセッションの `netplan` CLI は Python のバージョン不整合（`_cffi_backend` が見つからない）で実行できず、YAML の構文チェックにとどめた。netplan 独自のスキーマ検証・実際のインターフェースへの適用は未確認 |
+| `hostnamectl` / `timedatectl` / `systemctl`（[3-4](#3-4-初期ログインとホスト名時刻設定)・[3-8-3〜3-8-4](#3-8-パスワード認証root-ログインの禁止)・[T-01〜T-03](#5-試験項目書)・[T-10](#5-試験項目書)・[T-20](#5-試験項目書) の `systemctl is-enabled unattended-upgrades` 等） | このコンテナは systemd を PID 1 として起動していない（`Failed to connect to bus`）。実機 VM では systemd が起動するため対象外の制約だが、この環境では確認できない |
+| `netplan generate` / `netplan try`（[3-5](#3-5-固定-ip-の設定)）、`unattended-upgrade --dry-run`（[T-20](#5-試験項目書)） | このセッションの `/usr/bin/python3` が標準の 3.12 系ではなく 3.11 系に差し替わっており、OS 同梱パッケージが `cpython-312` 向けにビルドしたネイティブ拡張（netplan の `_cffi_backend`、`unattended-upgrade` が使う `apt_pkg`）を読み込めない（`/usr/bin/python3.12 -c "import apt_pkg"` は成功することを確認したため、Ubuntu 24.04 自体の欠陥ではなくこのセッション固有の Python 差し替えが原因と特定した）。YAML の構文チェックにとどめ、netplan 独自のスキーマ検証・実際のインターフェースへの適用・`unattended-upgrade` の dry-run 実行結果は未確認 |
 | `ufw enable`（[3-9-3〜3-9-4](#3-9-ファイアウォール)） | この AI 支援セッション自体がこのコンテナのネットワーク接続に依存しており、`ufw enable` で実際に iptables/nftables ルールを有効化するとセッションの接続性を損なうおそれがあるため、意図的に実行しなかった。ルール追加・既定ポリシー変更（上表 #5）までは安全に確認できたが、有効化後の実際の許可・拒否挙動（`22/tcp ALLOW IN` 等）は未確認 |
 | 実際のネットワークインターフェース（`enp0s3` / `enp0s8`）上での固定 IP 適用・再起動後の永続性（[3-11](#3-11-再起動試験とスナップショット)） | コンテナのネットワークは `eth0` / `docker0` のみで、VM のような複数 NIC 構成が無い |
 | [付録 A](#付録-a-hyper-v-版の差分)（Hyper-V 版）のコマンド・GUI 手順 | この環境に Hyper-V ホストへのアクセスが無いため、付録 A 自体は今回も未検証のまま |
