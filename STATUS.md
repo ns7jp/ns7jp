@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-25（Phase 1 演習設計「空の VM からの初期構築」を追加）
+最終更新：2026-08-26（server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
 
 ---
 
@@ -62,6 +62,7 @@
 | --- | --- | --- |
 | 5 | Terraform AWS provider の制約が複数ファイルに分散し、Dependabot PR が必ず CI を落ちた（`no available releases match the given constraints ~> 5.50, ~> 6.58`）。原因は `dependabot.yml` の `directories` の列挙漏れ | （記入）**「網羅すべき集合を手で列挙した時点で、次に漏れる」**という因果まで書けると、指摘が加点に変わります |
 | 6 | 依存更新 PR を 3 か月放置した。ADR に「見直しトリガー」を書く運用にしたのに、運用そのものが回っていなかった | （記入）設計と運用の差を実体験として語れる材料 |
+| 7 | 3 行しかない依存ファイル（`ansible/controller-requirements.txt`）を、別々の Dependabot PR 3 本がそれぞれ 1 行ずつ書き換えていた。2 本を merge した後、3 本目が `405 merge conflicts` で弾かれた。`git merge-tree` で見ると、行の前後に十分なコンテキストが無いため 3-way merge が変更点を分離できず、ファイル全体を 1 個の衝突として扱っていた（2026-08-26） | （記入）**依存関係の更新は 1 行ずつ独立ではなく、`boto3`/`botocore` のように相互にバージョン制約を持つペアがある**（`boto3==1.43.78` は `botocore>=1.43.78,<1.44.0` を要求し、片方だけ上げると単独では `ResolutionImpossible` になる）ことまで書けると、Dependabot 任せの限界を語れる材料になります |
 
 ### 実施待ち
 
@@ -636,6 +637,28 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 | Actions / pip 系を処理 | ✅ **2026-08-19: [PR #59](https://github.com/ns7jp/server-monitor/pull/59) をマージ済み**。更新後のCI成功を確認 |
 
 > **面接での価値**: この provider 6.x 移行は、`terraform init` の失敗ログから制約の重複宣言を特定した実例です。**LEARNINGS.md に書く題材として、現時点で最も質が高いもの**です（症状・原因・対処・学びの 4 点が既に揃っている）。
+>
+> **2026-08-26 追記（再点検と処理）**: 「決着」と書いた 2026-08-19 時点の一覧（#48 / #42 / #31 / #47）には
+> **当時の「残り 7 件」に含まれていた `#17`（python 3.12-slim → 3.14-slim）・`#18`（Flask）・`#20` への言及が無く**、
+> 実際に GitHub で確認すると `#17` と `#18` は 2026-08-26 時点でも未処理のまま残っていた（`#20` は別途消えており、
+> 追わずに放置していたことは変わらない）。加えて `#93`（boto3）・`#94`（botocore）・`#95`（ansible-core）・`#96`（pyyaml）の
+> 4 件が新規に滞留していた。7 件を isolated worktree で実際に checkout → install → `pytest` 実行して検証し、
+> 次のとおり処理した。
+>
+> | PR | 内容 | 検証結果 | 処理 |
+> | --- | --- | --- | --- |
+> | #96 | pyyaml（dev） | venv install 0 エラー、pytest 142 passed | ✅ merge |
+> | #95 | ansible-core 2.19.4→2.21.3 | 実 PyPI パッケージであることを確認（Python 3.12+ 必須と判明）、pytest 142 passed | ✅ merge（controller 用の Python バージョン要件が上がる点を PR にコメント） |
+> | #94 | botocore 1.40.0→1.43.78 | pytest 142 passed | ✅ merge |
+> | #93 | boto3 1.40.0→1.43.78 | **単独では `ResolutionImpossible`**（`boto3==1.43.78` は `botocore>=1.43.78,<1.44.0` を要求） | ❌ 直接 merge 不可。`ansible/controller-requirements.txt` が 3 行しかなく、3 本の PR がそれぞれ 1 行ずつ書き換えるため、2 本を先に merge した時点で 3-way merge がコンテキスト不足で衝突（`405 merge conflicts`）。手動で同内容を適用し直した [PR #102](https://github.com/ns7jp/server-monitor/pull/102) に置き換えて #93 は close |
+> | #18 | Flask 3.0→3.1.3 | venv install 0 エラー、pytest 11 passed | ✅ merge |
+> | #17 | Docker base image python 3.12-slim→3.14-slim | **検証未完了**。この作業環境のネットワークポリシーが Docker Hub の image blob（`production.cloudfront.docker.com`）と deadsnakes PPA の両方を遮断しており、`docker build` も実 Python 3.14 の取得もできなかった。加えて、この PR 自体が 2026-05-28 時点の古いブランチで、後から追加された `labs/three-tier/ap/Dockerfile`（同じく `python:3.12-slim`）を含んでいない — merge しても 2 つの Dockerfile が別々の Python メジャーバージョンのまま残る | ⏸ 保留。理由を PR にコメント。CI（Docker Hub へ到達できる環境）での実 build・実行、または再作成による対象漏れの解消が必要 |
+>
+> `#66`（AWS provider 5.x→6.x）は今回も対象外。`terraform` バイナリがこの環境に無く検証できないため、
+> 2026-08-19 の見送り判断を継続する。
+>
+> **記録として残す教訓**: 「決着」と書いた時点でも一覧化が不完全だったため、7 件の一部が 3 か月放置され続けた。
+> 一覧化の作業そのものを検証しないまま「決着」と書くと、今回と同じ穴が残る。
 
 ### 次に採録する実測証跡
 
