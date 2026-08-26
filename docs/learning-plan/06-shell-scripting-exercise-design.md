@@ -336,7 +336,7 @@ flowchart LR
 
 ### 4.4 Level 4: Active Directory 運用スクリプト
 
-前提: [Windows / AD 公開再現ラボ §4](../evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)の Greenfield 手順でラボドメイン（`ad.example.test` / `ADLAB`）を構築済みであること。**本書はドメインコントローラの構築（forest promotion）を対象にしません。** 同じラボ専用 OU（`PortfolioLab`）・接頭辞（`pf-`）をここでも使い、リポジトリ内で規約を二重化しません。
+前提: [Windows / AD 公開再現ラボ §4](../evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)の Greenfield 手順でラボドメイン（`ad.example.test` / `ADLAB`）を構築済みであること。**本書はドメインコントローラの構築（forest promotion）を対象にしません。** 同じラボ専用 OU（`PortfolioLab`）・接頭辞（`pf-`）をここでも使い、リポジトリ内で規約を二重化しません。OU 階層の設計、AGDLP グループ戦略、GPO・パスワードポリシー・FSMO・バックアップは[08 AD構築演習設計](./08-ad-exercise-design.md)が扱うため、本節は CSV からのユーザー一括作成という**スクリプト側**に閉じます。
 
 Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transcript、事前確認の考え方）を、AD 操作という書き込みを伴う対象に適用する演習です。入社時のアカウント作成・棚卸しという、社内 SE 補助業務で典型的な運用作業を題材に、CSV 一括操作のスクリプトとして 1 から組み立てます。
 
