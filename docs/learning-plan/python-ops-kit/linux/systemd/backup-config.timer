@@ -1,0 +1,11 @@
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.4 章 構築手順書 Linux 手順7。
+# 配置先: /etc/systemd/system/backup-config.timer
+[Unit]
+Description=Daily config backup timer
+
+[Timer]
+OnCalendar=*-*-* 02:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

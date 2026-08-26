@@ -1,0 +1,14 @@
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.2 章 構築手順書 手順8。
+# 配置先: /etc/systemd/system/routine-dryrun.service
+[Unit]
+Description=lab-base01 routine.py (dry-run)
+After=network.target
+
+[Service]
+Type=oneshot
+RuntimeDirectory=routine
+ExecStart=/opt/routine/venv/bin/python3 /opt/routine/routine.py --config /etc/routine/routine.yaml
+ProtectSystem=strict
+ReadWritePaths=/tmp /var/log
+PrivateTmp=no
+NoNewPrivileges=yes

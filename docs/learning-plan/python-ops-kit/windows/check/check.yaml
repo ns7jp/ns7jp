@@ -1,0 +1,21 @@
+# check.yaml (Windows 例)
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.5 章 / 3.4 章。
+# 配置先: C:\ProgramData\monitoring\check\check.yaml。
+# disk_path はドライブレター表記が必要（Linux 版の "/" とは書式が異なる。4.5 章「固有の注意点」参照）。
+# http_url の /healthz は「ダミー HTTP 対象の準備」（07 章 4.5 章 H-3/H-4）で用意する。
+
+disk_path: "C:\\"
+http_url: "http://127.0.0.1:8080/healthz"
+http_timeout: 5
+tls_host: "example.com"        # IANA予約の安定した公開ドメイン。check_tls_cert()のOK判定を確認する目的のみ
+tls_port: 443
+log_path: "C:\\ProgramData\\app\\app.log"
+log_window_minutes: 15
+log_pattern: "ERROR"
+webhook_url: "http://127.0.0.1:9000/local-webhook"   # 任意。実際の Slack 配信ではない
+thresholds:
+  cpu:        { warn: 80, crit: 95 }
+  memory:     { warn: 80, crit: 90 }
+  disk:       { warn: 80, crit: 90 }
+  tls_days:   { warn: 30, crit: 7 }
+  log_errors: { warn: 5,  crit: 20 }

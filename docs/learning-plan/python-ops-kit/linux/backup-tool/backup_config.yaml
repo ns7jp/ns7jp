@@ -1,0 +1,10 @@
+# backup_config.yaml (Linux 例)
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.4 章。
+# 配置先: /opt/backup-tool/backup_config.yaml。対象は演習用のダミー配置であり実データではない。
+
+source_dirs:
+  - /etc/nginx
+  - /etc/myapp
+backup_dir: /backup/config
+keep_generations: 7
+min_free_bytes: 1073741824   # 1 GiB

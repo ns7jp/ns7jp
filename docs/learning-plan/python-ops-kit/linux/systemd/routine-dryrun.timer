@@ -1,0 +1,13 @@
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.2 章 構築手順書 手順9。
+# 配置先: /etc/systemd/system/routine-dryrun.timer
+# 実削除（--apply）はこの timer には登録しない。ドライランのログを確認した運用担当者が手動実行する。
+[Unit]
+Description=Daily trigger for lab-base01 routine.py dry-run
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+Persistent=true
+Unit=routine-dryrun.service
+
+[Install]
+WantedBy=timers.target
