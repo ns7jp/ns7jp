@@ -1,5 +1,8 @@
 # 06. 分散トレーシング（Tempo + OpenTelemetry）
 
+> 公式ドキュメントや技術記事を調べて書いた学習目的の設計メモであり、実装・実運用の経験に
+> 基づくものではない。実装は未着手（本ディレクトリの位置付けは [roadmap/README.md](./README.md) 参照）。
+
 ## 1. 背景・課題
 
 現状の server-monitor は Prometheus（メトリクス）を採用し、[01](../server-monitor-improvements/01-loki-log-aggregation.md) で Loki（ログ）を追加する計画。

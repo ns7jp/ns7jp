@@ -1,5 +1,8 @@
 # 14. データベース運用設計
 
+> 公式ドキュメントや技術記事を調べて書いた学習目的の設計メモであり、実装・実運用の経験に
+> 基づくものではない。実装は未着手（本ディレクトリの位置付けは [roadmap/README.md](./README.md) 参照）。
+
 ## 1. 背景・課題
 
 server-monitor 本体や周辺アプリ（[掲示板](https://github.com/ns7jp/post) / [Pulse](https://github.com/ns7jp/pulse)）は **SQLite / MySQL** を使用しているが、これまでのポートフォリオでは **DB 運用** の設計が薄い。
