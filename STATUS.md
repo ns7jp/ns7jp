@@ -2,7 +2,10 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-26（07 Python 運用自動化演習設計「定型作業・バックアップ・監視チェック」を追加。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。06 シェルスクリプト演習設計を新規作成し、Bash 側（Level 1・2・演習A・演習B）をAI 支援セッションで実行）
+最終更新：2026-08-26（06 シェルスクリプト演習設計を新規作成し、Bash 側（Level 1・2・演習A・演習B）を AI 支援セッションで
+実行。07 Python 運用自動化演習設計に、この作業環境での Linux 側実行記録（付録、31/49 項目）を追加。Phase 1 演習の実施
+キット（Hyper-V 向け雛形）を準備。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は
+PR #102 に置き換え、#17/#66 は保留理由を記録）
 
 ---
 
@@ -62,7 +65,7 @@
 | --- | --- | --- |
 | 5 | Terraform AWS provider の制約が複数ファイルに分散し、Dependabot PR が必ず CI を落ちた（`no available releases match the given constraints ~> 5.50, ~> 6.58`）。原因は `dependabot.yml` の `directories` の列挙漏れ | 網羅性を主張する行をどこかに書いた瞬間、そこはもう検証対象だと考えることを学んだ |
 | 6 | 依存更新 PR を 3 か月放置した。ADR に「見直しトリガー」を書く運用にしたのに、運用そのものが回っていなかった | 依存関係更新のように「継続的に発生し続けるタスク」は、1回限りの個別対応では終わらないので、対応の「型」（採用可否の判断基準など）を決めても、それを回す頻度・トリガー・責任の所在を運用として仕組み化する必要があることを学んだ |
-| 7 | 3 行しかない依存ファイル（`ansible/controller-requirements.txt`）を、別々の Dependabot PR 3 本がそれぞれ 1 行ずつ書き換えていた。2 本を merge した後、3 本目が `405 merge conflicts` で弾かれた。`git merge-tree` で見ると、行の前後に十分なコンテキストが無いため 3-way merge が変更点を分離できず、ファイル全体を 1 個の衝突として扱っていた（2026-08-26） | （記入）**依存関係の更新は 1 行ずつ独立ではなく、`boto3`/`botocore` のように相互にバージョン制約を持つペアがある**（`boto3==1.43.78` は `botocore>=1.43.78,<1.44.0` を要求し、片方だけ上げると単独では `ResolutionImpossible` になる）ことまで書けると、Dependabot 任せの限界を語れる材料になります |
+| 7 | 3 行しかない依存ファイル（`ansible/controller-requirements.txt`）を、別々の Dependabot PR 3 本がそれぞれ 1 行ずつ書き換えていた。2 本を merge した後、3 本目が `405 merge conflicts` で弾かれた。`git merge-tree` で見ると、行の前後に十分なコンテキストが無いため 3-way merge が変更点を分離できず、ファイル全体を 1 個の衝突として扱っていた（2026-08-26） | 「変更対象の見た目が独立している（別の行、別のパッケージ）」ことと、「gitが構造的に独立した変更として検出できること」は別物であり、ファイルが小さいほどこの差が顕在化しやすい、という限界を学んだ |
 
 ### 実施待ち
 
@@ -85,6 +88,33 @@
 | 演習B `env-check.sh` | 設計どおりに実装し `shellcheck` クリーンを確認。ディスク使用率・証明書残日数のしきい値超過/警告の両方の異常系を含めて動作を確認した |
 | 環境の制約 | 演習B の B-1（サービス稼働）・B-4（時刻同期）は `systemctl`/`timedatectl` を使うが、このセッションのコンテナは systemd が PID 1 として起動しておらず、実際のサービス起動・停止に対する検知はできなかった（`systemctl` 自体が動作不能というエラーで失敗する状態のみ確認）。集約ロジック（B-5）は、`systemctl`/`timedatectl` をスタブに置き換えて全項目 OK → 終了コード `0` になる経路を別途確認した |
 | 状態 | **本人が実機で再現・検証した記録ではない**。Windows（PowerShell）側はこのセッションが Linux コンテナのため引き続き未実施。B-1・B-4 は systemd が動く実機でなければ十分な検証ができない |
+
+### 2026-08-26 の更新内容（追補2：07 Python 運用自動化演習設計の Linux 側を実行）
+
+下記（追補）の設計を、この AI 支援セッションの作業環境（`Linux 6.18.44-fc-v21`、Ubuntu 24.04.4、systemd が PID 1 では
+ないコンテナ）上で実際に実行した。lab-base01 / LAB-WINOPS1 という実機での実施ではないが、`routine.py`・`backup.py`・
+`check.py` の Linux 側コードは実際に配備・実行し、試験項目書 49 項目中 31 項目の実測結果を得た。
+[docs/learning-plan/07-python-ops-automation-exercise-design.md の付録](./docs/learning-plan/07-python-ops-automation-exercise-design.md#付録この作業環境での実行記録)。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 実行結果 | `routine.py`（Linux、TRL-01〜12 のうち 9 項目）・`backup.py`（TBK-01〜12 のうち 10 項目）・`check.py`（TCK-01〜14 のうち 12 項目）の計 31 項目を実行。30 項目が OK 判定（うち 3 項目は環境に合わせて手順を調整：`journalctl` のバグを発見・修正した上で OK、権限テストは root では再現しないため非 root ユーザーを作って再実行、RTO 計測は稼働中の systemd timer が無いため手動起動で計測）。残り 1 項目（TCK-05・TLS 証明書残日数の OK 判定）はコードは正しく動作したが、`example.com` の実際の証明書残日数が実行時点でしきい値を下回っており `WARNING` になった |
+| 発見した不具合 | `routine.py` の `recent_errors()` が、エラーが1件も無い状態でも `journalctl` 自身の境界メッセージ `-- No entries --` を「1件のエラー」として誤検知する不具合を発見。`--quiet` オプションを追加して修正し、設計書のコード例にも反映した。静的レビューでは見つからない類の不具合で、実行して初めて分かった |
+| 未実施のまま残る範囲 | Windows 側（`TW-01`〜`11` 全 11 項目）はこの環境に Windows が無いため未実施。systemd timer / タスクスケジューラによる定期実行そのもの（`TRL-06`・`TBK-05`・`TCK-07`・`TCK-08`）は、unit ファイルの静的構文検証（`systemd-analyze verify`）はできたが、稼働中の systemd インスタンスが無いため実登録・実発火は未確認。lab-base01 / LAB-WINOPS1 の実機での実施は依然として今後のタスク |
+| 整合性チェック | markdownlint（58 ファイル、0 件）、Mermaid 構文検証（55 図、全パース成功）、`lychee --include-fragments`（CI と同じツール）でリポジトリ全体 0 エラーを再確認した |
+
+### 2026-08-26 の更新内容（Phase 1 演習：実施キットの準備）
+
+[「コードでは埋められない、残っている穴」の 2 番目](#コードでは埋められない残っている穴)（空の VM に OS を入れるところからやっていない）は、
+05 の演習設計だけでは埋まらない。この AI 支援セッションの実行環境には KVM/qemu が無く、VirtualBox/Hyper-V での
+実機 VM 作成ができないため、本人が Hyper-V で実施する際の準備物として
+[docs/learning-plan/phase1-kit/](./docs/learning-plan/phase1-kit/README.md) を新規作成した。
+
+| 内容 | 詳細 |
+| --- | --- |
+| キットの中身 | netplan・`sshd_config.d` の設定ファイル雛形、Hyper-V 用 PowerShell スクリプト 6 本（Internal スイッチ作成・VM 作成・チェックポイント操作・検証用セグメントの追加撤去）、進捗チェックリスト、証跡記入用テンプレート |
+| 未検証の範囲 | Hyper-V ホストへのアクセスが無いため、PowerShell スクリプトは目視での構文確認のみで一度も実行していない。cmdlet の実際の挙動・エラーメッセージは未検証（[phase1-kit/README.md の該当節](./docs/learning-plan/phase1-kit/README.md#未検証の範囲)に明記） |
+| 状態 | **未実行の雛形。** 演習そのもの（空の VM への OS インストール）の実施ステータスは変わらず「設計のみ・未実施」のまま。この穴は残タスクのまま |
 
 ### 2026-08-26 の更新内容（追補：06 演習 A `backup-rotate.sh` の初回実行）
 
@@ -113,7 +143,7 @@ Windows（新規ラボホスト LAB-WINOPS1）の両方を対象にした演習�
 | --- | --- |
 | 演習設計 | `routine.py`（Linux / Windows）・`backup.py`（tarfile / zipfile、SHA-256 manifest によるリストア検証）・`check.py`（Nagios 系終了コード規約でのしきい値監視）の 3 本を独立ツールとして設計し、systemd timer / タスクスケジューラへの定期実行登録まで、[03 構築工程の実務ドキュメント](./docs/learning-plan/03-build-process.md)の様式（パラメータシート・構築手順書・試験項目書）でコマンドと想定結果まで具体化した |
 | 精査 | 4 本のモジュール（`routine.py` Linux 実装・Windows 実装・`backup.py`・`check.py`）をそれぞれ独立した技術レビューにかけ、Python / systemd / Windows タスクスケジューラ・イベントログ API の記述、および構築手順書と試験項目書の期待結果の整合性を確認し、指摘のあった 23 件（Windows 版イベントログ抽出が「該当イベントなし」と「アクセス拒否」を区別できていなかった点、`backup.py` のリストアが manifest 検証を経ずに展開してしまっていた点、両モジュールの異常系ログ出力が未実装だった点、Ubuntu Server 24.04 の最小構成に `python3-venv` が入っておらず `venv` 作成手順が失敗する点 等）を反映した。あわせて、4 本を統合する過程で見つかった Windows 版バックアップ・監視チェックの venv 未使用（グローバル Python への `pip install`）を統一し、GitHub の見出しアンカー生成規則を実装で再現したうえで文書内リンク・外部リンクを `lychee --include-fragments`（CI と同じツール）で 0 エラーまで確認した |
-| 状態 | **設計のみ・未実施**。試験項目書（TRL-01〜TRL-12、TW-01〜TW-11、TBK-01〜TBK-12、TCK-01〜TCK-14、計 49 項目）の実測結果欄はすべて空欄 |
+| 状態 | 設計時点では**設計のみ・未実施**（試験項目書 TRL-01〜TRL-12、TW-01〜TW-11、TBK-01〜TBK-12、TCK-01〜TCK-14、計 49 項目の実測結果欄はすべて空欄）だった。同日中に Linux 側 31 項目を実際に実行した経緯は上記（追補2）を参照。Windows 側・実機（lab-base01 / LAB-WINOPS1）・定期実行そのものは今も未実施 |
 
 ### 2026-08-26 の更新内容（06 シェルスクリプト演習設計：Linux (Bash) / Windows (PowerShell)）
 

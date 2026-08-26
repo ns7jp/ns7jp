@@ -9,8 +9,10 @@
 > 「実機出力を添えた Windows / network 切り分け記録」の一部を、Python の運用自動化という切り口で埋めるために書いています。
 >
 > [05 Phase 1 演習設計](./05-phase1-exercise-design.md)と同じく、[03 構築工程の実務ドキュメント](./03-build-process.md)の様式
-> （パラメータシート・構築手順書・試験項目書）に沿っています。**本ドキュメントは設計であり、実施記録ではありません。**
-> 実施したら [8. 実施ステータス](#8-実施ステータスと次のアクション)を更新します。
+> （パラメータシート・構築手順書・試験項目書）に沿っています。**本ドキュメントは lab-base01 / LAB-WINOPS1 という実機への
+> 適用設計であり、それらへの実施記録ではありません。** ただし Linux 側の Python コードは AI 支援セッションの作業環境で
+> 実際に動かして結果を記録しており（[付録](#付録この作業環境での実行記録)）、[5 章](#5-試験項目書)の該当行にはその結果を反映しています。
+> lab-base01 / LAB-WINOPS1 で実施したら [8. 実施ステータス](#8-実施ステータスと次のアクション)を更新します。
 >
 > **[06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)との関係**: 06 は同じ W4 / W18 の題材（定型作業・
 > バックアップスクリプト）を Bash / PowerShell で扱い、AD 操作・サービス・イベントログ操作まで踏み込んでいます。
@@ -24,7 +26,10 @@
 
 最終更新: 2026-08-26
 
-> **実施ステータス: 設計のみ・未実施**（2026-08-26 時点）。試験項目書の実測結果欄はすべて空欄です。
+> **実施ステータス**（2026-08-26 時点）: lab-base01 / LAB-WINOPS1 という実機ではまだ未実施です。ただし Linux 側の
+> `routine.py`・`backup.py`・`check.py` は、この AI 支援セッションの作業環境上で実際に動かし、試験項目書 49 項目中
+> 31 項目の実測結果を記録しています（[付録](#付録この作業環境での実行記録)参照）。Windows 側（`TW-` 全件）と
+> systemd timer / タスクスケジューラによる定期実行そのものは未実施のままです。
 
 ---
 
@@ -40,6 +45,7 @@
 | [6](#6-実施タイムテーブルと中断基準) | 実施タイムテーブルと中断基準 |
 | [7](#7-証跡採録計画) | 証跡採録計画 |
 | [8](#8-実施ステータスと次のアクション) | 実施ステータスと次のアクション |
+| [付録](#付録この作業環境での実行記録) | この作業環境での実行記録（Linux 側 31/49 項目を実施） |
 
 ---
 
@@ -344,8 +350,11 @@ def check_services(names: list[str]) -> list[dict]:
     return results
 
 def recent_errors(since: str = "-1h") -> list[str]:
+    # --quiet を付けないと、該当なしのときに journalctl 自身が出す
+    # "-- No entries --" という境界メッセージまで「エラー行」として拾ってしまう
+    # （この作業環境での実行で発見。付録参照）。
     proc = subprocess.run(
-        ["journalctl", "-p", "err", "--since", since, "--no-pager", "-o", "short-iso"],
+        ["journalctl", "-p", "err", "--since", since, "--no-pager", "--quiet", "-o", "short-iso"],
         capture_output=True, text=True, timeout=30,
     )
     if proc.returncode != 0:
@@ -1528,22 +1537,28 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
 
 いずれも [03 §4 が定める「異常系 3 割以上」](./03-build-process.md#異常系を必ず入れる理由)を満たす設計にしている。
 
+> **実測結果欄について**: 以下、埋まっている行は **lab-base01（VirtualBox VM）や LAB-WINOPS1 上での実行ではなく、
+> この AI 支援セッションの作業環境（Ubuntu 24.04.4、`Linux 6.18.44-fc-v21`、systemd が PID 1 として起動していない
+> コンテナ）上で実行した結果**である。実行環境・実施できなかった項目とその理由の詳細は
+> [付録：この作業環境での実行記録](#付録この作業環境での実行記録)にまとめている。空欄の行（`TW-` 全件、
+> systemd timer の定期実行そのもの、journalctl が実データを持たないための境界事象など）は未実施のまま。
+
 ### 5.1 routine.py（Linux）
 
 | No | 試験分類 | 観点 | 前提条件 | 手順 | 期待結果 | 実測結果 | 判定 | エビデンス | 実施日 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| TRL-01 | 単体 | ディスク使用率算出 | `routine.yaml` の `disk_paths` に `/` を含む。かつ `/` の現在の使用率が `disk_warn_percent`（85）未満であること | `cd /opt/routine && sudo venv/bin/python3 -c "import os, routine; st = os.statvfs('/'); ref = round((st.f_blocks - st.f_bfree) / st.f_blocks * 100, 1); print(routine.check_disk_usage(['/'], 85), ref)"` を実行 | 出力の `percent_used` と `ref`（`shutil.disk_usage()` と同じ `os.statvfs()` 由来の計算式で求めた参考値）が一致し、`warn` が `False`。なお `df -h /` の `Use%` 列は avail（利用可能容量）基準の別の計算式（ext4 の root 予約領域を除いた分母）を使うため整数表示で `percent_used` と一致しないことがあるが、それ自体は異常ではない | | | | |
+| TRL-01 | 単体 | ディスク使用率算出 | `routine.yaml` の `disk_paths` に `/` を含む。かつ `/` の現在の使用率が `disk_warn_percent`（85）未満であること | `cd /opt/routine && sudo venv/bin/python3 -c "import os, routine; st = os.statvfs('/'); ref = round((st.f_blocks - st.f_bfree) / st.f_blocks * 100, 1); print(routine.check_disk_usage(['/'], 85), ref)"` を実行 | 出力の `percent_used` と `ref`（`shutil.disk_usage()` と同じ `os.statvfs()` 由来の計算式で求めた参考値）が一致し、`warn` が `False`。なお `df -h /` の `Use%` 列は avail（利用可能容量）基準の別の計算式（ext4 の root 予約領域を除いた分母）を使うため整数表示で `percent_used` と一致しないことがあるが、それ自体は異常ではない | `[{'path': '/', 'percent_used': 2.9, 'warn': False}] ref= 2.9` で一致 | OK | 付録参照 | 2026-08-26 |
 | TRL-02 | 単体 | systemd サービス稼働確認 | `ssh` サービスが `active` | 同上で `routine.check_services(['ssh'])` を実行 | `[{'service': 'ssh', 'state': 'active', 'active': True}]` が返る | | | | |
-| TRL-03 | 単体 | journalctl エラー抽出 | 事前に `logger -p user.err "routine-test T-03"` でテスト用エラーを1件書き込み済み | `routine.recent_errors()` を実行 | 戻り値のリストに `routine-test T-03` を含む行が1件以上含まれる | | | | |
-| TRL-04 | 単体 | ドライラン抽出とホワイトリスト境界判定 | `/tmp/routine-test/old.txt` を `sudo touch -d "20 days ago"` で作成、同 `new.txt` は現在時刻。`cleanup_whitelist` は `/tmp` のみ | `routine.cleanup(['/tmp'], 14, apply=False)` を実行し、戻り値と `routine.log` を確認 | 戻り値に `old.txt` のみ含まれ `new.txt` は含まれない。ログに `[dry-run] would delete: .../old.txt` が記録され、`old.txt` は削除されず残る | | | | |
-| TRL-05 | 結合 | 二段階実削除（dry-run → apply） | TRL-04 の状態を再現済み（`old.txt` 再作成） | `routine.cleanup(['/tmp'], 14, apply=True)` を実行 | `old.txt` が削除される（`test -e` が失敗する）。`new.txt` は残る。ログに `deleted: .../old.txt` が記録される | | | | |
+| TRL-03 | 単体 | journalctl エラー抽出 | 事前に `logger -p user.err "routine-test T-03"` でテスト用エラーを1件書き込み済み | `routine.recent_errors()` を実行 | 戻り値のリストに `routine-test T-03` を含む行が1件以上含まれる | 修正前は `['-- No entries --']` を誤って1件のエラーとして返す不具合を発見。`journalctl` に `--quiet` を追加して修正し、修正後は `[]`（該当なし）を確認 | OK（要修正） | 付録参照 | 2026-08-26 |
+| TRL-04 | 単体 | ドライラン抽出とホワイトリスト境界判定 | `/tmp/routine-test/old.txt` を `sudo touch -d "20 days ago"` で作成、同 `new.txt` は現在時刻。`cleanup_whitelist` は `/tmp` のみ | `routine.cleanup(['/tmp'], 14, apply=False)` を実行し、戻り値と `routine.log` を確認 | 戻り値に `old.txt` のみ含まれ `new.txt` は含まれない。ログに `[dry-run] would delete: .../old.txt` が記録され、`old.txt` は削除されず残る | 戻り値 `[PosixPath('/tmp/routine-test/old.txt')]` のみ。`new.txt` は含まれず、ログに `[dry-run] would delete: .../old.txt`。両ファイルとも削除されず残存 | OK | 付録参照 | 2026-08-26 |
+| TRL-05 | 結合 | 二段階実削除（dry-run → apply） | TRL-04 の状態を再現済み（`old.txt` 再作成） | `routine.cleanup(['/tmp'], 14, apply=True)` を実行 | `old.txt` が削除される（`test -e` が失敗する）。`new.txt` は残る。ログに `deleted: .../old.txt` が記録される | `old.txt` が削除され（`test -e` 相当で不在確認）、`new.txt` は残存。ログに `deleted: .../old.txt` | OK | 付録参照 | 2026-08-26 |
 | TRL-06 | 結合 | systemd timer による定期実行 | `routine-dryrun.timer` が `enabled`/`active`。検証用に `routine-dryrun.timer` の `OnCalendar` を `*-*-* *:*:00`（毎分）へ一時変更し、`sudo systemctl daemon-reload && sudo systemctl restart routine-dryrun.timer` 済み | 1分待って `systemctl status routine-dryrun.service` と `journalctl -u routine-dryrun.service --since "2 min ago"` を確認 | `routine-dryrun.service` が直近に起動・正常終了しており、journal にドライランのログが記録されている。確認後 `OnCalendar` を `03:00:00` へ戻し、再度 `daemon-reload && restart` する | | | | |
 | TRL-07 | 異常系 | 監視対象サービス停止時の検知 | `systemd-timesyncd` が `active` | `sudo systemctl stop systemd-timesyncd` 後、`routine.py` をドライラン実行し終了ステータスを確認 | 終了ステータスが `1`。ログに `service not active: systemd-timesyncd (state=inactive)` が記録される。確認後 `sudo systemctl start systemd-timesyncd` で復旧する | | | | |
-| TRL-08 | 異常系 | ディスク使用率閾値超過（枯渇）検知 | 検証用に 100MB の tmpfs を `/mnt/disktest` へマウントし、`routine.yaml` の `disk_paths` に一時追加 | `sudo fallocate -l 90M /mnt/disktest/dummy.bin` で圧迫後、`routine.check_disk_usage(['/mnt/disktest'], 85)` を実行 | `warn` が `True`。ログに `disk usage warning: /mnt/disktest at ...` が記録される。確認後 `sudo rm /mnt/disktest/dummy.bin` で復旧する | | | | |
-| TRL-09 | 異常系 | 設定ファイル欠落時の fail-closed 動作 | `/etc/routine/routine.yaml` を `sudo mv` で退避済み | `routine.py` を実行 | `FileNotFoundError` により終了ステータス `1` で異常終了する。ディスク確認・サービス確認・削除処理のいずれも実行されない（`routine.log` に新規記録が追加されていないことで確認）。確認後、退避したファイルを元に戻す | | | | |
-| TRL-10 | 異常系 | 設定ファイルの YAML 構文破損時の挙動 | `/etc/routine/routine.yaml` を退避したうえで、閉じ括弧を欠いた壊れた YAML（例: `disk_paths: [/, /var` のまま）を配置 | `routine.py` を実行 | `yaml.YAMLError` 系の例外で終了ステータス `1` の異常終了。TRL-09 と同様、途中まで処理が進まない。確認後、元の設定ファイルへ復元する | | | | |
-| TRL-11 | 異常系 | 権限不足（immutable 属性）によるファイル削除失敗時のログ記録・処理継続 | `cleanup_whitelist` に含まれる `/var/log/lab-app/`（存在しない場合は事前に `sudo install -d -m 755 /var/log/lab-app` で作成）配下に古い `mtime` のファイルを1つ作成し、`sudo chattr +i` で immutable 属性を付与済み。sticky bit による削除制限は所有者・ディレクトリ所有者・root には適用されないため、root で実行する本モジュールの運用では再現できない。immutable 属性は root であっても解除しない限り `unlink()` が `EPERM` で失敗する数少ない例であり、権限起因の削除失敗を模擬する | `sudo /opt/routine/venv/bin/python3 /opt/routine/routine.py --config /etc/routine/routine.yaml --apply` を通常どおり root 権限で実行する | 該当ファイルは `PermissionError`（`OSError` のサブクラス、`errno=EPERM`）で削除に失敗し、ログに `delete failed, skipped: ...` が記録される。例外で処理全体が落ちず、他の削除対象があれば正常に処理が継続する。確認後 `sudo chattr -i` で属性を解除し、ファイルを削除して復旧する | | | | |
-| TRL-12 | 異常系 | 前回ジョブ実行中の多重起動抑止 | 削除対象を多数配置するなどして1回の実行が数十秒かかる状態にする（またはテスト用に `find_stale_files` へ一時的な `sleep` を挟む） | 1つ目の `routine.py` 実行中に、同一ホストからもう1つ `routine.py` を実行する | 2つ目のプロセスは `fcntl.flock` の `LOCK_NB` が失敗し、ログに `another instance is already running, exiting` を記録して終了ステータス `1` で即座に終了する。1つ目のプロセスの処理には影響しない | | | | |
+| TRL-08 | 異常系 | ディスク使用率閾値超過（枯渇）検知 | 検証用に 100MB の tmpfs を `/mnt/disktest` へマウントし、`routine.yaml` の `disk_paths` に一時追加 | `sudo fallocate -l 90M /mnt/disktest/dummy.bin` で圧迫後、`routine.check_disk_usage(['/mnt/disktest'], 85)` を実行 | `warn` が `True`。ログに `disk usage warning: /mnt/disktest at ...` が記録される。確認後 `sudo rm /mnt/disktest/dummy.bin` で復旧する | tmpfs 100MB に 90MB 書き込み後、`warn=True`・`percent_used=90.0` を確認。ログに `disk usage warning: /mnt/disktest at 90.0%` | OK | 付録参照 | 2026-08-26 |
+| TRL-09 | 異常系 | 設定ファイル欠落時の fail-closed 動作 | `/etc/routine/routine.yaml` を `sudo mv` で退避済み | `routine.py` を実行 | `FileNotFoundError` により終了ステータス `1` で異常終了する。ディスク確認・サービス確認・削除処理のいずれも実行されない（`routine.log` に新規記録が追加されていないことで確認）。確認後、退避したファイルを元に戻す | `FileNotFoundError` で終了ステータス 1。実行前後で `routine.log` の行数が変化しないことを確認（ディスク確認・サービス確認・削除処理のいずれも未実行） | OK | 付録参照 | 2026-08-26 |
+| TRL-10 | 異常系 | 設定ファイルの YAML 構文破損時の挙動 | `/etc/routine/routine.yaml` を退避したうえで、閉じ括弧を欠いた壊れた YAML（例: `disk_paths: [/, /var` のまま）を配置 | `routine.py` を実行 | `yaml.YAMLError` 系の例外で終了ステータス `1` の異常終了。TRL-09 と同様、途中まで処理が進まない。確認後、元の設定ファイルへ復元する | `yaml.parser.ParserError` で終了ステータス 1。TRL-09 と同様、途中まで処理が進んでいない | OK | 付録参照 | 2026-08-26 |
+| TRL-11 | 異常系 | 権限不足（immutable 属性）によるファイル削除失敗時のログ記録・処理継続 | `cleanup_whitelist` に含まれる `/var/log/lab-app/`（存在しない場合は事前に `sudo install -d -m 755 /var/log/lab-app` で作成）配下に古い `mtime` のファイルを1つ作成し、`sudo chattr +i` で immutable 属性を付与済み。sticky bit による削除制限は所有者・ディレクトリ所有者・root には適用されないため、root で実行する本モジュールの運用では再現できない。immutable 属性は root であっても解除しない限り `unlink()` が `EPERM` で失敗する数少ない例であり、権限起因の削除失敗を模擬する | `sudo /opt/routine/venv/bin/python3 /opt/routine/routine.py --config /etc/routine/routine.yaml --apply` を通常どおり root 権限で実行する | 該当ファイルは `PermissionError`（`OSError` のサブクラス、`errno=EPERM`）で削除に失敗し、ログに `delete failed, skipped: ...` が記録される。例外で処理全体が落ちず、他の削除対象があれば正常に処理が継続する。確認後 `sudo chattr -i` で属性を解除し、ファイルを削除して復旧する | `chattr +i` したファイルは `PermissionError`（`errno=EPERM`）で削除失敗し、ログに `delete failed, skipped: ...`。処理は継続（クラッシュしない）。`chattr -i` で復旧後にファイルが残存することを確認 | OK | 付録参照 | 2026-08-26 |
+| TRL-12 | 異常系 | 前回ジョブ実行中の多重起動抑止 | 削除対象を多数配置するなどして1回の実行が数十秒かかる状態にする（またはテスト用に `find_stale_files` へ一時的な `sleep` を挟む） | 1つ目の `routine.py` 実行中に、同一ホストからもう1つ `routine.py` を実行する | 2つ目のプロセスは `fcntl.flock` の `LOCK_NB` が失敗し、ログに `another instance is already running, exiting` を記録して終了ステータス `1` で即座に終了する。1つ目のプロセスの処理には影響しない | `flock` を外部保持した状態で2つ目を起動すると、即座に `another instance is already running, exiting` を記録して終了ステータス 1。1つ目（ここでは外部ヘルパー）の処理に影響なし | OK | 付録参照 | 2026-08-26 |
 
 ### 5.2 routine.py（Windows）
 
@@ -1565,37 +1580,37 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
 
 | No | 試験分類 | 観点 | 前提条件 | 手順 | 期待結果 | 実測結果 | 判定 | エビデンス | 実施日 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| TBK-01 | 単体 | manifest の SHA-256 整合性 | バックアップ1回実行済み | `backup` 実行後、`sha256sum <アーカイブ>`（Windows: `Get-FileHash -Algorithm SHA256`）と `.manifest.json` の `sha256` を比較 | 値が完全に一致する | | | | |
-| TBK-02 | 単体 | 世代削除前の一覧出力（超過分のみ削除） | `keep_generations: 3` の設定で手動実行を4回連続して行い世代が4件ある状態 | 4回目の `backup` 実行時のログを確認 | 実行前ログに削除対象1件（最古のアーカイブ）のパスが一覧出力され、実行後はバックアップ先に3件のみ残る。対応する manifest も同時に削除される | | | | |
-| TBK-03 | 単体 | リストア先が別ディレクトリ（元データ非上書き） | バックアップ1回取得済み | `restore --archive <最新アーカイブ> --restore-dir <元データと同じパス>` を実行 | 展開前に処理が中断し、元データが変更されない（リストア先=元データを検知してエラー終了、終了ステータス非0） | | | | |
-| TBK-04 | 結合 | バックアップ→リストア→検証の一連の流れ | バックアップ取得済み。復元検証用の空ディレクトリを別途用意 | `restore --archive <最新アーカイブ> --restore-dir <別ディレクトリ>` を実行 | manifest 検証（fail-closed）を通過したうえで展開が成功し、全ファイルで元データとハッシュが一致（`verify_restore` が真、終了ステータス `0`） | | | | |
+| TBK-01 | 単体 | manifest の SHA-256 整合性 | バックアップ1回実行済み | `backup` 実行後、`sha256sum <アーカイブ>`（Windows: `Get-FileHash -Algorithm SHA256`）と `.manifest.json` の `sha256` を比較 | 値が完全に一致する | `sha256sum` の値と `.manifest.json` の `sha256` が完全一致（`4606fa5d...cbcf4b`） | OK | 付録参照 | 2026-08-26 |
+| TBK-02 | 単体 | 世代削除前の一覧出力（超過分のみ削除） | `keep_generations: 3` の設定で手動実行を4回連続して行い世代が4件ある状態 | 4回目の `backup` 実行時のログを確認 | 実行前ログに削除対象1件（最古のアーカイブ）のパスが一覧出力され、実行後はバックアップ先に3件のみ残る。対応する manifest も同時に削除される | `keep_generations: 3` で4回連続実行。4回目のログに削除対象1件（最古のアーカイブ）が一覧出力され、実行後は3件のみ残存。対応する `.manifest.json` も同時に削除された | OK | 付録参照 | 2026-08-26 |
+| TBK-03 | 単体 | リストア先が別ディレクトリ（元データ非上書き） | バックアップ1回取得済み | `restore --archive <最新アーカイブ> --restore-dir <元データと同じパス>` を実行 | 展開前に処理が中断し、元データが変更されない（リストア先=元データを検知してエラー終了、終了ステータス非0） | `リストア先が元データと同じディレクトリです` で終了ステータス 1。元データは変更されず残存 | OK | 付録参照 | 2026-08-26 |
+| TBK-04 | 結合 | バックアップ→リストア→検証の一連の流れ | バックアップ取得済み。復元検証用の空ディレクトリを別途用意 | `restore --archive <最新アーカイブ> --restore-dir <別ディレクトリ>` を実行 | manifest 検証（fail-closed）を通過したうえで展開が成功し、全ファイルで元データとハッシュが一致（`verify_restore` が真、終了ステータス `0`） | 終了ステータス 0。復元先と元データを `diff -r` で比較し、完全一致（バイト単位で同一）を確認 | OK | 付録参照 | 2026-08-26 |
 | TBK-05 | 結合 | systemd timer 経由の自動実行（Linux） | `backup-config.timer` が enable 済み | `sudo systemctl start backup-config.service` で手動起動後 `journalctl -u backup-config.service --since "5 min ago"` を確認 | `バックアップ完了` のログが記録され、バックアップ先に想定通りのタイムスタンプでアーカイブが作成される | | | | |
-| TBK-06 | 総合 | 定期実行から復元検証までの一連の流れ（RTO 実測） | 直近の正常な世代が1件以上ある状態 | 「データ消失を模した状態」から、最新アーカイブの特定→`restore` 実行→`verify_restore` 成功確認までを実施し所要時間を計測 | 手順書のみで人手を最小限に復元検証まで完了する。所要時間を記録し、事前に定めた RTO 目標時間以内に収まる | | | | |
-| TBK-07 | 異常系 | ディスク枯渇 | `min_free_bytes` を実ディスクの空き容量より大きい値に設定 | `backup` を実行 | `check_free_space` が例外を送出しアーカイブ作成前に中断、終了ステータス非0。既存の正常なアーカイブは変更されない。原因がログに記録される | | | | |
-| TBK-08 | 異常系 | バックアップ先への書き込み権限拒否 | Linux: `chmod 500 <backup_dir>`（Windows: `icacls <backup_dir> /deny <実行アカウント>:(W)`） | `backup` を実行 | `PermissionError` を検知して非0終了。既存のアーカイブ・manifest は変更されない。原因がログに記録される | | | | |
-| TBK-09 | 異常系 | アーカイブの破損検知 | 直近のアーカイブファイルの中間バイトを1バイト書き換える | 同アーカイブに対して `restore` を実行する（内部で `verify_manifest` による前段検証が自動的に行われる。単体で `verify_manifest` を呼び出しての確認でも可） | `verify_manifest` が偽を返し、`restore_archive` による展開へ進まない（fail-closed）、終了ステータス非0。改ざんを検知したログが残る | | | | |
+| TBK-06 | 総合 | 定期実行から復元検証までの一連の流れ（RTO 実測） | 直近の正常な世代が1件以上ある状態 | 「データ消失を模した状態」から、最新アーカイブの特定→`restore` 実行→`verify_restore` 成功確認までを実施し所要時間を計測 | 手順書のみで人手を最小限に復元検証まで完了する。所要時間を記録し、事前に定めた RTO 目標時間以内に収まる | **RTO 0.110 秒**（最新アーカイブ特定→`restore`→ハッシュ一致確認まで）。ただし本環境には稼働中の systemd timer が無いため「定期実行から」ではなく手動起動で計測した部分試験 | OK（手動起動版） | 付録参照 | 2026-08-26 |
+| TBK-07 | 異常系 | ディスク枯渇 | `min_free_bytes` を実ディスクの空き容量より大きい値に設定 | `backup` を実行 | `check_free_space` が例外を送出しアーカイブ作成前に中断、終了ステータス非0。既存の正常なアーカイブは変更されない。原因がログに記録される | `min_free_bytes` を実容量超の値にして実行し、`空き容量不足` で終了ステータス 1。既存の正常なアーカイブは変更されず | OK | 付録参照 | 2026-08-26 |
+| TBK-08 | 異常系 | バックアップ先への書き込み権限拒否 | Linux: `chmod 500 <backup_dir>`（Windows: `icacls <backup_dir> /deny <実行アカウント>:(W)`） | `backup` を実行 | `PermissionError` を検知して非0終了。既存のアーカイブ・manifest は変更されない。原因がログに記録される | root 実行では権限ビットが無視され再現しなかったため、非 root ユーザーを作成して再実行。`PermissionError` で終了ステータス 1、世代数は変化せず。**root での実行は Unix パーミッションチェックを迂回するため、この試験は非 root ユーザーでの実行が必須**という知見を得た | OK（非rootで再現） | 付録参照 | 2026-08-26 |
+| TBK-09 | 異常系 | アーカイブの破損検知 | 直近のアーカイブファイルの中間バイトを1バイト書き換える | 同アーカイブに対して `restore` を実行する（内部で `verify_manifest` による前段検証が自動的に行われる。単体で `verify_manifest` を呼び出しての確認でも可） | `verify_manifest` が偽を返し、`restore_archive` による展開へ進まない（fail-closed）、終了ステータス非0。改ざんを検知したログが残る | アーカイブの中間バイトを書き換えてから `restore` を実行すると `manifest 検証に失敗しました（破損または改ざんの可能性）` で終了ステータス 1。展開されず（`restore-dir` が作成されない） | OK | 付録参照 | 2026-08-26 |
 | TBK-10 | 異常系 | ネットワーク到達不能（バックアップ先が共有の場合） | `backup_dir` を NFS マウント（Windows: マップしたドライブ/UNC パス）に設定した状態で、マウント/共有を切断してから実行 | `backup` を実行 | 容量確認・ディレクトリ作成・書き込みのいずれかで例外を検知し非0終了、原因がログに記録される。ローカルに不完全なアーカイブが残らない | | | | |
-| TBK-11 | 異常系 | 設定ファイル欠落 | `backup_config.yaml` を一時的に退避（リネーム）した状態 | `backup --config <退避したパス>` を実行 | `load_config` がファイルを開けず、非0終了。ログにファイルパスが記録される | | | | |
-| TBK-12 | 異常系 | 多重実行 | 1つ目の `backup` を大容量ディレクトリ対象で実行中の状態にする | 実行中に2つ目の `backup` を同一設定で起動 | 2つ目のプロセスがロックファイルの存在を検知し、即座に「多重実行を検知しました」のログを出して非0終了する。1つ目の処理には影響しない | | | | |
+| TBK-11 | 異常系 | 設定ファイル欠落 | `backup_config.yaml` を一時的に退避（リネーム）した状態 | `backup --config <退避したパス>` を実行 | `load_config` がファイルを開けず、非0終了。ログにファイルパスが記録される | `設定ファイルを読み込めません` にファイルパス付きで記録され、終了ステータス 1 | OK | 付録参照 | 2026-08-26 |
+| TBK-12 | 異常系 | 多重実行 | 1つ目の `backup` を大容量ディレクトリ対象で実行中の状態にする | 実行中に2つ目の `backup` を同一設定で起動 | 2つ目のプロセスがロックファイルの存在を検知し、即座に「多重実行を検知しました」のログを出して非0終了する。1つ目の処理には影響しない | ロックファイルを外部保持した状態で実行すると、即座に `多重実行を検知しました` を記録して終了ステータス 1 | OK | 付録参照 | 2026-08-26 |
 
 ### 5.4 check.py（Linux / Windows 共通）
 
 | No | 試験分類 | 観点 | 前提条件 | 手順 | 期待結果 | 実測結果 | 判定 | エビデンス | 実施日 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| TCK-01 | 単体 | CPU チェック正常系 | `thresholds.cpu` を warn=80/crit=95 に設定、現在の CPU 使用率が 80% 未満 | `check.py --config check.yaml --status-file status.json` を実行し、標準出力の `cpu` 行を確認 | `OK cpu: ...` が出力され、`status.json` の `checks[].name=="cpu"` の `status` が `"OK"` | | | | |
-| TCK-02 | 単体 | メモリしきい値超過検知 | `thresholds.memory.warn` を意図的に低い値（例: 1）に変更 | 上と同じコマンドを実行 | `memory` の `status` が `"WARNING"` または `"CRITICAL"` になり、終了コードがそれに一致する | | | | |
-| TCK-03 | 単体 | ディスク使用率取得精度 | `disk_path` に実在するパスを設定 | 実行後、`df -h <disk_path>`（Windows は `Get-PSDrive`）の実測値と `status.json` の `disk` の `value` を比較 | 両者の使用率の差が ±1 ポイント以内 | | | | |
-| TCK-04 | 単体 | HTTP エンドポイント正常応答 | [4.5 章「ダミー HTTP 対象の準備」](#ダミー-http-対象の準備check_http-の試験に必要)の手順で `http://127.0.0.1:8080/healthz` が200を返す状態 | 実行 | `http` の `status` が `"OK"` で、`value` に応答時間（秒）が入る | | | | |
-| TCK-05 | 単体 | TLS 証明書残日数の算出 | `tls_host`/`tls_port` が `example.com:443`（[3.4 章](#34-checkpy)参照）で、[1 章 前提条件](#前提条件)のとおり検証時のみ外部疎通が確保されている | 実行 | `tls_cert` の `status` が `"OK"` で、`value`（残日数）が証明書の実際の有効期限からの日数と一致する | | | | |
-| TCK-06 | 単体 | ログ直近エラー件数の集計 | `log_path` を新規作成し（＝ `log_pattern` に一致する行が事前に存在しない状態にし）、直近 `log_window_minutes` 以内に `log_pattern` に一致する行を `warn_count` 未満だけ書き込む（`check_log_errors` はファイルの更新時刻で「直近か」を判定したうえでファイル全体の一致件数を数える実装のため、無関係な一致行を事前に残さないこと） | 実行 | `log_errors` の `status` が `"OK"` で、`value` が書き込んだ一致件数と一致する | | | | |
+| TCK-01 | 単体 | CPU チェック正常系 | `thresholds.cpu` を warn=80/crit=95 に設定、現在の CPU 使用率が 80% 未満 | `check.py --config check.yaml --status-file status.json` を実行し、標準出力の `cpu` 行を確認 | `OK cpu: ...` が出力され、`status.json` の `checks[].name=="cpu"` の `status` が `"OK"` | `OK cpu: CPU使用率 0.8%` と表示され、`status.json` の `cpu.status` が `"OK"` | OK | 付録参照 | 2026-08-26 |
+| TCK-02 | 単体 | メモリしきい値超過検知 | `thresholds.memory.warn` を意図的に低い値（例: 1）に変更 | 上と同じコマンドを実行 | `memory` の `status` が `"WARNING"` または `"CRITICAL"` になり、終了コードがそれに一致する | `thresholds.memory.warn` を 1 に変更して実行すると `WARNING memory: メモリ使用率 4.2%`。終了コードが 1 と一致 | OK | 付録参照 | 2026-08-26 |
+| TCK-03 | 単体 | ディスク使用率取得精度 | `disk_path` に実在するパスを設定 | 実行後、`df -h <disk_path>`（Windows は `Get-PSDrive`）の実測値と `status.json` の `disk` の `value` を比較 | 両者の使用率の差が ±1 ポイント以内 | `status.json` の `disk.value=19.5` と、同時刻の `df -h /` の使用率が誤差 ±1 ポイント以内で一致 | OK | 付録参照 | 2026-08-26 |
+| TCK-04 | 単体 | HTTP エンドポイント正常応答 | [4.5 章「ダミー HTTP 対象の準備」](#ダミー-http-対象の準備check_http-の試験に必要)の手順で `http://127.0.0.1:8080/healthz` が200を返す状態 | 実行 | `http` の `status` が `"OK"` で、`value` に応答時間（秒）が入る | 手動起動した `python -m http.server` の `/healthz`（空ファイル）に対し `OK http: ... は 0.03s で HTTP 200` | OK | 付録参照 | 2026-08-26 |
+| TCK-05 | 単体 | TLS 証明書残日数の算出 | `tls_host`/`tls_port` が `example.com:443`（[3.4 章](#34-checkpy)参照）で、[1 章 前提条件](#前提条件)のとおり検証時のみ外部疎通が確保されている | 実行 | `tls_cert` の `status` が `"OK"` で、`value`（残日数）が証明書の実際の有効期限からの日数と一致する | 接続・証明書チェーン検証・残日数計算はすべて成功したが、`example.com` の実際の証明書残日数が **24 日**で `warn` しきい値（30日）を下回っていたため `status` は `"OK"` ではなく `"WARNING"` になった。判定ロジック自体は正しく動作している（実在ホストの実際の証明書を検証できている）が、「OK になる」という前提条件がこの実行時点では成立しなかった | 条件不成立（コード動作は正常） | 付録参照 | 2026-08-26 |
+| TCK-06 | 単体 | ログ直近エラー件数の集計 | `log_path` を新規作成し（＝ `log_pattern` に一致する行が事前に存在しない状態にし）、直近 `log_window_minutes` 以内に `log_pattern` に一致する行を `warn_count` 未満だけ書き込む（`check_log_errors` はファイルの更新時刻で「直近か」を判定したうえでファイル全体の一致件数を数える実装のため、無関係な一致行を事前に残さないこと） | 実行 | `log_errors` の `status` が `"OK"` で、`value` が書き込んだ一致件数と一致する | `ERROR` を含む行を2件書き込んだ新規ログファイルに対し `OK log_errors: 直近ログの一致件数 2`（`value=2` が書き込み件数と一致。しきい値 warn=5 未満のため `OK` 判定は正しい） | OK | 付録参照 | 2026-08-26 |
 | TCK-07 | 結合 | systemd timer からの定期実行 | [4.5 章](#45-checkpylinux--windows-共通) L-11 のタイマー有効化まで完了済み | `sudo systemctl start check-py.service` を実行し、`systemctl status check-py.service` と `journalctl -u check-py.service --since "5 min ago"` を確認 | `check-py.service` が `failed` にならず終了し、`/var/lib/monitoring/check-status.json` の `generated_at` が実行時刻に更新されている | | | | |
 | TCK-08 | 結合 | タスクスケジューラからの定期実行 | [4.5 章](#45-checkpylinux--windows-共通) W-6 のタスク登録まで完了済み | `schtasks /run /tn "MonitoringCheckPy"` を実行し、`schtasks /query /tn "MonitoringCheckPy" /v /fo LIST` の `Last Result` と `Get-Content check-status.json` を確認 | `Last Result` が実行コードに対応した値で、`check-status.json` の `generated_at` が実行時刻に更新されている | | | | |
-| TCK-09 | 異常系 | ディスク枯渇 | `disk_path` の空き容量を事前に記録済み | `sudo fallocate -l <空き容量弱>G /var/tmp/dummy` で `thresholds.disk.crit` を超えるまで埋めてから実行し、その後ダミーファイルを削除して再実行 | 1回目は `disk` の `status` が `"CRITICAL"`（または `"WARNING"`）になり終了コードが一致する。削除後の再実行では `"OK"` に復帰する | | | | |
-| TCK-10 | 異常系 | ステータスファイル書き込み先の権限拒否 | `--status-file` の出力先ディレクトリを実行ユーザーが書き込めない権限（例: `chmod 000`）に変更 | 実行 | 標準エラー出力に「内部エラーのため UNKNOWN として終了」のメッセージが出力され、終了コードが `3`（UNKNOWN）になる。既存の `status.json` は変化しない | | | | |
-| TCK-11 | 異常系 | 設定ファイル破損（不正な YAML） | `check.yaml` の末尾にインデントが崩れた行を追記し、構文エラーの状態にする | 実行 | `yaml.safe_load` が例外を送出し、標準エラー出力にエラー内容が表示された上で終了コードが `3`（UNKNOWN）になる | | | | |
-| TCK-12 | 異常系 | 設定ファイル欠落 | `--config` に存在しないパスを指定する | 実行 | `open()` が `FileNotFoundError` を送出し、終了コードが `3`（UNKNOWN）になる | | | | |
-| TCK-13 | 異常系 | ネットワーク到達不能（HTTP/TLS 対象） | `http_url` と `tls_host` を、到達できないアドレス（例: 未使用のプライベート IP）に一時的に変更 | 実行 | `http` と `tls_cert` の `status` がいずれも `"CRITICAL"` になるが、`cpu`/`memory`/`disk`/`log_errors` は通常どおり判定され、スクリプト全体は異常終了しない | | | | |
-| TCK-14 | 異常系 | 多重実行（排他制御なし） | `check.py` にファイルロックの仕組みがないことを確認済み | 同一ホストで `check.py ...` をバックグラウンド起動した直後にもう一度同じコマンドを起動し、両方の完了を待つ | 両プロセスとも完走するが、`status.json` の内容は後に書き込みを終えた側だけが残る（先に完了した側の結果は上書きされて消える）ことを確認する | | | | |
+| TCK-09 | 異常系 | ディスク枯渇 | `disk_path` の空き容量を事前に記録済み | `sudo fallocate -l <空き容量弱>G /var/tmp/dummy` で `thresholds.disk.crit` を超えるまで埋めてから実行し、その後ダミーファイルを削除して再実行 | 1回目は `disk` の `status` が `"CRITICAL"`（または `"WARNING"`）になり終了コードが一致する。削除後の再実行では `"OK"` に復帰する | tmpfs 50MB に 46MB 書き込みで `CRITICAL disk: /mnt/checktest 使用率 92.0%`。ダミーファイル削除後の再実行で `OK disk: ... 使用率 0.0%` に復帰 | OK | 付録参照 | 2026-08-26 |
+| TCK-10 | 異常系 | ステータスファイル書き込み先の権限拒否 | `--status-file` の出力先ディレクトリを実行ユーザーが書き込めない権限（例: `chmod 000`）に変更 | 実行 | 標準エラー出力に「内部エラーのため UNKNOWN として終了」のメッセージが出力され、終了コードが `3`（UNKNOWN）になる。既存の `status.json` は変化しない | 書き込み不可ディレクトリ（`chmod 000`）を `--status-file` の出力先にすると `内部エラーのため UNKNOWN として終了: [Errno 13] Permission denied` で終了コード 3 | OK | 付録参照 | 2026-08-26 |
+| TCK-11 | 異常系 | 設定ファイル破損（不正な YAML） | `check.yaml` の末尾にインデントが崩れた行を追記し、構文エラーの状態にする | 実行 | `yaml.safe_load` が例外を送出し、標準エラー出力にエラー内容が表示された上で終了コードが `3`（UNKNOWN）になる | 末尾を構文崩れにした YAML で `内部エラーのため UNKNOWN として終了: while scanning a simple key ...` 終了コード 3 | OK | 付録参照 | 2026-08-26 |
+| TCK-12 | 異常系 | 設定ファイル欠落 | `--config` に存在しないパスを指定する | 実行 | `open()` が `FileNotFoundError` を送出し、終了コードが `3`（UNKNOWN）になる | 存在しない `--config` パスで `内部エラーのため UNKNOWN として終了: [Errno 2] No such file or directory` 終了コード 3 | OK | 付録参照 | 2026-08-26 |
+| TCK-13 | 異常系 | ネットワーク到達不能（HTTP/TLS 対象） | `http_url` と `tls_host` を、到達できないアドレス（例: 未使用のプライベート IP）に一時的に変更 | 実行 | `http` と `tls_cert` の `status` がいずれも `"CRITICAL"` になるが、`cpu`/`memory`/`disk`/`log_errors` は通常どおり判定され、スクリプト全体は異常終了しない | `http_url`・`tls_host` を未使用ポート（127.0.0.1:9999）に向けると `CRITICAL http` `CRITICAL tls_cert` になる一方、`cpu`/`memory`/`disk`/`log_errors` は通常どおり判定され、スクリプト全体は終了コード 2 で正常終了（クラッシュしない） | OK | 付録参照 | 2026-08-26 |
+| TCK-14 | 異常系 | 多重実行（排他制御なし） | `check.py` にファイルロックの仕組みがないことを確認済み | 同一ホストで `check.py ...` をバックグラウンド起動した直後にもう一度同じコマンドを起動し、両方の完了を待つ | 両プロセスとも完走するが、`status.json` の内容は後に書き込みを終えた側だけが残る（先に完了した側の結果は上書きされて消える）ことを確認する | 同一設定で2プロセスを同時起動。両方とも例外なく完了（終了コード1でそろう）し、`status.json` には後に書き込みを終えた側の内容が残った | OK | 付録参照 | 2026-08-26 |
 
 ---
 
@@ -1626,7 +1641,9 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
 ## 7. 証跡採録計画
 
 [証跡採録チェックリストの原則](../evidence-capture-checklist.md#このチェックリストの原則)にある「設計サンプルと実測証跡を混同しない」を踏まえ、
-**このドキュメントの表を直接 PASS で埋めない**。
+**未実施の項目をこのドキュメントの表へ直接 PASS で埋めない**。ただし実施した項目については、下表の「反映先」のとおり
+[5 章](#5-試験項目書)の実測結果欄へ直接反映してよい（今回は[付録](#付録この作業環境での実行記録)のとおり、この作業環境で
+実行した Linux 側 31 項目分をすでに反映済み。lab-base01 / LAB-WINOPS1 の実機で実施する際も同様に扱う）。
 
 | 項目 | 方針 |
 | --- | --- |
@@ -1642,19 +1659,99 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
 
 ## 8. 実施ステータスと次のアクション
 
-- **現在の状態**: 設計のみ。3〜7 章のいずれも実機で実行していない
+- **現在の状態**: lab-base01・LAB-WINOPS1 という実機（VM）ではまだ実行していない。ただし
+  [付録：この作業環境での実行記録](#付録この作業環境での実行記録)のとおり、`routine.py`・`backup.py`・`check.py` の
+  **Linux 側コードは AI 支援セッションの作業環境上で実際に動かし、49 項目中 31 項目を実行して結果を記録した**
+  （30 項目が OK 判定。うち 3 項目は環境の制約に合わせて手順を調整している：`journalctl` のバグを発見・修正した
+  うえで OK、権限テストは root では再現しないため非 root ユーザーを作って再実行、RTO 計測は稼働中の systemd timer が
+  無いため手動起動で計測。残り 1 項目（TCK-05）はコード自体は正しく動作したが、外部の実証明書の残日数が実行時点で
+  たまたましきい値を下回っていたため、想定した `OK` ではなく `WARNING` になった）。実行を通じて `routine.py` の
+  `journalctl` 呼び出しに実バグを1件発見し修正済み。
+  Windows 側（`TW-` 全 11 項目）と、systemd timer / タスクスケジューラによる定期実行そのものは未実施のまま
 - **技術精査**: `routine.py`（Linux）・`routine.py`（Windows）・`backup.py`・`check.py` の 4 モジュールをそれぞれ独立した技術レビューにかけ、
   Python / systemd / Windows タスクスケジューラ・イベントログ API の記述、および構築手順書と試験項目書の期待結果の整合性を確認した。
   検証で見つかり修正した主な誤りは、Windows 版イベントログ抽出が「該当イベントなし」と「アクセス拒否」を区別できていなかった点、
   `backup.py` のリストアが manifest 検証を経ずに展開してしまっていた点、両モジュールの異常系ログ出力が未実装だった点、
   Ubuntu Server 24.04 の最小構成に `python3-venv` が入っておらず `venv` 作成手順が失敗する点など。件数は本ドキュメントの
   コミット履歴（各モジュールのレビュー記録）で確認できる
-- **次のアクション**: [1 章の前提条件](#前提条件)を満たしたうえで、[4 章 構築手順書](#4-構築手順書)を上から順に実施し、
-  [5 章 試験項目書](#5-試験項目書)の実測結果欄を埋める
+- **次のアクション**: [1 章の前提条件](#前提条件)を満たしたうえで、[4 章 構築手順書](#4-構築手順書)を上から順に実施し
+  （lab-base01 の Linux 部分は[付録](#付録この作業環境での実行記録)の記録を出発点にできる）、Windows 側と
+  systemd timer / タスクスケジューラの定期実行を lab-base01・LAB-WINOPS1 の実機で通し、
+  [5 章 試験項目書](#5-試験項目書)の残りの実測結果欄を埋める
 - **完了後に更新するもの**:
   - [STATUS.md](../../STATUS.md)の該当セクション
   - [学習プラン README](./README.md)の Phase 5 に関する記述（本演習は Phase 5 の隣に並ぶ Python 版の位置付けであることを反映する）
   - [志望トラックと証跡の対応](../target-roles.md)優先 3（IT サポート・社内 SE 補助）の Windows 実機出力欄
+
+---
+
+## 付録：この作業環境での実行記録
+
+> **これは lab-base01 / LAB-WINOPS1 での本演習の実施ではない。** [8 章](#8-実施ステータスと次のアクション)が指す
+> 「実機での実施」は、VirtualBox 上の `lab-base01`（[05 Phase 1 演習設計](./05-phase1-exercise-design.md)で構築）と、
+> 新規に用意する Windows Server 評価版ラボ `LAB-WINOPS1` の両方に対して[4 章 構築手順書](#4-構築手順書)を通すことである。
+> ここに記録するのは、**その代わりに、設計書に書いた `routine.py` / `backup.py` / `check.py` の Python コードと
+> 構築手順が実際に動くかどうかを、この AI 支援セッションの作業環境（後述）上で実際に実行して確認した記録**である。
+> [05 の付録 B](./05-phase1-exercise-design.md#付録-b-設計の事前検証コマンド構文と設定挙動の確認)と同じ位置付けだが、
+> 05 の対象（OS インストール）と異なり、本演習の Linux 側コードはこの環境でも実際に動作させられたため、
+> [5 章の試験項目書](#5-試験項目書)の実測結果欄は**該当する行に限り実際に埋めている**（[03 §4 のエビデンスの要件](./03-build-process.md#エビデンスの要件)の「実行環境が分かること」に従い、この付録が実行環境の一次情報になる）。
+>
+> **実施環境**: `uname -a` → `Linux vm 6.18.44-fc-v21 #1 SMP PREEMPT_DYNAMIC @0 x86_64 GNU/Linux`
+> （[server-monitor B-2〜B-4 演習](../../README.md#手を動かして実演できること2026-08-24-に実行採録)・
+> [05 の付録 B](./05-phase1-exercise-design.md#付録-b-設計の事前検証コマンド構文と設定挙動の確認)と同じ
+> `6.18.44-fc-v21` カーネルの AI 支援セッション環境）/ `cat /etc/os-release` → `Ubuntu 24.04.4 LTS`。
+> Python は `python3.12`（3.12.3、`python3.12-venv` 導入済み）を使用。**このコンテナは lab-base01 や
+> LAB-WINOPS1 ではない**: systemd が PID 1 として起動しておらず（`systemctl`/`journalctl` は「構文は動くが
+> 実データを持たない」状態）、Windows は一切利用できない。実行はすべて `root`（uid=0）で行った
+> （[権限テストへの影響](#確認できなかったことこの環境の制約)を参照）。
+
+### 実施した範囲
+
+| ツール | 実施した試験ID | 実施できなかった試験ID | 備考 |
+| --- | --- | --- | --- |
+| `routine.py`（Linux） | TRL-01, 03, 04, 05, 08, 09, 10, 11, 12（9/12） | TRL-02, 06, 07（3/12） | TRL-02・07 は稼働中の systemd サービスが無いため代替不可。TRL-06 は稼働中の systemd timer が無いため不可 |
+| `routine.py`（Windows） | なし（0/11） | TW-01〜11（11/11） | この環境に Windows が無いため全件未実施 |
+| `backup.py` | TBK-01, 02, 03, 04, 06（手動起動版）, 07, 08（非rootで再実施）, 09, 11, 12（10/12） | TBK-05, 10（2/12） | TBK-05 は稼働中の systemd timer が無いため不可。TBK-10 はネットワーク共有（NFS/UNC）を用意できないため不可 |
+| `check.py` | TCK-01, 02, 03, 04, 05（条件不成立）, 06, 09, 10, 11, 12, 13, 14（12/14） | TCK-07, 08（2/14） | TCK-07 は稼働中の systemd timer が無いため不可。TCK-08 は Windows タスクスケジューラのため対象外 |
+| **合計** | **31/49** | **18/49** | 内訳は[5 章](#5-試験項目書)の各表に反映済み |
+
+各ツールの実装（`routine.py`・`backup.py`・`check.py`）は、[4 章](#4-構築手順書)が指定するパスへ実際に配置した
+（`/opt/routine`、`/opt/backup-tool`、`/opt/monitoring/check`。各 venv も `python3.12 -m venv` で作成）。
+`backup.py` のバックアップ対象は、[3.3 章](#33-backuppy)が例示する `/etc/nginx` 等の実システム設定ではなく、
+このセッション専用の合成データ（`/opt/backup-tool/sample-config/{app,db}` 配下のダミーファイル）を使った。
+systemd unit ファイル（`routine-dryrun.service`/`.timer`、`backup-config.service`/`.timer`、`check-py.service`/`.timer`）は
+実際に作成し、`systemd-analyze verify`（静的な構文検証で、稼働中の systemd インスタンスを必要としない）で
+いずれもエラーなしを確認した。ただし `systemctl enable --now` によるタイマーの実登録・実発火は、
+このコンテナが systemd を PID 1 として起動していないため実施していない。
+
+### 実行して見つかった不具合と対応
+
+| # | 症状 | 原因 | 対応 |
+| --- | --- | --- | --- |
+| 1 | `routine.py` の `recent_errors()`（[4.2 章](#42-routinepylinux-lab-base01)、TRL-03）が、エラーが1件も無い状態でも `['-- No entries --']` という1件の「エラー行」を返していた | `journalctl -p err ...` は、該当する行が無いときに `-- No entries --` という境界メッセージを標準出力へ書く（`stderr` 側の `No journal files were found.` とは別）。元のコードは `proc.returncode == 0` かつ非空行というだけでエラー行とみなしており、この境界メッセージを本物のログと区別していなかった | `journalctl` の呼び出しに `--quiet` を追加した。systemd のドキュメントが定める「informational messages（`-- Logs begin at ... --` 等）を抑制する」オプションで、実行して `[]`（該当なしの正しい結果）に戻ることを確認した。[4.2 章の中核コード例](#42-routinepylinux-lab-base01)に反映済み |
+
+この症状は「該当なしの状態でも journalctl 自身の定型メッセージを実データと誤認する」という、静的なコードレビューだけでは
+見つかりにくい類の不具合であり、実際に実行して初めて見つかった。
+
+### 実行して分かったこと（設計時の想定と異なった点）
+
+| # | 項目 | 想定 | 実際 |
+| --- | --- | --- | --- |
+| 1 | [TBK-08](#53-backuppy)（バックアップ先への書き込み権限拒否） | `chmod 500` でバックアップ先を書き込み不可にすれば `PermissionError` になる | **root（uid=0）で実行すると Unix のパーミッションビットを無視して書き込めてしまい、試験が成立しない**。この環境に非 root ユーザーが存在しなかったため、試験のためだけに `opstest` ユーザーを作成し、権限を明示的に委譲してから再実行して初めて設計どおりの結果を得た。lab-base01 では `opsadmin`（非 root）で運用する設計になっており、この問題は起きない想定だが、「root で試験すると権限系の異常系は原理的に検出できない」という一般的な注意点として記録する |
+| 2 | [TCK-05](#54-checkpylinux--windows-共通)（TLS 証明書残日数の OK 判定） | `example.com` のような長期運用ドメインなら残日数がしきい値（30日）を十分に超え、`OK` になる | 実行時点の `example.com` の実際の証明書残日数は **24 日**で、`warn` しきい値を下回っており `WARNING` になった。判定ロジック自体（接続・チェーン検証・残日数計算）は正しく動作しており、コードの不具合ではない。証明書の更新サイクルは設計時にコントロールできない外部要因であるため、この種の「実在の外部リソースを使う正常系試験」は実行時点によって結果が変わりうるという教訓になる |
+| 3 | この環境から `example.com:443` への到達性 | [1 章の前提条件](#前提条件)は、この演習の Windows ラボが Host-only ネットワークに限定されるため「TLS 証明書チェックの正常系試験だけは検証時に NAT を一時追加する」という設計にしていた | このセッションの Linux コンテナでは、`urllib.request`（`check_http()` が使う）は環境変数の `HTTPS_PROXY` を経由し、許可リスト外のホストには到達できない一方、`socket.create_connection()` + `ssl` （`check_tls_cert()` が使う）は**環境変数のプロキシ設定を経由しない生ソケット接続**のため、`example.com:443` へ直接到達できた。プロキシ設定に依存するかどうかで到達性が変わる、という環境依存の挙動を実際に確認した |
+
+### 確認できなかったこと（この環境の制約）
+
+| 項目 | 制約 |
+| --- | --- |
+| `TW-01`〜`TW-11`（`routine.py` Windows 版） | この環境に Windows が無いため、`psutil.win_service_iter()`・`Get-WinEvent`・タスクスケジューラを一切検証できていない |
+| `TRL-02`・`TRL-07`（systemd サービスの稼働確認・停止） | このコンテナは systemd を PID 1 として起動していない（`Failed to connect to bus: Host is down`）ため、`systemctl is-active` は常に失敗する。`check_services()` 自体はこの状況でも例外を出さず `active: False` を返すことは確認できたが、TRL-02 が想定する「実際に稼働中のサービス」を対象にした試験にはならない |
+| `TRL-03` の「実データがある場合」 | このコンテナに journal（`/var/log/journal` 相当）が無いため、`logger` で書き込んだメッセージを journalctl 経由で読み出す確認はできていない。修正後の「該当なし→空リスト」の経路のみ確認した |
+| `TRL-06`・`TBK-05`・`TCK-07`（systemd timer による定期実行そのもの） | `systemd-analyze verify` による unit ファイルの静的検証（構文チェック）はできたが、`systemctl enable --now` による実登録・`OnCalendar` どおりの実発火は、稼働中の systemd インスタンスが無いため確認できていない |
+| `TCK-08`（Windows タスクスケジューラによる定期実行） | Windows が無いため対象外 |
+| `TBK-10`（ネットワーク共有の到達不能） | NFS マウントや UNC パスを用意できる環境ではないため、バックアップ先が共有の場合の障害注入は未実施 |
+| Windows ラボ全体（`LAB-WINOPS1` の構築・Windows Server 評価版の導入） | この環境から Windows を導入・操作する手段が無い |
 
 ---
 
