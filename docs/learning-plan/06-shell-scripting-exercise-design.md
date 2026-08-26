@@ -113,7 +113,7 @@ flowchart LR
 | 関数定義 | `func_name() { ... }` | `function Verb-Noun { ... }` | PowerShell は「動詞-名詞」の命名規約（`Get-`/`Set-`/`Invoke-` 等）が推奨される |
 | 配列 | `arr=(a b c)` / `declare -A` で連想配列 | `$arr = @(a, b, c)` / `@{}` でハッシュテーブル | Bash の連想配列は bash 4 以降が必須（[3.1](#31-level-1-基礎文法)） |
 | 終了ステータス | `$?`（直前コマンドの 0-255） | `$?`（真偽値）と `$LASTEXITCODE`（ネイティブ exe の数値）の 2 系統 | [3.2](#32-level-2-制御入出力エラー処理) / [4.2](#42-level-2-制御入出力エラー処理)で詳述 |
-| エラー時に止める | `set -e` | `$ErrorActionPreference = 'Stop'` + `try`/`catch` | Bash は「即終了」、PowerShell は「例外として捕捉可能にする」という設計思想の違いがある |
+| エラー時に止める | `set -e` | `$ErrorActionPreference = 'Stop'` + `try`/`catch` | Bash は「失敗コマンドで即終了」（ただし `if`/`while` の条件式や `&&`/`\|\|` の非最後尾など例外がある。詳細は [3.2](#32-level-2-制御入出力エラー処理)）、PowerShell は「例外として捕捉可能にする」という設計思想の違いがある |
 | 引数解析 | `getopts` | `param()` ブロック + `[CmdletBinding()]` | PowerShell は型・必須・選択肢を宣言的に書ける分、学習コストがやや高い |
 | 排他制御（多重起動防止） | `flock` | `Mutex`（`System.Threading.Mutex`） | [3.3](#33-level-3-実務スクリプト) / [4.3](#43-level-3-システム操作サービスイベントログ) |
 | サービス操作 | `systemctl`（[02 W3](./02-curriculum.md#w3-プロセスサービスログ)） | `Get-Service`/`Start-Service`/`Stop-Service`/`Set-Service` | 障害時の自動復旧は Linux が `Restart=on-failure`、Windows は `sc.exe failure` と担当コマンドが分かれる（[4.3](#43-level-3-システム操作サービスイベントログ)） |
@@ -133,7 +133,7 @@ flowchart LR
 | --- | --- | --- | --- | --- |
 | L1-1 | 変数・クォート（`"..."` / `'...'` / コマンド置換 `$(...)`） | `now=$(date +%Y%m%d)` のように日付を変数化し、`echo "今日は $now"` で展開されることを確認する。シングルクォートで同じことをして展開されないことも確認する | ダブルクォートとシングルクォートの展開の違いを、実際に壊してから説明できる | `name = value`（`=` の前後にスペース）は代入ではなくコマンド実行として解釈される |
 | L1-2 | 条件分岐（`if` / `[[ ]]` / `case`） | ファイルの存在確認（`-f`）・実行権限確認（`-x`）を `if [[ ]]` で書く。`case` で引数 `start`/`stop`/`status` を分岐する | `[[ ]]` と `[ ]` の違いを 1 つ挙げて説明できる | `[[ $a == $b ]]` は右辺がクォートなしだとパターンマッチになる（`==` の右辺はグロブとして解釈される） |
-| L1-3 | ループ（`for` / `while` / `until`） | `for f in *.log; do ...; done` でファイル一覧を処理する。`while read -r line; do ...; done < file` で 1 行ずつ処理する | `while read` でファイルを行単位に処理できる（`cat file \| while read` との違いも説明できる） | パイプ経由の `while read` はサブシェルで実行されるため、ループ内で更新した変数がループ後に消える（bash 特有の落とし穴） |
+| L1-3 | ループ（`for` / `while` / `until`） | `for f in *.log; do ...; done` でファイル一覧を処理する。`while read -r line; do ...; done < file` で 1 行ずつ処理する | `while read` でファイルを行単位に処理できる（`cat file \| while read` との違いも説明できる） | パイプ経由の `while read` はサブシェルで実行されるため、ループ内で更新した変数がループ後に消える（bash・dash 等 POSIX 系シェル全般に共通する落とし穴で bash 固有ではない。bash では `shopt -s lastpipe` で回避できる） |
 | L1-4 | 関数・引数（`$1` `$2` `$@` `$#`） | 引数を検証する関数 `require_arg()` を書き、未指定なら使い方を表示して終了する | 関数内の `local` とグローバル変数の違いを説明できる。関数から値を返す 2 通り（`return` の終了ステータスと、`echo` を `$(...)` で受け取るデータ返却）を区別できる | `return` は 0-255 の終了ステータスしか返せない。数値以外のデータを返したい場合は標準出力を `$(...)` で受け取る |
 | L1-5 | 配列・連想配列 | ログファイルのパスを配列に入れて `for` で処理する。サービス名 → ポート番号の対応を連想配列（`declare -A`）で持つ | `"${arr[@]}"` のダブルクォートを外すと何が起きるかを実際に壊して確認できる | 連想配列は bash 4 以降が必要（`bash --version` で確認する習慣をつける） |
 
@@ -175,8 +175,8 @@ flowchart LR
 | A-3 | ロック | `exec 200>"$dst/.backup.lock"; flock -n 200 \|\| exit 4` を関数化する | 同じバックアップ先に対して 2 つ目を同時実行すると即座に終了コード `4` | 1 つ目は継続して正常終了する |
 | A-4 | ログ関数 | `log() { printf '%(%F %T)T [%s] %s\n' -1 "$1" "$2" \| tee -a "$logfile" >&2; }` のようなログ関数を用意し、各段階で呼ぶ | `log INFO "backup started"` がログファイルと標準エラー出力の両方に出る | タイムスタンプの書式が統一されている |
 | A-5 | バックアップ本体 | `tar -czf "$dst/backup-$(date +%Y%m%d-%H%M%S).tar.gz" -C "$(dirname "$src")" "$(basename "$src")"` | 生成された `tar.gz` を別ディレクトリへ展開し、元の対象ディレクトリと `diff -r` で差分なし | 展開後の内容が一致する |
-| A-6 | `trap` によるロック解放保証 | `trap 'flock -u 200; log INFO "exit code=$?"' EXIT` を先頭付近に置く | `kill -TERM` で中断させても、ロックファイルが解放され次回実行がブロックされない | 中断後すぐに再実行が成功する |
-| A-7 | 世代管理 | バックアップ先の `backup-*.tar.gz` を更新日時順に並べ、`-n` で指定した世代数を超えた分だけ `rm` する（`ls -t` を使い、移植性の低い `find -printf` は避ける） | 世代数を `3` にして 5 回実行すると、最新 3 世代だけが残る | 削除順が古い順になっている（新しいものを誤って消していない） |
+| A-6 | `trap` によるロック解放・後始末の保証 | `trap 'rc=$?; flock -u 200 2>/dev/null; [[ $rc -ne 0 && -n "${outfile:-}" && -e "$outfile" ]] && rm -f "$outfile"; log INFO "exit code=$rc"; exit "$rc"' EXIT` を **A-3（ロック取得）の直後**に置く（`$?` を `rc` へ退避してから解放・後始末を行い、最後に `exit "$rc"` で本来の終了コードを明示的に復元する。単に `flock -u 200; log INFO "exit code=$?"` だと `$?` が `flock -u` 自身の終了コードに上書きされ、`log` の終了コードがそのままスクリプトの最終終了コードになってしまう） | `kill -TERM` で中断させても、ロックファイルが解放され次回実行がブロックされない。`tar` 失敗時は中途半端な `.tar.gz` が残らない | 中断後すぐに再実行が成功する。呼び出し元が見る終了コードが常に元の値（2/3/4/5 等）と一致する。A-1・A-2 のように A-3 より前で終了する経路ではこの trap は未登録のため発火しない（後始末対象がまだ無いので問題ない） |
+| A-7 | 世代管理 | バックアップ先の `backup-*.tar.gz` を更新日時順に並べ、`-n` で指定した世代数を超えた分だけ `rm` する（`ls -t` を使い、移植性の低い `find -printf` は避ける） | 世代数を `3` にして 5 回実行すると、最新 3 世代だけが残る | 削除順が古い順になっている（新しいものを誤って消していない）。`ls` 出力のパースは一般にファイル名の空白等で壊れうる（shellcheck SC2012）が、本演習の生成ファイル名は `backup-YYYYmmdd-HHMMSS.tar.gz` の固定形式のため許容している |
 
 ##### 試験項目書
 
@@ -188,7 +188,7 @@ flowchart LR
 | T-02 | 単体 | 正常バックアップ生成 | 対象ディレクトリにテストファイル数点 | `./backup-rotate.sh -s ./src -d ./dst -n 3` | `dst/backup-<日時>.tar.gz` が生成される。終了コード `0` | | | | |
 | T-03 | 単体 | バックアップ内容の整合性 | T-02 完了後 | 生成物を別ディレクトリへ展開し `diff -r ./src <展開先>` | 差分なし | | | | |
 | T-04 | 単体 | ログ記録 | T-02 完了後 | `cat dst/backup-rotate.log` | 開始・完了のログ行が時刻付きで記録されている | | | | |
-| T-05 | 結合 | 世代管理 | `-n 3` で 5 回連続実行 | `ls dst/backup-*.tar.gz \| wc -l` | `3`（最新 3 世代のみ） | | | | |
+| T-05 | 結合 | 世代管理 | 各実行の間に `sleep 1` を挟みながら `-n 3` で 5 回実行（タイムスタンプが秒単位のため、間隔を空けないと同名ファイルが上書きされ世代数が想定と変わる） | `ls dst/backup-*.tar.gz \| wc -l` | `3`（最新 3 世代のみ） | | | | |
 | T-06 | 結合 | ロック正常解放 | 正常終了後 | 続けて同じコマンドを再実行 | 待たされずに開始できる | | | | |
 | T-07 | 総合 | cron 経由の非対話実行 | crontab に 1 分後実行を登録 | 実行後 `dst` を確認 | 対話シェルと同じ結果が得られる（環境変数・`PATH` 差異がないことを確認） | | | | |
 | T-08 | 異常系 | 対象ディレクトリなし | `-s` に存在しないパスを指定 | `./backup-rotate.sh -s ./no-such-dir -d ./dst -n 3` | 終了コード `2`。ログに原因が記録される | | | | |
@@ -217,7 +217,7 @@ flowchart LR
 
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
-| L1-1 | 変数・型 | `$today = Get-Date -Format 'yyyyMMdd'` のように変数へ代入し、`"今日は $today"` で文字列展開する | 変数が文字列だけでなくオブジェクト（`DateTime` 等）を保持できることを、`$today.GetType()` で確認できる | `$today` のようにドル記号が変数名の一部（Bash の `$name` が「参照時にだけ付く記号」なのに対し PowerShell は「変数名そのものに含まれる」という違い） |
+| L1-1 | 変数・型 | `$today = Get-Date -Format 'yyyyMMdd'` のように変数へ代入し、`"今日は $today"` で文字列展開する。`(Get-Date).GetType()` も試し、`-Format` の有無で型が変わることを比較する | `Get-Date -Format ...` は文字列（`String`）を返すため `$today.GetType()` は `String` になることを確認できる。`-Format` を外した `(Get-Date).GetType()` は `DateTime` になり、変数が文字列だけでなくオブジェクトも保持できることを確認できる | `$today` のようにドル記号が変数名の一部（Bash の `$name` が「参照時にだけ付く記号」なのに対し PowerShell は「変数名そのものに含まれる」という違い）。`-Format` を付けると戻り値の型が `DateTime` から `String` に変わる点を混同しない |
 | L1-2 | 条件分岐（`if` / `switch`） | `Test-Path` でファイル存在確認をし `if` で分岐する。引数 `start`/`stop`/`status` を `switch` で分岐する | `-eq`/`-like`/`-match` の使い分けを説明できる。`$null` との比較は必ず `$null` を左辺に書く理由を説明できる | `if ($a = $b)` は代入であり比較にならない（`-eq` を使う）。`-eq`/`-like`/`-match` は既定で大文字小文字を区別しない（区別するには `-ceq`/`-clike`/`-cmatch`）。`$var -eq $null` は `$var` が配列だと「各要素との比較結果の配列」を返し、要素数 2 以上ならその配列は常に真と評価されるため誤判定になる。`$null -eq $var` の順で書けば `$null` はスカラーなのでこの罠を避けられる |
 | L1-3 | ループ（`foreach` / `while`） | `Get-ChildItem *.log` の結果を `foreach` で 1 件ずつ処理する | `foreach ($item in $collection)` と `$collection \| ForEach-Object { ... }` の違いを説明できる（詳細は [4.2](#42-level-2-制御入出力エラー処理)） | `foreach` 文はコレクション全体を先にメモリへ展開する。巨大な結果セットではパイプライン処理（`ForEach-Object`）の方が適することがある |
 | L1-4 | 関数・パラメータ | `Test-DiskUsage` のような「動詞-名詞」形式の関数を定義し、引数を受け取る | PowerShell の命名規約（承認済み動詞: `Get-`/`Set-`/`Test-`/`Invoke-` 等）を `Get-Verb` で確認できる | 関数の戻り値は `return` の式だけでなく、途中の出力すべてがパイプラインに混ざる（[4.2](#42-level-2-制御入出力エラー処理)の `Write-Host` の説明と合わせて理解する） |
@@ -245,7 +245,7 @@ flowchart LR
 | --- | --- | --- | --- | --- |
 | A-1 | 圧縮バックアップ | `Compress-Archive -Path $src -DestinationPath "backup-$(Get-Date -Format yyyyMMdd-HHmmss).zip"` | 生成物を `Expand-Archive` で展開し元と一致することを確認する | `Compress-Archive` は既定で対象フォルダ名を zip 内の最上位に含める（Bash の `tar -C` によるパス制御と挙動が異なる） |
 | A-2 | 世代管理 | `Get-ChildItem -Filter 'backup-*.zip' \| Sort-Object LastWriteTime -Descending \| Select-Object -Skip $keep \| Remove-Item` | 世代数を超えた分だけ削除される | `Sort-Object` の既定は昇順のため `-Descending` を明示しないと新しいものを消してしまう |
-| A-3 | 排他制御 | `[System.Threading.Mutex]::new($false, 'Global\BackupRotate')` を使い、2 つ目のインスタンスが `WaitOne(0)` で即座に `$false` を受け取ることを確認する | Bash の `flock` と同じ目的をどう PowerShell で実現するか説明できる | Mutex は明示的に `ReleaseMutex()`/`Dispose()` しないと解放されないため、`try`/`finally` で確実に解放する設計にする |
+| A-3 | 排他制御 | `[System.Threading.Mutex]::new($false, 'Global\BackupRotate')` を作成した後、両方のインスタンスで `WaitOne(0)` を呼ぶ。1 つ目は `$true`（ロック取得）、2 つ目は即座に `$false` を受け取ることを確認する | Bash の `flock` と同じ目的をどう PowerShell で実現するか説明できる | コンストラクタの第 1 引数 `$false`（initiallyOwned）は「作成時点でロックを保持しない」という意味で、呼ぶだけではロックを取得しない。`WaitOne()` を明示的に呼んで初めてロックを取得する。Mutex は明示的に `ReleaseMutex()`/`Dispose()` しないと解放されないため、`try`/`finally` で確実に解放する設計にする |
 | A-4 | ログ記録 | `Start-Transcript` で開始し、`finally` ブロックで `Stop-Transcript` を呼ぶ | スクリプトを異常終了させても transcript が正しく閉じることを確認する | `Start-Transcript` を多重に開始しようとすると `Transcription has already been started. Use the -Force parameter to start a new transcript.` というエラーになる（既定では非終端エラーのため `-ErrorAction Stop` を付けないと `try`/`catch` で捕まらない）。`try`/`finally` の対で管理する |
 
 #### 演習 B: Windows サービスの操作
@@ -254,17 +254,19 @@ flowchart LR
 | --- | --- | --- | --- | --- |
 | S-1 | サービス状態の確認 | `Get-Service` で対象サービス一覧の `Status`/`StartType` を取得する。`services.msc` の表示と突き合わせる | `Get-Service -Name` と `Get-Service -DisplayName` の違いを説明できる | サービス名（`Name`）と表示名（`DisplayName`）は別物で、`-Name` にはサービス名を渡す |
 | S-2 | 起動・停止 | 非重要なサービス（例: `Spooler`）を `Stop-Service` → `Start-Service` で操作し、状態遷移を確認する | 依存関係のあるサービスを停止しようとした場合の挙動（`-Force` の要否）を説明できる | 依存されているサービスを `-Force` なしで停止しようとするとエラーになる。事前に `-WhatIf` で確認する習慣をつける |
-| S-3 | スタートアップ種別の変更 | `Set-Service -StartupType Manual` / `Automatic` を試し、再起動なしで設定が反映されることを確認する | `Automatic`・`Manual`・`Disabled` の違いを説明できる。「自動（遅延開始）」は `Set-Service` の標準パラメータだけでは設定できず、`sc.exe config <name> start= delayed-auto` の併用が必要になることを知っている | `Set-Service` はコマンドレットだけで完結しない設定項目があり、古い `sc.exe` を併用する場面が残っている（`sc.exe` の `key= value` 形式は `=` の直後に半角スペースが必須） |
+| S-3 | スタートアップ種別の変更 | `Set-Service -StartupType Manual` / `Automatic` を試し、再起動なしで設定が反映されることを確認する | `Automatic`・`Manual`・`Disabled` の違いを説明できる。「自動（遅延開始）」は Windows PowerShell 5.1 の `Set-Service` では設定できず `sc.exe config <name> start= delayed-auto` の併用が必要だが、PowerShell 7.1 以降は `Set-Service -StartupType AutomaticDelayedStart` で直接設定できることを知っている | `Set-Service` はバージョンによってコマンドレットだけで完結しない設定項目があり、古い `sc.exe` を併用する場面が残っている（`sc.exe` の `key= value` 形式は `=` の直後に半角スペースが必須） |
 | S-4 | 障害時の自動復旧設定 | `sc.exe failure <サービス名> reset= 86400 actions= restart/60000` で「失敗時に 60 秒後リスタート」を設定し、直後に `if ($LASTEXITCODE -ne 0) { throw "sc.exe failed: $LASTEXITCODE" }` で成否を確認する | この設定が PowerShell 標準コマンドレットには存在しない（`sc.exe` 併用が必要な）ことを説明できる | `sc.exe` はネイティブ exe のため、失敗しても `try`/`catch` では捕まらない。[4.2 L2-4](#42-level-2-制御入出力エラー処理)と同じく `$LASTEXITCODE` を自分で確認する必要がある。Linux の `systemd` の `Restart=on-failure`（[02 W3](./02-curriculum.md#w3-プロセスサービスログ)）に相当する機能だが、設定方法が全く異なる |
 | S-5 | サービス障害の検知 | 対象サービスを意図的に `Stop-Service` した状態を「異常」とみなし、`Get-Service` の結果から検知するチェック関数 `Test-ServiceRunning` を書く | [演習 C](#演習-cフラッグシップ-invoke-environmentcheckps1)のサービス確認部分がこの関数を再利用できる設計になっている | サービスが「存在しない」（`Get-Service` がエラー）のと「存在するが停止中」は別のエラーとして扱う必要がある（[4.2 L2-2](#42-level-2-制御入出力エラー処理)の非終端エラーの扱いと同じ論点） |
 
 #### 演習 C: イベントログの操作
 
+> **バージョン制約**: `New-EventLog`/`Write-EventLog`/`Clear-EventLog`/`Remove-EventLog` など classic の `*-EventLog` 系コマンドレットは、PowerShell 7（Core）への移植時に含まれず存在しません（Windows PowerShell 5.1 専用）。読み取り専用の `Get-WinEvent` は両バージョンで動作しますが、本演習の書き込み・作成・クリア操作（E-1・E-2・E-4、および [演習 C（フラッグシップ）の C-6](#演習-cフラッグシップ-invoke-environmentcheckps1)）は **Windows PowerShell 5.1 での実施を前提**にします。
+
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
 | E-1 | カスタムログ・ソースの作成 | 管理者権限で `New-EventLog -LogName 'PortfolioLab' -Source 'EnvCheck'` を実行する | 既存のログ名・ソース名と重複しないことを確認してから作成できる | ログ・ソースの作成には管理者権限が必要。一般ユーザーで実行すると権限エラーになる |
 | E-2 | イベントの書き込み | `Write-EventLog -LogName 'PortfolioLab' -Source 'EnvCheck' -EventId 1000 -EntryType Information -Message '...'` で書き込む | `EntryType`（`Information`/`Warning`/`Error`）を使い分けて書き込める | `-EventId` の指定範囲に制限があるため、事前にドキュメントで確認してから採番規則を決める |
-| E-3 | イベントの検索・絞り込み | `Get-WinEvent -LogName 'PortfolioLab'` で全件、`-FilterHashtable @{LogName='PortfolioLab'; Level=2}` でエラーのみに絞り込む | 直近 1 時間・特定 `EventId`・特定 `EntryType`（`Level`）の 3 通りで絞り込みができる | `Get-EventLog` は PowerShell 7（Core）では非推奨・非対応（Windows PowerShell 5.1 専用）。新しいスクリプトは `Get-WinEvent` を使う |
+| E-3 | イベントの検索・絞り込み | `Get-WinEvent -LogName 'PortfolioLab'` で全件、`-FilterHashtable @{LogName='PortfolioLab'; Level=2}` でエラーのみに絞り込む | 直近 1 時間・特定 `EventId`・特定 `EntryType`（`Level`）の 3 通りで絞り込みができる | `Get-EventLog` だけでなく `New-EventLog`/`Write-EventLog`/`Clear-EventLog`/`Remove-EventLog` など classic の `*-EventLog` 系コマンドレット全体が PowerShell 7（Core）には存在しない（上記バージョン制約を参照）。読み取りは両バージョン対応の `Get-WinEvent` を使う |
 | E-4 | エクスポートとクリア | `Get-WinEvent \| Export-Csv` で外部保存してから `Clear-EventLog` でログをクリアする（**ラボ専用ログのみ**に限定する） | クリア前にエクスポートが完了していることを確認する運用を徹底できる | `Clear-EventLog`/`Remove-EventLog` はシステムログ（`Application`/`System` 等）に対しては実施しない。本演習はラボ専用ログ `PortfolioLab` のみを対象にする |
 | E-5 | 障害検知への応用 | [演習 B](#演習-b-windows-サービスの操作)で検知したサービス異常を、イベントとして記録する処理を組み合わせる | サービス異常発生 → イベント記録 → `Get-WinEvent` で検知、という一連の流れを再現できる | イベントログへの書き込み自体が失敗するケース（権限不足）も想定し、書き込み失敗時にせめて transcript には残す設計にする |
 
@@ -281,6 +283,7 @@ flowchart LR
 | 終了コード | `0`=すべて正常／`1`=パラメータ不正／`2`=1 件以上 `WARN`／`3`=1 件以上 `FAIL` |
 | ログ出力先 | `Start-Transcript` によるフル記録に加え、[演習 C](#演習-c-イベントログの操作)のログ・ソースへサマリを記録する。標準出力へは各チェック結果を `[pscustomobject]` の配列として返す |
 | 対象範囲 | ドメインコントローラを前提にしない。単体の Windows 端末（評価版 Windows Server、または Windows 11）で完結する |
+| 実行環境の制約 | [演習 C（フラッグシップ）の C-6](#演習-cフラッグシップ-invoke-environmentcheckps1)（イベントログへの記録）が `Write-EventLog` を使うため、[演習 C のバージョン制約](#演習-c-イベントログの操作)により Windows PowerShell 5.1 での実施が前提になる |
 | Windows の時刻同期確認 | `w32tm /query /status` を使うが、本書では確認コマンドの提示に留め、演習の必須項目には含めない（Bash 版の演習 B にある `timedatectl` 相当項目との非対称は意図的） |
 
 ##### 構築手順（段階的に機能を積む）
@@ -313,9 +316,9 @@ flowchart LR
 | T-09 | 異常系 | ディスク使用率しきい値超過 | ダミーファイルでドライブを圧迫 | 同上コマンドを実行 | 対象ドライブが `WARN`、スクリプト終了コード `2` | | | | |
 | T-10 | 異常系 | サービス停止中 | 対象サービスを `Stop-Service` | 同上 | `FAIL` として記録され、終了コード `3` | | | | |
 | T-11 | 異常系 | 存在しないサービス名 | `-Services` に存在しない名前を含める | 同上 | 例外で停止せず `FAIL` として記録される（C-3 の設計どおり） | | | | |
-| T-12 | 異常系 | 証明書の期限切れ間近 | 有効期限を数分後に設定した自己署名証明書 | 同上 | `WARN` として残日数付きで記録される | | | | |
-| T-13 | 異常系 | transcript 多重起動 | 別セッションで同名 transcript を開始済み | 同上コマンドを実行 | エラーを `try`/`catch` で捕捉し、処理は継続する（C-5 の設計どおり） | | | | |
-| T-14 | 異常系 | イベントログ書き込み権限なし | 一般権限（非管理者）で実行 | 同上 | `Write-EventLog` の失敗を `try`/`catch` で捕捉し、他のチェック・終了コード判定は継続する（C-6 の設計どおり） | | | | |
+| T-12 | 異常系 | 証明書の期限切れ間近 | 有効期限をしきい値未満だが日単位の余裕を持たせた未来（例: 警告しきい値の半分程度の日数後）に設定した自己署名証明書（分単位だと実行タイミングのずれで期限切れに転じ `FAIL` になりうるため避ける） | 同上 | `WARN` として残日数付きで記録される | | | | |
+| T-13 | 異常系 | transcript 多重起動 | 同一セッション（同一プロセス）内で `Start-Transcript` を開始済み・未 `Stop-Transcript`（`Start-Transcript` の多重起動エラーはセッション単位のため、別セッションで同名ファイルを指定しても通常は再現しない） | 同上コマンドを実行 | エラーを `try`/`catch` で捕捉し、処理は継続する（C-5 の設計どおり） | | | | |
+| T-14 | 異常系 | イベントログ書き込み権限なし | イベントソース `EnvCheck` が未登録（`New-EventLog` 未実行）の状態で、一般権限（非管理者）で実行（登録済みソースへの書き込みは一般権限でも通常成功するため、未登録状態でないと失敗を再現できない） | 同上 | `Write-EventLog` の失敗を `try`/`catch` で捕捉し、他のチェック・終了コード判定は継続する（C-6 の設計どおり） | | | | |
 
 ### 4.4 Level 4: Active Directory 運用スクリプト
 
@@ -330,7 +333,7 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 | D-1 | ドメイン・OU の確認 | `Get-ADDomain`、`Get-ADOrganizationalUnit -Filter *` でラボドメインの構造を確認する | 対象ドメインが期待どおりか（`DNSRoot` 等）をスクリプトで検証できる | `Get-ADDomain` は現在ログオン中のドメインに対して実行される。想定外のドメインで実行しないための事前確認が必要 |
 | D-2 | ユーザーの読み取り | `Get-ADUser -SearchBase <ラボ OU> -Filter *` でラボ OU 内のユーザーだけを取得する | `-SearchBase` を指定しないとドメイン全体が検索対象になることを実演できる（誤って本番相当の OU まで検索しない） | `-SearchBase` の指定漏れは読み取りだけなら実害は小さいが、次の作成・変更操作では書き込み範囲の誤りに直結する |
 | D-3 | ユーザーの作成 | `New-ADUser` でラボ OU 内・接頭辞付きのユーザーを 1 件作成する（パスワードは `Read-Host -AsSecureString`） | 作成後 `Get-ADUser` で存在確認し、`SamAccountName` が接頭辞規約と一致することを確認できる | 平文パスワードを変数やコマンド引数に残さない（[Windows / AD 公開再現ラボ §7.2](../evidence/templates/windows-ad-lab.md#72-ou--group--test-user-の安全な作成)と同じ注意） |
-| D-4 | グループへの追加 | `New-ADGroup` でラボ OU 内にグループを作成し、`Add-ADGroupMember` でユーザーを追加する | 既にメンバーのユーザーに対して再実行した場合の挙動（エラーになるか、無処理で完了するか）を事前に確認してから、冪等な設計にできる | `Add-ADGroupMember` の重複メンバー指定時の挙動はバージョンによって差があり得るため、実装前に手元で確認してから設計する |
+| D-4 | グループへの追加 | `New-ADGroup` でラボ OU 内にグループを作成し、`Add-ADGroupMember` でユーザーを追加する | 既にメンバーのユーザーに `Add-ADGroupMember` を再実行するとエラーになり、無処理では完了しないことを踏まえ、`Get-ADGroupMember` による事前確認を組み込んだ冪等な設計にできる | `Add-ADGroupMember` は既存メンバーを指定すると一貫してエラーを返す（黙って成功はしない）。[Windows / AD 公開再現ラボ §7.2](../evidence/templates/windows-ad-lab.md#72-ou--group--test-user-の安全な作成)も同じ前提で、`Get-ADGroupMember` で既存メンバーか確認してからのみ `Add-ADGroupMember` を呼ぶパターンを使っている。本演習でも同じパターンを再利用する |
 | D-5 | OU 間の移動 | `Move-ADObject` でユーザーをラボ OU 内の別サブ OU へ移動する | 移動前後で `DistinguishedName` が変わることを確認できる | 移動先が想定したラボ OU の配下であることを、移動前に文字列一致で確認する（[Level 2 の事前検証](#42-level-2-制御入出力エラー処理)と同じ考え方） |
 
 #### 演習 E（フラッグシップ）: `New-LabUserBatch.ps1`
@@ -353,7 +356,7 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 | E-2 | 事前確認（fail-closed） | [D-1](#演習-d-ad-オブジェクトの読み取り作成の基礎)の確認をスクリプト化し、`Get-ADDomain` の `DNSRoot`／`NetBIOSName` が期待値と一致しない場合は書き込み前に停止する | 期待値と異なるドメインで実行すると終了コード `1`。書き込みは一切発生しない | 事前確認の失敗パスを先に試験する（[試験項目書](#試験項目書-2)の T-08） |
 | E-3 | 重複確認 | CSV の各行について `Get-ADUser -Filter "SamAccountName -eq '$sam'"` で既存ユーザーを確認し、既存ならスキップして記録する | 同じ CSV を 2 回実行しても、2 回目は全件スキップとして完了する（冪等） | スキップと失敗を区別して結果に記録する（両方とも「作成されなかった」ではログとして不十分） |
 | E-4 | ユーザー作成 | `New-ADUser` でラボ OU・接頭辞付きで作成する（`-Path` はラボ OU 固定、`SamAccountName` は接頭辞チェック後のみ使用） | 接頭辞のない `SamAccountName` を含む行はスキップされ、理由が記録される | 1 件の失敗で全体を止めない（`try`/`catch` を行単位で囲み、失敗した行だけ記録して継続する） |
-| E-5 | グループ追加 | 部署名からグループ名（`pf-<部署>`）を導出し、存在しなければ [D-4](#演習-d-ad-オブジェクトの読み取り作成の基礎)の要領で作成してから追加する | 部署ごとのグループにユーザーが分類される | グループ名の導出ルール（部署名の正規化）を先に決めておく（空白・全角半角の揺れに注意） |
+| E-5 | グループ追加 | 部署名からグループ名（`pf-<部署>`）を導出し、存在しなければ作成する。[D-4](#演習-d-ad-オブジェクトの読み取り作成の基礎)と同じく `Get-ADGroupMember` で既存メンバーか確認してから `Add-ADGroupMember` を呼ぶ | 部署ごとのグループにユーザーが分類される。同じ CSV を再実行しても `Add-ADGroupMember` のエラーで止まらない（T-05 の冪等性はこの事前確認に依存する） | グループ名の導出ルール（部署名の正規化）を先に決めておく（空白・全角半角の揺れに注意） |
 | E-6 | 結果サマリと棚卸し | 作成・スキップ・失敗を件数で集計し、[アカウント管理 §5.1](../it-support/account-management.md#51-アカウント棚卸し)の 90 日未ログイン抽出クエリをラボ OU 限定で呼び出して一覧を出力する | サマリと棚卸し結果の両方が transcript に記録される | 棚卸しクエリは読み取りのみのため、[アカウント管理 §5.1](../it-support/account-management.md#51-アカウント棚卸し)のクエリをそのまま呼び出す設計にし、同じロジックを二重に書かない |
 
 ##### 試験項目書
