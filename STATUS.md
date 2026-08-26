@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-26（server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。06 シェルスクリプト演習設計を新規作成。Phase 1 演習の実施キット（Hyper-V 向け雛形）を準備）
+最終更新：2026-08-26（07 Python 運用自動化演習設計「定型作業・バックアップ・監視チェック」を追加。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。06 シェルスクリプト演習設計を新規作成。Phase 1 演習の実施キット（Hyper-V 向け雛形）を準備）
 
 ---
 
@@ -51,7 +51,7 @@
 | 1 | 3 層ラボの層分離チェックが `set -e` に巻き込まれ、**遮断できているときにだけ**演習が中断していた（壊れている環境の方が完走する逆転現象） | shellcheck / ansible-lint / molecule いずれも検出せず | 壊れている環境の方が完走し、正しい環境の方が中断するという逆転現象の発生を学んだ |
 | 2 | `storage` role が対象 OS（Ubuntu 24.04 の既定 Ansible）で play ごと失敗していた | 同上 | 検査に使っている ansible-core のバージョンと、配布先（対象 OS の既定パッケージ）のバージョンが違うことが根本原因だと学んだ |
 | 3 | `storage` role が冪等でなく、`site.yml` の 2 回目で自分が作った LV を自分の安全装置が拒否した | 同上 | 安全装置が「未知の子デバイス（＝他人のデータかもしれない）」と「自分がこの role で管理しているはずの LV（＝安全）」を区別する手段を学んだ |
-| 4 | `labs/routing` が Docker の network 設計と衝突し、**一度も起動できていなかった**（router 用の `.1` が bridge の既定アドレスと衝突） | 同上 | （記入） |
+| 4 | `labs/routing` が Docker の network 設計と衝突し、**一度も起動できていなかった**（router 用の `.1` が bridge の既定アドレスと衝突） | 同上 | Docker の bridge network が「サブネットの .1」をブリッジ自身の既定ゲートウェイアドレスとして予約する仕様があることを学んだ |
 
 > **#1 は面接映えします。**「テストが、壊れている環境でだけ通る」状態は、
 > 試験設計の話として一般化でき、実務でも起こります。
@@ -60,7 +60,7 @@
 
 | # | 症状（事実） | 学び |
 | --- | --- | --- |
-| 5 | Terraform AWS provider の制約が複数ファイルに分散し、Dependabot PR が必ず CI を落ちた（`no available releases match the given constraints ~> 5.50, ~> 6.58`）。原因は `dependabot.yml` の `directories` の列挙漏れ | （記入）**「網羅すべき集合を手で列挙した時点で、次に漏れる」**という因果まで書けると、指摘が加点に変わります |
+| 5 | Terraform AWS provider の制約が複数ファイルに分散し、Dependabot PR が必ず CI を落ちた（`no available releases match the given constraints ~> 5.50, ~> 6.58`）。原因は `dependabot.yml` の `directories` の列挙漏れ | 網羅性を主張する行をどこかに書いた瞬間、そこはもう検証対象だと考えることを学んだ |
 | 6 | 依存更新 PR を 3 か月放置した。ADR に「見直しトリガー」を書く運用にしたのに、運用そのものが回っていなかった | （記入）設計と運用の差を実体験として語れる材料 |
 | 7 | 3 行しかない依存ファイル（`ansible/controller-requirements.txt`）を、別々の Dependabot PR 3 本がそれぞれ 1 行ずつ書き換えていた。2 本を merge した後、3 本目が `405 merge conflicts` で弾かれた。`git merge-tree` で見ると、行の前後に十分なコンテキストが無いため 3-way merge が変更点を分離できず、ファイル全体を 1 個の衝突として扱っていた（2026-08-26） | （記入）**依存関係の更新は 1 行ずつ独立ではなく、`boto3`/`botocore` のように相互にバージョン制約を持つペアがある**（`boto3==1.43.78` は `botocore>=1.43.78,<1.44.0` を要求し、片方だけ上げると単独では `ResolutionImpossible` になる）ことまで書けると、Dependabot 任せの限界を語れる材料になります |
 
@@ -86,6 +86,21 @@
 | キットの中身 | netplan・`sshd_config.d` の設定ファイル雛形、Hyper-V 用 PowerShell スクリプト 6 本（Internal スイッチ作成・VM 作成・チェックポイント操作・検証用セグメントの追加撤去）、進捗チェックリスト、証跡記入用テンプレート |
 | 未検証の範囲 | Hyper-V ホストへのアクセスが無いため、PowerShell スクリプトは目視での構文確認のみで一度も実行していない。cmdlet の実際の挙動・エラーメッセージは未検証（[phase1-kit/README.md の該当節](./docs/learning-plan/phase1-kit/README.md#未検証の範囲)に明記） |
 | 状態 | **未実行の雛形。** 演習そのもの（空の VM への OS インストール）の実施ステータスは変わらず「設計のみ・未実施」のまま。この穴は残タスクのまま |
+
+### 2026-08-26 の更新内容（追補：07 Python 運用自動化演習設計：定型作業・バックアップ・監視チェック）
+
+下記の 06 シェルスクリプト演習設計と同じ日に、同じ W4 / W18 の題材（定型作業・バックアップ・監視チェック）を Python で扱う
+発展演習として、[05 Phase 1 演習設計](./docs/learning-plan/05-phase1-exercise-design.md)と同じ様式で、Linux（lab-base01）と
+Windows（新規ラボホスト LAB-WINOPS1）の両方を対象にした演習設計を新規作成した。
+[docs/learning-plan/07-python-ops-automation-exercise-design.md](./docs/learning-plan/07-python-ops-automation-exercise-design.md)。
+06 とは言語（Bash/PowerShell と Python）が異なる並行案であり、どちらか一方が他方を置き換えるものではない。AD 操作は扱わないため、
+「コードでは埋められない、残っている穴」5 番目への対応は 06 側が担う。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 演習設計 | `routine.py`（Linux / Windows）・`backup.py`（tarfile / zipfile、SHA-256 manifest によるリストア検証）・`check.py`（Nagios 系終了コード規約でのしきい値監視）の 3 本を独立ツールとして設計し、systemd timer / タスクスケジューラへの定期実行登録まで、[03 構築工程の実務ドキュメント](./docs/learning-plan/03-build-process.md)の様式（パラメータシート・構築手順書・試験項目書）でコマンドと想定結果まで具体化した |
+| 精査 | 4 本のモジュール（`routine.py` Linux 実装・Windows 実装・`backup.py`・`check.py`）をそれぞれ独立した技術レビューにかけ、Python / systemd / Windows タスクスケジューラ・イベントログ API の記述、および構築手順書と試験項目書の期待結果の整合性を確認し、指摘のあった 23 件（Windows 版イベントログ抽出が「該当イベントなし」と「アクセス拒否」を区別できていなかった点、`backup.py` のリストアが manifest 検証を経ずに展開してしまっていた点、両モジュールの異常系ログ出力が未実装だった点、Ubuntu Server 24.04 の最小構成に `python3-venv` が入っておらず `venv` 作成手順が失敗する点 等）を反映した。あわせて、4 本を統合する過程で見つかった Windows 版バックアップ・監視チェックの venv 未使用（グローバル Python への `pip install`）を統一し、GitHub の見出しアンカー生成規則を実装で再現したうえで文書内リンク・外部リンクを `lychee --include-fragments`（CI と同じツール）で 0 エラーまで確認した |
+| 状態 | **設計のみ・未実施**。試験項目書（TRL-01〜TRL-12、TW-01〜TW-11、TBK-01〜TBK-12、TCK-01〜TCK-14、計 49 項目）の実測結果欄はすべて空欄 |
 
 ### 2026-08-26 の更新内容（06 シェルスクリプト演習設計：Linux (Bash) / Windows (PowerShell)）
 
