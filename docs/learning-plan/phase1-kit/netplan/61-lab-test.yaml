@@ -1,0 +1,23 @@
+# lab-base01 検証用セグメント（T-09 外側 / T-13 用）
+#
+# [05 Phase 1 演習設計 P-3（5 章）/ 付録 A-3 Q-4] で作成するファイルそのもの。
+# https://github.com/ns7jp/ns7jp/blob/main/docs/learning-plan/05-phase1-exercise-design.md#5-試験項目書
+#
+# 配置先: /etc/netplan/61-lab-test.yaml（パーミッションは 600 にする。60-lab-static.yaml と同じ扱い）
+#
+# 使い方:
+#   1. 検証用の 3 枚目 NIC を追加した後（VirtualBox: P-1〜P-2 / Hyper-V: 付録 A-3 Q-1〜Q-2）、
+#      `ip a` で実際のインターフェース名を確認し、enp0s9 が違う場合は下を書き換える
+#   2. このファイルを配置し、sudo chmod 600 /etc/netplan/61-lab-test.yaml
+#   3. sudo netplan apply
+#
+# 試験後の後始末（P-6 / Q-7）:
+#   sudo rm /etc/netplan/61-lab-test.yaml && sudo netplan apply
+#   に続けて、VM 設定側で 3 枚目の NIC / スイッチも撤去する（このファイルの削除だけでは終わらない）
+
+network:
+  version: 2
+  ethernets:
+    enp0s9:
+      dhcp4: false
+      addresses: [192.168.57.10/24]

@@ -1,0 +1,27 @@
+# lab-base01 固定 IP 設定
+#
+# [05 Phase 1 演習設計 3-5-4] で作成するファイルそのもの。
+# https://github.com/ns7jp/ns7jp/blob/main/docs/learning-plan/05-phase1-exercise-design.md#3-5-固定-ip-の設定
+#
+# 配置先: /etc/netplan/60-lab-static.yaml（パーミッションは 3-5-6 のとおり 600 にする）
+#
+# 使い方:
+#   1. 適用前に必ず `ip a` で実際のインターフェース名を確認し、
+#      enp0s3 / enp0s8 が違う場合は下の 2 か所を実機の名前に書き換える
+#      （設計書もこの読み替えを前提にしている）。
+#   2. sudo cp -a /etc/netplan/50-cloud-init.yaml /var/tmp/50-cloud-init.yaml.bak
+#      （切り戻し用の退避。3-5-4 の手順どおり）
+#   3. このファイルを /etc/netplan/60-lab-static.yaml として配置する
+#   4. sudo chmod 600 /etc/netplan/60-lab-static.yaml
+#   5. 50-cloud-init.yaml 側に enp0s8（ホストオンリー側）の定義が残っていないか
+#      3-5-5 のとおり確認・除去する
+#   6. sudo netplan apply
+
+network:
+  version: 2
+  ethernets:
+    enp0s3:
+      dhcp4: true
+    enp0s8:
+      dhcp4: false
+      addresses: [192.168.56.10/24]
