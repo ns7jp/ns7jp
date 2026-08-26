@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     lab-base01 のチェックポイント（VirtualBox のスナップショット相当）を作成・復元する関数。
 
