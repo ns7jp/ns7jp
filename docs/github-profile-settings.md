@@ -48,6 +48,8 @@ Topics は2026-08-23に適用・再確認済みです。
 
 `ansible`, `docker`, `github-pages`, `grafana`, `infrastructure`, `it-support`, `linux`, `monitoring`, `portfolio`, `prometheus`, `terraform`
 
+> **2026-08-26 の見直し**: `docs/it-support/` を削除し IT サポート・社内 SE 補助の露出を縮小したため、`it-support` Topic は次回 GitHub 側で設定を見直す際に外す候補です（この Topics 変更は GitHub の Web UI / API 側の操作であり、本リポジトリのファイル編集だけでは反映されません）。`active-directory` / `windows-server` は、[06 シェルスクリプト演習設計](./learning-plan/06-shell-scripting-exercise-design.md#44-level-4-active-directory-運用スクリプト)と[Windows / AD 公開再現ラボ](./evidence/templates/windows-ad-lab.md)として最小限は残しているため、現時点では維持します。
+
 ## 適用後の確認（2026-08-22）
 
 - [x] Bio、README 見出し、`docs/overview-for-recruiters.md` がサーバー設計・構築を第一志望として示している

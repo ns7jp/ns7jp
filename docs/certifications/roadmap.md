@@ -144,7 +144,7 @@ LPIC-1（101 / 102）は FE と並行して学習中ですが、**受験日は�
 | AWS CloudOps Engineer - Associate（旧 SysOps Administrator / SOA。2025-09 に SOA-C03 へ改称） | AWS 運用が主業務になった場合 |
 | AZ-802（Windows Server Administrator Associate） | Windows Server / Active Directory 案件が主業務になった場合（AZ-800 / 801 は 2026-09-30 廃止。後継の AZ-802 は単一試験で費用も旧体系の約半分） |
 | ITIL 4 Foundation | 応募先・就業先が ITSM プロセスを重視する場合（団体受験・費用補助があれば優先度を上げる。用語の学習は先行して継続） |
-| CKAD / CKA | コンテナ基盤・Kubernetes を扱う部署に配属された場合（[K8s 発展計画](../server-monitor-improvements/08-kubernetes-roadmap.md) と連動） |
+| CKAD / CKA | コンテナ基盤・Kubernetes を扱う部署に配属された場合（[今後の興味リスト](../roadmap/README.md) と連動） |
 
 ---
 

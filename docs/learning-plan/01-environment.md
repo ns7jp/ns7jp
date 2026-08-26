@@ -195,7 +195,7 @@ Phase 6 でクラウドを使います。未経験者が最も恐れるのは想
 | 入手 | Microsoft の評価版（180 日間・無料） |
 | VM 要件 | vCPU 2 / メモリ 4 GB / ディスク 40 GB |
 | 学習範囲 | AD DS の構築、OU 設計、ユーザー作成、グループポリシーの基本、PowerShell での一括操作 |
-| 成果物 | PowerShell の実行ログ（[アカウント管理手順](../it-support/account-management.md)の内容を実際に流す） |
+| 成果物 | PowerShell の実行ログ（[06 シェルスクリプト演習設計 Level 4](./06-shell-scripting-exercise-design.md#44-level-4-active-directory-運用スクリプト)の内容を実際に流す） |
 
 > Linux トラックを主軸にする場合、この 1 台は Phase 6 以降または転職活動と並行して追加すれば十分です。
 > 本リポジトリでは[証跡採録チェックリストの優先 7](../evidence-capture-checklist.md) に対応します。

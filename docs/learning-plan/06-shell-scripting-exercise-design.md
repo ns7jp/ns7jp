@@ -332,7 +332,7 @@ flowchart LR
 
 前提: [Windows / AD 公開再現ラボ §4](../evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)の Greenfield 手順でラボドメイン（`ad.example.test` / `ADLAB`）を構築済みであること。**本書はドメインコントローラの構築（forest promotion）を対象にしません。** 同じラボ専用 OU（`PortfolioLab`）・接頭辞（`pf-`）をここでも使い、リポジトリ内で規約を二重化しません。
 
-Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transcript、事前確認の考え方）を、AD 操作という書き込みを伴う対象に適用する演習です。[アカウント管理・キッティング手順サンプル](../it-support/account-management.md)の「入社時のアカウント作成」「棚卸し」を、CSV 一括操作のスクリプトとして 1 から組み立てます。
+Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transcript、事前確認の考え方）を、AD 操作という書き込みを伴う対象に適用する演習です。入社時のアカウント作成・棚卸しという、社内 SE 補助業務で典型的な運用作業を題材に、CSV 一括操作のスクリプトとして 1 から組み立てます。
 
 #### 演習 D: AD オブジェクトの読み取り・作成の基礎
 
@@ -365,7 +365,7 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 | E-3 | 重複確認 | CSV の各行について `Get-ADUser -Filter "SamAccountName -eq '$sam'"` で既存ユーザーを確認し、既存ならスキップして記録する | 同じ CSV を 2 回実行しても、2 回目は全件スキップとして完了する（冪等） | スキップと失敗を区別して結果に記録する（両方とも「作成されなかった」ではログとして不十分） |
 | E-4 | ユーザー作成 | `New-ADUser` でラボ OU・接頭辞付きで作成する（`-Path` はラボ OU 固定、`SamAccountName` は接頭辞チェック後のみ使用） | 接頭辞のない `SamAccountName` を含む行はスキップされ、理由が記録される | 1 件の失敗で全体を止めない（`try`/`catch` を行単位で囲み、失敗した行だけ記録して継続する） |
 | E-5 | グループ追加 | 部署名からグループ名（`pf-<部署>`）を導出し、存在しなければ作成する。[D-4](#演習-d-ad-オブジェクトの読み取り作成の基礎)と同じく `Get-ADGroupMember` で既存メンバーか確認してから `Add-ADGroupMember` を呼ぶ | 部署ごとのグループにユーザーが分類される。同じ CSV を再実行しても `Add-ADGroupMember` のエラーで止まらない（T-05 の冪等性はこの事前確認に依存する） | グループ名の導出ルール（部署名の正規化）を先に決めておく（空白・全角半角の揺れに注意） |
-| E-6 | 結果サマリと棚卸し | 作成・スキップ・失敗を件数で集計し、[アカウント管理 §5.1](../it-support/account-management.md#51-アカウント棚卸し)の 90 日未ログイン抽出クエリをラボ OU 限定で呼び出して一覧を出力する | サマリと棚卸し結果の両方が transcript に記録される | 棚卸しクエリは読み取りのみのため、[アカウント管理 §5.1](../it-support/account-management.md#51-アカウント棚卸し)のクエリをそのまま呼び出す設計にし、同じロジックを二重に書かない |
+| E-6 | 結果サマリと棚卸し | 作成・スキップ・失敗を件数で集計し、`LastLogonDate` が 90 日以上前（未ログインの場合は `whenCreated` が 90 日以上前）のユーザーをラボ OU 限定で抽出して一覧を出力する | サマリと棚卸し結果の両方が transcript に記録される | 棚卸しクエリは読み取りのみのため、E-2 で確認済みのラボ OU をそのまま `-SearchBase` に使う設計にし、判定ロジックを演習内で二重に書かない |
 
 ##### 試験項目書
 
@@ -379,7 +379,7 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 | T-04 | 単体 | グループ追加 | E-5 完了後 | `Get-ADGroupMember` | 対象ユーザーが部署グループのメンバーになっている | | | | |
 | T-05 | 結合 | 冪等性 | T-03 完了後 | 同じ CSV で再実行 | 全件スキップとして完了。終了コード `0` | | | | |
 | T-06 | 結合 | transcript 記録 | 実行後 | transcript ファイルを確認 | 事前確認・作成・スキップ・棚卸しの各段階が記録されている | | | | |
-| T-07 | 総合 | 棚卸しの実行 | E-6 完了後 | 出力結果を確認 | 基準日時・検索範囲・件数を説明できる（[アカウント管理 §5.1](../it-support/account-management.md#51-アカウント棚卸し)と同じ判定基準） | | | | |
+| T-07 | 総合 | 棚卸しの実行 | E-6 完了後 | 出力結果を確認 | 基準日時・検索範囲・件数を説明できる（`LastLogonDate` 90 日超、またはログイン履歴なしで `whenCreated` 90 日超という判定基準） | | | | |
 | T-08 | 異常系 | 誤ったドメインでの実行 | 期待値と異なる `DNSRoot` | 同上コマンドを実行 | 終了コード `1`。`Get-ADUser`/`New-ADUser` は一切呼ばれない | | | | |
 | T-09 | 異常系 | CSV の必須列欠落 | `Department` 列のない CSV | 同上 | 終了コード `2` | | | | |
 | T-10 | 異常系 | 重複する `SamAccountName` | CSV 内に同一値を 2 行 | 同上 | 1 件目は作成、2 件目はスキップとして記録される（作成の重複エラーで停止しない） | | | | |
@@ -484,7 +484,7 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 - **完了後に更新するもの**:
   - [02 フェーズ別カリキュラム W4 / W18](./02-curriculum.md#w4-ディスクファイルシステムシェルスクリプト) の該当ハンズオンから、本書の実施記録へのリンク
   - [STATUS.md](../../STATUS.md) の「コードでは埋められない、残っている穴」（Windows 側、特に Level 4 が完了した場合）
-  - Level 4 が完了した場合、[アカウント管理・キッティング手順サンプル](../it-support/account-management.md)や[証跡採録チェックリスト](../evidence-capture-checklist.md)の Windows 優先項目（4a/4b・8a/8b）が要求する、より高度な PowerShell（AD 操作・winget 一括導入）へ進むための土台が整ったことになる
+  - Level 4 が完了した場合、[証跡採録チェックリスト](../evidence-capture-checklist.md)の Windows 優先項目が要求する、より高度な PowerShell（AD 操作）へ進むための土台が整ったことになる
 
 ---
 
@@ -495,9 +495,7 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 - [02 フェーズ別カリキュラム](./02-curriculum.md)
 - [03 構築工程の実務ドキュメント](./03-build-process.md)
 - [05 Phase 1 演習設計](./05-phase1-exercise-design.md)
-- [アカウント管理・キッティング手順サンプル](../it-support/account-management.md)
 - [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)
-- [Windows / winget 端末セットアップ](../evidence/templates/windows-winget-provisioning.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [学習の一次記録（つまずきログ）](../../LEARNINGS.md)
 - [ポートフォリオ進捗 STATUS](../../STATUS.md)

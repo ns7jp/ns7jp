@@ -22,7 +22,7 @@ server-monitor v1.0 のデプロイ方式を決定する必要があった。
 
 **Docker Compose** を採用する。`docker-compose.yml` で全コンテナ（Flask アプリ / Prometheus / Grafana / Alertmanager / node-exporter / Nginx）を宣言的に管理する。
 
-将来的に Ansible（[02](../server-monitor-improvements/02-ansible-automation.md)）→ Terraform / AWS（[03](../server-monitor-improvements/03-terraform-aws.md)）→ Kubernetes / EKS（[08](../server-monitor-improvements/08-kubernetes-roadmap.md)）と段階的に発展させる。
+将来的に Ansible（[02](../server-monitor-improvements/02-ansible-automation.md)）→ Terraform / AWS（[03](../server-monitor-improvements/03-terraform-aws.md)）→ Kubernetes / EKS（[今後の興味リスト](../roadmap/README.md)）と段階的に発展させる。
 
 ---
 

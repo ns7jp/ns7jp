@@ -2,10 +2,14 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-26（07 Python 運用自動化演習設計に、この作業環境での Linux 側実行記録（付録、31/49 項目）を追加。
-06 シェルスクリプト演習設計を新規作成し、演習 A を AI 支援セッションで初回実行・12/12 OK。Phase 1 演習の実施キット
-（Hyper-V 向け雛形）を準備。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102
-に置き換え、#17/#66 は保留理由を記録）
+最終更新：2026-08-26（ポートフォリオの網羅範囲を「Linux サーバー構築」第一志望へ絞り直す整理を実施。
+`docs/it-support/` と Windows / winget 端末セットアップのテンプレートを削除し、`docs/roadmap/` 配下の
+個別設計書 10 本と `08-kubernetes-roadmap.md` を削除して[今後の興味リスト](./docs/roadmap/README.md)
+へ一本化。約 20 ファイルの相互参照を修正し、markdownlint・Mermaid 構文検証・全リンク/アンカー
+934 件のローカルチェックで 0 件を確認。07 Python 運用自動化演習設計に、この作業環境での Linux 側実行記録
+（付録、31/49 項目）を追加。06 シェルスクリプト演習設計を新規作成し、演習 A を AI 支援セッションで初回実行・
+12/12 OK。Phase 1 演習の実施キット（Hyper-V 向け雛形）を準備。server-monitor の滞留 Dependabot PR を検証・
+処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
 
 ---
 
@@ -77,6 +81,22 @@
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
 
+### 2026-08-26 の更新内容（追補3：網羅範囲の縮小 — IT サポート・Windows 補助証跡・中長期ロードマップの整理）
+
+未経験のサーバー構築エンジニア志望のポートフォリオとして、網羅している内容の範囲が広すぎるという
+指摘を受け、第一志望（Linux サーバー構築）との関係が薄い項目を削減した。
+
+| 対応 | 内容 |
+| --- | --- |
+| IT サポート業務資料の削除 | `docs/it-support/`（FAQ・アカウント管理・トラブルシューティング・Service Desk メトリクスの 4 本）を削除。IT サポート・社内 SE 補助は応募先次第の補助トラックであり、Linux サーバー構築より優先度が低いため |
+| Windows / AD 関連の圧縮 | `docs/evidence/templates/windows-winget-provisioning.md`（端末セットアップテンプレート）を削除。現職（Windows Server / AD 研修）を反映する技術的な部分（[06 シェルスクリプト演習設計 Level 4（AD 操作）](./docs/learning-plan/06-shell-scripting-exercise-design.md#44-level-4-active-directory-運用スクリプト)、[Windows / AD 公開再現ラボ](./docs/evidence/templates/windows-ad-lab.md)）は差別化材料として最小限残した |
+| 中長期ロードマップの一本化 | 実装・実機検証が一切ない `docs/roadmap/` 配下の個別設計書 10 本（分散トレーシング、インシデント対応、セキュリティ運用、キャパシティプランニング、メタモニタリング、FinOps、DB 運用、ネットワーク運用、ID 運用、カオスエンジニアリング）と `docs/server-monitor-improvements/08-kubernetes-roadmap.md` を削除し、[今後の興味リスト](./docs/roadmap/README.md)という短い一覧へ集約した |
+| 相互参照の修正 | 上記の削除に伴い、README・本ファイル・ADR・server-monitor 改善設計・学習プラン・証跡採録チェックリスト・career-bridge・target-roles など約 20 ファイルのリンクを修正・削除した |
+| 整合性チェック | markdownlint（45 ファイル、0 件）、Mermaid 構文検証（16 図、全パース成功）、リポジトリ内リンク・アンカーの解決チェック（934 件、0 件切れ）を実行し、いずれも問題なし |
+
+削除した設計は破棄したのではなく、実装が伴わないまま個別ページとして積み上がっていた状態を、
+実際の到達度に合わせて縮小したものである。着手時期が近づいた際は、改めて一次導線へ追加する。
+
 ### 2026-08-26 の更新内容（追補2：07 Python 運用自動化演習設計の Linux 側を実行）
 
 下記（追補）の設計を、この AI 支援セッションの作業環境（`Linux 6.18.44-fc-v21`、Ubuntu 24.04.4、systemd が PID 1 では
@@ -141,7 +161,7 @@ Windows（新規ラボホスト LAB-WINOPS1）の両方を対象にした演習�
 | --- | --- |
 | 演習設計 | [02 フェーズ別カリキュラム](./docs/learning-plan/02-curriculum.md) W4 / W18 が見出しだけで済ませていたシェルスクリプト学習項目を、Linux（Bash）と Windows（PowerShell）の両方で基礎文法から実務水準まで具体化した。Windows 側は [01 学習環境 §6](./docs/learning-plan/01-environment.md#6-windows-server-の学習環境任意)が 1 行で済ませていた「PowerShell での一括操作」を、Windows サービス操作・イベントログ操作・ラボドメインに対する Active Directory 操作（ユーザー・グループ・OU、CSV 一括作成、棚卸し）まで含めて新規に設計した |
 | 技術検証 | Bash（`set -euo pipefail` の除外条件、`trap` の発火条件、`flock` のロック解放、パイプラインの終了ステータス伝播 等）と PowerShell（ストリームの分離、終端/非終端エラーと `try`/`catch`、`$LASTEXITCODE`、`$null` 比較の罠、`Start-Transcript` の多重起動、ネイティブコマンドの終了コード 等）で計 24 件の技術的挙動を独立に検証させ、記述へ反映した |
-| 精査 | 3 系統の独立レビュー（Bash の技術的正確性、PowerShell の技術的正確性、AD 操作の正確性と [Windows / AD 公開再現ラボ](./docs/evidence/templates/windows-ad-lab.md)・[アカウント管理サンプル](./docs/it-support/account-management.md)との整合）を通し、15 件の指摘（`trap` が本来の終了コードを上書きする不具合、`Mutex.WaitOne()` の呼び忘れ、`Get-Date -Format` の戻り値型の誤り、`*-EventLog` 系コマンドレットが PowerShell 7 に存在しないこと、`Add-ADGroupMember` の重複時の挙動誤認 等）をすべて反映した |
+| 精査 | 3 系統の独立レビュー（Bash の技術的正確性、PowerShell の技術的正確性、AD 操作の正確性と [Windows / AD 公開再現ラボ](./docs/evidence/templates/windows-ad-lab.md)との整合）を通し、15 件の指摘（`trap` が本来の終了コードを上書きする不具合、`Mutex.WaitOne()` の呼び忘れ、`Get-Date -Format` の戻り値型の誤り、`*-EventLog` 系コマンドレットが PowerShell 7 に存在しないこと、`Add-ADGroupMember` の重複時の挙動誤認 等）をすべて反映した |
 | 整合性チェック | markdownlint（57 ファイル、0 件）、Mermaid 構文検証（54 図、全パース成功）、リポジトリ内リンク・アンカーの解決チェック（209 件、0 件切れ）をローカルで実行し、いずれも問題なし |
 | 状態 | **設計のみ・未実施**。全試験項目書の実測結果欄は空欄。Level 4（AD 操作）はさらに [Windows / AD 公開再現ラボ §4](./docs/evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)のラボドメイン構築（これ自体も `NOT RUN`）が前提条件になる |
 
@@ -613,7 +633,7 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 
 | # | テーマ | 状態 | 設計書 |
 | --- | --- | --- | --- |
-| v3.0 | Kubernetes / EKS 発展計画 | ⬜ 学習ロードマップ段階（就業後の資格計画と連動） | [08](./docs/server-monitor-improvements/08-kubernetes-roadmap.md) |
+| v3.0 | Kubernetes / EKS 発展計画 | ⬜ 学習ロードマップ段階（就業後の資格計画と連動） | [今後の興味リスト](./docs/roadmap/README.md) |
 | v1.2 | 変更管理プロセス | ✅ PR / Issue テンプレートとミニ運用を server-monitor 側へ追加 | [11](./docs/server-monitor-improvements/11-change-management.md) |
 
 ### 中長期ロードマップへ縮退（2026-07-03、2026-08-19 追加）
@@ -622,22 +642,27 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 
 | # | テーマ | 設計書 | 縮退時期 |
 | --- | --- | --- | --- |
-| 13 | FinOps（コスト最適化運用） | [13](./docs/roadmap/13-finops.md) | 2026-07 |
-| 14 | データベース運用設計 | [14](./docs/roadmap/14-database-operations.md) | 2026-07 |
-| 16 | アイデンティティ運用 | [16](./docs/roadmap/16-identity-operations.md) | 2026-07 |
-| 17 | カオスエンジニアリング / Game Day | [17](./docs/roadmap/17-chaos-engineering.md) | 2026-07 |
-| 06 | 分散トレーシング（Tempo + OpenTelemetry） | [06](./docs/roadmap/06-observability-traces.md) | 2026-08 |
-| 07 | インシデント対応プロセス・ポストモーテム | [07](./docs/roadmap/07-incident-response.md) | 2026-08 |
-| 09 | セキュリティ運用プロセス | [09](./docs/roadmap/09-security-operations.md) | 2026-08 |
-| 10 | キャパシティプランニング・負荷試験 | [10](./docs/roadmap/10-capacity-planning.md) | 2026-08 |
-| 12 | メタモニタリング（監視の監視） | [12](./docs/roadmap/12-meta-monitoring.md) | 2026-08 |
-| 15 | ネットワーク・DNS 運用 | [15](./docs/roadmap/15-network-operations.md) | 2026-08 |
+| 13 | FinOps（コスト最適化運用） | [今後の興味リスト](./docs/roadmap/README.md) | 2026-07 |
+| 14 | データベース運用設計 | [今後の興味リスト](./docs/roadmap/README.md) | 2026-07 |
+| 16 | アイデンティティ運用 | [今後の興味リスト](./docs/roadmap/README.md) | 2026-07 |
+| 17 | カオスエンジニアリング / Game Day | [今後の興味リスト](./docs/roadmap/README.md) | 2026-07 |
+| 06 | 分散トレーシング（Tempo + OpenTelemetry） | [今後の興味リスト](./docs/roadmap/README.md) | 2026-08 |
+| 07 | インシデント対応プロセス・ポストモーテム | [今後の興味リスト](./docs/roadmap/README.md) | 2026-08 |
+| 09 | セキュリティ運用プロセス | [今後の興味リスト](./docs/roadmap/README.md) | 2026-08 |
+| 10 | キャパシティプランニング・負荷試験 | [今後の興味リスト](./docs/roadmap/README.md) | 2026-08 |
+| 12 | メタモニタリング（監視の監視） | [今後の興味リスト](./docs/roadmap/README.md) | 2026-08 |
+| 15 | ネットワーク・DNS 運用 | [今後の興味リスト](./docs/roadmap/README.md) | 2026-08 |
 
 > **2026-08-19 追記**: 06 / 07 / 09 / 10 / 12 / 15 は、実装着手時期の遠さに加えて、
 > 未経験からのキャリアチェンジという実際のスキル水準に対して内容が高度すぎる
 > （インシデントコマンダー制のポストモーテム、ITIL 準拠の変更管理相当の統制、
 > 分散トレーシングなど、組織規模や複数人チームを前提にした設計）と判断し、
 > ポートフォリオ全体の難易度・スコープを引き下げる整理の一環として追加で移動した。
+>
+> **2026-08-26 追記**: `docs/roadmap/` 配下の個別設計書 10 本は、実装・実機検証が一切ないまま
+> 詳細な設計だけが積み上がる状態になっていたため全て削除し、方向性だけを短い一覧に
+> 集約した（[今後の興味リスト](./docs/roadmap/README.md)）。Kubernetes / EKS 発展計画
+> （旧 `docs/server-monitor-improvements/08-kubernetes-roadmap.md`）も同じ理由でここへ統合した。
 
 ### ADR（アーキテクチャ決定記録）
 
@@ -763,7 +788,7 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 | リポジトリ / サイト | 位置付け | 状態 |
 | --- | --- | --- |
 | [server-monitor](https://github.com/ns7jp/server-monitor) | 主作品（Linux サーバー構築・運用） | [PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へマージ済み。§2 のとおり |
-| [post](https://github.com/ns7jp/post) | 学習作品（PHP / MySQL、CSRF / bcrypt / PDO） | 完成・公開中。DB 運用設計（[14](./docs/roadmap/14-database-operations.md)）の題材 |
+| [post](https://github.com/ns7jp/post) | 学習作品（PHP / MySQL、CSRF / bcrypt / PDO） | 完成・公開中。DB 運用は[今後の興味リスト](./docs/roadmap/README.md)の題材 |
 | [pulse](https://github.com/ns7jp/pulse) | 学習作品（PHP / SQLite） | 完成・公開中 |
 | [works](https://github.com/ns7jp/works) | 学習作品集（Python / HTML / CSS） | 公開中（学習過程の記録） |
 | [ns7jp.github.io](https://ns7jp.github.io/) | ポートフォリオサイト | ✅ 同期済み（PR #23〜#24で採用担当者向け階層・証跡リプレイ・E2Eを統合し、[PR #25](https://github.com/ns7jp/ns7jp.github.io/pull/25)で証跡整合性とアクセシビリティを改善。main SHA `5ab3367`） |

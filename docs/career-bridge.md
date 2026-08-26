@@ -43,11 +43,9 @@ flowchart LR
 | 物流現場 | インフラ運用 | 該当ドキュメント |
 | --- | --- | --- |
 | 15 分単位の作業時間記録 | SLI 計測（Prometheus / Loki） | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
-| ABC 分析（パレート図） | 問い合わせ TOP10 → FAQ / 自動化対象選定 | [想定 FAQ](./it-support/faq.md) / [Service Desk Metrics](./it-support/service-desk-metrics.md) |
 | 「忙しい時間帯」の特定 | アラートで負荷のピークを検知する | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
-| 出庫頻度の集計 | アラート発火頻度・ノイズ率の集計 | [07. インシデント対応](roadmap/07-incident-response.md) |
-| 容量上限の把握（棚・倉庫） | キャパシティ計画（CPU / Mem / Disk / RPS） | [10. キャパシティプランニング](roadmap/10-capacity-planning.md) |
-| ピッキング件数の月次レビュー | Service Desk メトリクスの月次レビュー | [Service Desk Metrics](./it-support/service-desk-metrics.md) |
+| 出庫頻度の集計 | アラート発火頻度・ノイズ率の集計 | [今後の興味リスト](roadmap/README.md) |
+| 容量上限の把握（棚・倉庫） | キャパシティ計画（CPU / Mem / Disk / RPS） | [今後の興味リスト](roadmap/README.md) |
 
 ### 2.2 標準化・属人化排除
 
@@ -56,27 +54,26 @@ flowchart LR
 | 場所マップで「新人でも探せる」 | 構成図 + ランブックで「当番でも復旧できる」 | [server-monitor 構成](https://github.com/ns7jp/server-monitor/blob/main/docs/architecture.md) |
 | 棚ラベル統一（表記揺れ排除） | リソースタグ規約・命名規則 | [03. Terraform 化](./server-monitor-improvements/03-terraform-aws.md) |
 | 補充閾値表で「気付いた人がやる」を脱却 | アラート閾値・自動スケール | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
-| OJT チェックリスト | キッティング SOP・オンボーディング手順 | [アカウント管理](./it-support/account-management.md) |
 
 ### 2.3 運用カイゼン
 
 | 物流現場 | インフラ運用 | 該当ドキュメント |
 | --- | --- | --- |
-| 動線改善（ABC で棚再配置） | アラート最適化（ノイズ削減） | [07. インシデント対応](roadmap/07-incident-response.md) |
+| 動線改善（ABC で棚再配置） | アラート最適化（ノイズ削減） | [今後の興味リスト](roadmap/README.md) |
 | 季節要因で計測期間を見直す | 月次のふりかえり、指標の確認 | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
 | 「カイゼンのリバウンド防止」 | IaC + CI で「設定が手動で戻らない」 | [02. Ansible](./server-monitor-improvements/02-ansible-automation.md) |
-| 棚卸し（実物と帳簿の突合） | 構成棚卸し（Ansible / AWS Config） | [02. Ansible](./server-monitor-improvements/02-ansible-automation.md) [09. セキュリティ運用](roadmap/09-security-operations.md) |
+| 棚卸し（実物と帳簿の突合） | 構成棚卸し（Ansible / AWS Config） | [02. Ansible](./server-monitor-improvements/02-ansible-automation.md) |
 | 「変えてはいけない時期」を決めておく | 変更を控える期間（年末年始・連休前） | [11. 変更管理](./server-monitor-improvements/11-change-management.md) |
-| 想定外への備え（停電演習） | 意図的に障害を起こして復旧を練習する（カオスエンジニアリング） | [17. カオスエンジニアリング](./roadmap/17-chaos-engineering.md) |
+| 想定外への備え（停電演習） | 意図的に障害を起こして復旧を練習する（カオスエンジニアリング） | [今後の興味リスト](./roadmap/README.md) |
 
 ### 2.4 セキュリティ・統制（5S → セキュリティ統制）
 
 | 物流現場の 5S | インフラ運用 | 該当ドキュメント |
 | --- | --- | --- |
-| 整理（要らない物を捨てる） | 不要 IAM ロール・古いシークレット削除 | [09. セキュリティ運用](roadmap/09-security-operations.md) |
+| 整理（要らない物を捨てる） | 不要 IAM ロール・古いシークレット削除 | [今後の興味リスト](roadmap/README.md) |
 | 整頓（定位置管理） | リソースタグ規約・Namespace 分離 | [03. Terraform 化](./server-monitor-improvements/03-terraform-aws.md) |
-| 清掃（日々の点検） | 監査ログ日次チェック | [09. セキュリティ運用](roadmap/09-security-operations.md) |
-| 清潔（清掃の標準化） | 自動化された脆弱性スキャン CI | [09. セキュリティ運用](roadmap/09-security-operations.md) |
+| 清掃（日々の点検） | 監査ログ日次チェック | [今後の興味リスト](roadmap/README.md) |
+| 清潔（清掃の標準化） | 自動化された脆弱性スキャン CI | [今後の興味リスト](roadmap/README.md) |
 | 躾（ルールの定着） | セルフチェックと CI による自動チェック | 各設計書の CI セクション |
 
 ### 2.5 災害対応・BCP
@@ -84,7 +81,7 @@ flowchart LR
 | 物流現場 | インフラ運用 | 該当ドキュメント |
 | --- | --- | --- |
 | 機械停止時の手作業フォロー | プロセス障害時のフェイルオーバー | [server-monitor ランブック](https://github.com/ns7jp/server-monitor/blob/main/docs/runbooks/service-down.md) |
-| 繁忙期のピーク対応 | 負荷スパイク時のオートスケール / 帯域制御 | [08. K8s 計画](./server-monitor-improvements/08-kubernetes-roadmap.md) |
+| 繁忙期のピーク対応 | 負荷スパイク時のオートスケール / 帯域制御 | [今後の興味リスト](./roadmap/README.md) |
 | 棚卸しズレ発生時の原因追跡 | データ不整合時の調査・復旧 | [05. 復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 | 災害時の代替動線 | 2 AZ 冗長化、リージョン障害対応 | [03. Terraform 化](./server-monitor-improvements/03-terraform-aws.md) [05. 復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 
@@ -127,8 +124,8 @@ flowchart LR
 | 学んだこと | 監視ラボでの反映先 |
 | --- | --- |
 | 単発の改善でなく **継続計測ルールを最初に設計** する | [04. SLO / SLI / エラーバジェット設計](./server-monitor-improvements/04-slo-design.md) |
-| 気づいたことを **記憶だけでなく記録に残す** | [07. 障害の振り返り記録](roadmap/07-incident-response.md) |
-| 「次回は気を付ける」で終わらせない、**仕組みで防ぐ** | [07. アクションアイテム運用](roadmap/07-incident-response.md) |
+| 気づいたことを **記憶だけでなく記録に残す** | [今後の興味リスト](roadmap/README.md) |
+| 「次回は気を付ける」で終わらせない、**仕組みで防ぐ** | [今後の興味リスト](roadmap/README.md) |
 | 自分しか知らない手順を作らない | [02. Ansible で手順をコード化](./server-monitor-improvements/02-ansible-automation.md) |
 
 > **過去の反省を、次の現場では仕組みで防ぐ** — これが現場経験 15 年から得た最大の学びです。
@@ -139,8 +136,6 @@ flowchart LR
 
 | 業務 | 私が貢献できること | 根拠 |
 | --- | --- | --- |
-| ヘルプデスク・問い合わせ対応 | 一次切り分けと FAQ 整備 | [想定 FAQ](./it-support/faq.md) [TS フロー](./it-support/troubleshooting.md) |
-| キッティング・棚卸し | SOP / チェックリスト整備、属人化排除 | [アカウント管理](./it-support/account-management.md) |
 | サーバー監視・運用 | 構築 → 監視 → 障害対応のサイクル設計と実装 | [server-monitor](https://github.com/ns7jp/server-monitor) |
 | 業務改善提案 | 数値で語る改善、上長合意の取り方 | [業務改善レポート](./business-improvement/picking-improvement.md) |
 | ドキュメント運用 | 構造化された手順書・設計書を継続作成 | 本リポジトリ全体 |
@@ -185,6 +180,5 @@ D-1 復旧演習 / AD の DNS 向き先）のうち、どれで手応えを得�
 - [業務改善レポート](./business-improvement/picking-improvement.md)
 - [サーバー監視ラボ 改善計画](./server-monitor-improvements/README.md)（中長期テーマは[ロードマップ](./roadmap/README.md)へ分離）
 - [ADR（技術選定の根拠）](./adr/README.md)
-- [Service Desk Metrics 設計](./it-support/service-desk-metrics.md)
 - [アーキテクチャ図](./architecture-diagram.md)
 - [資格取得ロードマップ](./certifications/roadmap.md)

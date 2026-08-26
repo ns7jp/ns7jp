@@ -38,7 +38,7 @@
 
 - Prometheus / Grafana は監視系の求人でよく見かける組み合わせで、Pull モデルや PromQL など基本的な考え方を学べた
 - Loki（ログ）と同じ Grafana 上で統合できる（[01](../server-monitor-improvements/01-loki-log-aggregation.md)）
-- Prometheus 単体では長期保存に弱く、監視自体の死活監視（メタモニタリング）も別途必要（[12](../roadmap/12-meta-monitoring.md)）
+- Prometheus 単体では長期保存に弱く、監視自体の死活監視（メタモニタリング）も別途必要（[今後の興味リスト](../roadmap/README.md)）
 
 ---
 

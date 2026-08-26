@@ -431,8 +431,8 @@
 | 方向 | 内容 | 参考 |
 | --- | --- | --- |
 | 深さ | 冗長化・負荷分散・チューニング・大規模構成 | [改善設計一覧](../server-monitor-improvements/README.md) |
-| 広さ | Windows Server / Active Directory、ネットワーク機器、ストレージ | [アカウント管理手順](../it-support/account-management.md) |
-| 運用 | インシデント対応、変更管理、サービス品質の目標値、リソースの余力管理 | [インシデント対応](../roadmap/07-incident-response.md) / [変更管理](../server-monitor-improvements/11-change-management.md) |
+| 広さ | Windows Server / Active Directory、ネットワーク機器、ストレージ | [06 シェルスクリプト演習設計 Level 4](./06-shell-scripting-exercise-design.md#44-level-4-active-directory-運用スクリプト) |
+| 運用 | インシデント対応、変更管理、サービス品質の目標値、リソースの余力管理 | [今後の興味リスト](../roadmap/README.md) / [変更管理](../server-monitor-improvements/11-change-management.md) |
 
 ---
 

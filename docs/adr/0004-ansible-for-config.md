@@ -58,7 +58,7 @@ flowchart LR
 
 - `ansible-playbook site.yml` で 0 から再現でき、構成変更を Pull Request 単位で見直せるようになった
 - inventory がホスト台帳を兼ねるようになった
-- SSH 越しの逐次実行のため台数が増えると遅く、Vault によるシークレット管理も商用では Secrets Manager 等への移行が要検討（[09 §5](../roadmap/09-security-operations.md)）
+- SSH 越しの逐次実行のため台数が増えると遅く、Vault によるシークレット管理も商用では Secrets Manager 等への移行が要検討（[今後の興味リスト](../roadmap/README.md)）
 
 ---
 
