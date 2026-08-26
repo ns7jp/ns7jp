@@ -23,6 +23,7 @@
 | [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md) | W4 / W18 のシェルスクリプト学習項目を、Linux（Bash）と Windows（PowerShell）の両方で基礎から実務（AD 操作・サービス・イベントログを含む）まで具体化した設計。**設計のみ・未実施** |
 | [07 Python 運用自動化演習設計](./07-python-ops-automation-exercise-design.md) | 06 と同じ Phase 5（W18）の題材（定型作業・バックアップ・監視チェック）を、シェルではなく Python で Linux / Windows 両対応にする演習設計。**設計のみ・未実施** |
 | [08 AD構築演習設計](./08-ad-exercise-design.md) | [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)のフォレスト昇格・最小 OU 構成の先を、OU 階層・AGDLP グループ戦略・GPO・パスワードポリシー（既定 + 細分化）・FSMO 確認・ヘルスチェック・システム状態バックアップ／権威復元まで具体化した演習設計。**設計のみ・未実施** |
+| [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md) | Phase 6（W23）の監視ハンズオンを、本ラボの主系統である Prometheus/Grafana とは別に Zabbix で具体化した補完演習。[career-bridge.md の概念対応表](../career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)を実機で検証する狙い。**設計のみ・未実施** |
 
 ---
 
@@ -403,6 +404,7 @@ gantt
 - [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)
 - [07 Python 運用自動化演習設計](./07-python-ops-automation-exercise-design.md)
 - [08 AD構築演習設計](./08-ad-exercise-design.md)
+- [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md)
 - [資格取得ロードマップ](../certifications/roadmap.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [志望トラックと証跡の対応](../target-roles.md)
