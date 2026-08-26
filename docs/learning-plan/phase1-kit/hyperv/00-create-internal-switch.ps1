@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     lab-base01 用のホストオンリー相当ネットワーク（Internal スイッチ）を作成する。
 

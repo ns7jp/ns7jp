@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     03-test-segment-setup.ps1 で追加した検証用セグメントを撤去する（Q-7）。
 

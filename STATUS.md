@@ -10,14 +10,15 @@
 演習B）を AI 支援セッションで実行。07 Python 運用自動化演習設計に、この作業環境での Linux 側実行記録
 （付録、31/49 項目）を追加し、Windows 側・実機（lab-base01 / LAB-WINOPS1）実施用のキット（python-ops-kit、
 未実行の雛形）を準備。Phase 1 演習の実施キット（Hyper-V 向け雛形）を準備し、本人が実機（Hyper-V ホスト）で
-初回実行して見つけた実バグ 1 件を修正。06 シェルスクリプト演習設計の Windows/PowerShell 側
-（Level 1・2・演習A `Backup-Rotate.ps1`）を、Linux コンテナへ導入した PowerShell 7 で実行し、
-演習B〜E は windows-ps-kit（構文検証済みの実施キット）として準備。windows-ad-lab.md のフォレスト
-昇格・最小 OU 構成の先を、OU 階層・AGDLP グループ戦略・GPO・パスワードポリシー・FSMO・システム
-状態バックアップ／権威復元まで具体化した 08 AD構築演習設計を新規作成。career-bridge.md の Zabbix
-概念対応表を実機で検証する補完演習として 09 Zabbix 監視基盤構築演習設計も新規作成（設計のみ・未実施、
-ADR-0001 の主系統は変更しない）。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18
-を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
+初回実行して見つけた実バグ 2 件（誤成功表示、UTF-8 BOM 無しによる Windows PowerShell 5.1 での文字化け・
+構文エラー）を修正。06 シェルスクリプト演習設計の Windows/PowerShell 側（Level 1・2・演習A
+`Backup-Rotate.ps1`）を、Linux コンテナへ導入した PowerShell 7 で実行し、演習B〜E は windows-ps-kit
+（構文検証済みの実施キット）として準備（同キットも同種の UTF-8 BOM 欠落バグを実機で発見・修正済み）。
+windows-ad-lab.md のフォレスト昇格・最小 OU 構成の先を、OU 階層・AGDLP グループ戦略・GPO・
+パスワードポリシー・FSMO・システム状態バックアップ／権威復元まで具体化した 08 AD構築演習設計を
+新規作成。career-bridge.md の Zabbix 概念対応表を実機で検証する補完演習として 09 Zabbix 監視基盤構築
+演習設計も新規作成（設計のみ・未実施、ADR-0001 の主系統は変更しない）。server-monitor の滞留
+Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
 
 ---
 
@@ -79,6 +80,7 @@ ADR-0001 の主系統は変更しない）。server-monitor の滞留 Dependabot
 | 6 | 依存更新 PR を 3 か月放置した。ADR に「見直しトリガー」を書く運用にしたのに、運用そのものが回っていなかった | 依存関係更新のように「継続的に発生し続けるタスク」は、1回限りの個別対応では終わらないので、対応の「型」（採用可否の判断基準など）を決めても、それを回す頻度・トリガー・責任の所在を運用として仕組み化する必要があることを学んだ |
 | 7 | 3 行しかない依存ファイル（`ansible/controller-requirements.txt`）を、別々の Dependabot PR 3 本がそれぞれ 1 行ずつ書き換えていた。2 本を merge した後、3 本目が `405 merge conflicts` で弾かれた。`git merge-tree` で見ると、行の前後に十分なコンテキストが無いため 3-way merge が変更点を分離できず、ファイル全体を 1 個の衝突として扱っていた（2026-08-26） | 「変更対象の見た目が独立している（別の行、別のパッケージ）」ことと、「gitが構造的に独立した変更として検出できること」は別物であり、ファイルが小さいほどこの差が顕在化しやすい、という限界を学んだ |
 | 8 | Phase 1 演習キットの `00-create-internal-switch.ps1` を Hyper-V ホストで初回実行したところ、`New-VMSwitch` が権限不足で失敗した。その調査で、スクリプト自体が失敗を検知できておらず、失敗したのに「作成しました」と成功表示していたことが分かった（PowerShell の既定の非終了エラーのため）（2026-08-26） | （記入） |
+| 9 | 続けて `01-create-vm.ps1` を実行したところ、日本語コメント・文字列が文字化けし、さらに構文エラー（文字列の終端記号が無い等）で実行できなかった。原因は、スクリプトが UTF-8（BOM 無し）で保存されており、Windows PowerShell 5.1 が BOM の無いファイルをシステムの ANSI コードページ（Shift-JIS）として読んでいたこと（2026-08-26） | （記入） |
 
 ### 実施待ち
 
@@ -226,6 +228,13 @@ lab-base01 / LAB-WINOPS1 という実機（VM）での実施はこの AI 支援�
 `$ErrorActionPreference = 'Stop'` と `try/catch` を追加し、実際の成否を判定してから成功メッセージを出すよう修正した
 （詳細は [phase1-kit/README.md の未検証の範囲](./docs/learning-plan/phase1-kit/README.md#未検証の範囲)）。元の権限エラー
 自体（Hyper-V の実行権限・グループ設定）はスクリプトの不具合ではなく、実施者側の環境の問題として引き続き対応中。
+
+**追記2（同日・`01-create-vm.ps1` の実行で見つかった 2 件目の実バグ）**: `hyperv/*.ps1` が UTF-8（BOM 無し）で
+保存されていたため、Windows PowerShell 5.1（PowerShell 7/pwsh ではない、Windows 既定の Desktop 版）が
+BOM の無い `.ps1` をシステムの ANSI コードページ（日本語 Windows では Shift-JIS）として読み込み、UTF-8 の
+日本語コメント・文字列がバイト単位で誤読された。文字化けだけでなく `"` の対応がずれて構文エラー（文字列の
+終端記号が無い、`}` が無い）にまで発展していた。`hyperv/*.ps1` 全 5 本の先頭に UTF-8 BOM を追加して修正した。
+`netplan/*.yaml`・`sshd/*.conf` は Linux ゲスト側で消費するため、BOM を付けると壊れる可能性があり対象外とした。
 
 ### 2026-08-26 の更新内容（追補：06 演習 A `backup-rotate.sh` の初回実行）
 

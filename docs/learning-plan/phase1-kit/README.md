@@ -61,3 +61,13 @@ PowerShell の既定動作（非終了エラー）のままだと後続の行が
 `hyperv/*.ps1` 全 5 本に `$ErrorActionPreference = 'Stop'` と `try/catch` を追加し、
 実際の成否を判定してから成功メッセージを出すよう修正した。元の権限エラー自体（Hyper-V の
 実行権限・グループ設定の問題）はスクリプトの不具合ではなく、実施者側の環境の問題として残っている。
+
+**同日、続けて `01-create-vm.ps1` を実行したところ、実バグがもう 1 件見つかった。**
+`hyperv/*.ps1` は UTF-8（BOM 無し）で保存されていたが、Windows PowerShell 5.1（`.ps1` を
+Bypass/RemoteSigned で実行する既定の Desktop 版。PowerShell 7/pwsh ではない）は、BOM の無い
+`.ps1` をシステムの ANSI コードページ（日本語 Windows では Shift-JIS）として読み込む。
+UTF-8 の日本語コメント・文字列がバイト単位で誤読され、文字化けだけでなく `"` の対応がずれて
+`文字列に終端記号 " がありません` 等の構文エラーにまで発展していた。`hyperv/*.ps1` 全 5 本の
+先頭に UTF-8 BOM（`EF BB BF`）を追加して修正した。`netplan/*.yaml` と `sshd/*.conf` は Linux
+ゲスト側で消費されるファイルであり、BOM を付けると `netplan apply` や `sshd` の設定読み込みが
+壊れる可能性があるため、意図的に対象外にしている。
