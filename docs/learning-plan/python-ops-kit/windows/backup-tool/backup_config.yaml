@@ -1,0 +1,10 @@
+# backup_config.yaml (Windows 例)
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.4 章。
+# 配置先: C:\ops\backup-tool\backup_config.yaml。対象は演習用のダミー配置であり実データではない。
+# D ドライブが無い場合は backup_dir を C:\ops\backup-tool\backups に読み替える（3.3 章参照）。
+
+source_dirs:
+  - C:\ProgramData\MyApp\config
+backup_dir: D:\backup\config
+keep_generations: 7
+min_free_bytes: 1073741824

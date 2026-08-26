@@ -1,0 +1,15 @@
+# routine.yaml -- lab-base01 の routine.py 設定例。
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.2 章。
+# 配置先: /etc/routine/routine.yaml（構築手順書 手順5）。実値はホストの実態に合わせて調整すること。
+
+disk_paths:
+  - /
+  - /var
+disk_warn_percent: 85
+services:
+  - ssh
+  - systemd-timesyncd
+cleanup_whitelist:
+  - /tmp
+  - /var/log/lab-app
+cleanup_max_age_days: 14

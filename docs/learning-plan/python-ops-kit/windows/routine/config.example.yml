@@ -1,0 +1,16 @@
+# config.example.yml -- LAB-WINOPS1 の routine_windows.py 設定例。
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.3 章 構築手順書 W-6。
+# コピーして C:\ops\routine\config.yml を作り、ラボ実値に編集すること
+# （構築手順書スタイルの表 W-6。しきい値は 3.4 章 check.py の disk と揃えた例）。
+
+disk_paths:
+  - "C:\\"
+disk_warn_percent: 80
+disk_crit_percent: 90
+services:
+  - Spooler
+event_log_name: System
+event_since_hours: 24
+event_max: 20
+temp_dir: "%TEMP%"
+temp_older_than_days: 14

@@ -1667,7 +1667,12 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
   無いため手動起動で計測。残り 1 項目（TCK-05）はコード自体は正しく動作したが、外部の実証明書の残日数が実行時点で
   たまたましきい値を下回っていたため、想定した `OK` ではなく `WARNING` になった）。実行を通じて `routine.py` の
   `journalctl` 呼び出しに実バグを1件発見し修正済み。
-  Windows 側（`TW-` 全 11 項目）と、systemd timer / タスクスケジューラによる定期実行そのものは未実施のまま
+  Windows 側（`TW-` 全 11 項目）と、systemd timer / タスクスケジューラによる定期実行そのものは未実施のまま。
+  同日、Windows 側・lab-base01 / LAB-WINOPS1 実機での実施を楽にするための実施キット（配置用スクリプト・
+  設定ファイル一式、LAB-WINOPS1 用 Hyper-V PowerShell スクリプト、進捗チェックリスト、証跡記入用テンプレート）を
+  [python-ops-kit/](./python-ops-kit/README.md) に用意した。これも AI 支援セッションでの作成のみで、
+  Windows 実行環境にも Hyper-V ホストへのアクセスにもこのセッションからは到達できないため一度も実行しておらず、
+  上記の実施ステータスを変えるものではない
 - **技術精査**: `routine.py`（Linux）・`routine.py`（Windows）・`backup.py`・`check.py` の 4 モジュールをそれぞれ独立した技術レビューにかけ、
   Python / systemd / Windows タスクスケジューラ・イベントログ API の記述、および構築手順書と試験項目書の期待結果の整合性を確認した。
   検証で見つかり修正した主な誤りは、Windows 版イベントログ抽出が「該当イベントなし」と「アクセス拒否」を区別できていなかった点、
@@ -1675,8 +1680,9 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
   Ubuntu Server 24.04 の最小構成に `python3-venv` が入っておらず `venv` 作成手順が失敗する点など。件数は本ドキュメントの
   コミット履歴（各モジュールのレビュー記録）で確認できる
 - **次のアクション**: [1 章の前提条件](#前提条件)を満たしたうえで、[4 章 構築手順書](#4-構築手順書)を上から順に実施し
-  （lab-base01 の Linux 部分は[付録](#付録この作業環境での実行記録)の記録を出発点にできる）、Windows 側と
-  systemd timer / タスクスケジューラの定期実行を lab-base01・LAB-WINOPS1 の実機で通し、
+  （lab-base01 の Linux 部分は[付録](#付録この作業環境での実行記録)の記録を出発点にでき、
+  [python-ops-kit/](./python-ops-kit/README.md)の配置用ファイルと `checklist.md` を使うと手間を減らせる）、
+  Windows 側と systemd timer / タスクスケジューラの定期実行を lab-base01・LAB-WINOPS1 の実機で通し、
   [5 章 試験項目書](#5-試験項目書)の残りの実測結果欄を埋める
 - **完了後に更新するもの**:
   - [STATUS.md](../../STATUS.md)の該当セクション
@@ -1762,6 +1768,7 @@ systemd unit ファイル（`routine-dryrun.service`/`.timer`、`backup-config.s
 - [03 構築工程の実務ドキュメント](./03-build-process.md)
 - [05 Phase 1 演習設計](./05-phase1-exercise-design.md)
 - [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)
+- [07 Python 運用自動化演習 実施キット（Windows / Hyper-V 向け、未使用の雛形）](./python-ops-kit/README.md)
 - [Windows / AD 公開再現ラボ テンプレート](../evidence/templates/windows-ad-lab.md)
 - [Windows / winget 端末セットアップ テンプレート](../evidence/templates/windows-winget-provisioning.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
