@@ -1,0 +1,12 @@
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.5 章 構築手順書 Linux L-9。
+# 配置先: /etc/systemd/system/check-py.timer
+# 周期（5分）はしきい値と同様に環境ごとに調整する値。check.yaml と合わせてパラメータシート相当の一覧に残すこと。
+[Unit]
+Description=Run check-py.service every 5 minutes
+
+[Timer]
+OnCalendar=*:0/5
+Persistent=true
+
+[Install]
+WantedBy=timers.target

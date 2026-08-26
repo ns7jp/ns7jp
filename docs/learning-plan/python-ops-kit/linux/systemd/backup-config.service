@@ -1,0 +1,10 @@
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.4 章 構築手順書 Linux 手順6。
+# 配置先: /etc/systemd/system/backup-config.service
+[Unit]
+Description=Config backup (backup.py)
+
+[Service]
+Type=oneshot
+User=opsadmin
+WorkingDirectory=/opt/backup-tool
+ExecStart=/opt/backup-tool/.venv/bin/python3 /opt/backup-tool/backup.py --config /opt/backup-tool/backup_config.yaml backup

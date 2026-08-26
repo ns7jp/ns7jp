@@ -15,19 +15,27 @@ param(
     [string]$VMName = 'lab-base01'
 )
 
+$ErrorActionPreference = 'Stop'
+
 $SwitchName = 'lab-test-segment'
 
-Get-VMNetworkAdapter -VMName $VMName |
-    Where-Object { $_.SwitchName -eq $SwitchName } |
-    Remove-VMNetworkAdapter
+try {
+    Get-VMNetworkAdapter -VMName $VMName |
+        Where-Object { $_.SwitchName -eq $SwitchName } |
+        Remove-VMNetworkAdapter -ErrorAction Stop
 
-Write-Host "VM '$VMName' から検証用 NIC を削除しました。"
+    Write-Host "VM '$VMName' から検証用 NIC を削除しました。"
 
-if (Get-VMSwitch -Name $SwitchName -ErrorAction SilentlyContinue) {
-    Remove-VMSwitch -Name $SwitchName -Force
-    Write-Host "スイッチ '$SwitchName' を削除しました（ホスト側の 192.168.57.1 も併せて消える）。"
-} else {
-    Write-Host "スイッチ '$SwitchName' は既に存在しません。"
+    if (Get-VMSwitch -Name $SwitchName -ErrorAction SilentlyContinue) {
+        Remove-VMSwitch -Name $SwitchName -Force -ErrorAction Stop
+        Write-Host "スイッチ '$SwitchName' を削除しました（ホスト側の 192.168.57.1 も併せて消える）。"
+    } else {
+        Write-Host "スイッチ '$SwitchName' は既に存在しません。"
+    }
+} catch {
+    $ErrorActionPreference = 'Continue'
+    Write-Error "失敗しました: $($_.Exception.Message)"
+    exit 1
 }
 
 Write-Host ''
