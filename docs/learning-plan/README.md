@@ -20,6 +20,7 @@
 | [03 構築工程の実務ドキュメント](./03-build-process.md) | パラメータシート / 構築手順書 / 試験項目書 / 移行・切り戻しのテンプレート |
 | [04 教材と資格の対応](./04-resources.md) | 書籍・無料教材・資格の対応表と費用の目安 |
 | [05 Phase 1 演習設計](./05-phase1-exercise-design.md) | 03 のテンプレートを Phase 1（空の VM からの初期構築）へ適用した具体設計。**設計のみ・未実施** |
+| [06 Python 運用自動化演習設計](./06-python-ops-automation-exercise-design.md) | Phase 5（W18）の定型化・バックアップ・監視チェックを、シェルではなく Python で Linux / Windows 両対応にする演習設計。**設計のみ・未実施** |
 
 ---
 
@@ -397,6 +398,7 @@ gantt
 - [03 構築工程の実務ドキュメント](./03-build-process.md)
 - [04 教材と資格の対応](./04-resources.md)
 - [05 Phase 1 演習設計](./05-phase1-exercise-design.md)
+- [06 Python 運用自動化演習設計](./06-python-ops-automation-exercise-design.md)
 - [資格取得ロードマップ](../certifications/roadmap.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [志望トラックと証跡の対応](../target-roles.md)
