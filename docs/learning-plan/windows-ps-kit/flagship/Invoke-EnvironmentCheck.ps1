@@ -1,4 +1,4 @@
-# docs/learning-plan/06-shell-scripting-exercise-design.md 4.3 演習C（フラッグシップ）の実装
+﻿# docs/learning-plan/06-shell-scripting-exercise-design.md 4.3 演習C（フラッグシップ）の実装
 # 状態: 未実行。この AI 支援セッションには Windows 実行環境が無いため、Get-Service /
 # Write-EventLog に依存する経路は一度も実行していない（このキットの README「未検証の範囲」を参照）。
 # 実行には Windows PowerShell 5.1（*-EventLog 系コマンドレットのため）が前提。

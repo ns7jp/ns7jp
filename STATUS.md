@@ -13,10 +13,12 @@
 初回実行して見つけた実バグ 2 件（誤成功表示、UTF-8 BOM 無しによる Windows PowerShell 5.1 での文字化け・
 構文エラー）を修正。06 シェルスクリプト演習設計の Windows/PowerShell 側（Level 1・2・演習A
 `Backup-Rotate.ps1`）を、Linux コンテナへ導入した PowerShell 7 で実行し、演習B〜E は windows-ps-kit
-（構文検証済みの実施キット）として準備。windows-ad-lab.md のフォレスト昇格・最小 OU 構成の先を、
-OU 階層・AGDLP グループ戦略・GPO・パスワードポリシー・FSMO・システム状態バックアップ／権威復元まで
-具体化した 08 AD構築演習設計を新規作成。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18
-を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
+（構文検証済みの実施キット）として準備（同キットも同種の UTF-8 BOM 欠落バグを実機で発見・修正済み）。
+windows-ad-lab.md のフォレスト昇格・最小 OU 構成の先を、OU 階層・AGDLP グループ戦略・GPO・
+パスワードポリシー・FSMO・システム状態バックアップ／権威復元まで具体化した 08 AD構築演習設計を
+新規作成。career-bridge.md の Zabbix 概念対応表を実機で検証する補完演習として 09 Zabbix 監視基盤構築
+演習設計も新規作成（設計のみ・未実施、ADR-0001 の主系統は変更しない）。server-monitor の滞留
+Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
 
 ---
 
@@ -89,6 +91,32 @@ OU 階層・AGDLP グループ戦略・GPO・パスワードポリシー・FSMO�
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-26 の更新内容（追補5：windows-ps-kit の UTF-8 BOM 欠落バグを実機で発見・修正）
+
+本人が Windows PowerShell 5.1（`powershell.exe`）で [windows-ps-kit](./docs/learning-plan/windows-ps-kit/README.md) の
+`backup-rotate/Backup-Rotate.ps1` を初回実行したところ、`ParserError: MissingCatchOrFinally`（「Try ステートメントに
+Catch ブロックまたは Finally ブロックがありません」）でスクリプトの読み込み自体に失敗する事象に遭遇した。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 症状 | Windows PowerShell 5.1 で `.ps1` を実行すると、AI 支援セッションでは一度も発生しなかったパースエラーで起動できない |
+| 原因 | `windows-ps-kit` の `.ps1` 全 4 本が UTF-8（BOM なし）で保存されていた。Windows PowerShell 5.1 は BOM なしの `.ps1` を既定でシステムの ANSI コードページとして読み込むため、日本語コメント・文字列リテラルが文字化けし、波かっこの対応をパーサーが見失っていた。PowerShell 7（Core）は BOM の有無に関わらず UTF-8 として扱うため、AI 支援セッションの Linux コンテナでは再現しなかった |
+| 対処 | `backup-rotate/Backup-Rotate.ps1`・`flagship/Invoke-EnvironmentCheck.ps1`・`flagship/New-LabUserBatch.ps1`・`register-task/Register-EnvironmentCheckTask.ps1` の全 4 本に UTF-8 BOM を付与。PowerShell 7 の構文パーサーで再検証済み。スクリプトのロジック自体（A-1〜A-4 等）は変更していない |
+| 状態 | エンコーディング修正のみ完了。Windows PowerShell 5.1 上での機能面の実行確認（`Get-Service`/`Write-EventLog`/AD 操作を含む）は本人による実施が引き続き必要 |
+
+### 2026-08-26 の更新内容（09 Zabbix 監視基盤構築演習設計：Prometheus 概念対応表の実機検証設計）
+
+[career-bridge.md §2.6](./docs/career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)が示す Prometheus → Zabbix の概念対応表は、これまで「調べて書いた対応関係」に留まっていた。国内 SIer・受託運用の求人で Zabbix の実務経験が問われることが多い（[ADR-0001](./docs/adr/0001-monitoring-stack.md)、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)）ことを踏まえ、この対応表を実際に構築・設定・障害検知まで動かして検証するための演習設計を、[05](./docs/learning-plan/05-phase1-exercise-design.md)・[06](./docs/learning-plan/06-shell-scripting-exercise-design.md)・[07](./docs/learning-plan/07-python-ops-automation-exercise-design.md)と同水準の具体性で新規作成した。
+
+| 項目 | 内容 |
+| --- | --- |
+| 新規作成 | [09 Zabbix 監視基盤構築演習設計](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)（`lab-ops01` 1 台での Zabbix 7.0 LTS + PostgreSQL + Nginx/PHP-FPM 構築、Agent2 導入、Item/Trigger/Action/Template/LLD の監視設計、障害演習、バックアップ・リストア試験まで。設計のみ・未実施） |
+| ADR との関係 | [ADR-0001](./docs/adr/0001-monitoring-stack.md)（Prometheus + Grafana 採用）を変更するものではなく、独立した補完演習として追加。本ラボの主監視スタックは変更していない |
+| 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[08](./docs/learning-plan/08-ad-exercise-design.md)と同じ位置付け）のため対象外 |
+| 技術情報の裏取り | AI 支援セッションで Zabbix 公式ドキュメントを調査。セッションのネットワーク方針により直接アクセスが遮断されたため、検索エンジンのスニペットと GitHub 公式リポジトリのタグ一覧を突き合わせて裏付けを取った（バージョン番号は GitHub タグで直接確認済み、コマンド細部は実施前に公式ドキュメントでの再確認を前提とする旨を明記） |
+| 相互参照の追加 | [学習プラン README](./docs/learning-plan/README.md)、[02 W23](./docs/learning-plan/02-curriculum.md#w23-監視バックアップ復旧演習)、[career-bridge.md §2.6](./docs/career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)から本書へのリンクを追加 |
+| 整合性チェック | markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェックをいずれも実行し、0 件を確認 |
 
 ### 2026-08-26 の更新内容（08 AD構築演習設計：OU・グループ・GPO・パスワードポリシー・ヘルスチェック・バックアップ）
 

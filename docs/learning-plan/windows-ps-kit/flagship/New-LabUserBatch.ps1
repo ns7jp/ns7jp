@@ -1,4 +1,4 @@
-# docs/learning-plan/06-shell-scripting-exercise-design.md 4.4 演習E（フラッグシップ）の実装
+﻿# docs/learning-plan/06-shell-scripting-exercise-design.md 4.4 演習E（フラッグシップ）の実装
 # 状態: 未実行。この AI 支援セッションには Active Directory 環境が無いため
 # （ActiveDirectory モジュール自体が利用できない）、一度も実行していない
 # （このキットの README「未検証の範囲」を参照）。
