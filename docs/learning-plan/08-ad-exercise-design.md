@@ -250,7 +250,7 @@ OU 階層の再編 → AGDLP グループ再設計 → オブジェクトの配�
 | --- | --- |
 | バックアップ対象 | システム状態（AD DS データベース `ntds.dit`、SYSVOL、レジストリ、ブートファイル等一式） |
 | バックアップ先 | 追加仮想ディスク（`E:`、20 GB、OS ディスクとは別） |
-| 取得方法 | `wbadmin start systemstatebackup -backupTarget:E:\ -quiet` |
+| 取得方法 | `wbadmin start systemstatebackup -backupTarget:E: -quiet` |
 | 世代管理 | ラボの規模上、明示的な世代削除は行わず `wbadmin get versions` で世代を都度確認する（本番運用では [W4 の 7 世代ルール](./02-curriculum.md#w4-ディスクファイルシステムシェルスクリプト)に相当する保持ポリシーの検討が必要になる旨を学びとして残す） |
 | 復元対象（演習用） | `TestRestore` OU 配下のテストオブジェクト（[4.10](#410-権威復元演習ou-の誤削除からの復旧)） |
 | DSRM 管理者パスワード | windows-ad-lab.md §4.3 で設定済みの値をそのまま使う（本書では新規設定しない） |
@@ -351,7 +351,7 @@ OU 階層の再編 → AGDLP グループ再設計 → オブジェクトの配�
 | 4.9-1 | 追加仮想ディスクの取り付け | 仮想化基盤で 20 GB の VHD/VHDX を作成し `ADLAB-DC1` に取り付け | ディスクマネージャーに未初期化ディスクが表示される | 表示される |
 | 4.9-2 | 初期化・フォーマット | ディスクの管理（GUI）または `Initialize-Disk -Number <N> -PartitionStyle GPT; New-Partition -DiskNumber <N> -UseMaximumSize -DriveLetter E; Format-Volume -DriveLetter E -FileSystem NTFS -NewFileSystemLabel "AD-Backup"` | `E:` ドライブが利用可能になる | `Get-Volume -DriveLetter E` が `NTFS`/`Healthy` |
 | 4.9-3 | バックアップ取得前確認 | `wbadmin get versions` | 現時点でバックアップが存在しない旨のメッセージ | 想定どおり（初回のため） |
-| 4.9-4 | システム状態バックアップ取得 | `wbadmin start systemstatebackup -backupTarget:E:\ -quiet` | `The backup operation successfully completed.` | 成功メッセージ |
+| 4.9-4 | システム状態バックアップ取得 | `wbadmin start systemstatebackup -backupTarget:E: -quiet` | `The backup operation successfully completed.` | 成功メッセージ |
 | 4.9-5 | バックアップ世代の確認 | `wbadmin get versions` | 1 件のバージョンが表示される（バージョン識別子を控える。[4.10](#410-権威復元演習ou-の誤削除からの復旧)で使用） | バージョンが表示される |
 | 4.9-6 | チェックポイント取得 | 仮想化基盤で `ad-backup-taken` という名前のチェックポイントを取得 | 一覧に表示される | 表示される |
 
@@ -364,10 +364,10 @@ OU 階層の再編 → AGDLP グループ再設計 → オブジェクトの配�
 | No | 作業内容 | コマンド / 操作 | 想定結果 | 判定 |
 | --- | --- | --- | --- | --- |
 | 4.10-1 | 復元対象のテストオブジェクトを作成 | `New-ADUser -Name "pf-restore-target" -SamAccountName "pf-restore-target" -Path "OU=TestRestore,OU=PortfolioLab,DC=ad,DC=example,DC=test" -Enabled $false` | 出力なし | `Get-ADUser "pf-restore-target"` が成功する |
-| 4.10-2 | **バックアップを取り直す**（4.10-1 の後の状態を含める） | `wbadmin start systemstatebackup -backupTarget:E:\ -quiet` | 成功メッセージ | `wbadmin get versions` に新しいバージョンが増える（このバージョン識別子を 4.10-5 で使う） |
+| 4.10-2 | **バックアップを取り直す**（4.10-1 の後の状態を含める） | `wbadmin start systemstatebackup -backupTarget:E: -quiet` | 成功メッセージ | `wbadmin get versions` に新しいバージョンが増える（このバージョン識別子を 4.10-5 で使う） |
 | 4.10-3 | 障害注入（誤削除の再現） | `Remove-ADUser "pf-restore-target" -Confirm:$false` | 出力なし | `Get-ADUser "pf-restore-target"` が `Cannot find an object with identity` で失敗する |
 | 4.10-4 | DSRM への再起動 | `bcdedit /set safeboot dsrepair` の後 `Restart-Computer` | 再起動後、DSRM セーフモードで起動する | サインイン画面が「セーフ モード」の表示になる |
-| 4.10-5 | DSRM でサインインし非権威復元を実行 | ローカル `.\Administrator`（**ドメインアカウントではなく、windows-ad-lab.md §4.3 で設定した DSRM パスワードを使うローカル管理者**）でサインイン後、`wbadmin start systemstaterecovery -version:<4.10-2で控えたバージョン> -backupTarget:E:\ -quiet` | `The recovery operation completed successfully.` | 成功メッセージ。この時点ではまだ `pf-restore-target` は他 DC のレプリケーションに巻き戻される可能性がある状態（本ラボは単一 DC のため実際には巻き戻されないが、手順は本番と同じ順序で行う） |
+| 4.10-5 | DSRM でサインインし非権威復元を実行 | ローカル `.\Administrator`（**ドメインアカウントではなく、windows-ad-lab.md §4.3 で設定した DSRM パスワードを使うローカル管理者**）でサインイン後、`wbadmin start systemstaterecovery -version:<4.10-2で控えたバージョン> -backupTarget:E: -quiet` | `The recovery operation completed successfully.` | 成功メッセージ。この時点ではまだ `pf-restore-target` は他 DC のレプリケーションに巻き戻される可能性がある状態（本ラボは単一 DC のため実際には巻き戻されないが、手順は本番と同じ順序で行う） |
 | 4.10-6 | 権威復元のマーキング（DSRM のまま） | `ntdsutil` を起動し `activate instance ntds`、続けて `authoritative restore`、続けて `restore subtree OU=TestRestore,OU=PortfolioLab,DC=ad,DC=example,DC=test`、`quit`、`quit` | 対象オブジェクトのバージョン番号が引き上げられた旨のログが出力される | エラーなく完了する |
 | 4.10-7 | 通常起動へ戻す | `bcdedit /deletevalue safeboot` の後 `Restart-Computer` | 通常のドメインサインイン画面に戻る | ドメインアカウントでサインインできる |
 | 4.10-8 | 復旧確認 | `Get-ADUser "pf-restore-target"` | オブジェクトが復活している | エラーなく取得できる |
@@ -552,7 +552,7 @@ AD はマルチマスターレプリケーション（どの DC でも書き込�
 | 種類 | 配布 | メール配布リスト専用。権限付与には使えない |
 | スコープ | ドメインローカル | 同じドメイン内のリソース（フォルダ・プリンタ等）への権限付与に使う。メンバーは他ドメインのプリンシパルも受け入れられる |
 | スコープ | グローバル | 同じドメインのユーザーをまとめる。他ドメインのドメインローカルグループへネストできる |
-| スコープ | ユニバーサル | フォレスト全体で使える。メンバー変更がフォレスト全体にレプリケートされるためグローバルカタログへの負荷が大きく、頻繁な変更には向かない |
+| スコープ | ユニバーサル | フォレスト全体で使える。メンバー一覧はグローバルカタログにも保持される。ドメイン機能レベル Windows Server 2003 以降は Linked Value Replication によりメンバーの増減が差分だけレプリケートされるが、それでもメンバー一覧自体はフォレスト全体（グローバルカタログ）へ可視化されるため、頻繁な変更が向く用途ではない |
 
 **AGDLP**（Account → Global → Domain Local → Permission）は、ユーザー（Account）をグローバルグループにまとめ、
 そのグローバルグループをドメインローカルグループへネストし、ドメインローカルグループにリソースへの権限（Permission）を
