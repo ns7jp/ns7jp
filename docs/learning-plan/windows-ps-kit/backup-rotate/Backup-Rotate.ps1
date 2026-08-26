@@ -1,4 +1,4 @@
-# docs/learning-plan/06-shell-scripting-exercise-design.md 4.3 演習A の実装
+﻿# docs/learning-plan/06-shell-scripting-exercise-design.md 4.3 演習A の実装
 # この AI 支援セッションの作業環境（Ubuntu 24.04 コンテナ、PowerShell 7.4.6）で
 # A-1〜A-4 のハンズオンどおりに実際に実行し、生成物の展開一致・世代管理・排他制御
 # （2 重起動の拒否）・異常系での transcript 終了と Mutex 解放を確認済み。

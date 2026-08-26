@@ -90,6 +90,19 @@ ADR-0001 の主系統は変更しない）。server-monitor の滞留 Dependabot
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
 
+### 2026-08-26 の更新内容（追補5：windows-ps-kit の UTF-8 BOM 欠落バグを実機で発見・修正）
+
+本人が Windows PowerShell 5.1（`powershell.exe`）で [windows-ps-kit](./docs/learning-plan/windows-ps-kit/README.md) の
+`backup-rotate/Backup-Rotate.ps1` を初回実行したところ、`ParserError: MissingCatchOrFinally`（「Try ステートメントに
+Catch ブロックまたは Finally ブロックがありません」）でスクリプトの読み込み自体に失敗する事象に遭遇した。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 症状 | Windows PowerShell 5.1 で `.ps1` を実行すると、AI 支援セッションでは一度も発生しなかったパースエラーで起動できない |
+| 原因 | `windows-ps-kit` の `.ps1` 全 4 本が UTF-8（BOM なし）で保存されていた。Windows PowerShell 5.1 は BOM なしの `.ps1` を既定でシステムの ANSI コードページとして読み込むため、日本語コメント・文字列リテラルが文字化けし、波かっこの対応をパーサーが見失っていた。PowerShell 7（Core）は BOM の有無に関わらず UTF-8 として扱うため、AI 支援セッションの Linux コンテナでは再現しなかった |
+| 対処 | `backup-rotate/Backup-Rotate.ps1`・`flagship/Invoke-EnvironmentCheck.ps1`・`flagship/New-LabUserBatch.ps1`・`register-task/Register-EnvironmentCheckTask.ps1` の全 4 本に UTF-8 BOM を付与。PowerShell 7 の構文パーサーで再検証済み。スクリプトのロジック自体（A-1〜A-4 等）は変更していない |
+| 状態 | エンコーディング修正のみ完了。Windows PowerShell 5.1 上での機能面の実行確認（`Get-Service`/`Write-EventLog`/AD 操作を含む）は本人による実施が引き続き必要 |
+
 ### 2026-08-26 の更新内容（09 Zabbix 監視基盤構築演習設計：Prometheus 概念対応表の実機検証設計）
 
 [career-bridge.md §2.6](./docs/career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)が示す Prometheus → Zabbix の概念対応表は、これまで「調べて書いた対応関係」に留まっていた。国内 SIer・受託運用の求人で Zabbix の実務経験が問われることが多い（[ADR-0001](./docs/adr/0001-monitoring-stack.md)、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)）ことを踏まえ、この対応表を実際に構築・設定・障害検知まで動かして検証するための演習設計を、[05](./docs/learning-plan/05-phase1-exercise-design.md)・[06](./docs/learning-plan/06-shell-scripting-exercise-design.md)・[07](./docs/learning-plan/07-python-ops-automation-exercise-design.md)と同水準の具体性で新規作成した。

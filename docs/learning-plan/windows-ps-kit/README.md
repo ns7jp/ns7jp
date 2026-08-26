@@ -102,3 +102,15 @@ Linux コンテナへ PowerShell 7.4.6（公式 tar.gz、GitHub Releases から�
 
 実施時に画面の表記やエラーが異なる場合は、実際の表記を優先し、差分を本人が
 [LEARNINGS.md](../../../LEARNINGS.md) へ残す。
+
+**追記（同日・本人が実機で初回実行）**: 本人が Windows PowerShell 5.1（`powershell.exe`）で
+`backup-rotate/Backup-Rotate.ps1` を実行したところ、`ParserError: MissingCatchOrFinally` /
+`式またはステートメントのトークン '}' を使用できません` で読み込み自体に失敗する事象に遭遇した。
+その調査で、キットの `.ps1` 全 4 本に**実バグ**が見つかった。ファイルが UTF-8（BOM なし）で
+保存されており、Windows PowerShell 5.1 は BOM なしの `.ps1` を既定でシステムの ANSI コード
+ページ（日本語 Windows では Shift-JIS 系）として読み込むため、日本語コメント・文字列リテラルが
+文字化けし、その結果パーサーが波かっこの対応を見失っていた（PowerShell 7／Core は BOM の有無に
+関わらず UTF-8 として扱うため、この AI 支援セッションの Linux コンテナでは再現しなかった）。
+4 本すべてに UTF-8 BOM を付与し、PowerShell 7 の構文パーサーで再検証した上で修正した
+（`New-LabUserBatch.ps1` の AD 依存部分など、Windows PowerShell 5.1 での機能面の実行確認は
+このバグ修正時点でもまだ未完了のまま残っている）。
