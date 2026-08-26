@@ -276,3 +276,4 @@ Get-ADUser -SearchBase $targetOu -Filter {Enabled -eq $true} `
 - [想定 FAQ](./faq.md)
 - [トラブルシューティングフロー](./troubleshooting.md)
 - [業務改善レポート（ピッキング工程）](../business-improvement/picking-improvement.md)
+- [06 シェルスクリプト演習設計](../learning-plan/06-shell-scripting-exercise-design.md)（本ページの PowerShell 例を基礎から積み上げる演習設計。AD 操作は同ラボ専用 OU・接頭辞規約を共有する）

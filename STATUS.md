@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-26（server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
+最終更新：2026-08-26（server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。06 シェルスクリプト演習設計を新規作成）
 
 ---
 
@@ -73,6 +73,17 @@
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-26 の更新内容（06 シェルスクリプト演習設計：Linux (Bash) / Windows (PowerShell)）
+
+[STATUS.md の「コードでは埋められない、残っている穴」の 5 番目](#コードでは埋められない残っている穴)（研修で触れている Windows Server / AD が portfolio に出ていない）に対応する土台として、[docs/learning-plan/06-shell-scripting-exercise-design.md](./docs/learning-plan/06-shell-scripting-exercise-design.md) を新規作成した。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 演習設計 | [02 フェーズ別カリキュラム](./docs/learning-plan/02-curriculum.md) W4 / W18 が見出しだけで済ませていたシェルスクリプト学習項目を、Linux（Bash）と Windows（PowerShell）の両方で基礎文法から実務水準まで具体化した。Windows 側は [01 学習環境 §6](./docs/learning-plan/01-environment.md#6-windows-server-の学習環境任意)が 1 行で済ませていた「PowerShell での一括操作」を、Windows サービス操作・イベントログ操作・ラボドメインに対する Active Directory 操作（ユーザー・グループ・OU、CSV 一括作成、棚卸し）まで含めて新規に設計した |
+| 技術検証 | Bash（`set -euo pipefail` の除外条件、`trap` の発火条件、`flock` のロック解放、パイプラインの終了ステータス伝播 等）と PowerShell（ストリームの分離、終端/非終端エラーと `try`/`catch`、`$LASTEXITCODE`、`$null` 比較の罠、`Start-Transcript` の多重起動、ネイティブコマンドの終了コード 等）で計 24 件の技術的挙動を独立に検証させ、記述へ反映した。あわせて AD 操作の正確性と、[Windows / AD 公開再現ラボ](./docs/evidence/templates/windows-ad-lab.md)・[アカウント管理サンプル](./docs/it-support/account-management.md)との整合（ラボ OU 名・接頭辞・ドメイン名の一致、参照先アンカーの実在確認）を独立レビューで確認した |
+| 整合性チェック | markdownlint（57 ファイル、0 件）、Mermaid 構文検証（54 図、全パース成功）、リポジトリ内リンク・アンカーの解決チェック（201 件、0 件切れ）をローカルで実行し、いずれも問題なし |
+| 状態 | **設計のみ・未実施**。全試験項目書の実測結果欄は空欄。Level 4（AD 操作）はさらに [Windows / AD 公開再現ラボ §4](./docs/evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)のラボドメイン構築（これ自体も `NOT RUN`）が前提条件になる |
 
 ### 2026-08-25 の更新内容（Phase 1 演習設計：空の VM からの初期構築）
 
