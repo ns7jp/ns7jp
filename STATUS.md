@@ -3,10 +3,10 @@
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
 最終更新：2026-08-26（06 シェルスクリプト演習設計を新規作成し、Bash 側（Level 1・2・演習A・演習B）を AI 支援セッションで
-実行。07 Python 運用自動化演習設計に、この作業環境での Linux 側実行記録（付録、31/49 項目）を追加。Phase 1 演習の実施
-キット（Hyper-V 向け雛形）を準備し、本人が実機（Hyper-V ホスト）で初回実行して見つけた実バグ 1 件を修正。
-server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は
-保留理由を記録）
+実行。07 Python 運用自動化演習設計に、この作業環境での Linux 側実行記録（付録、31/49 項目）を追加し、Windows 側・実機
+（lab-base01 / LAB-WINOPS1）実施用のキット（python-ops-kit、未実行の雛形）を準備。Phase 1 演習の実施キット（Hyper-V
+向け雛形）を準備し、本人が実機（Hyper-V ホスト）で初回実行して見つけた実バグ 1 件を修正。server-monitor の滞留
+Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
 
 ---
 
@@ -104,6 +104,21 @@ server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を 
 | 発見した不具合 | `routine.py` の `recent_errors()` が、エラーが1件も無い状態でも `journalctl` 自身の境界メッセージ `-- No entries --` を「1件のエラー」として誤検知する不具合を発見。`--quiet` オプションを追加して修正し、設計書のコード例にも反映した。静的レビューでは見つからない類の不具合で、実行して初めて分かった |
 | 未実施のまま残る範囲 | Windows 側（`TW-01`〜`11` 全 11 項目）はこの環境に Windows が無いため未実施。systemd timer / タスクスケジューラによる定期実行そのもの（`TRL-06`・`TBK-05`・`TCK-07`・`TCK-08`）は、unit ファイルの静的構文検証（`systemd-analyze verify`）はできたが、稼働中の systemd インスタンスが無いため実登録・実発火は未確認。lab-base01 / LAB-WINOPS1 の実機での実施は依然として今後のタスク |
 | 整合性チェック | markdownlint（58 ファイル、0 件）、Mermaid 構文検証（55 図、全パース成功）、`lychee --include-fragments`（CI と同じツール）でリポジトリ全体 0 エラーを再確認した |
+
+### 2026-08-26 の更新内容（追補3：07 Python 運用自動化演習設計の実施キットを準備）
+
+上記（追補2）で Linux 側ロジックの実行確認までは進んだが、Windows 側（`TW-` 全 11 項目）と
+lab-base01 / LAB-WINOPS1 という実機（VM）での実施はこの AI 支援セッションには行えない
+（Windows 実行環境も Hyper-V ホストへのアクセスも無い）。本人が実機で実施する際の準備物として、
+[Phase 1 演習の実施キット](./docs/learning-plan/phase1-kit/README.md)と同じ考え方で
+[docs/learning-plan/python-ops-kit/](./docs/learning-plan/python-ops-kit/README.md) を新規作成した。
+
+| 内容 | 詳細 |
+| --- | --- |
+| キットの中身 | Linux / Windows それぞれの配置用ファイル一式（`routine.py`・`backup.py`・`check.py` とその YAML 設定）、systemd unit 6 本、タスクスケジューラ登録用 PowerShell スクリプト 3 本、LAB-WINOPS1 用 Hyper-V PowerShell スクリプト 5 本（Internal スイッチ作成・VM 作成・チェックポイント操作・TLS 試験用の外部疎通の一時追加撤去）、進捗チェックリスト、証跡記入用テンプレート |
+| ファイル分割と疎通確認 | 07 章の中核コード例（可読性のため単一ファイル）を、同章の「ファイル/関数構成」表が示す `backup_common.py`/`backup_linux.py`/`backup_windows.py`/`backup.py`、`routine_common.py`/`routine_windows.py` という複数ファイル構成へキット作成時に分割した。Linux 側（`linux/` 配下）はこの分割構成のまま AI 支援セッションの作業環境（Python 3.12.3 venv）で実際に動かし、`backup.py backup`→`restore` の往復でアーカイブが元データと完全一致すること、`check.py` の6チェックが正常動作すること、`routine.py` のディスク確認・ドライラン削除が正しく動作することを確認した（lab-base01 実機ではなく、このセッション自身のコンテナ上での疎通確認。07章付録の正式な試験IDの再実施ではない） |
+| 未検証の範囲 | Windows 実行環境にも Hyper-V ホストへのアクセスにもこの AI 支援セッションからは到達できないため、`windows/` 配下と `hyperv/*.ps1` は一度も実行していない（構文は目視で確認したのみ）。Linux 側も、systemd timer による実際の定期実行登録・発火、専用アカウント（`opsadmin`/`svc-monitor`）での実行、lab-base01 実機での実施はまだ行っていない |
+| 状態 | **未実行の雛形。** 07 章の実施ステータス（Windows 側・実機・定期実行が未実施）は変わらない |
 
 ### 2026-08-26 の更新内容（Phase 1 演習：実施キットの準備）
 

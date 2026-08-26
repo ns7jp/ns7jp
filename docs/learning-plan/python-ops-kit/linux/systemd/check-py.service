@@ -1,0 +1,12 @@
+# 出典: docs/learning-plan/07-python-ops-automation-exercise-design.md 4.5 章 構築手順書 Linux L-8。
+# 配置先: /etc/systemd/system/check-py.service
+[Unit]
+Description=check.py monitoring check (oneshot)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=svc-monitor
+Group=svc-monitor
+ExecStart=/opt/monitoring/check/venv/bin/python /opt/monitoring/check/check.py --config /opt/monitoring/check/check.yaml --status-file /var/lib/monitoring/check-status.json
