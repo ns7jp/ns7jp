@@ -404,7 +404,7 @@
   - しきい値を決めた理由を説明できる
 - **つまずきやすい点**: 通知が多すぎて無視されるようになる / バックアップの取得だけで復旧を試さない / 演習を「成功させる」ことが目的化する
 
-> 本ラボで実際に導入するのは Prometheus / Grafana（[ADR-0001](../adr/0001-monitoring-stack.md)）ですが、国内 SIer・受託運用の求人で頻出する Zabbix についても、[career-bridge.md の概念対応表](../career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)を実機で検証する補完演習を [08 Zabbix 監視基盤構築演習設計](./08-zabbix-monitoring-exercise-design.md)に用意している（設計のみ・未実施）。
+> 本ラボで実際に導入するのは Prometheus / Grafana（[ADR-0001](../adr/0001-monitoring-stack.md)）ですが、国内 SIer・受託運用の求人で頻出する Zabbix についても、[career-bridge.md の概念対応表](../career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)を実機で検証する補完演習を [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md)に用意している（設計のみ・未実施）。
 
 ### W24 総仕上げとポートフォリオ化
 
