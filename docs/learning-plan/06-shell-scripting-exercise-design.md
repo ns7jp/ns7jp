@@ -260,6 +260,8 @@ flowchart LR
 [3.3 演習 A](#演習-aフラッグシップ-backup-rotatesh)の PowerShell 版を、通常のハンズオン粒度で設計します。
 
 > **実施記録（2026-08-26）**: AI 支援セッションの作業環境（Linux コンテナに PowerShell 7.4.6 を導入したもの）で A-1〜A-4 のとおりに実装・実行し、生成物を `Expand-Archive` で展開して元と一致すること（A-1）、`Keep` を超えた世代だけが削除されること（A-2）、2 重起動時に 2 つ目のインスタンスが `Mutex.WaitOne(0)` で `$false` を受け取り安全に終了すること（A-3）、`SourcePath` 不正時の異常系でも `finally` により transcript が閉じられ Mutex が解放され、直後の実行に影響しないこと（A-4）を確認しました（**本人による実機（Windows）再現ではありません**）。`Compress-Archive`／`[System.Threading.Mutex]`／`Start-Transcript` はいずれも Linux 版 PowerShell 7 でも動作するクロスプラットフォームな機能のため、この確認は成立します。実装は [windows-ps-kit](./windows-ps-kit/README.md) の `backup-rotate/Backup-Rotate.ps1` を参照してください。
+>
+> **追記（同日・本人が実機で初回実行）**: 本人が Windows PowerShell 5.1 で `Backup-Rotate.ps1` を実行したところ、`ParserError: MissingCatchOrFinally` で読み込み自体に失敗する事象に遭遇した。原因は `windows-ps-kit` の全 `.ps1` が UTF-8（BOM なし）で保存されており、Windows PowerShell 5.1 は BOM なしの `.ps1` を既定でシステムの ANSI コードページとして読み込むため日本語コメント・文字列が文字化けしていたこと（PowerShell 7／Core では BOM の有無に関わらず UTF-8 として扱うため、AI 支援セッションの Linux コンテナでは再現しなかった）。全 `.ps1` に UTF-8 BOM を付与して修正した（詳細は [windows-ps-kit README の未検証の範囲](./windows-ps-kit/README.md#未検証の範囲)）。この修正はエンコーディングの付与のみで、スクリプトのロジック自体（A-1〜A-4）は変更していない。
 
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
