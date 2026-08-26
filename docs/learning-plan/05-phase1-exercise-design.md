@@ -21,10 +21,19 @@
 > ネットワーク、スナップショット）が出てくる箇所には `[Hyper-V版]` の注記を置き、対応する手順は
 > [付録 A](#付録-a-hyper-v-版の差分) にまとめています。OS 側の操作（netplan・sshd・ufw・ユーザー作成など）は
 > 仮想化基盤に依存しないため、本文の記述をそのまま使います。
+>
+> 2026-08-26 には、設計書に書いたコマンド・設定ファイルのうち OS インストールを伴わない部分（`sshd_config.d`
+> の読み込み順序、`ufw` のコマンド出力、`logrotate` / `unattended-upgrades` の既定値など）を、この AI 支援
+> セッションの作業環境上で個別に実行して検証しました。その過程で [T-12](#5-試験項目書) の期待結果が既定の
+> `sshd` `LogLevel` では成立しないことが分かり、設計を訂正しています。**これは本演習の実施ではありません**
+> （空の VM への OS インストールを伴っていません）。検証できた範囲・できなかった範囲は
+> [付録 B](#付録-b-設計の事前検証コマンド構文と設定挙動の確認) にまとめています。
 
 最終更新: 2026-08-26
 
-> **実施ステータス: 設計のみ・未実施**（2026-08-25 時点）。試験項目書の実測結果欄はすべて空欄です。
+> **実施ステータス: 設計のみ・未実施**（2026-08-26 時点。[付録 B](#付録-b-設計の事前検証コマンド構文と設定挙動の確認)の
+> コマンド構文・設定挙動の事前検証は完了しましたが、本演習そのもの（空の VM への OS インストール）は未実施です）。
+> 試験項目書の実測結果欄はすべて空欄です。
 
 ---
 
@@ -41,6 +50,7 @@
 | [7](#7-証跡採録計画) | 証跡採録計画 |
 | [8](#8-実施ステータスと次のアクション) | 実施ステータスと次のアクション |
 | [付録 A](#付録-a-hyper-v-版の差分) | Hyper-V 版の差分（VM 作成・ネットワーク・チェックポイント） |
+| [付録 B](#付録-b-設計の事前検証コマンド構文と設定挙動の確認) | 設計の事前検証（コマンド構文・設定挙動の確認。本演習の実施ではない） |
 
 ---
 
@@ -325,11 +335,11 @@ network:
 | No | 作業内容 | コマンド | 想定結果 | 判定 |
 | --- | --- | --- | --- | --- |
 | 3-8-0 | 既存ドロップインの確認 | `ls -l /etc/ssh/sshd_config.d/` | インストーラが置いた `50-cloud-init.conf` が見える場合がある | 既存ファイルの番号を控える。本演習のファイルはそれより小さい番号（`00-`）にする |
-| 3-8-1 | ドロップイン設定ファイル作成 | `sudo vi /etc/ssh/sshd_config.d/00-lab-hardening.conf` に以下を記述<br>`PasswordAuthentication no`<br>`KbdInteractiveAuthentication no`<br>`PermitRootLogin no` | ファイルが保存される | - |
+| 3-8-1 | ドロップイン設定ファイル作成 | `sudo vi /etc/ssh/sshd_config.d/00-lab-hardening.conf` に以下を記述<br>`PasswordAuthentication no`<br>`KbdInteractiveAuthentication no`<br>`PermitRootLogin no`<br>`LogLevel VERBOSE` | ファイルが保存される | - |
 | 3-8-2 | 構文チェック | `sudo sshd -t` | 出力なし | エラーが出ない |
 | 3-8-3 | 設定反映 | `sudo systemctl reload ssh` | 出力なし | 3-8-4 で active |
 | 3-8-4 | 稼働確認 | `systemctl is-active ssh` | `active` | 一致 |
-| 3-8-5 | **実効値の確認（必須）** | `sudo sshd -T \| grep -Ei '^(passwordauthentication\|permitrootlogin\|kbdinteractiveauthentication)'` | `passwordauthentication no` / `permitrootlogin no` / `kbdinteractiveauthentication no` | 3 行とも `no`。1 つでも `yes` なら 3-8-0 に戻り、読み込み順（ファイル名の辞書順）を疑う |
+| 3-8-5 | **実効値の確認（必須）** | `sudo sshd -T \| grep -Ei '^(passwordauthentication\|permitrootlogin\|kbdinteractiveauthentication\|loglevel)'` | `passwordauthentication no` / `permitrootlogin no` / `kbdinteractiveauthentication no` / `loglevel verbose` | 4 行とも一致。1 つでも既定値に戻っていれば 3-8-0 に戻り、読み込み順（ファイル名の辞書順）を疑う |
 
 > **3-8 の注意**: インストーラで SSH 鍵を取り込まなかった場合、Subiquity は `ssh_pwauth: true` を渡し、
 > cloud-init が初回起動時に `/etc/ssh/sshd_config.d/50-cloud-init.conf` を作成して `PasswordAuthentication yes` を書く。
@@ -337,6 +347,13 @@ network:
 > 最初に得た値**を採用し、glob は辞書順に展開される。ファイル名が `50-` より後（例: `99-`）だと負けて
 > `PasswordAuthentication no` が黙って無視される（`sshd -t` は構文チェックのみでこれを検出できない）。
 > 本演習では `00-` を使って先に読ませており、3-8-5 の実効値確認で最終確認する。
+>
+> **`LogLevel VERBOSE` を加えている理由**: OpenSSH の既定 `LogLevel`（`INFO`）では、`Accepted publickey` は
+> 記録されるが、**鍵が一致しなかった試行の `Failed publickey for ...` は記録されない**（`sshd -T` で確認できる
+> 実効値は `loglevel info` のまま変えなくても構文上は正しく、`sshd -t` はこれを検出できない）。
+> [T-12](#5-試験項目書)は「サーバーログに `Failed publickey` が残る」ことを期待結果にしているため、
+> 既定の `INFO` のままだと期待結果自体が成立しない。`VERBOSE` にするとこの行が記録される
+> （[付録 B](#付録-b-設計の事前検証コマンド構文と設定挙動の確認)で実測済み）。
 
 #### 3-9 ファイアウォール
 
@@ -545,7 +562,8 @@ network:
 
 ## 8. 実施ステータスと次のアクション
 
-- **現在の状態**: 設計のみ。3〜7 章・[付録 A](#付録-a-hyper-v-版の差分)のいずれも実機で実行していない
+- **現在の状態**: 設計のみ。3〜7 章・[付録 A](#付録-a-hyper-v-版の差分)のいずれも実機（VM）で実行していない。
+  [付録 B](#付録-b-設計の事前検証コマンド構文と設定挙動の確認)のコマンド構文・設定挙動の事前検証のみ完了（2026-08-26）
 - **次のアクション**: [1 章の前提条件](#前提条件)を満たしたうえで、[4 章 構築手順書](#4-構築手順書)を上から順に実施し
   （VirtualBox 固有の操作は [付録 A](#付録-a-hyper-v-版の差分) の Hyper-V 版に読み替える）、
   [5 章 試験項目書](#5-試験項目書)の実測結果欄を埋める
@@ -668,6 +686,56 @@ Hyper-V ではスナップショットを「チェックポイント」と呼ぶ
 > （`hv_vss_daemon` 等）を導入していない場合にどちらの方式になるかは実施時に確認する。
 > 挙動を固定したい場合は、VM 設定 →「チェックポイント」で「運用チェックポイントの作成」のチェックを外し、
 > 常に標準チェックポイントを使うようにする。
+
+---
+
+## 付録 B: 設計の事前検証（コマンド構文と設定挙動の確認）
+
+> **これは本演習の実施ではない。** [8 章](#8-実施ステータスと次のアクション)が指す「実施」は、空の VM に
+> Ubuntu Server 24.04 を新規インストールしてから 4〜5 章を通すことであり、下記はそれとは別の、
+> **設計書に書いたコマンド・設定ファイルの記述が実際に想定どおり動くかを、この AI 支援セッションの
+> 作業環境（後述）上で個別に確認した記録**である。[STATUS.md](../../STATUS.md) の「コードでは埋められない、
+> 残っている穴」（空の VM への OS インストール）はこれでは埋まらない。試験項目書（[5 章](#5-試験項目書)）の
+> 実測結果欄も更新しない（対象がラボの実機ではないため）。
+>
+> **実施環境**: `uname -a` → `Linux vm 6.18.44-fc-v21 #1 SMP PREEMPT_DYNAMIC @0 x86_64 GNU/Linux`
+>（[B-2〜B-4 演習](../../README.md#手を動かして実演できること2026-08-24-に実行採録)と同じ `6.18.44-fc-v21`
+> カーネルの AI 支援セッション環境）/ `cat /etc/os-release` → `Ubuntu 24.04.4 LTS`。ただしこれは
+> **AI 支援セッションのコンテナ環境**であり、Ubuntu Server 24.04 の
+> ISO から最小構成でインストールした実機・VM ではない（多数の開発ツールが同居し、systemd が PID 1 として
+> 起動していない）。確認できたのはコマンドの構文・設定ファイルの読み込み順序・sshd や ufw といった
+> 個々のプログラムの挙動までで、VM 全体の構築・再起動を跨いだ永続性・実際のネットワークインターフェース
+> 上での通信は確認していない。
+
+### 確認できたこと
+
+| # | 確認対象 | 方法 | 結果 |
+| --- | --- | --- | --- |
+| 1 | [3-8](#3-8-パスワード認証root-ログインの禁止) の `sshd_config.d` 読み込み順序 | `00-lab-hardening.conf` と `50-cloud-init.conf`（`PasswordAuthentication yes`）を両方置き、`sshd -T -f <test-config>` で実効値を確認 | `00-` のときは `passwordauthentication no` が勝つ。ファイル名を `99-` に変えて再実行すると `passwordauthentication yes` に戻ることも確認し、設計書の警告どおりの失敗モードを再現した |
+| 2 | [T-17](#5-試験項目書) `authorized_keys` の権限（`644` は通り `666` は拒否） | 実際に `sshd` をループバック（`127.0.0.1:2222`）で起動し、鍵ペアを生成して両方の権限で接続を試行 | `644`: 接続成功（`Accepted publickey`）。`666`: 拒否され、サーバーログに設計書が引用しているとおり `Authentication refused: bad ownership or modes for file ...authorized_keys` が記録された |
+| 3 | [T-18](#5-試験項目書) クライアント秘密鍵 `644` の拒否 | 同上の環境で秘密鍵側を `644` にして接続 | クライアント側に `WARNING: UNPROTECTED PRIVATE KEY FILE!` が出て鍵が使われず、設計書の記述と一致した |
+| 4 | [T-05](#5-試験項目書) `sudo -n true` の失敗メッセージ | `sudo` グループに所属させたテストユーザーで `sudo -k && sudo -n true` を実行 | `sudo: a password is required` で終了ステータス 1。設計書の記述と一致 |
+| 5 | [3-9-1〜3-9-2](#3-9-ファイアウォール) の `ufw` コマンド出力 | `ufw allow ...` / `ufw default deny incoming` / `ufw default allow outgoing` / `ufw show added` を実行（**`ufw enable` は実行していない**。下記「確認できなかったこと」参照） | いずれも設計書に書いた出力文言（`Rules updated`、`Default incoming policy changed to 'deny'` 等）と一致した |
+| 6 | [3-10-5](#3-10-os-の最新化自動更新とログの確認) `logrotate.conf` の既定値 | `cat /etc/logrotate.conf` | `weekly` / `rotate 4` が有効、`compress` はコメントアウト。設計書の記述と一致 |
+| 7 | [3-10-2〜3-10-3](#3-10-os-の最新化自動更新とログの確認) `unattended-upgrades` の既定状態 | `dpkg -s unattended-upgrades` / `cat /etc/apt/apt.conf.d/20auto-upgrades` | 導入済み、2 行とも `"1"`。設計書の記述と一致 |
+| 8 | [3-4-4](#3-4-初期ログインとホスト名時刻設定) `locale -a` の表記 | `locale-gen ja_JP.UTF-8` 後に `locale -a` | `ja_JP.utf8`（`UTF-8` ではなく小文字・ハイフン無し）で一致。設計書の記述と一致 |
+| 9 | [3-5-4](#3-5-固定-ip-の設定) netplan YAML の構文 | Python の `yaml` モジュールで構文解析のみ確認（下記「確認できなかったこと」参照） | 構文エラー無し |
+
+### 見つかった不整合と対応（設計を訂正した）
+
+| # | 症状 | 原因 | 対応 |
+| --- | --- | --- | --- |
+| 1 | [T-12](#5-試験項目書)（誤った鍵での接続）の期待結果「サーバーログに `Failed publickey for opsadmin` が残る」が、設計書どおりの `sshd_config.d` 設定では**実際には記録されない** | OpenSSH の既定 `LogLevel`（`INFO`）では `Accepted publickey` は記録されるが `Failed publickey` は記録されない。`VERBOSE` 以上が必要（`sshd -T` の実効値確認・`sshd -t` の構文チェックのどちらも既定 `LogLevel` のままで「正しい」と判定してしまい、検出できない） | [3-8-1](#3-8-パスワード認証root-ログインの禁止) の `00-lab-hardening.conf` に `LogLevel VERBOSE` を追加し、[3-8-5](#3-8-パスワード認証root-ログインの禁止) の実効値確認にも `loglevel` を追加した。実際に `LogLevel VERBOSE` を加えた設定で `Failed publickey for ...` が記録されることを確認済み |
+
+### 確認できなかったこと（この環境の制約）
+
+| 項目 | 制約 |
+| --- | --- |
+| `hostnamectl` / `timedatectl` / `systemctl`（[3-4](#3-4-初期ログインとホスト名時刻設定)・[3-8-3〜3-8-4](#3-8-パスワード認証root-ログインの禁止)・[T-01〜T-03](#5-試験項目書)・[T-10](#5-試験項目書) 等） | このコンテナは systemd を PID 1 として起動していない（`Failed to connect to bus`）。実機 VM では systemd が起動するため対象外の制約だが、この環境では確認できない |
+| `netplan generate` / `netplan try`（[3-5](#3-5-固定-ip-の設定)） | このセッションの `netplan` CLI は Python のバージョン不整合（`_cffi_backend` が見つからない）で実行できず、YAML の構文チェックにとどめた。netplan 独自のスキーマ検証・実際のインターフェースへの適用は未確認 |
+| `ufw enable`（[3-9-3〜3-9-4](#3-9-ファイアウォール)） | この AI 支援セッション自体がこのコンテナのネットワーク接続に依存しており、`ufw enable` で実際に iptables/nftables ルールを有効化するとセッションの接続性を損なうおそれがあるため、意図的に実行しなかった。ルール追加・既定ポリシー変更（上表 #5）までは安全に確認できたが、有効化後の実際の許可・拒否挙動（`22/tcp ALLOW IN` 等）は未確認 |
+| 実際のネットワークインターフェース（`enp0s3` / `enp0s8`）上での固定 IP 適用・再起動後の永続性（[3-11](#3-11-再起動試験とスナップショット)） | コンテナのネットワークは `eth0` / `docker0` のみで、VM のような複数 NIC 構成が無い |
+| [付録 A](#付録-a-hyper-v-版の差分)（Hyper-V 版）のコマンド・GUI 手順 | この環境に Hyper-V ホストへのアクセスが無いため、付録 A 自体は今回も未検証のまま |
 
 ---
 
