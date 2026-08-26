@@ -29,8 +29,12 @@ function New-LabCheckpoint {
         [ValidateSet('key-login-ok', 'base-clean', 'before-drill')]
         [string]$Name
     )
-    Checkpoint-VM -VMName $VMName -SnapshotName $Name
-    Write-Host "チェックポイント '$Name' を作成しました（$VMName）。"
+    try {
+        Checkpoint-VM -VMName $VMName -SnapshotName $Name -ErrorAction Stop
+        Write-Host "チェックポイント '$Name' を作成しました（$VMName）。"
+    } catch {
+        Write-Error "チェックポイント '$Name' の作成に失敗しました（$VMName）: $($_.Exception.Message)"
+    }
 }
 
 function Restore-LabCheckpoint {
@@ -40,8 +44,12 @@ function Restore-LabCheckpoint {
         [ValidateSet('key-login-ok', 'base-clean', 'before-drill')]
         [string]$Name
     )
-    Get-VMSnapshot -VMName $VMName -Name $Name | Restore-VMSnapshot -Confirm:$false
-    Write-Host "チェックポイント '$Name' へ復元しました（$VMName）。VM の起動状態を確認すること。"
+    try {
+        Get-VMSnapshot -VMName $VMName -Name $Name -ErrorAction Stop | Restore-VMSnapshot -Confirm:$false -ErrorAction Stop
+        Write-Host "チェックポイント '$Name' へ復元しました（$VMName）。VM の起動状態を確認すること。"
+    } catch {
+        Write-Error "チェックポイント '$Name' への復元に失敗しました（$VMName）: $($_.Exception.Message)"
+    }
 }
 
 function Get-LabCheckpoints {
