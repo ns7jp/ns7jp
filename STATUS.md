@@ -60,7 +60,7 @@
 
 | # | 症状（事実） | 学び |
 | --- | --- | --- |
-| 5 | Terraform AWS provider の制約が複数ファイルに分散し、Dependabot PR が必ず CI を落ちた（`no available releases match the given constraints ~> 5.50, ~> 6.58`）。原因は `dependabot.yml` の `directories` の列挙漏れ | （記入）**「網羅すべき集合を手で列挙した時点で、次に漏れる」**という因果まで書けると、指摘が加点に変わります |
+| 5 | Terraform AWS provider の制約が複数ファイルに分散し、Dependabot PR が必ず CI を落ちた（`no available releases match the given constraints ~> 5.50, ~> 6.58`）。原因は `dependabot.yml` の `directories` の列挙漏れ | 網羅性を主張する行をどこかに書いた瞬間、そこはもう検証対象だと考えることを学んだ |
 | 6 | 依存更新 PR を 3 か月放置した。ADR に「見直しトリガー」を書く運用にしたのに、運用そのものが回っていなかった | （記入）設計と運用の差を実体験として語れる材料 |
 | 7 | 3 行しかない依存ファイル（`ansible/controller-requirements.txt`）を、別々の Dependabot PR 3 本がそれぞれ 1 行ずつ書き換えていた。2 本を merge した後、3 本目が `405 merge conflicts` で弾かれた。`git merge-tree` で見ると、行の前後に十分なコンテキストが無いため 3-way merge が変更点を分離できず、ファイル全体を 1 個の衝突として扱っていた（2026-08-26） | （記入）**依存関係の更新は 1 行ずつ独立ではなく、`boto3`/`botocore` のように相互にバージョン制約を持つペアがある**（`boto3==1.43.78` は `botocore>=1.43.78,<1.44.0` を要求し、片方だけ上げると単独では `ResolutionImpossible` になる）ことまで書けると、Dependabot 任せの限界を語れる材料になります |
 
