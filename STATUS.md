@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-26（server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。06 シェルスクリプト演習設計を新規作成）
+最終更新：2026-08-26（07 Python 運用自動化演習設計「定型作業・バックアップ・監視チェック」を追加。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。06 シェルスクリプト演習設計を新規作成）
 
 ---
 
@@ -73,6 +73,21 @@
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-26 の更新内容（追補：07 Python 運用自動化演習設計：定型作業・バックアップ・監視チェック）
+
+下記の 06 シェルスクリプト演習設計と同じ日に、同じ W4 / W18 の題材（定型作業・バックアップ・監視チェック）を Python で扱う
+発展演習として、[05 Phase 1 演習設計](./docs/learning-plan/05-phase1-exercise-design.md)と同じ様式で、Linux（lab-base01）と
+Windows（新規ラボホスト LAB-WINOPS1）の両方を対象にした演習設計を新規作成した。
+[docs/learning-plan/07-python-ops-automation-exercise-design.md](./docs/learning-plan/07-python-ops-automation-exercise-design.md)。
+06 とは言語（Bash/PowerShell と Python）が異なる並行案であり、どちらか一方が他方を置き換えるものではない。AD 操作は扱わないため、
+「コードでは埋められない、残っている穴」5 番目への対応は 06 側が担う。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 演習設計 | `routine.py`（Linux / Windows）・`backup.py`（tarfile / zipfile、SHA-256 manifest によるリストア検証）・`check.py`（Nagios 系終了コード規約でのしきい値監視）の 3 本を独立ツールとして設計し、systemd timer / タスクスケジューラへの定期実行登録まで、[03 構築工程の実務ドキュメント](./docs/learning-plan/03-build-process.md)の様式（パラメータシート・構築手順書・試験項目書）でコマンドと想定結果まで具体化した |
+| 精査 | 4 本のモジュール（`routine.py` Linux 実装・Windows 実装・`backup.py`・`check.py`）をそれぞれ独立した技術レビューにかけ、Python / systemd / Windows タスクスケジューラ・イベントログ API の記述、および構築手順書と試験項目書の期待結果の整合性を確認し、指摘のあった 23 件（Windows 版イベントログ抽出が「該当イベントなし」と「アクセス拒否」を区別できていなかった点、`backup.py` のリストアが manifest 検証を経ずに展開してしまっていた点、両モジュールの異常系ログ出力が未実装だった点、Ubuntu Server 24.04 の最小構成に `python3-venv` が入っておらず `venv` 作成手順が失敗する点 等）を反映した。あわせて、4 本を統合する過程で見つかった Windows 版バックアップ・監視チェックの venv 未使用（グローバル Python への `pip install`）を統一し、GitHub の見出しアンカー生成規則を実装で再現したうえで文書内リンク・外部リンクを `lychee --include-fragments`（CI と同じツール）で 0 エラーまで確認した |
+| 状態 | **設計のみ・未実施**。試験項目書（TRL-01〜TRL-12、TW-01〜TW-11、TBK-01〜TBK-12、TCK-01〜TCK-14、計 49 項目）の実測結果欄はすべて空欄 |
 
 ### 2026-08-26 の更新内容（06 シェルスクリプト演習設計：Linux (Bash) / Windows (PowerShell)）
 

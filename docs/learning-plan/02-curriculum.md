@@ -321,6 +321,10 @@
   - 同じスクリプトを 2 回実行しても問題が起きない
 - **つまずきやすい点**: 成功時しかテストしない / cron 環境ではパスや環境変数が対話シェルと異なる
 
+> [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)が同じ題材を Bash / PowerShell で扱うのに対し、
+> シェルではなく Python で書き直す発展演習を [07 Python 運用自動化演習設計](./07-python-ops-automation-exercise-design.md)に
+> 用意している（設計のみ・未実施）。
+
 ### W19 Ansible による構成管理
 
 - **学習項目**: 構成管理の目的 / インベントリ / playbook とタスク / モジュールの選び方 / 変数と `group_vars` / テンプレート / role への分割 / 冪等性 / `--check` と `--diff` / 機密情報の取り扱い / 構文チェックと Lint
