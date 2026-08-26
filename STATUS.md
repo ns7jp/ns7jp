@@ -11,7 +11,9 @@
 （付録、31/49 項目）を追加し、Windows 側・実機（lab-base01 / LAB-WINOPS1）実施用のキット（python-ops-kit、
 未実行の雛形）を準備。Phase 1 演習の実施キット（Hyper-V 向け雛形）を準備し、本人が実機（Hyper-V ホスト）で
 初回実行して見つけた実バグ 1 件を修正。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18
-を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
+を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。続けて、windows-ad-lab.md のフォレスト昇格・
+最小 OU 構成の先を、OU 階層・AGDLP グループ戦略・GPO・パスワードポリシー・FSMO・システム状態バックアップ／
+権威復元まで具体化した 08 AD構築演習設計を新規作成）
 
 ---
 
@@ -83,6 +85,25 @@
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-26 の更新内容（08 AD構築演習設計：OU・グループ・GPO・パスワードポリシー・ヘルスチェック・バックアップ）
+
+[01 学習環境 §6](./docs/learning-plan/01-environment.md#6-windows-server-の学習環境任意)が学習範囲に挙げながら、
+どの資料にも詳細設計がなかった「OU 設計」「グループポリシーの基本」を埋めるため、
+[docs/learning-plan/08-ad-exercise-design.md](./docs/learning-plan/08-ad-exercise-design.md) を新規作成した。
+[Windows / AD 公開再現ラボ](./docs/evidence/templates/windows-ad-lab.md)のフォレスト昇格・単一 OU・単一グループという
+最小構成を起点にし、そこで終わっていた設計を、実務の AD 構築案件が扱う範囲（OU 階層・AGDLP グループ戦略・
+GPO の作成とリンク・パスワードポリシー（既定 + 細分化）・FSMO 確認・`dcdiag`/`repadmin` によるヘルスチェック・
+システム状態バックアップと権威復元）まで拡張する。
+
+| 内容 | 詳細 |
+| --- | --- |
+| 演習設計 | [03 構築工程の実務ドキュメント](./docs/learning-plan/03-build-process.md)の様式（パラメータシート・構築手順書・試験項目書）で、OU 階層 6 個・AGDLP グループ 3 個・GPO 2 個（Computer/User Configuration を分離）・細分化パスワードポリシー（PSO）1 個・システム状態バックアップと `ntdsutil` による権威復元までコマンドと想定結果を具体化した。試験項目書は単体 12 件・結合 4 件・総合 2 件・異常系 8 件の計 26 件（異常系 31%） |
+| 重複の排除 | windows-ad-lab.md §4（フォレスト昇格）・§8（90 日棚卸し）・§9（DNS 障害注入・ドメイン参加）、[06 §4.4](./docs/learning-plan/06-shell-scripting-exercise-design.md#44-level-4-active-directory-運用スクリプト)（CSV 一括ユーザー作成）とは範囲を分け、本書はそれらが作った状態を前提条件として使うのみで再掲しない。役割分担は本書の付録 B に一覧化した |
+| 基礎解説 | 「基礎から」の演習にするため、フォレスト/ドメイン/サイトの階層、FSMO 5 ロール、グループの種類とスコープ・AGDLP 戦略、GPO の処理順序（LSDOU）と Computer/User Configuration の適用範囲の違い、SYSVOL/DFSR、AD ごみ箱と tombstone を付録 A にまとめた |
+| 整合性チェック | markdownlint（49 ファイル、0 件）、Mermaid 構文検証（19 図、全パース成功）、`github-slugger`（GitHub と同じ見出しアンカー生成ライブラリ）を使って自作したリポジトリ内リンク・アンカーの解決チェック（49 ファイル、0 件切れ）をローカルで実行した。このチェックで本書内の誤ったアンカー参照 3 件（`06`・windows-ad-lab.md への参照）を発見し修正した |
+| 技術精査 | AD DS / PowerShell / GPO / FSMO / DSRM 権威復元のコマンドと挙動を Microsoft Learn 等の一次情報と突き合わせる独立レビューを実施。致命的な誤りは無かったが、`wbadmin` の `-backupTarget:E:\` を公式サンプルどおりの `-backupTarget:E:`（末尾バックスラッシュなし）へ統一し、付録 A のユニバーサルグループの説明を「Linked Value Replication により差分レプリケートだが、メンバー一覧はグローバルカタログへ可視化される」という現行のドメイン機能レベルに即した記述へ訂正した |
+| 状態 | **設計のみ・未実施**。前提となる windows-ad-lab.md §4 のフォレスト昇格自体が本書執筆時点で `NOT RUN` のため、本書のいずれの手順も未着手。試験項目書 T-01〜T-26 の実測結果欄はすべて空欄 |
 
 ### 2026-08-26 の更新内容（追補3：網羅範囲の縮小 — IT サポート・Windows 補助証跡・中長期ロードマップの整理）
 
