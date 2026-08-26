@@ -18,12 +18,10 @@
 | 検証 | 記録先 | 状態 |
 | --- | --- | --- |
 | Windows Server 評価版 / AD DS 公開再現ラボ | `YYYY-MM-DD-windows-ad-lab.md` | `NOT RUN` |
-| Windows テスト VM / winget 端末セットアップ | `YYYY-MM-DD-windows-winget-provisioning.md` | `NOT RUN` |
 
 ## テンプレート
 
 - [Windows / AD 公開再現ラボ](templates/windows-ad-lab.md)
-- [Windows / winget 端末セットアップ](templates/windows-winget-provisioning.md)
 
 テンプレートや計画の存在を実行実績として扱いません。公開前にドメイン名、ユーザー名、
 IP、ライセンス情報、研修先情報、個人情報をマスクし、実際のコマンドと出力を確認します。

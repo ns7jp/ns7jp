@@ -10,7 +10,7 @@
 
 ## 1. 背景・課題
 
-server-monitor には「障害対応の手順」（[07](../roadmap/07-incident-response.md)）はあるが、
+server-monitor には「障害対応の手順」（[今後の興味リスト](../roadmap/README.md)）はあるが、
 「平常時の設定変更をどう記録し、戻せるようにするか」が最初は決まっていなかった。
 
 | 現状の課題 | リスク |
@@ -53,7 +53,7 @@ server-monitor には「障害対応の手順」（[07](../roadmap/07-incident-r
 ## 5. 関連設計書・ADR
 
 - [04 SLO 設計](./04-slo-design.md) — エラーバジェット消費で変更を控える判断につなげる案
-- [07 インシデント対応](../roadmap/07-incident-response.md) — 恒久対策の実施先
+- [今後の興味リスト（インシデント対応プロセス）](../roadmap/README.md) — 恒久対策の実施先
 - [ADR-0004 Ansible 採用](../adr/0004-ansible-for-config.md)
 - [ADR-0005 Terraform 採用](../adr/0005-terraform-for-iac.md)
 

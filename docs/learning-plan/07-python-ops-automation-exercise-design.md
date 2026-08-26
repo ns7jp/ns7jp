@@ -82,8 +82,7 @@ Linux / Windows で呼び出し方が変わらない標準・準標準ライブ�
 ### 前提条件
 
 - [05 Phase 1 演習設計](./05-phase1-exercise-design.md)を完了した `lab-base01`、または同等の Ubuntu Server 24.04 LTS が使えること
-- 新規に、使い捨ての評価版 Windows Server 2022 VM を 1 台用意できること。[Windows / winget 端末セットアップ テンプレート](../evidence/templates/windows-winget-provisioning.md)・
-  [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)と同じ「使い捨て評価版・業務端末や研修端末を対象にしない」原則に従う
+- 新規に、使い捨ての評価版 Windows Server 2022 VM を 1 台用意できること。[Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)と同じ「使い捨て評価版・業務端末や研修端末を対象にしない」原則に従う
 - 両ホストに Python 3.12 以降を導入できること（Linux は `apt`、Windows は公式インストーラ）。`backup.py` は `tarfile.extractall` の
   `filter` 引数（Python 3.12 で追加）を使うため、3.12 未満では動作しない
 - [01 学習環境](./01-environment.md)のホストオンリーネットワーク運用に加え、Windows ラボは Linux ラボと**同一セグメントに置かない**。
@@ -1651,7 +1650,7 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
 | Windows 側の作業ログ | [Windows / AD 公開再現ラボ §6](../evidence/templates/windows-ad-lab.md#6-raw-transcript-と公開用コピー)と同じく `Start-Transcript` で raw transcript をリポジトリ外（`Documents\portfolio-evidence-private`）へ保存し、マスク済みコピーだけを本リポジトリの `docs/evidence/` へ置く |
 | ファイル名 | `<日付>_<対象ホスト>_<ツール名>.log`（例: `20260901_lab-base01_routine-build.log`、`20260901_LAB-WINOPS1_backup-build.log`） |
 | 試験証跡の命名 | [5 章 試験項目書](#5-試験項目書)のエビデンス列は [03 §4 のエビデンスの要件](./03-build-process.md#エビデンスの要件)に従い `<試験No>_<対象>_<日付>.<拡張子>` で統一する（例: `TRL-01_lab-base01_20260901.log`、`TCK-05_LAB-WINOPS1_20260901.log`） |
-| マスク | 保存前にパスワード・鍵の中身・実 IP（ラボ内 IP は学習目的のため公開可）・Windows ホスト側の個人パスを確認する（[Windows / winget テンプレート §2](../evidence/templates/windows-winget-provisioning.md#2-安全条件)と同じ基準） |
+| マスク | 保存前にパスワード・鍵の中身・実 IP（ラボ内 IP は学習目的のため公開可）・Windows ホスト側の個人パスを確認する（[Windows / AD 公開再現ラボ §3](../evidence/templates/windows-ad-lab.md#3-公開前の安全条件)と同じ基準） |
 | 保管先・索引 | Linux 側は [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)から辿れるようにする。Windows 側は本リポジトリの `docs/evidence/` にテンプレートを新設して索引する。着手時に[証跡採録チェックリスト](../evidence-capture-checklist.md)の該当箇所へ採録予定として追記する |
 | 反映先 | 実施後、本ドキュメントの[試験項目書](#5-試験項目書)の実測結果欄を埋めるか、実施記録を指す別ファイルへのリンクをここに追加する |
 
@@ -1770,7 +1769,6 @@ systemd unit ファイル（`routine-dryrun.service`/`.timer`、`backup-config.s
 - [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)
 - [07 Python 運用自動化演習 実施キット（Windows / Hyper-V 向け、未使用の雛形）](./python-ops-kit/README.md)
 - [Windows / AD 公開再現ラボ テンプレート](../evidence/templates/windows-ad-lab.md)
-- [Windows / winget 端末セットアップ テンプレート](../evidence/templates/windows-winget-provisioning.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [志望トラックと証跡の対応](../target-roles.md)
 - [職務経歴書・スキルシート](../resume.md)

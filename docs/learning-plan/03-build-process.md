@@ -346,5 +346,5 @@ Phase 3 で作ったラボを「案件」に見立て、次を作成します。
 - [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)（同上、シェルスクリプト演習向け）
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [変更管理の設計](../server-monitor-improvements/11-change-management.md)
-- [インシデント対応の設計](../roadmap/07-incident-response.md)
+- [今後の興味リスト（インシデント対応）](../roadmap/README.md)
 - [ビジュアルショーケース](../showcase/README.md)

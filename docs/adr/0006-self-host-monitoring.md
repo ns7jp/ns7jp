@@ -18,7 +18,7 @@
 
 ## 2. Decision
 
-**監視スタックを自前で運用する**（EC2 上に Prometheus / Grafana / Loki / Alertmanager をホスト。Tempo は設計のみで未着手 → [06 分散トレーシング](../roadmap/06-observability-traces.md)）。SaaS を否定するわけではなく、案件で SaaS が要件ならそちらを使う。
+**監視スタックを自前で運用する**（EC2 上に Prometheus / Grafana / Loki / Alertmanager をホスト。Tempo は設計のみで未着手 → [今後の興味リスト（分散トレーシング）](../roadmap/README.md)）。SaaS を否定するわけではなく、案件で SaaS が要件ならそちらを使う。
 
 ---
 
@@ -36,7 +36,7 @@
 
 - 自分でストレージ設計やアラート設計を考える機会が増える一方、アップデートやバックアップなど運用の負荷も自分で負う
 - APM（アプリ内部の自動計装）のような SaaS 標準機能は無く、必要なら OpenTelemetry で自分で実装する
-- 「監視そのものが落ちたら気づけるか」という課題が残るため、[メタモニタリング](../roadmap/12-meta-monitoring.md)で外部からのヘルスチェックを検討している
+- 「監視そのものが落ちたら気づけるか」という課題が残るため、[今後の興味リスト（メタモニタリング）](../roadmap/README.md)で外部からのヘルスチェックを検討している
 
 ---
 

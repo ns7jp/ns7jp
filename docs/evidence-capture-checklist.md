@@ -67,9 +67,9 @@
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
 | ✅ 3 | ~~`docker compose up` 後の **Grafana 実画面**（CPU/メモリ/HTTP/アラート状態）~~ **2026-08-18 採録完了** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) | ローカル Linux + Docker | 0 円 | [アーキテクチャ図](./architecture-diagram.md) |
-| 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [07 インシデント対応](roadmap/07-incident-response.md) |
+| 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [今後の興味リスト](roadmap/README.md) |
 | ✅ 5 | ~~Loki + Grafana Alloy の **ログ検索実画面**（クエリ + 結果）~~ **2026-08-18 採録完了**（上記記録に含む） | 同上 | 0 円 | [01 ログ集約](./server-monitor-improvements/01-loki-log-aggregation.md) |
-| ✅ 6 | ~~**ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる）~~ **2026-08-21 実質完了** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)（`ss` / `docker port` / `docker inspect` で切り分け、`internal: true` ネットワークがホストへのポート公開を無効化する不具合を発見・原因特定。当初想定していたホスト公開ポート経由ではなく、コンテナ IP を直接指定する方法・`docker compose exec` 経由で、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてを観察できた） | 同上 | 0 円 | [15 ネットワーク運用](roadmap/15-network-operations.md) / [橋渡し](./career-bridge.md) |
+| ✅ 6 | ~~**ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる）~~ **2026-08-21 実質完了** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)（`ss` / `docker port` / `docker inspect` で切り分け、`internal: true` ネットワークがホストへのポート公開を無効化する不具合を発見・原因特定。当初想定していたホスト公開ポート経由ではなく、コンテナ IP を直接指定する方法・`docker compose exec` 経由で、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてを観察できた） | 同上 | 0 円 | [今後の興味リスト](roadmap/README.md) / [橋渡し](./career-bridge.md) |
 | ✅ 7 | ~~**D-1 復旧演習の実測**（検知 → 復旧の各ステップを実時間で計測）~~ **2026-08-19 採録完了（PASS、RTO 13秒）** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) | 同上 | 0 円 | [05 バックアップ・復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 
 > **優先 3 は 2026-08-18 に採録完了しました。** あわせて `server-monitor/docs/screenshot.png` も
@@ -81,11 +81,10 @@
 
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
-| △ 8a | **Windows / AD 公開用再現ラボ**（評価版 AD DS でユーザー作成〜棚卸し、DNS 障害復旧） | 自宅 PC + Hyper-V / VirtualBox（評価版） | 0 円 | [アカウント管理](./it-support/account-management.md) |
-| 8b | **Windows / winget 端末セットアップ**（導入・再実行・rollback） | 使い捨て Windows test VM | 0 円 | [アカウント管理](./it-support/account-management.md) |
+| △ 8a | **Windows / AD 公開用再現ラボ**（評価版 AD DS でユーザー作成〜棚卸し、DNS 障害復旧） | 自宅 PC + Hyper-V / VirtualBox（評価版） | 0 円 | [Windows / AD 公開再現ラボ](./evidence/templates/windows-ad-lab.md) |
 | 9 | `terraform apply` → `destroy` と **Cost Explorer の実費** | 承認済み AWS アカウント | 数十〜数百円 | [03 AWS + Terraform](./server-monitor-improvements/03-terraform-aws.md) |
 
-> 優先 8a は**部分実施**です。トライアル就業先の研修で AD DS を構築し、クライアントの DNS 設定が原因だったドメイン参加障害を切り分けた経験は [LEARNINGS.md](../LEARNINGS.md) に記録しました。ただし、研修先の情報を含まない PowerShell のユーザー作成・棚卸し・domain 参加復旧ログは未採録です。公開実績にする場合は、隔離した自宅ラボ等で再現して機密情報を含まない一次出力を残します。優先 8b の winget 実行ログも未採録で、AD ラボとは別の端末セットアップ証跡として扱います。
+> 優先 8a は**部分実施**です。トライアル就業先の研修で AD DS を構築し、クライアントの DNS 設定が原因だったドメイン参加障害を切り分けた経験は [LEARNINGS.md](../LEARNINGS.md) に記録しました。ただし、研修先の情報を含まない PowerShell のユーザー作成・棚卸し・domain 参加復旧ログは未採録です。公開実績にする場合は、隔離した自宅ラボ等で再現して機密情報を含まない一次出力を残します。
 > 旧優先 9 の AWS 検証は、現在は冒頭表の順位 6 です。独立対象ホスト、再起動・72時間継続、
 > Slack、Windows / AD、winget、D-2 の順に採録した後、承認済みアカウントで 1 日に
 > plan → apply → destroy まで実施します。数百円の実費と「即 destroy した」記録自体が、
@@ -206,19 +205,6 @@
    domain 参加 → 再起動 → secure channel / domain user sign-in まで採録する。
 6. raw transcript は Git 管理外へ置き、マスク済み公開コピーの SHA-256 と再確認結果を残す。
 
-### 8b. Windows / winget 端末セットアップ（未実施）
-
-> winget は AD / DNS とは別の端末キッティング証跡です。実行時は
-> [winget 端末セットアップの記録テンプレート](./evidence/templates/windows-winget-provisioning.md)を
-> `docs/evidence/YYYY-MM-DD-windows-winget-provisioning.md` へコピーします。
-
-1. 使い捨て Windows test VM の checkpoint と実行前 package 一覧を保存する。
-2. package ID、source、license、再起動要否を確認し、承認済み無償 package だけを対象にする。
-3. package ごとの install 出力・exit code、導入後確認、2 回目実行を採録する。
-4. 実行前から存在した package は残し、新規導入分だけを uninstall した後、checkpoint 復元で
-   実行前状態へ戻ったことを確認する。
-5. raw transcript は Git 管理外へ置き、公開用コピーのマスクと SHA-256 を記録する。
-
 ### 9. AWS apply / destroy と実費
 
 1. **短時間で破棄する前提**で `terraform plan` → `apply` を実行する。
@@ -248,9 +234,8 @@
 
 - **ネットワーク切り分け（優先 6）**は、第一志望（Linux サーバー構築・運用）で疎通確認と障害一次対応を行うための中核スキルです。
 - **Windows / AD（旧優先 8a）**は IT サポート / 社内 SE 補助へ応募する場合の補助証跡です。研修中の AD DS 構築・名前解決の切り分けは記録済みですが、公開可能な一次出力はまだ不足しています。
-- **winget（旧優先 8b）**は端末セットアップの補助証跡です。AD / DNS の達成条件には混ぜず、別記録で導入・再実行・rollback を判定します。
 
-> **進め方の判断**: Linux サーバー構築・運用を主軸とし、まず独立対象ホストの新規構築・受け入れ・再起動後確認を採録します。Windows / AD と winget は研修内容を外部公開せず、隔離した自宅ラボ等で安全に再現できる範囲を補助証跡にします。
+> **進め方の判断**: Linux サーバー構築・運用を主軸とし、まず独立対象ホストの新規構築・受け入れ・再起動後確認を採録します。Windows / AD は研修内容を外部公開せず、隔離した自宅ラボ等で安全に再現できる範囲を補助証跡にします。
 
 ---
 
