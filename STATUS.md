@@ -11,7 +11,9 @@
 （付録、31/49 項目）を追加し、Windows 側・実機（lab-base01 / LAB-WINOPS1）実施用のキット（python-ops-kit、
 未実行の雛形）を準備。Phase 1 演習の実施キット（Hyper-V 向け雛形）を準備し、本人が実機（Hyper-V ホスト）で
 初回実行して見つけた実バグ 1 件を修正。server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18
-を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
+を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録。さらに、career-bridge.md の Zabbix 概念対応表を
+実機で検証する補完演習として 08 Zabbix 監視基盤構築演習設計を新規作成（設計のみ・未実施、ADR-0001 の主系統
+は変更しない）
 
 ---
 
@@ -83,6 +85,19 @@
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-26 の更新内容（追補4：08 Zabbix 監視基盤構築演習設計の新規作成）
+
+[career-bridge.md §2.6](./docs/career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)が示す Prometheus → Zabbix の概念対応表は、これまで「調べて書いた対応関係」に留まっていた。国内 SIer・受託運用の求人で Zabbix の実務経験が問われることが多い（[ADR-0001](./docs/adr/0001-monitoring-stack.md)、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)）ことを踏まえ、この対応表を実際に構築・設定・障害検知まで動かして検証するための演習設計を、[05](./docs/learning-plan/05-phase1-exercise-design.md)・[06](./docs/learning-plan/06-shell-scripting-exercise-design.md)・[07](./docs/learning-plan/07-python-ops-automation-exercise-design.md)と同水準の具体性で新規作成した。
+
+| 項目 | 内容 |
+| --- | --- |
+| 新規作成 | [08 Zabbix 監視基盤構築演習設計](./docs/learning-plan/08-zabbix-monitoring-exercise-design.md)（`lab-ops01` 1 台での Zabbix 7.0 LTS + PostgreSQL + Nginx/PHP-FPM 構築、Agent2 導入、Item/Trigger/Action/Template/LLD の監視設計、障害演習、バックアップ・リストア試験まで。設計のみ・未実施） |
+| ADR との関係 | [ADR-0001](./docs/adr/0001-monitoring-stack.md)（Prometheus + Grafana 採用）を変更するものではなく、独立した補完演習として追加。本ラボの主監視スタックは変更していない |
+| 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[07](./docs/learning-plan/07-python-ops-automation-exercise-design.md)と同じ位置付け）のため対象外 |
+| 技術情報の裏取り | AI 支援セッションで Zabbix 公式ドキュメントを調査。セッションのネットワーク方針により直接アクセスが遮断されたため、検索エンジンのスニペットと GitHub 公式リポジトリのタグ一覧を突き合わせて裏付けを取った（バージョン番号は GitHub タグで直接確認済み、コマンド細部は実施前に公式ドキュメントでの再確認を前提とする旨を明記） |
+| 相互参照の追加 | [学習プラン README](./docs/learning-plan/README.md)、[02 W23](./docs/learning-plan/02-curriculum.md#w23-監視バックアップ復旧演習)、[career-bridge.md §2.6](./docs/career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)から本書へのリンクを追加 |
+| 整合性チェック | markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェックをいずれも実行し、0 件を確認 |
 
 ### 2026-08-26 の更新内容（追補3：網羅範囲の縮小 — IT サポート・Windows 補助証跡・中長期ロードマップの整理）
 
