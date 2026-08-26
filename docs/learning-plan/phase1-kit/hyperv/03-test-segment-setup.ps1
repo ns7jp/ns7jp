@@ -17,25 +17,33 @@ param(
     [string]$VMName = 'lab-base01'
 )
 
+$ErrorActionPreference = 'Stop'
+
 $SwitchName = 'lab-test-segment'
 $HostIp = '192.168.57.1'
 $PrefixLength = 24
 
-if (Get-VMSwitch -Name $SwitchName -ErrorAction SilentlyContinue) {
-    Write-Host "スイッチ '$SwitchName' は既に存在します。作成をスキップします。"
-} else {
-    New-VMSwitch -SwitchName $SwitchName -SwitchType Internal
-    Write-Host "スイッチ '$SwitchName'（Internal）を作成しました。"
-}
+try {
+    if (Get-VMSwitch -Name $SwitchName -ErrorAction SilentlyContinue) {
+        Write-Host "スイッチ '$SwitchName' は既に存在します。作成をスキップします。"
+    } else {
+        New-VMSwitch -SwitchName $SwitchName -SwitchType Internal -ErrorAction Stop | Out-Null
+        Write-Host "スイッチ '$SwitchName'（Internal）を作成しました。"
+    }
 
-$adapterAlias = "vEthernet ($SwitchName)"
-if (-not (Get-NetIPAddress -InterfaceAlias $adapterAlias -IPAddress $HostIp -ErrorAction SilentlyContinue)) {
-    New-NetIPAddress -InterfaceAlias $adapterAlias -IPAddress $HostIp -PrefixLength $PrefixLength
-    Write-Host "$adapterAlias に $HostIp/$PrefixLength を設定しました。"
-}
+    $adapterAlias = "vEthernet ($SwitchName)"
+    if (-not (Get-NetIPAddress -InterfaceAlias $adapterAlias -IPAddress $HostIp -ErrorAction SilentlyContinue)) {
+        New-NetIPAddress -InterfaceAlias $adapterAlias -IPAddress $HostIp -PrefixLength $PrefixLength -ErrorAction Stop | Out-Null
+        Write-Host "$adapterAlias に $HostIp/$PrefixLength を設定しました。"
+    }
 
-Add-VMNetworkAdapter -VMName $VMName -SwitchName $SwitchName
-Write-Host "VM '$VMName' に検証用 NIC を追加しました。"
+    Add-VMNetworkAdapter -VMName $VMName -SwitchName $SwitchName -ErrorAction Stop
+    Write-Host "VM '$VMName' に検証用 NIC を追加しました。"
+} catch {
+    $ErrorActionPreference = 'Continue'
+    Write-Error "失敗しました: $($_.Exception.Message)"
+    exit 1
+}
 
 Write-Host ''
 Write-Host '次の手順:'

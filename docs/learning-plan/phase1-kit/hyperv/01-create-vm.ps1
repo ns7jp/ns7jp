@@ -28,6 +28,8 @@ param(
     [string]$VmRoot = 'D:\HyperV\lab-base01'
 )
 
+$ErrorActionPreference = 'Stop'
+
 $VmName = 'lab-base01'
 $InternalSwitch = 'lab-internal'
 $DefaultSwitch = 'Default Switch'
@@ -40,28 +42,35 @@ if (Get-VM -Name $VmName -ErrorAction SilentlyContinue) {
     throw "VM '$VmName' は既に存在します。作り直す場合は先に Remove-VM -Name $VmName -Force を実行してください（VHDX の削除は別途）。"
 }
 
-New-Item -ItemType Directory -Path $VmRoot -Force | Out-Null
+try {
+    New-Item -ItemType Directory -Path $VmRoot -Force | Out-Null
 
-New-VM -Name $VmName -Generation 2 -MemoryStartupBytes 2GB `
-    -NewVHDPath "$VmRoot\$VmName.vhdx" -NewVHDSizeBytes 20GB
+    New-VM -Name $VmName -Generation 2 -MemoryStartupBytes 2GB `
+        -NewVHDPath "$VmRoot\$VmName.vhdx" -NewVHDSizeBytes 20GB | Out-Null
 
-Set-VMProcessor $VmName -Count 2
-Set-VMMemory $VmName -DynamicMemoryEnabled $false
-Set-VMFirmware $VmName -SecureBootTemplate MicrosoftUEFICertificateAuthority
-Add-VMDvdDrive $VmName -Path $IsoPath
+    Set-VMProcessor $VmName -Count 2
+    Set-VMMemory $VmName -DynamicMemoryEnabled $false
+    Set-VMFirmware $VmName -SecureBootTemplate MicrosoftUEFICertificateAuthority
+    Add-VMDvdDrive $VmName -Path $IsoPath
 
-# NIC1: NAT 相当（Default Switch。Windows Server の Hyper-V には無いことが多い。
-# [付録 A-2] のとおり、その場合は External スイッチ等の代替が必要）
-if (Get-VMSwitch -Name $DefaultSwitch -ErrorAction SilentlyContinue) {
-    Get-VMNetworkAdapter -VMName $VmName | Connect-VMNetworkAdapter -SwitchName $DefaultSwitch
-    Write-Host "NIC1 を '$DefaultSwitch' に接続しました。"
-} else {
-    Write-Warning "'$DefaultSwitch' が見つかりません。付録 A-2 の代替（External スイッチ等）を自分で用意し、Connect-VMNetworkAdapter で割り当ててください。"
+    # NIC1: NAT 相当（Default Switch。Windows Server の Hyper-V には無いことが多い。
+    # [付録 A-2] のとおり、その場合は External スイッチ等の代替が必要）
+    if (Get-VMSwitch -Name $DefaultSwitch -ErrorAction SilentlyContinue) {
+        Get-VMNetworkAdapter -VMName $VmName | Connect-VMNetworkAdapter -SwitchName $DefaultSwitch
+        Write-Host "NIC1 を '$DefaultSwitch' に接続しました。"
+    } else {
+        Write-Warning "'$DefaultSwitch' が見つかりません。付録 A-2 の代替（External スイッチ等）を自分で用意し、Connect-VMNetworkAdapter で割り当ててください。"
+    }
+
+    # NIC2: ホストオンリー相当
+    Add-VMNetworkAdapter -VMName $VmName -SwitchName $InternalSwitch
+    Write-Host "NIC2 を '$InternalSwitch' に接続しました。"
+} catch {
+    $ErrorActionPreference = 'Continue'
+    Write-Error "VM 作成に失敗しました: $($_.Exception.Message)"
+    Write-Error "途中まで作成された可能性があります。Get-VM -Name $VmName で状態を確認し、必要なら Remove-VM -Name $VmName -Force で削除してからやり直してください。"
+    exit 1
 }
-
-# NIC2: ホストオンリー相当
-Add-VMNetworkAdapter -VMName $VmName -SwitchName $InternalSwitch
-Write-Host "NIC2 を '$InternalSwitch' に接続しました。"
 
 Write-Host ''
 Write-Host "VM '$VmName' を作成しました。次の手順:"
