@@ -490,6 +490,13 @@ OU 階層の再編 → AGDLP グループ再設計 → オブジェクトの配�
 - 前提となる [windows-ad-lab.md §4 のフォレスト昇格](../evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)自体が
   本書執筆時点で `NOT RUN` のため、本書のいずれの手順も未着手である。
 - [5 章の試験項目書](#5-試験項目書) T-01〜T-26 の実測結果・判定・エビデンス・実施日はすべて空欄。
+- 同日、実施を楽にするための実施キット（4 章をそのままスクリプト化した `.ps1` 全 11 本、Hyper-V
+  チェックポイント関数、進捗チェックリスト、証跡記入用テンプレート）を [ad-exercise-kit/](./ad-exercise-kit/README.md)
+  に用意した。全スクリプトを PowerShell 7 の構文パーサーで検証済みで、その過程で `wbadmin` への
+  ネイティブコマンド引数展開に関する不具合を 1 件発見・修正した（詳細は
+  [ad-exercise-kit/README.md の「発見した不具合」](./ad-exercise-kit/README.md#発見した不具合構文検証の過程で)）。
+  これも AI 支援セッションでの作成・構文検証のみで実行は未実施であり、上記の実施ステータスを
+  変えるものではない。
 - 次のアクションは次の順で進める。
 
 | # | アクション | 前提 |
@@ -626,6 +633,7 @@ Windows / AD 関連の資料が複数に分かれているため、「何を確�
 - [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)
 - [07 Python 運用自動化演習設計](./07-python-ops-automation-exercise-design.md)
 - [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)
+- [08 AD構築演習 実施キット](./ad-exercise-kit/README.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [志望トラックと証跡の対応](../target-roles.md)
 - [ポートフォリオ進捗 STATUS](../../STATUS.md)
