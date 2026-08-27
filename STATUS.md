@@ -96,6 +96,23 @@ server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を 
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
 
+### 2026-08-27 の更新内容（10 Windows Server 基礎構築演習設計：空の VM からの初期構築）
+
+[windows-ad-lab.md §4.1](./docs/evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)や
+[07 §3.1](./docs/learning-plan/07-python-ops-automation-exercise-design.md#31-lab-winops1新規ホストの基本情報)が
+「hostname 設定済み・ネットワーク設定済み」を前提条件の箇条書きで済ませ、OS の初期構築そのものを一度も
+詳細設計していなかった差分を埋めるため、[10 Windows Server 基礎構築演習設計](./docs/learning-plan/10-windows-server-exercise-design.md)を新規作成した。
+
+| 項目 | 内容 |
+| --- | --- |
+| 新規作成 | [10 Windows Server 基礎構築演習設計](./docs/learning-plan/10-windows-server-exercise-design.md)（`LAB-WINBASE01` 1 台への Windows Server 2022 評価版導入、ホスト名・固定 IP・ローカル管理者・組み込みアカウント整理、WinRM/RDP のスコープ限定有効化、ファイアウォール確認、Windows Update の一時的な外部疎通運用、ロール・機能ベースライン記録、サービス／イベントログとタスクスケジューラの基礎操作、再起動試験・チェックポイントまで。試験項目書 T-01〜T-26。設計のみ・未実施） |
+| 位置付け | [05 Phase 1 演習設計](./docs/learning-plan/05-phase1-exercise-design.md)が Linux の `lab-base01` に対して行った「空の VM からの初期構築」を、Windows Server の `LAB-WINBASE01` に対して同じ密度で行うもの。`ADLAB-DC1`（windows-ad-lab.md）・`LAB-WINOPS1`（07）とは別の独立ホストであり、両者を作り直すものではない |
+| 既存資料との関係 | AD DS 昇格・ドメイン参加は windows-ad-lab.md、OU・GPO・PSO・FSMO・システム状態バックアップは 08、PowerShell 言語基礎・サービス／イベントログ・AD 操作の実務スクリプト化は 06、Python 運用自動化は 07 が扱う範囲とし、重複させていない（役割分担は本書の付録 B に一覧化） |
+| 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[09](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)と同じ位置付け）のため対象外 |
+| 技術情報の裏取り | この AI 支援セッションには Windows・Hyper-V・PowerShell の実行環境が無く、コマンド構文・レジストリキー・既定値は一つも実行して確認していない。Microsoft の公開ドキュメントと既存の Windows 系資料（windows-ad-lab.md・06・07・08）の記述との整合を根拠に記述し、[09](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)と同じく「調べた範囲での判断」であることを明記した |
+| 相互参照の追加 | [学習プラン README](./docs/learning-plan/README.md)、[01 学習環境 §6](./docs/learning-plan/01-environment.md#6-windows-server-の学習環境任意)から本書へのリンクを追加 |
+| 整合性チェック | markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェックをいずれも実行し、0 件を確認 |
+
 ### 2026-08-26 の更新内容（08 AD構築演習 実施キットを準備）
 
 [08 AD構築演習設計](./docs/learning-plan/08-ad-exercise-design.md)の 4 章（構築手順書）を、実施時の

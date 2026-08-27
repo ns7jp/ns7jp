@@ -24,6 +24,7 @@
 | [07 Python 運用自動化演習設計](./07-python-ops-automation-exercise-design.md) | 06 と同じ Phase 5（W18）の題材（定型作業・バックアップ・監視チェック）を、シェルではなく Python で Linux / Windows 両対応にする演習設計。**設計のみ・未実施** |
 | [08 AD構築演習設計](./08-ad-exercise-design.md) | [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)のフォレスト昇格・最小 OU 構成の先を、OU 階層・AGDLP グループ戦略・GPO・パスワードポリシー（既定 + 細分化）・FSMO 確認・ヘルスチェック・システム状態バックアップ／権威復元まで具体化した演習設計。実施キット（[ad-exercise-kit/](./ad-exercise-kit/README.md)、構文検証済みの `.ps1` 全 11 本）あり。**設計のみ・未実施** |
 | [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md) | Phase 6（W23）の監視ハンズオンを、本ラボの主系統である Prometheus/Grafana とは別に Zabbix で具体化した補完演習。[career-bridge.md の概念対応表](../career-bridge.md#26-監視ツールの転用可能性prometheus--zabbix--jp1)を実機で検証する狙い。**設計のみ・未実施** |
+| [10 Windows Server 基礎構築演習設計](./10-windows-server-exercise-design.md) | [windows-ad-lab.md](../evidence/templates/windows-ad-lab.md)・[07](./07-python-ops-automation-exercise-design.md)がいずれも「OS は初期構築済み」を前提条件の箇条書きで済ませていた差分を埋め、空の VM への Windows Server 導入からホスト名・固定 IP・ローカル管理者・WinRM/RDP・ファイアウォール・Windows Update・サービス／タスクの基礎までを、05 と同じ密度で具体化した演習設計（`LAB-WINBASE01`）。**設計のみ・未実施** |
 
 ---
 
@@ -405,6 +406,7 @@ gantt
 - [07 Python 運用自動化演習設計](./07-python-ops-automation-exercise-design.md)
 - [08 AD構築演習設計](./08-ad-exercise-design.md)
 - [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md)
+- [10 Windows Server 基礎構築演習設計](./10-windows-server-exercise-design.md)
 - [資格取得ロードマップ](../certifications/roadmap.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [志望トラックと証跡の対応](../target-roles.md)
