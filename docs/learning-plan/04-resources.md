@@ -98,10 +98,12 @@
 | 公式 | [Prometheus](https://prometheus.io/docs/) / [Grafana](https://grafana.com/docs/) | - (随時更新) | 監視の設定と可視化 |
 | 参考 | [Zabbix ドキュメント](https://www.zabbix.com/documentation) | - (随時更新) | 国内 SIer で採用例が多く、概念の対応付けに有効 |
 | 本リポジトリ | [改善設計一覧](../server-monitor-improvements/README.md) | - | 監視・サービス目標値・復旧演習の設計例 |
+| 本リポジトリ | [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md) | - | AWS 無料利用枠 + Terraform を、VPC・EC2 1 台の最小構成で実際に `apply`/`destroy` まで回す演習設計（設計のみ・未実施） |
 
 > 国内の運用現場では Zabbix や JP1 などの製品が使われることも多くあります。
 > ツールが違っても**監視の考え方は共通**です。対応関係は[現場経験とインフラ運用の橋渡し](../career-bridge.md)にも整理しています。
 > Zabbix を実機で構築・検証する演習設計は [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md)にまとめています（設計のみ・未実施）。
+> AWS Skill Builder で学ぶ内容を実機で裏付ける演習設計は [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md)にまとめています（設計のみ・未実施）。
 >
 > 本ラボの主要クラウド／IaC 系統は AWS + Terraform（[ADR-0005](../adr/0005-terraform-for-iac.md)）ですが、現在の派遣先研修（[target-roles.md](../target-roles.md)）や国内エンタープライズ案件で頻出する Azure についても、[career-bridge.md §2.7 の概念対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)を実機で検証する演習設計を [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md)にまとめています（設計のみ・未実施）。
 

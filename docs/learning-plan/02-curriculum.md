@@ -389,7 +389,9 @@
   - state を安全に扱う必要性を説明できる
 - **つまずきやすい点**: state の紛失・共有 / 手作業の変更とコードの乖離 / `destroy` 漏れ
 
-> W21・W22 は本ラボの主要クラウド／IaC 系統である AWS + Terraform（[ADR-0005](../adr/0005-terraform-for-iac.md)、[03 AWS + Terraform](../server-monitor-improvements/03-terraform-aws.md)）を主教材とするが、現在の派遣先研修で扱う Azure（[target-roles.md](../target-roles.md)）についても、[career-bridge.md の概念対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)を実機で検証する補完演習を [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md)に用意している（設計のみ・未実施）。
+> W21・W22 の見出しだけのハンズオンを、VPC・EC2 1 台の最小構成でコンソール手動構築 → Terraform化 → `apply`/`destroy` まで具体化した演習設計を [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md)に用意している（設計のみ・未実施）。[server-monitor 改善設計 03](../server-monitor-improvements/03-terraform-aws.md)が扱う ALB・マルチ AZ を含む本番想定の大規模設計とは別物で、その前段に位置する。
+>
+> あわせて、現在の派遣先研修で扱う Azure（[target-roles.md](../target-roles.md)）についても、[career-bridge.md の概念対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)を実機で検証する補完演習を [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md)に用意している（設計のみ・未実施）。本ラボの主要クラウド／IaC 系統は AWS + Terraform（[ADR-0005](../adr/0005-terraform-for-iac.md)）のままである。
 
 ### W23 監視・バックアップ・復旧演習
 
