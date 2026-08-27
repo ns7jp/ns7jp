@@ -2,13 +2,27 @@
 
 ## Linux サーバー設計・構築エンジニア志望
 
-Ubuntu サーバーを設計書から構築し、監視を載せ、わざと壊して復旧させ、バックアップから復元するところまでを一人で通しました。試験項目 23 件すべてに合格しています（詳細は下記「実測できていること」）。作品は主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** です。
+主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** で、設計・構築・試験・監視・障害復旧・バックアップ復元を工程として整理し、使い捨て Ubuntu 24.04 runner と手元 WSL2 で実行結果を採録しています。Full-stack E2E は試験項目 23 件中 23 件に合格しました。独立した引き渡し対象ホストでの実績ではなく、実行環境と未実測範囲も公開しています。
 
 ## 30 秒で確認する 3 点
 
-| [2 分 15 秒デモ（保存済み画面の証跡リプレイ）](https://ns7jp.github.io/demo.html) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [詰まった記録](./LEARNINGS.md) |
+| [主作品 `server-monitor`](https://github.com/ns7jp/server-monitor) | [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) |
 | --- | --- | --- |
-| 2026-08-18・19 の保存済み画面と復旧ログを再構成 | 2026-08-22 の 23/23 PASS と未実測範囲 | 実機で外した仮説を、症状 → 原因 → 対処 → 学びで記録 |
+| Ansible、Docker、Prometheus、Grafana、Loki を使った主作品 | 要件、設計、パラメータ、構築、試験、変更、引き渡しを工程順に確認 | 23/23 PASS の結果、実行環境、未実測範囲を確認 |
+
+[採用ご担当者さま向け 1 ページ版](./docs/overview-for-recruiters.md) ／ [2 分 15 秒デモ（保存済み画面の証跡リプレイ）](https://ns7jp.github.io/demo.html) ／ [詰まった記録](./LEARNINGS.md)
+
+## サーバー構築工程で示すもの
+
+| 工程 | 成果物・実行内容 | 現在の状態 |
+| --- | --- | --- |
+| 要件・設計 | [要件定義、基本・詳細設計、パラメータシート、ネットワーク設計](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | **実装済み**（文書を作成） |
+| 構築・試験 | Ansible `site.yml` の適用、2 回目の冪等性、network / UFW、監視スタック、バックアップ / 復元 | **実測済み**（使い捨て Ubuntu 24.04 runner、23/23 PASS） |
+| 監視・切り分け | Prometheus / Grafana / Loki の実データ表示、通信断の原因切り分け | **実測済み**（手元 WSL2） |
+| 障害復旧 | app 停止からの自動復旧、D-1 の RTO 計測 | **実測済み**（手元 WSL2、RTO 13 秒） |
+| 変更・引き渡し | Git SHA を固定した変更・ロールバック、引き渡しチェックリスト | ロールバックは **実測済み**（使い捨て runner）。独立した対象ホストへの引き渡しは **未実施（NOT RUN）** |
+
+状態は、成果物やコードが存在する **実装済み**、日付・環境・commit SHA を含む結果がある **実測済み**、実行ログがない **未実施（NOT RUN）** の 3 つに分けます。正本は [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) です。
 
 ## 志望と現況
 
@@ -44,9 +58,9 @@ Ubuntu サーバーを設計書から構築し、監視を載せ、わざと壊�
 
 未実測: 独立した引き渡し対象ホスト、組織 DNS、Slack 実配信、AWS `apply`、ホスト再起動後の永続性、長期稼働、AlmaLinux 実機への適用。何がどこまで確認済みかは[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)に 1 か所へまとめています。実行ログのない項目を実績として書くことはしません。
 
-## 手を動かして実演できること（2026-08-24 に実行・採録）
+## 追加の実測演習
 
-スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。証跡ファイルの「実施環境」欄に採録時の `uname` をそのまま残しています（B-2 / B-3 / B-4 は `Linux 6.18.44-fc-v21`）。手元での再実行と、実行者欄を含む再採録は着手予定です（[STATUS](./STATUS.md) 参照）。
+2026-08-24 に実行・採録した演習です。スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。証跡ファイルの「実施環境」欄に採録時の `uname` をそのまま残しています（B-2 / B-3 / B-4 は `Linux 6.18.44-fc-v21`）。独立した物理／VPS ホストや手元 WSL2 での再採録ではなく、現時点で面接時に再実演を約束できるのは手元 WSL2 + Docker で再現できる B-2 / B-3 です。実行者欄を含む再採録は着手予定です（[STATUS](./STATUS.md) 参照）。
 
 | 演習 | 内容 | 結果 |
 | --- | --- | --- |
@@ -72,11 +86,14 @@ Ansible role は Ubuntu 22.04 / 24.04 に加えて **AlmaLinux / Rocky 9** に�
 
 **この 4 件のうち、UFW の競合と systemd の誤診は、事実（環境・症状・原因・対処）を AI 支援で下書きしたのち、学びの言語化は私自身が書きました。docker kill の 2 件は、私が伝えた核心の一文を AI が文章に起こしたもの、Hyper-V AD の 1 件は研修中の作業メモを AI が本文化したものです**（`git log -- LEARNINGS.md` で確認できます）。[AI の利用について](#ai-の利用について)のとおり、このリポジトリの他の文書には AI 支援が広く入っており、`LEARNINGS.md` も例外ではありませんでした。2026-08-25 以降は、新規エントリも含めすべて本人のみが編集します（[STATUS §0](./STATUS.md) のルール 7）。
 
-## 主作品の読み方
+## 採用担当者向けの最短レビュー順
 
-この README では、実行して確認した結果と未実施項目を中心に示します。採用ご担当者向けの全体像は [案件概要](https://ns7jp.github.io/project-brief.html)、最新結果は [実測証跡ダイジェスト](https://ns7jp.github.io/evidence-demo.html) に整理しています。設計、構築、試験、変更、引き渡しまでの成果物一覧は [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、実装・CI・実測の境界は [構成図](./docs/architecture-diagram.md) と [証跡採録チェックリスト](./docs/evidence-capture-checklist.md) にまとめています。
+1. [主作品 `server-monitor`](https://github.com/ns7jp/server-monitor)で、構成と実行方法を確認
+2. [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)で、設計、構築、試験、変更、引き渡しの成果物を確認
+3. [実測証跡ダイジェスト](https://ns7jp.github.io/evidence-demo.html)と[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)で、実行結果と **NOT RUN** を確認
+4. [詰まった記録](./LEARNINGS.md)で、症状から原因を切り分けた過程を確認
 
-使用技術の一覧、資格、他の学習作品は [職務経歴書・スキルシート](./docs/resume.md)、未着手を含む学習計画は [STATUS](./STATUS.md) に分離しています。README の項目数を増やすより、主作品で実際に構築・検証・復旧した結果を優先して更新します。
+[案件概要](https://ns7jp.github.io/project-brief.html)はブラウザ向けの要約です。使用技術の一覧、資格、他の学習作品は [職務経歴書・スキルシート](./docs/resume.md)、未着手を含む学習計画は [STATUS](./STATUS.md) に分離しています。README の項目数を増やすより、主作品で実際に構築・検証・復旧した結果を優先して更新します。
 
 ## AI の利用について
 

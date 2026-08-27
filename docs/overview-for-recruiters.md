@@ -2,26 +2,40 @@
 
 ## 30 秒の結論
 
-主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** は、使い捨て Ubuntu 24.04 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元まで一気通貫で検証し、試験項目 23 件中 23 件合格を採録したインフラ構築ラボです。[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映済みです。PR #77 では、Git SHA を固定した変更・ロールバック実演も CI で PASS しています（PR ブランチ・使い捨て runner の結果）。
+第一志望は **Linux サーバー設計・構築**です。主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** では、使い捨て Ubuntu 24.04 runner 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元までを検証し、試験項目 23 件中 23 件合格を採録しました。[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映済みです。独立した引き渡し対象ホストでの実績ではありません。
 
-| [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) | [詰まった記録](../LEARNINGS.md) |
+| [主作品 `server-monitor`](https://github.com/ns7jp/server-monitor) | [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) |
 | --- | --- | --- |
-| 要件定義から引き渡しまでの成果物 12 本（1,242 行） | 2026-08-22 の 23/23 PASS と未実測範囲 | 実機で外した仮説を、症状 → 原因 → 対処 → 学びで記録 |
+| 構成、コード、実行方法を確認 | 要件定義から引き渡しまでを工程順に確認 | 23/23 PASS の結果、実行環境、未実測範囲を確認 |
 
-[案件概要（1 枚）](https://ns7jp.github.io/project-brief.html) ／ [2 分 15 秒デモ（保存済み画面の証跡リプレイ）](https://ns7jp.github.io/demo.html)
+[案件概要（1 枚）](https://ns7jp.github.io/project-brief.html) ／ [2 分 15 秒デモ（保存済み画面の証跡リプレイ）](https://ns7jp.github.io/demo.html) ／ [詰まった記録](../LEARNINGS.md)
+
+## 構築工程と証拠
+
+| 工程 | 成果物・実行内容 | 状態 |
+| --- | --- | --- |
+| 要件・設計 | 要件定義、基本・詳細設計、パラメータシート、ネットワーク設計 | **実装済み**（文書を作成） |
+| 構築・試験 | Ansible `site.yml`、2 回目の冪等性、network / UFW、監視スタック、backup / restore | **実測済み**（使い捨て Ubuntu 24.04 runner、23/23 PASS） |
+| 監視・復旧 | Grafana / Loki の実データ表示、通信断の切り分け、D-1 の RTO 計測 | **実測済み**（手元 WSL2） |
+| 変更 | Git SHA を固定した配備と旧版へのロールバック | **実測済み**（PR ブランチの使い捨て runner） |
+| 引き渡し | チェックリストと受け入れ手順 | **実装済み**。独立した対象ホストへの引き渡しは **未実施（NOT RUN）** |
+
+**実装済み**は成果物・コードが存在する状態、**実測済み**は日付・環境・commit SHA を含む結果がある状態、**未実施（NOT RUN）**は実行ログがない状態です。判定の正本は [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) です。
 
 ## 志望と現況
 
 製造・物流の現場で 15 年以上続けてきた「測る・原因を絞る・手順化する・定着させる」を、Linux サーバーの構築・運用に生かすエンジニア志望です。
 
-**現況**: 人材派遣会社（アデコ株式会社）を通じ、IT 企業にてトライアル就業中です（2026/07〜、トライアル期間 2 か月。就業先の社名は面談時に開示します）。IT 業務に従事しながら、Linux サーバー構築へのキャリア移行を進めています。
+**公開版の現況（2026-08 時点）**: 人材派遣会社（アデコ株式会社）を通じ、IT 企業にてトライアル就業中です（2026/07〜、トライアル期間 2 か月。就業先の社名は面談時に開示します）。IT 業務に従事しながら、Linux サーバー構築へのキャリア移行を進めています。
 
 | 項目 | 内容 |
 | --- | --- |
 | 夜勤・交代制 | 24/365 監視業務のシフト勤務に対応可能 |
 | 勤務開始時期 | トライアル期間満了の 2026/09 以降。相談のうえ 1 か月以内の調整も可能 |
 
-第一志望は **Linux サーバー構築・運用**。入口としてインフラ監視・運用にも対応します。IT サポート・社内 SE 補助は応募先に応じた補助トラックです。
+個別に調整する応募条件は、公開版に空欄や仮入力を残さず、応募書類または面談時に提示します。
+
+第一志望は **Linux サーバー設計・構築**。入口としてインフラ監視・運用にも対応します。IT サポート・社内 SE 補助は応募先に応じた補助トラックです。
 
 ## 実測したこと
 
@@ -37,7 +51,7 @@
 
 設計、パラメータ、構築、試験、変更、引き渡しの成果物は [案件概要](https://ns7jp.github.io/project-brief.html) と [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) に分離しています。このページでは技術名を広く並べるより、実際に実行して結果を残した項目を優先します。
 
-## その場で実演できること
+## 追加の実測演習
 
 2026-08-24 に実行し、証跡を採録しました。判定はスクリプトが期待値と実測値を比較した結果で、証跡ファイルも自動生成されます。手で PASS を書き込む余地を残さない作りです。
 
@@ -87,7 +101,7 @@ AlmaLinux 実機への適用。**実行ログが無い項目を実績として�
 **AI 支援の範囲も同じ基準で開示しています。** 文書だけでなく実装コード（Ansible role、
 Terraform module、CI workflow、テスト、ラボ）の生成にも AI を使っており、3 リポジトリの
 実作業コミット 243 件のうち 110 件が Claude を著者または共同著者に含みます
-（[内訳](../README.md#ai-の利用について)）。**その中で、実機を触って外した仮説の一次記録
+（2026-08-25 時点。[内訳](../README.md#ai-の利用について)）。**その中で、実機を触って外した仮説の一次記録
 [LEARNINGS.md](../LEARNINGS.md) は、2026-08-25 以降、新規エントリを本人のみが書く
 運用にしています**（それ以前の各エントリで AI がどこまで下書きしたかは
 [README](../README.md#詰まった記録)参照）。技術的な深さより、ここを

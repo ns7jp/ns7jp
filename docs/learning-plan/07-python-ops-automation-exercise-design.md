@@ -1702,7 +1702,7 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
 > [5 章の試験項目書](#5-試験項目書)の実測結果欄は**該当する行に限り実際に埋めている**（[03 §4 のエビデンスの要件](./03-build-process.md#エビデンスの要件)の「実行環境が分かること」に従い、この付録が実行環境の一次情報になる）。
 >
 > **実施環境**: `uname -a` → `Linux vm 6.18.44-fc-v21 #1 SMP PREEMPT_DYNAMIC @0 x86_64 GNU/Linux`
-> （[server-monitor B-2〜B-4 演習](../../README.md#手を動かして実演できること2026-08-24-に実行採録)・
+> （[server-monitor B-2〜B-4 演習](../../README.md#追加の実測演習)・
 > [05 の付録 B](./05-phase1-exercise-design.md#付録-b-設計の事前検証コマンド構文と設定挙動の確認)と同じ
 > `6.18.44-fc-v21` カーネルの AI 支援セッション環境）/ `cat /etc/os-release` → `Ubuntu 24.04.4 LTS`。
 > Python は `python3.12`（3.12.3、`python3.12-venv` 導入済み）を使用。**このコンテナは lab-base01 や
