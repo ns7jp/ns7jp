@@ -1,4 +1,4 @@
-# 10 AWS基礎構築演習設計：基礎からのクラウド構築とTerraform化
+# 11 AWS基礎構築演習設計：基礎からのクラウド構築とTerraform化
 
 > **本ドキュメントの位置付け**
 >
@@ -179,7 +179,7 @@ flowchart TB
 | --- | --- |
 | ホスト名 / Name タグ | `lab-aws01` |
 | 役割 | AWS 基礎構築演習用の単一 EC2（Web デモを兼ねる） |
-| 対応する演習 | 10 AWS基礎構築演習（本書） |
+| 対応する演習 | 11 AWS基礎構築演習（本書） |
 | 位置付け | [24 週学習プラン](./README.md) Phase 6（W21-W22）の具体化。[server-monitor 改善設計 03](../server-monitor-improvements/03-terraform-aws.md)の前段 |
 
 ### アカウント・IAM
@@ -223,7 +223,7 @@ flowchart TB
 | `Name` | `lab-aws01` |
 | `Project` | `ns7jp-learning` |
 | `ManagedBy` | 前半は `manual`、後半は `terraform`（[4 章](#4-構築手順書前半コンソールでの手動構築)・[5 章](#5-terraform化後半適用と削除まで実行)で使い分ける） |
-| `Exercise` | `10-aws-foundational` |
+| `Exercise` | `11-aws-foundational` |
 
 ---
 
@@ -518,6 +518,7 @@ resource "aws_instance" "web" {
 - [05 Phase 1 演習設計](./05-phase1-exercise-design.md)
 - [08 AD構築演習設計](./08-ad-exercise-design.md)
 - [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md)
+- [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md)
 - [server-monitor 改善設計 03: AWS + Terraform化（本番想定の大規模設計）](../server-monitor-improvements/03-terraform-aws.md)
 - [資格取得ロードマップ](../certifications/roadmap.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)

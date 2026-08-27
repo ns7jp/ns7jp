@@ -102,6 +102,26 @@ flowchart LR
 
 Zabbix 側については、上記の対応表を実機で検証する演習設計を[09 Zabbix 監視基盤構築演習設計](./learning-plan/09-zabbix-monitoring-exercise-design.md)にまとめています（設計のみ・未実施）。JP1 系は自宅ラボでの再現が難しいため、対応表による概念の橋渡しに留めています。
 
+### 2.7 クラウド基盤の転用可能性（AWS → Azure）
+
+本ラボの主要クラウド／IaC 系統は AWS + Terraform（[ADR-0005](./adr/0005-terraform-for-iac.md)、[03 AWS + Terraform](./server-monitor-improvements/03-terraform-aws.md)）ですが、現在の派遣先では Windows Server / AD / Linux / AWS / **Azure** の構築研修に就いており（[志望の経緯](#志望の経緯)）、国内 SIer・大手企業の社内基盤では Microsoft 365 / Entra ID との親和性から Azure の採用例も多いと理解しています。クラウドが違っても、アカウント境界・ネットワーク・IAM・IaC・監視・バックアップという設計の骨格は対応するため、次の対応で読み替えて習得します。
+
+| インフラの概念 | 本ラボ（AWS 系） | Azure |
+| --- | --- | --- |
+| 課金の入れ物 | アカウント | サブスクリプション |
+| リソースのグルーピング | タグ + アカウント分割 | リソースグループ |
+| 仮想ネットワーク | VPC | VNet |
+| ファイアウォール | セキュリティグループ（インスタンス単位） | NSG（サブネット/NIC 単位） |
+| 管理アクセス | Session Manager / 踏み台ホスト | Azure Bastion |
+| IAM | IAM ユーザー / ロール / ポリシー | Entra ID + RBAC |
+| IaC ツール | Terraform（`aws` provider） | Terraform（`azurerm` provider） |
+| 監視 | CloudWatch | Azure Monitor + Log Analytics |
+| バックアップ | EBS スナップショット / AWS Backup | Azure Backup（Recovery Services vault） |
+
+「アカウント境界を切り、ネットワークと IAM を設計し、同じ IaC ツールでコード化し、監視とバックアップを組み込む」という骨格は共通です。違うのはクラウドごとの provider・リソースモデル（Azure はテナント → サブスクリプション → リソースグループという入れ子構造を持つ）であり、**IaC ツール（Terraform）を固定したまま対象クラウドだけ増やせる**ことを、面接で「うちは Azure だが」と問われた際の説明材料にしています。
+
+Azure 側については、上記の対応表を実機で検証する演習設計を[10 Azure構築演習設計](./learning-plan/10-azure-foundational-exercise-design.md)にまとめています（設計のみ・未実施）。
+
 ---
 
 ## 3. 一段深い共通点 — 「**現場と本社の翻訳者**」
