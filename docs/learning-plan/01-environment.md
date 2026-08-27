@@ -200,7 +200,7 @@ Phase 6 でクラウドを使います。未経験者が最も恐れるのは想
 > Linux トラックを主軸にする場合、この 1 台は Phase 6 以降または転職活動と並行して追加すれば十分です。
 > 本リポジトリでは[証跡採録チェックリストの優先 7](../evidence-capture-checklist.md) に対応します。
 > 「OS の初期構築」（空の VM への導入からホスト名・固定 IP・ローカル管理者・WinRM/RDP・ファイアウォール・
-> Windows Update・サービス／タスクの基礎まで）は [10 Windows Server 基礎構築演習設計](./10-windows-server-exercise-design.md)に、
+> Windows Update・サービス／タスクの基礎まで）は [12 Windows Server 基礎構築演習設計](./12-windows-server-exercise-design.md)に、
 > 「PowerShell での一括操作」の具体的な演習（基礎文法からサービス・イベントログ・AD 操作まで）は
 > [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md)に、「OU 設計」「グループポリシーの基本」は
 > [08 AD構築演習設計](./08-ad-exercise-design.md)に設計しています。

@@ -2,7 +2,9 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-26（ポートフォリオの網羅範囲を「Linux サーバー構築」第一志望へ絞り直す整理を実施。
+最終更新：2026-08-27（[STATUS.md の「コードでは埋められない、残っている穴」4 番目](#コードでは埋められない残っている穴)（Terraform 約 3,000 行が `apply` 0 回）に対応する最初の一歩として、VPC・EC2 1 台の最小構成でコンソール手動構築 → Terraform化 → `apply`/`destroy` まで具体化した [11 AWS基礎構築演習設計](./docs/learning-plan/11-aws-foundational-exercise-design.md)を新規作成。[server-monitor 改善設計 03](./docs/server-monitor-improvements/03-terraform-aws.md)が扱う ALB・マルチ AZ を含む本番想定の大規模設計とは別物で、その前段に位置する演習として設計のみ・未実施）
+
+2026-08-27（career-bridge.md の AWS → Azure 概念対応表を実機で検証する補完演習として 10 Azure構築演習設計を新規作成。ADR-0005（IaC に Terraform を採用）の主系統は変更せず、既存の AWS + Terraform に加えて Azure 環境を独立して追加する設計。詳細は下記「1. 本リポジトリ」の該当エントリを参照。以下は 2026-08-26 時点の更新内容。ポートフォリオの網羅範囲を「Linux サーバー構築」第一志望へ絞り直す整理を実施。
 `docs/it-support/` と Windows / winget 端末セットアップのテンプレートを削除し、`docs/roadmap/` 配下の
 個別設計書 10 本と `08-kubernetes-roadmap.md` を削除して[今後の興味リスト](./docs/roadmap/README.md)
 へ一本化。約 20 ファイルの相互参照を修正し、markdownlint・Mermaid 構文検証・全リンク/アンカーのローカル
@@ -96,21 +98,49 @@ server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を 
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
 
-### 2026-08-27 の更新内容（10 Windows Server 基礎構築演習設計：空の VM からの初期構築）
+### 2026-08-27 の更新内容（12 Windows Server 基礎構築演習設計：空の VM からの初期構築）
 
 [windows-ad-lab.md §4.1](./docs/evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)や
 [07 §3.1](./docs/learning-plan/07-python-ops-automation-exercise-design.md#31-lab-winops1新規ホストの基本情報)が
 「hostname 設定済み・ネットワーク設定済み」を前提条件の箇条書きで済ませ、OS の初期構築そのものを一度も
-詳細設計していなかった差分を埋めるため、[10 Windows Server 基礎構築演習設計](./docs/learning-plan/10-windows-server-exercise-design.md)を新規作成した。
+詳細設計していなかった差分を埋めるため、[12 Windows Server 基礎構築演習設計](./docs/learning-plan/12-windows-server-exercise-design.md)を新規作成した。
 
 | 項目 | 内容 |
 | --- | --- |
-| 新規作成 | [10 Windows Server 基礎構築演習設計](./docs/learning-plan/10-windows-server-exercise-design.md)（`LAB-WINBASE01` 1 台への Windows Server 2022 評価版導入、ホスト名・固定 IP・ローカル管理者・組み込みアカウント整理、WinRM/RDP のスコープ限定有効化、ファイアウォール確認、Windows Update の一時的な外部疎通運用、ロール・機能ベースライン記録、サービス／イベントログとタスクスケジューラの基礎操作、再起動試験・チェックポイントまで。試験項目書 T-01〜T-26。設計のみ・未実施） |
+| 新規作成 | [12 Windows Server 基礎構築演習設計](./docs/learning-plan/12-windows-server-exercise-design.md)（`LAB-WINBASE01` 1 台への Windows Server 2022 評価版導入、ホスト名・固定 IP・ローカル管理者・組み込みアカウント整理、WinRM/RDP のスコープ限定有効化、ファイアウォール確認、Windows Update の一時的な外部疎通運用、ロール・機能ベースライン記録、サービス／イベントログとタスクスケジューラの基礎操作、再起動試験・チェックポイントまで。試験項目書 T-01〜T-26。設計のみ・未実施） |
 | 位置付け | [05 Phase 1 演習設計](./docs/learning-plan/05-phase1-exercise-design.md)が Linux の `lab-base01` に対して行った「空の VM からの初期構築」を、Windows Server の `LAB-WINBASE01` に対して同じ密度で行うもの。`ADLAB-DC1`（windows-ad-lab.md）・`LAB-WINOPS1`（07）とは別の独立ホストであり、両者を作り直すものではない |
 | 既存資料との関係 | AD DS 昇格・ドメイン参加は windows-ad-lab.md、OU・GPO・PSO・FSMO・システム状態バックアップは 08、PowerShell 言語基礎・サービス／イベントログ・AD 操作の実務スクリプト化は 06、Python 運用自動化は 07 が扱う範囲とし、重複させていない（役割分担は本書の付録 B に一覧化） |
 | 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[09](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)と同じ位置付け）のため対象外 |
 | 技術情報の裏取り | この AI 支援セッションには Windows・Hyper-V・PowerShell の実行環境が無く、コマンド構文・レジストリキー・既定値は一つも実行して確認していない。Microsoft の公開ドキュメントと既存の Windows 系資料（windows-ad-lab.md・06・07・08）の記述との整合を根拠に記述し、[09](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)と同じく「調べた範囲での判断」であることを明記した |
 | 相互参照の追加 | [学習プラン README](./docs/learning-plan/README.md)、[01 学習環境 §6](./docs/learning-plan/01-environment.md#6-windows-server-の学習環境任意)から本書へのリンクを追加 |
+| 他 PR との関係 | ほぼ同時に merge された [10 Azure構築演習設計](./docs/learning-plan/10-azure-foundational-exercise-design.md)・[11 AWS基礎構築演習設計](./docs/learning-plan/11-aws-foundational-exercise-design.md)（いずれも下記エントリ）が「10」「11」の番号を先に main へ入れたため、本書は本 PR の main 追随時に「10」から「12」へ採番を変更した |
+| 整合性チェック | markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェックをいずれも実行し、0 件を確認 |
+
+### 2026-08-27 の更新内容（11 AWS基礎構築演習設計：apply 0 回を破る最初の一歩）
+
+[02 フェーズ別カリキュラム W21](./docs/learning-plan/02-curriculum.md#w21-クラウド基礎)・[W22](./docs/learning-plan/02-curriculum.md#w22-terraform-によるコード化)は見出しレベルの記述に留まり、他フェーズと同じ密度の具体設計が無かった。この差分と、[「コードでは埋められない、残っている穴」4 番目](#コードでは埋められない残っている穴)（Terraform 約 3,000 行が `apply` 0 回）の両方に対応するため、VPC 1 つ・EC2 1 台という最小構成に絞った演習設計を新規作成した。
+
+| 項目 | 内容 |
+| --- | --- |
+| 新規作成 | [11 AWS基礎構築演習設計](./docs/learning-plan/11-aws-foundational-exercise-design.md)（IAM Identity Center + 予算アラートのセットアップ、VPC/EC2 1 台のコンソール手動構築、同一構成の Terraform化・`plan`/`apply`/`destroy`・冪等性確認、CloudWatch Alarm + SNS による検知・復旧演習、試験項目書まで。設計のみ・未実施） |
+| server-monitor 改善設計 03 との関係 | [03 AWS + Terraform化](./docs/server-monitor-improvements/03-terraform-aws.md)（ALB・マルチ AZ・NAT Gateway を含む本番想定・約 3,000 行、`apply` 0 回）を置き換えるものではなく、規模を絞った独立の前段演習として追加。03 の remote state（S3 + ネイティブロック）に対し、本演習はローカル state を採用するなど、スコープを意図的に小さくしている |
+| 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[09](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)と同じ位置付け）のため対象外 |
+| 技術情報の裏取り | AI 支援セッションで Web 検索を実行し、AWS Free Tier の 2025-07-15 制度変更（新規アカウントは $100〜$200 クレジット + 6 か月の Free プラン）、Terraform／AWS provider の現行バージョン、ルートユーザー MFA の強制化時期（2024-05 標準アカウント、2025-06 Organizations 配下）、IAM Identity Center が長期 IAM ユーザーより推奨される 2024 年以降の方針を確認した。server-monitor 本体の AWS provider 5.x→6.x 更新見送り（2026-08-19 判断、上記表参照）とは矛盾しない独立した新規構成であることを明記した |
+| 相互参照の追加 | [学習プラン README](./docs/learning-plan/README.md)、[02 W21/W22](./docs/learning-plan/02-curriculum.md#w21-クラウド基礎)、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)、[資格取得ロードマップ（AWS SAA）](./docs/certifications/roadmap.md)、[証跡採録チェックリストの順位 6・項目 9](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)から本書へのリンクを追加 |
+| 整合性チェック | markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェックをいずれも実行し、0 件を確認 |
+| 他 PR との関係 | ほぼ同時に merge された [10 Azure構築演習設計](./docs/learning-plan/10-azure-foundational-exercise-design.md)（下記エントリ）が「10」の番号を先に main へ入れたため、本書は本 PR のマージ時に「10」から「11」へ採番を変更した |
+
+### 2026-08-27 の更新内容（10 Azure構築演習設計：AWS 概念対応表の実機検証設計）
+
+[target-roles.md](./docs/target-roles.md)・[career-bridge.md「志望の経緯」](./docs/career-bridge.md#志望の経緯)が記すとおり、現在の派遣先では Windows Server / AD / Linux / AWS / Azure の構築研修に就いている。本ラボの主要クラウド／IaC 系統は AWS + Terraform（[ADR-0005](./docs/adr/0005-terraform-for-iac.md)、[03 AWS + Terraform](./docs/server-monitor-improvements/03-terraform-aws.md)）だが、志望領域そのものである Azure の実務経験を、[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[09](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)と同水準の具体性で積むための演習設計を新規作成した。09 Zabbix 監視基盤構築演習設計（Prometheus → Zabbix の概念対応表を実機検証）と同じ「主系統は変更せず、独立した補完トラックを追加する」という構成を踏襲している。
+
+| 項目 | 内容 |
+| --- | --- |
+| 新規作成 | [10 Azure構築演習設計](./docs/learning-plan/10-azure-foundational-exercise-design.md)（サブスクリプション/リソースグループ/RBAC/Entra ID のガバナンス基礎、VNet/NSG/Azure Bastion のネットワーク設計、Ubuntu VM 3 台での 3 層構成再現、Terraform `azurerm` provider による IaC 化、Azure Monitor + Log Analytics による監視、Azure Backup によるバックアップ・リストア、障害演習、試験項目書（16 項目、異常系 50%）まで。設計のみ・未実施） |
+| ADR との関係 | [ADR-0005](./docs/adr/0005-terraform-for-iac.md)（IaC に Terraform を採用）を変更するものではなく、独立した補完演習として追加。本ラボの主要クラウド系統（AWS）は変更していない。監視面でも [ADR-0001](./docs/adr/0001-monitoring-stack.md)・[ADR-0006](./docs/adr/0006-self-host-monitoring.md)（自前運用の Prometheus/Grafana）は変更せず、Azure Monitor はあくまで比較用の補完として位置付けた |
+| 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[09](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)と同じ位置付け）のため対象外 |
+| 技術情報の裏取り | AI 支援セッションで Microsoft Azure 公式ドキュメント（`learn.microsoft.com`・`azure.microsoft.com`）の調査を試みたが、セッションのネットワーク方針により両ドメインへの直接アクセスが遮断されたため、検索エンジンのスニペットと GitHub 公式リポジトリ（`hashicorp/terraform-provider-azurerm`）のリリースタグ一覧を突き合わせて裏付けを取った。Terraform azurerm provider のメジャーバージョン（`5.x` 系、`5.0.0` は 2026-07-27 リリース）は GitHub タグで直接確認済み。Azure CLI の細部・無料アカウントの正確な条件は実施前に公式ドキュメントでの再確認を前提とする旨を明記した |
+| 相互参照の追加 | [学習プラン README](./docs/learning-plan/README.md)、[02 W21/W22](./docs/learning-plan/02-curriculum.md#w21-クラウド基礎)、career-bridge.md に新設した §2.7（AWS → Azure の概念対応表）、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)から本書へのリンクを追加 |
 | 整合性チェック | markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェックをいずれも実行し、0 件を確認 |
 
 ### 2026-08-26 の更新内容（08 AD構築演習 実施キットを準備）

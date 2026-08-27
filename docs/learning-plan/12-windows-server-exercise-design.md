@@ -1,4 +1,4 @@
-# 10 Windows Server 基礎構築演習設計：空の VM からの初期構築（LAB-WINBASE01）
+# 12 Windows Server 基礎構築演習設計：空の VM からの初期構築（LAB-WINBASE01）
 
 > **本ドキュメントの位置付け**
 >

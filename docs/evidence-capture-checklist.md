@@ -19,7 +19,7 @@
 | 4a | Windows / AD の公開可能な再現ログ | 隔離ラボでユーザー作成、棚卸し、DNS 障害から domain 参加復旧までを再実施 |
 | 4b | Windows / winget 端末セットアップ | 使い捨て test VM で導入、2 回目実行、rollback、package ごとの exit code を採録 |
 | 5 | D-2 ホスト障害復旧 | 別ホストへの復旧、RTO / RPO、失敗箇所を採録 |
-| 6 | 承認済み AWS 短時間検証 | `plan / apply / destroy`、疎通、実費を採録 |
+| 6 | 承認済み AWS 短時間検証 | `plan / apply / destroy`、疎通、実費を採録。手順は [11 AWS基礎構築演習設計](./learning-plan/11-aws-foundational-exercise-design.md)（設計のみ・未実施） |
 
 この表の項目はすべて**未実測または部分実施**です。予定を実績欄へは移しません。
 
@@ -82,7 +82,7 @@
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
 | △ 8a | **Windows / AD 公開用再現ラボ**（評価版 AD DS でユーザー作成〜棚卸し、DNS 障害復旧） | 自宅 PC + Hyper-V / VirtualBox（評価版） | 0 円 | [Windows / AD 公開再現ラボ](./evidence/templates/windows-ad-lab.md) |
-| 9 | `terraform apply` → `destroy` と **Cost Explorer の実費** | 承認済み AWS アカウント | 数十〜数百円 | [03 AWS + Terraform](./server-monitor-improvements/03-terraform-aws.md) |
+| 9 | `terraform apply` → `destroy` と **Cost Explorer の実費** | 承認済み AWS アカウント | 数十〜数百円 | [03 AWS + Terraform](./server-monitor-improvements/03-terraform-aws.md)（大規模な本番想定設計）／ [11 AWS基礎構築演習設計](./learning-plan/11-aws-foundational-exercise-design.md)（VPC・EC2 1 台の最小構成。まずこちらを先に回し切る） |
 
 > 優先 8a は**部分実施**です。トライアル就業先の研修で AD DS を構築し、クライアントの DNS 設定が原因だったドメイン参加障害を切り分けた経験は [LEARNINGS.md](../LEARNINGS.md) に記録しました。ただし、研修先の情報を含まない PowerShell のユーザー作成・棚卸し・domain 参加復旧ログは未採録です。公開実績にする場合は、隔離した自宅ラボ等で再現して機密情報を含まない一次出力を残します。
 > 旧優先 9 の AWS 検証は、現在は冒頭表の順位 6 です。独立対象ホスト、再起動・72時間継続、
@@ -206,6 +206,8 @@
 6. raw transcript は Git 管理外へ置き、マスク済み公開コピーの SHA-256 と再確認結果を残す。
 
 ### 9. AWS apply / destroy と実費
+
+> 具体的な手順（パラメータシート・構築手順書・試験項目書・課金ストップ基準）は [11 AWS基礎構築演習設計](./learning-plan/11-aws-foundational-exercise-design.md)にまとめている（設計のみ・未実施）。以下は概要のみ。
 
 1. **短時間で破棄する前提**で `terraform plan` → `apply` を実行する。
 2. ALB health / CloudWatch alarm の動作を確認し、スクショする。
