@@ -130,7 +130,7 @@ LPIC-1（101 / 102）は FE と並行して学習中ですが、**受験日は�
 | 目的 | クラウド設計の基礎（VPC / EC2 / RDS / S3 / IAM / 監視 / コスト最適化） |
 | 受験予定 | 2027 年後半 |
 | 学習方法 | AWS Skill Builder + 公式模擬試験 + AWS 無料利用枠での実機演習 |
-| ポートフォリオ連動 | server-monitor を AWS 上に Terraform で再構築（[計画](../server-monitor-improvements/03-terraform-aws.md)） |
+| ポートフォリオ連動 | server-monitor を AWS 上に Terraform で再構築（[計画](../server-monitor-improvements/03-terraform-aws.md)）。まずは [10 AWS基礎構築演習設計](../learning-plan/10-aws-foundational-exercise-design.md)で VPC・EC2 1 台の最小構成の `apply`/`destroy` を経験してから着手する（設計のみ・未実施） |
 
 ---
 
