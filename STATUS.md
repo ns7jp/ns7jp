@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-26（ポートフォリオの網羅範囲を「Linux サーバー構築」第一志望へ絞り直す整理を実施。
+最終更新：2026-08-27（career-bridge.md の AWS → Azure 概念対応表を実機で検証する補完演習として 10 Azure構築演習設計を新規作成。ADR-0005（IaC に Terraform を採用）の主系統は変更せず、既存の AWS + Terraform に加えて Azure 環境を独立して追加する設計。詳細は下記「1. 本リポジトリ」の該当エントリを参照。以下は 2026-08-26 時点の更新内容。ポートフォリオの網羅範囲を「Linux サーバー構築」第一志望へ絞り直す整理を実施。
 `docs/it-support/` と Windows / winget 端末セットアップのテンプレートを削除し、`docs/roadmap/` 配下の
 個別設計書 10 本と `08-kubernetes-roadmap.md` を削除して[今後の興味リスト](./docs/roadmap/README.md)
 へ一本化。約 20 ファイルの相互参照を修正し、markdownlint・Mermaid 構文検証・全リンク/アンカーのローカル
@@ -95,6 +95,19 @@ server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を 
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-27 の更新内容（10 Azure構築演習設計：AWS 概念対応表の実機検証設計）
+
+[target-roles.md](./docs/target-roles.md)・[career-bridge.md「志望の経緯」](./docs/career-bridge.md#志望の経緯)が記すとおり、現在の派遣先では Windows Server / AD / Linux / AWS / Azure の構築研修に就いている。本ラボの主要クラウド／IaC 系統は AWS + Terraform（[ADR-0005](./docs/adr/0005-terraform-for-iac.md)、[03 AWS + Terraform](./docs/server-monitor-improvements/03-terraform-aws.md)）だが、志望領域そのものである Azure の実務経験を、[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[09](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)と同水準の具体性で積むための演習設計を新規作成した。09 Zabbix 監視基盤構築演習設計（Prometheus → Zabbix の概念対応表を実機検証）と同じ「主系統は変更せず、独立した補完トラックを追加する」という構成を踏襲している。
+
+| 項目 | 内容 |
+| --- | --- |
+| 新規作成 | [10 Azure構築演習設計](./docs/learning-plan/10-azure-foundational-exercise-design.md)（サブスクリプション/リソースグループ/RBAC/Entra ID のガバナンス基礎、VNet/NSG/Azure Bastion のネットワーク設計、Ubuntu VM 3 台での 3 層構成再現、Terraform `azurerm` provider による IaC 化、Azure Monitor + Log Analytics による監視、Azure Backup によるバックアップ・リストア、障害演習、試験項目書（16 項目、異常系 50%）まで。設計のみ・未実施） |
+| ADR との関係 | [ADR-0005](./docs/adr/0005-terraform-for-iac.md)（IaC に Terraform を採用）を変更するものではなく、独立した補完演習として追加。本ラボの主要クラウド系統（AWS）は変更していない。監視面でも [ADR-0001](./docs/adr/0001-monitoring-stack.md)・[ADR-0006](./docs/adr/0006-self-host-monitoring.md)（自前運用の Prometheus/Grafana）は変更せず、Azure Monitor はあくまで比較用の補完として位置付けた |
+| 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[09](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)と同じ位置付け）のため対象外 |
+| 技術情報の裏取り | AI 支援セッションで Microsoft Azure 公式ドキュメント（`learn.microsoft.com`・`azure.microsoft.com`）の調査を試みたが、セッションのネットワーク方針により両ドメインへの直接アクセスが遮断されたため、検索エンジンのスニペットと GitHub 公式リポジトリ（`hashicorp/terraform-provider-azurerm`）のリリースタグ一覧を突き合わせて裏付けを取った。Terraform azurerm provider のメジャーバージョン（`5.x` 系、`5.0.0` は 2026-07-27 リリース）は GitHub タグで直接確認済み。Azure CLI の細部・無料アカウントの正確な条件は実施前に公式ドキュメントでの再確認を前提とする旨を明記した |
+| 相互参照の追加 | [学習プラン README](./docs/learning-plan/README.md)、[02 W21/W22](./docs/learning-plan/02-curriculum.md#w21-クラウド基礎)、career-bridge.md に新設した §2.7（AWS → Azure の概念対応表）、[04 教材と資格の対応](./docs/learning-plan/04-resources.md)から本書へのリンクを追加 |
+| 整合性チェック | markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェックをいずれも実行し、0 件を確認 |
 
 ### 2026-08-26 の更新内容（08 AD構築演習 実施キットを準備）
 

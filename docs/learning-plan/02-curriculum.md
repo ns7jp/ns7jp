@@ -389,6 +389,8 @@
   - state を安全に扱う必要性を説明できる
 - **つまずきやすい点**: state の紛失・共有 / 手作業の変更とコードの乖離 / `destroy` 漏れ
 
+> W21・W22 は本ラボの主要クラウド／IaC 系統である AWS + Terraform（[ADR-0005](../adr/0005-terraform-for-iac.md)、[03 AWS + Terraform](../server-monitor-improvements/03-terraform-aws.md)）を主教材とするが、現在の派遣先研修で扱う Azure（[target-roles.md](../target-roles.md)）についても、[career-bridge.md の概念対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)を実機で検証する補完演習を [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md)に用意している（設計のみ・未実施）。
+
 ### W23 監視・バックアップ・復旧演習
 
 - **学習項目**: 監視の 4 分類（死活・リソース・ログ・外形）/ 監視項目としきい値の決め方 / 通知設計とアラート疲れ / ダッシュボードの構成 / バックアップ方式と保管世代 / 目標復旧時間と目標復旧時点の考え方 / 復旧演習の進め方
