@@ -17,8 +17,12 @@
 windows-ad-lab.md のフォレスト昇格・最小 OU 構成の先を、OU 階層・AGDLP グループ戦略・GPO・
 パスワードポリシー・FSMO・システム状態バックアップ／権威復元まで具体化した 08 AD構築演習設計を
 新規作成。career-bridge.md の Zabbix 概念対応表を実機で検証する補完演習として 09 Zabbix 監視基盤構築
-演習設計も新規作成（設計のみ・未実施、ADR-0001 の主系統は変更しない）。server-monitor の滞留
-Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に置き換え、#17/#66 は保留理由を記録）
+演習設計も新規作成（設計のみ・未実施、ADR-0001 の主系統は変更しない）。08 AD構築演習設計の実施キット
+（4 章をそのままスクリプト化した `.ps1` 全 11 本、Hyper-V チェックポイント関数、進捗チェックリスト、
+証跡記入用テンプレート）を ad-exercise-kit として準備し、Linux コンテナへ導入した PowerShell 7 で
+全スクリプトを構文検証（`wbadmin` へのネイティブコマンド引数展開に関する不具合 1 件を発見・修正）。
+server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 に
+置き換え、#17/#66 は保留理由を記録）
 
 ---
 
@@ -91,6 +95,19 @@ Dependabot PR を検証・処理。#96/#95/#94/#18 を merge、#93 は PR #102 �
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-26 の更新内容（08 AD構築演習 実施キットを準備）
+
+[08 AD構築演習設計](./docs/learning-plan/08-ad-exercise-design.md)の 4 章（構築手順書）を、実施時の
+コピー&ペーストの手間とタイプミスを減らすための `.ps1` へ落とし込んだ実施キットを新規作成した。
+[docs/learning-plan/ad-exercise-kit/](./docs/learning-plan/ad-exercise-kit/README.md)。
+
+| 内容 | 詳細 |
+| --- | --- |
+| キットの中身 | OU/グループ作成（`01-ou-and-groups.ps1`）、GPO 作成・リンク（`02-gpo-setup.ps1`・`02b-client-verify-gpo.ps1`）、パスワードポリシー・PSO（`03-password-policy-and-pso.ps1`）、FSMO・ヘルスチェック（`04-fsmo-and-health-check.ps1`、DNS 障害注入は `-InjectDnsFault` で任意実施）、追加ディスク・システム状態バックアップ（`05-system-state-backup.ps1`）、DSRM 権威復元演習を 3 段階に分割したスクリプト（`06a`/`06b`/`06c`）、切り戻し（`07-rollback.ps1`）、Hyper-V チェックポイント関数の計 11 本、進捗チェックリスト、証跡記入用テンプレート |
+| 技術検証 | [windows-ps-kit](./docs/learning-plan/windows-ps-kit/README.md)と同じ方法で、Linux コンテナへ PowerShell 7.4.6（公式 GitHub Releases の tar.gz）を導入し、全 11 本を `[System.Management.Automation.Language.Parser]::ParseFile()` で構文検証した。UTF-8 BOM 付与の前後両方で再検証し、`windows-ps-kit`で見つかった BOM 欠落バグの再発が無いことを確認した |
+| 発見した不具合 | `wbadmin` へのネイティブコマンド引数展開で、`-backupTarget:${DriveLetter}:` のように波かっこ変数の直後にコロンを続けて引用符なし引数として書くと、PowerShell が `-backupTarget:` と `E:` の 2 引数に分割してしまう不具合を、`Write-Output` による代替実行で発見した。変数展開を先に文字列として組み立ててから渡す書き方へ、影響する 3 本（`05`・`06a`・`06b`）を修正した。08 章本体のコマンド例（固定のドライブレターを直接書いている箇所）はこの問題の影響を受けない |
+| 状態 | **未実行の雛形。** 08 章の実施ステータス（設計のみ・未実施）は変わらない。`ActiveDirectory`/`GroupPolicy` モジュール・`dcdiag`/`repadmin`/`wbadmin`/`ntdsutil`/`bcdedit`・Hyper-V の `Checkpoint-VM` 系はこの環境に存在しないため、cmdlet としての実行は一度もできていない |
 
 ### 2026-08-26 の更新内容（追補5：windows-ps-kit の UTF-8 BOM 欠落バグを実機で発見・修正）
 
