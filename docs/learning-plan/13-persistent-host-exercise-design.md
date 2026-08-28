@@ -77,8 +77,10 @@
 
 完成後の成果物は、[証跡採録チェックリストの現在の残タスク](../evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)
 順位 1・2 が採録先として使える「独立ホストの構築・試験手順」になる。**ただし本演習を完走しても順位 1・2 が
-完了扱いになるわけではない**（[付録 B](#付録-b-本演習と既存資料の役割分担)のとおり、`site.yml` の適用と
-Slack 実配信は別途必要）。
+完了扱いになるわけではない**（[付録 B](#付録-b-本演習と既存資料の役割分担)のとおり、順位 1 の `site.yml` 適用と
+順位 3 の Slack 実配信は別途必要。順位 2 についても、本演習が確認するのは再起動後のサービス自動復帰と
+heartbeat による 24 / 72 時間後の到達性のみであり、監視スタック本体の復帰確認とバックアップの復元試験は
+対象外のまま残る）。
 
 ### スコープ
 
@@ -90,7 +92,7 @@ Slack 実配信は別途必要）。
 | `ufw` によるファイアウォールと `fail2ban` による総当たり対策 | **対象**。[05](./05-phase1-exercise-design.md)がラボセグメント限定で済ませていた到達制御を、実インターネット向けに置き換える。[4.6](#46-ファイアウォールufwと総当たり対策fail2ban) |
 | 最小限の Web サービス（Nginx、静的ページ + ヘルスチェック用エンドポイント） | **対象**。TLS 化・稼働確認の対象を用意するためだけの最小構成。[4.8](#48-nginx-の導入と最小ページの配置) |
 | Let's Encrypt（`certbot`）による TLS 証明書の取得と自動更新 | **対象**。[4.9](#49-lets-encrypttls証明書の取得) |
-| 再起動試験、24 時間後・72 時間後の継続稼働確認 | **対象**。[4.10](#410-再起動試験)、[5 章](#5-試験項目書)の T-15〜T-17 |
+| heartbeat タイマーの設定、再起動試験、24 時間後・72 時間後の継続稼働確認 | **対象**。[4.10](#410-heartbeat-タイマーの設定)〜[4.11](#411-再起動試験)、[5 章](#5-試験項目書)の T-15〜T-17 |
 | 使用終了時の解約・データ消去 | **対象**。[付録 A](#付録-a-使用終了時の解約データ消去手順) |
 | `site.yml`（Ansible）による構成管理の適用、Docker 導入 | **対象外**。[証跡採録チェックリスト順位 1](../evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)が扱う。本書はその適用先になり得る「素の独立ホスト」を作るところまで |
 | Alertmanager → Slack の実配信 | **対象外**。[証跡採録チェックリスト順位 3](../evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)が扱う。Slack Webhook の取得は本書のホストに依存しない |
@@ -107,7 +109,7 @@ Slack 実配信は別途必要）。
 | 意思決定 | 独自ドメインを新規取得するか、既存ドメインのサブドメインを払い出すかを事前に決めておく（[2 章](#2-要件と基本設計)） |
 | 環境 | 手元の PC 1 台（[01 学習環境](./01-environment.md)のラボとは独立。VM は不要） |
 | 想定所要時間 | 初回構築（[4.1](#41-作業前確認)〜[4.9](#49-lets-encrypttls証明書の取得)） 2.5〜3.5 時間。DNS 反映待ちで数十分〜数時間の中断が入ることがある（[6 章](#6-実施タイムテーブルと運用ガード)）。再起動試験 30 分。24 時間後・72 時間後の確認は各 10〜15 分だが、**構築から 72 時間後の確認完了まで暦日で最短 4 日かかる**（[6 章](#6-実施タイムテーブルと運用ガード)） |
-| 想定コスト | [2 章のコスト試算](#コスト試算)を参照。初月はドメイン取得費を含めて概ね 2,000 円以内、継続する場合は月 600〜1,300 円程度 |
+| 想定コスト | [2 章のコスト試算](#コスト試算)を参照。初月は VPS + ドメイン取得費で概ね 1,000〜3,300 円程度、継続する場合は月 600〜1,300 円程度 |
 
 ---
 
@@ -184,7 +186,8 @@ flowchart TB
 | Let's Encrypt 証明書 | 0 円 | 発行・更新とも無料 |
 | VPS スナップショット | 事業者により数十〜数百円/月 | [6 章](#6-実施タイムテーブルと運用ガード)の判断点で不要なら削除する |
 
-**初月の総額は概ね 2,000 円以内**（ドメイン新規取得費を含む）。**継続する場合は月 600〜1,300 円程度 + 年 1 回のドメイン更新**。
+**初月の総額は概ね 1,000〜3,300 円程度**（VPS 初月 + ドメイン新規取得費。事業者・レジストラの組み合わせにより変動）。
+**継続する場合は月 600〜1,300 円程度 + 年 1 回のドメイン更新**。
 [01 学習環境 §5](./01-environment.md#5-クラウド検証と課金事故の防止)がクラウド検証の目安として挙げている「数百円」よりも
 高くなるのは、本書が**継続課金**を前提にしているためであり、[6 章](#6-実施タイムテーブルと運用ガード)で
 継続要否を明示的に判断する設計にしている理由でもある。
@@ -363,20 +366,32 @@ flowchart TB
 | 4.9-5 | 自動更新タイマーの確認 | `systemctl list-timers certbot.timer` | 1 日 2 回のスケジュールが表示される | Ubuntu 24.04 の `certbot` パッケージの既定動作であることを確認する（[2 章の決定事項](#決定事項選定と理由)） |
 | 4.9-6 | 更新のドライラン | `sudo certbot renew --dry-run` | `Congratulations, all simulated renewals succeeded` 相当のメッセージ | 実際の証明書を消費せずに更新経路を検証する |
 
-### 4.10 再起動試験
+### 4.10 heartbeat タイマーの設定
+
+[5 章](#5-試験項目書) T-16・T-17 の 24 / 72 時間後チェックが参照する `/var/log/lab-heartbeat.log` は、
+このタイマーが作る。
+
+| No | 作業内容 | コマンド | 想定結果 | 判定 |
+| --- | --- | --- | --- | --- |
+| 4.10-1 | heartbeat 実行スクリプトの配置 | `printf '#!/bin/sh\ndate >> /var/log/lab-heartbeat.log\n' \| sudo tee /usr/local/bin/lab-heartbeat.sh && sudo chmod +x /usr/local/bin/lab-heartbeat.sh` | ファイルが作成される | `test -x /usr/local/bin/lab-heartbeat.sh` |
+| 4.10-2 | systemd service ユニットの作成 | `/etc/systemd/system/lab-heartbeat.service` に `[Unit]`（`Description=lab heartbeat`）と `[Service]`（`Type=oneshot`、`ExecStart=/usr/local/bin/lab-heartbeat.sh`）を記載 | ファイルが作成される | `systemctl cat lab-heartbeat.service` がエラーなく表示される |
+| 4.10-3 | systemd timer ユニットの作成 | `/etc/systemd/system/lab-heartbeat.timer` に `[Timer]`（`OnCalendar=hourly`、`Persistent=true`）と `[Install]`（`WantedBy=timers.target`）を記載 | ファイルが作成される | `systemctl cat lab-heartbeat.timer` がエラーなく表示される |
+| 4.10-4 | 有効化と初回実行確認 | `sudo systemctl daemon-reload && sudo systemctl enable --now lab-heartbeat.timer && sudo systemctl start lab-heartbeat.service` | timer が有効化され、`lab-heartbeat.service` の初回実行でログに 1 行追記される | `systemctl is-enabled lab-heartbeat.timer` が `enabled`、`cat /var/log/lab-heartbeat.log` に 1 行以上 |
+
+### 4.11 再起動試験
 
 | No | 作業内容 | コマンド / 操作 | 想定結果 | 判定 |
 | --- | --- | --- | --- | --- |
-| 4.10-1 | 自動起動設定の記録（再起動前） | `systemctl is-enabled ssh ufw fail2ban nginx` | すべて `enabled` | 再起動後との比較用に控える |
-| 4.10-2 | 再起動 | `sudo reboot`。復帰しない場合は VPS 管理画面のコンソールから再起動する | 数十秒〜数分でホストが復帰する | 手元 PC からの疎通で確認する |
-| 4.10-3 | 復帰後の一括確認（手元 PC 側） | `ssh opsadmin@lab-persist01.<取得したドメイン> "systemctl is-enabled ssh ufw fail2ban nginx && systemctl is-active ssh ufw fail2ban nginx && sudo ufw status && curl -s -o /dev/null -w '%{http_code}\n' https://lab-persist01.<取得したドメイン>/healthz"` | 4.10-1 と同じ `enabled` 一覧、全サービス `active`、`ufw` が `active`、HTTP ステータス `200` | 手動操作なしで全項目が復帰する |
-| 4.10-4 | 証明書の有効性確認 | `curl -vI https://lab-persist01.<取得したドメイン>/ 2>&1 \| grep -i "expire\|issuer"` | 再起動前と同じ証明書が有効なまま | 再起動によって証明書が失われていないことを確認する |
+| 4.11-1 | 自動起動設定の記録（再起動前） | `systemctl is-enabled ssh ufw fail2ban nginx lab-heartbeat.timer` | すべて `enabled` | 再起動後との比較用に控える |
+| 4.11-2 | 再起動 | `sudo reboot`。復帰しない場合は VPS 管理画面のコンソールから再起動する | 数十秒〜数分でホストが復帰する | 手元 PC からの疎通で確認する |
+| 4.11-3 | 復帰後の一括確認（手元 PC 側） | `ssh opsadmin@lab-persist01.<取得したドメイン> "systemctl is-enabled ssh ufw fail2ban nginx lab-heartbeat.timer && systemctl is-active ssh ufw fail2ban nginx lab-heartbeat.timer && sudo ufw status && curl -s -o /dev/null -w '%{http_code}\n' https://lab-persist01.<取得したドメイン>/healthz"` | 4.11-1 と同じ `enabled` 一覧、全サービス `active`、`ufw` が `active`、HTTP ステータス `200` | 手動操作なしで全項目が復帰する |
+| 4.11-4 | 証明書の有効性確認 | `curl -vI https://lab-persist01.<取得したドメイン>/ 2>&1 \| grep -i "expire\|issuer"` | 再起動前と同じ証明書が有効なまま | 再起動によって証明書が失われていないことを確認する |
 
 ---
 
 ## 5. 試験項目書
 
-[03 構築工程の実務ドキュメント §4](./03-build-process.md#4-試験項目書)の書式に従う。全 21 項目中 7 項目が異常系であり、
+[03 構築工程の実務ドキュメント §4](./03-build-process.md#4-試験項目書)の書式に従う。全 22 項目中 7 項目が異常系であり、
 [03 の「異常系を全体の 3 割以上」](./03-build-process.md#異常系を必ず入れる理由)の条件を満たす。
 
 | No | 試験分類 | 観点 | 前提条件 | 手順 | 期待結果 | 実測結果 | 判定 | エビデンス | 実施日 |
@@ -395,13 +410,14 @@ flowchart TB
 | T-12 | 単体 | 証明書自動更新タイマー | 4.9-5 実施済み | `systemctl list-timers certbot.timer` | 1 日 2 回のスケジュールが有効 | | | | |
 | T-13 | 異常系 | 証明書更新のドライラン | 4.9-6 実施済み | `sudo certbot renew --dry-run` | 全件成功のメッセージ | | | | |
 | T-14 | 異常系 | 80 番ポート閉塞時の更新失敗と復旧 | T-13 が PASS 済み | `sudo ufw delete allow 80/tcp` 後に `sudo certbot renew --dry-run --force-renewal` を実行 → `sudo ufw allow 80/tcp` で復旧 | HTTP-01 チャレンジが失敗する。ポートを戻すと再度成功する | | | | |
-| T-15 | 総合 | 再起動後の復帰 | 4.10 実施済み | [4.10-3](#410-再起動試験)の一括確認コマンド | 手動操作なしで全項目が復帰する | | | | |
+| T-15 | 総合 | 再起動後の復帰 | 4.11 実施済み | [4.11-3](#411-再起動試験)の一括確認コマンド | 手動操作なしで全項目が復帰する | | | | |
 | T-16 | 総合 | 24 時間後の継続稼働 | T-15 が PASS 済み | 構築から 24 時間後、手元 PC から `curl` で `/healthz` を実行し、`/var/log/lab-heartbeat.log` の最新行を SSH 越しに確認 | `200` が返り、heartbeat が 1 時間毎に途切れず記録されている | | | | |
 | T-17 | 総合 | 72 時間後の継続稼働 | T-16 が PASS 済み | 構築から 72 時間後、T-16 と同じ確認に加え `sudo fail2ban-client status sshd` で総当たり検知件数を確認 | `200` が返り、heartbeat が途切れていない。総当たり検知件数を記録する（0 件でも異常ではない） | | | | |
 | T-18 | 異常系 | 実インターネットからの総当たりに対する `fail2ban` の動作 | T-17 と同時期に実施可 | `sudo fail2ban-client status sshd` を複数日おきに確認し、`Currently banned` と `Total banned` の推移を記録する | 期間中に 1 件以上の自動検知・遮断が記録される（実インターネットに公開したホストは高い確率でスキャンを受けるため）。0 件だった場合は「未観測」として正直に記録する | | | | |
 | T-19 | 異常系 | SSH 誤設定からの復旧 | スナップショット取得済み | `00-lab-hardening.conf` に存在しないディレクティブを追記し `sudo sshd -t` を実行 → 元の内容に復元 | `sshd -t` が構文エラーを検出する。復元で復旧できる | | | | |
 | T-20 | 異常系 | Nginx 設定ミスからの復旧 | スナップショット取得済み | `server` ブロックの閉じ括弧を削除し `sudo nginx -t` を実行 → 元の内容に復元し `sudo systemctl reload nginx` | `nginx -t` が構文エラーを検出する。復元後 `active` に戻る | | | | |
 | T-21 | 異常系 | 未許可ポートへの到達不能確認 | 4.6 実施済み | 手元 PC から `nc -zv -w3 lab-persist01.<取得したドメイン> 3306`（例: DB ポートなど未許可ポート） | 接続が拒否またはタイムアウトする | | | | |
+| T-22 | 異常系 | ディスク容量逼迫時の検知と復旧 | スナップショット取得済み | `df -h /` で残容量を確認後 `sudo fallocate -l <残容量弱>G /var/tmp/dummy` でほぼ埋め、`sudo apt update` の失敗を確認 → `sudo rm /var/tmp/dummy` で復旧 | 容量不足によるコマンド失敗（`No space left on device` 相当）を確認できる。削除後は `df -h /` の使用率が元に戻り、`sudo apt update` が成功する | | | | |
 
 ---
 
@@ -413,8 +429,8 @@ flowchart TB
 
 | 日 | 作業 | 目安時間 |
 | --- | --- | --- |
-| Day 0 | [4.1](#41-作業前確認)〜[4.9](#49-lets-encrypttls証明書の取得)（VPS 契約〜TLS 証明書取得）、スナップショット取得 | 2.5〜3.5 時間（DNS 反映待ちを除く） |
-| Day 0（同日、間隔を空けて） | [4.10](#410-再起動試験) 再起動試験、T-01〜T-15 | 1 時間 |
+| Day 0 | [4.1](#41-作業前確認)〜[4.10](#410-heartbeat-タイマーの設定)（VPS 契約〜heartbeat タイマー設定）、スナップショット取得 | 2.5〜3.5 時間（DNS 反映待ちを除く） |
+| Day 0（同日、間隔を空けて） | [4.11](#411-再起動試験) 再起動試験、T-01〜T-15 | 1 時間 |
 | Day 1 | T-16（24 時間後チェック） | 15 分 |
 | Day 3 | T-17・T-18（72 時間後チェック、`fail2ban` 検知件数の確認） | 15 分 |
 | Day 3（判断後） | [下記「継続 or 解約の判断」](#継続-or-解約の判断) | 15 分 |
@@ -434,7 +450,7 @@ flowchart TB
 | 選択肢 | 該当する場合 | 次のアクション |
 | --- | --- | --- |
 | 継続する | [証跡採録チェックリスト順位 1](../evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)（`site.yml` 適用）や順位 3（Slack 実配信）を近日中に実施する予定がある | ホストを維持し、[STATUS.md](../../STATUS.md)の実施ステータスへ「継続中」と記録する |
-| 解約する | 本演習の証跡採録（T-01〜T-21）で目的を達成しており、当面の後続演習の予定が無い | [付録 A](#付録-a-使用終了時の解約データ消去手順)を実施し、[8 章](#8-実施ステータスと次のアクション)へ解約日を記録する |
+| 解約する | 本演習の証跡採録（T-01〜T-22）で目的を達成しており、当面の後続演習の予定が無い | [付録 A](#付録-a-使用終了時の解約データ消去手順)を実施し、[8 章](#8-実施ステータスと次のアクション)へ解約日を記録する |
 
 ---
 
@@ -445,7 +461,7 @@ flowchart TB
 | 証跡 | 内容 | 保存先（実施時） |
 | --- | --- | --- |
 | 構築ログ | [4 章](#4-構築手順書)のコマンドと出力全文（`script` コマンドで記録） | [証跡採録チェックリスト](../evidence-capture-checklist.md)が指す保存先 |
-| 試験結果 | [5 章](#5-試験項目書) T-01〜T-21 の実測結果とエビデンスファイル | 同上 |
+| 試験結果 | [5 章](#5-試験項目書) T-01〜T-22 の実測結果とエビデンスファイル | 同上 |
 | 24 / 72 時間チェックの記録 | T-16・T-17 実施時刻と `curl` / heartbeat ログのスクリーンショットまたは出力全文 | 同上。**実施日時が証跡の核心**のため、コマンド出力の日時をマスクしない |
 | `fail2ban` 検知ログ | T-18 の `fail2ban-client status sshd` 出力（送信元 IP はマスクする） | 同上 |
 | 解約記録（解約する場合） | 解約日、最終請求額、DNS レコード削除の確認 | [8 章](#8-実施ステータスと次のアクション) |
@@ -463,7 +479,7 @@ flowchart TB
 | 本演習の実施 | 未実施 |
 | VPS 契約 | 未実施 |
 | ドメイン取得 | 未実施 |
-| T-01〜T-21 | 未実施（実測結果欄はすべて空欄） |
+| T-01〜T-22 | 未実施（実測結果欄はすべて空欄） |
 | 継続 or 解約の判断 | 未実施 |
 
 **次のアクション**
@@ -499,7 +515,7 @@ flowchart TB
 | [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md) | AWS 上に VPC・EC2 を構築し、1 セッションで `apply` から `destroy` まで完了させる | [2 章の比較表](#11awsとの違い)のとおり目的が異なる別演習。どちらか一方で代替しない |
 | [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md) | 監視スタック本体の構築 | 本演習は監視スタックを導入しない（heartbeat のみ）。`lab-persist01` に監視スタックを載せる演習は将来の課題として扱う |
 | [証跡採録チェックリスト](../evidence-capture-checklist.md)順位 1（`site.yml` 適用） | server-monitor の Ansible role 一式を対象ホストへ適用する | **本演習が作る `lab-persist01` は、この適用先になり得る候補の 1 つ**だが、適用作業そのものは対象外。Docker 導入・`site.yml` 適用は server-monitor 側の [build-package](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) が担う |
-| 証跡採録チェックリスト順位 2（再起動・継続稼働） | 対象ホストの再起動・24 / 72 時間後の正常性確認 | 本演習の[4.10](#410-再起動試験)・[5 章](#5-試験項目書) T-15〜T-17 がこの項目の詳細設計そのものに当たる |
+| 証跡採録チェックリスト順位 2（再起動・継続稼働） | 対象ホストの再起動・24 / 72 時間後の正常性確認 | 本演習の[4.11](#411-再起動試験)・[5 章](#5-試験項目書) T-15〜T-17 は、再起動後のサービス自動復帰と heartbeat による 24 / 72 時間後の到達性確認の詳細設計に当たる。ただし監視スタック本体の復帰確認とバックアップの復元試験は[スコープ](#スコープ)のとおり対象外であり、この項目を完全に満たすものではない |
 | 証跡採録チェックリスト順位 3（Slack 実配信） | Alertmanager から Slack への実配信 | 対象外。Slack Webhook の取得・Alertmanager 設定は本演習のホストの有無に依存しない独立した作業 |
 | [ADR-0006](../adr/0006-self-host-monitoring.md) | 監視スタックを自前運用する方針（EC2 上を想定） | 本演習は監視スタックの本番配置場所を決めるものではない。`lab-persist01` を将来の配置先にするかどうかは、本演習の証跡が貯まった後の別判断とする |
 
