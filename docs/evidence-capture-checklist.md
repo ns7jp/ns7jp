@@ -14,7 +14,7 @@
 | 順位 | 次に採録するもの | 完了条件 |
 | --- | --- | --- |
 | 1 | Docker 未導入の独立した Ubuntu 対象ホスト + 別の管理端末 | Docker 導入を含む `site.yml` 初回適用、2 回目 `changed=0`、network / UFW、受け入れ試験、引き渡し資料を同じ commit で採録。独立ホストそのものの構築手順は [13 恒久ホスト構築演習設計](./learning-plan/13-persistent-host-exercise-design.md)（設計のみ・未実施）を土台にできる |
-| 2 | 対象ホストの再起動・継続稼働 | 再起動直後の自動起動・監視復帰・バックアップに加え、24時間後と72時間後の正常性を時刻付きで採録。手順は [13 恒久ホスト構築演習設計](./learning-plan/13-persistent-host-exercise-design.md)の 4.10 章・5 章 T-15〜T-17（設計のみ・未実施） |
+| 2 | 対象ホストの再起動・継続稼働 | 再起動直後の自動起動・監視復帰・バックアップに加え、24時間後と72時間後の正常性を時刻付きで採録。[13 恒久ホスト構築演習設計](./learning-plan/13-persistent-host-exercise-design.md)の 4.11 章・5 章 T-15〜T-17（設計のみ・未実施）は、このうち再起動後のサービス自動復帰と heartbeat による 24 / 72 時間後の到達性確認までを扱う。監視スタック本体の復帰確認とバックアップの復元試験は 13 のスコープ外であり、`site.yml` 適用（順位 1）後の別演習として別途採録する |
 | 3 | Alertmanager → Slack 実配信 | FIRING / RESOLVED の両方を秘密値を伏せて採録 |
 | 4a | Windows / AD の公開可能な再現ログ | 隔離ラボでユーザー作成、棚卸し、DNS 障害から domain 参加復旧までを再実施 |
 | 4b | Windows / winget 端末セットアップ | 使い捨て test VM で導入、2 回目実行、rollback、package ごとの exit code を採録 |
