@@ -1,133 +1,118 @@
 # 島田則幸 (Noriyuki Shimada)
 
-## Linux サーバー設計・構築エンジニア志望
+## 未経験から Linux サーバー設計・構築エンジニアへ
 
-主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** で、設計・構築・試験・監視・障害復旧・バックアップ復元を工程として整理し、使い捨て Ubuntu 24.04 runner と手元 WSL2 で実行結果を採録しています。Full-stack E2E は試験項目 23 件中 23 件に合格しました。独立した引き渡し対象ホストでの実績ではなく、実行環境と未実測範囲も公開しています。
+製造・物流の現場で 15 年以上培った「計測する・原因を絞る・手順化する・改善を続ける」を、サーバー構築と運用に生かします。
 
-## 30 秒で確認する 3 点
+主作品は **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** です。Linux サーバーを題材に、設計して終わりではなく、次の一連の作業をコード・手順書・実行記録で示しています。
 
-| [主作品 `server-monitor`](https://github.com/ns7jp/server-monitor) | [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) |
+> **設計する → 構築する → 試験する → 監視する → 壊して直す → 記録する**
+
+## 30 秒で見る
+
+| 見てほしいもの | 分かること | 所要時間 |
 | --- | --- | --- |
-| Ansible、Docker、Prometheus、Grafana、Loki を使った主作品 | 要件、設計、パラメータ、構築、試験、変更、引き渡しを工程順に確認 | 23/23 PASS の結果、実行環境、未実測範囲を確認 |
+| [採用ご担当者さま向け 1 ページ](./docs/overview-for-recruiters.md) | 経験、強み、入社後に任せやすい業務 | 1 分 |
+| [主作品 `server-monitor`](https://github.com/ns7jp/server-monitor) | Linux、Docker、Ansible、監視の実装 | 3 分 |
+| [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | 要件から引き渡しまでの構築工程 | 5 分 |
+| [実測証跡ダイジェスト](https://ns7jp.github.io/evidence-demo.html) | 実際に動かした結果と未実施の範囲 | 2 分 |
 
-[採用ご担当者さま向け 1 ページ版](./docs/overview-for-recruiters.md) ／ [2 分 15 秒デモ（保存済み画面の証跡リプレイ）](https://ns7jp.github.io/demo.html) ／ [詰まった記録](./LEARNINGS.md)
+初学者の方は、先に **[やさしい用語・見方ガイド](./docs/beginner-guide.md)** をご覧ください。
 
-## サーバー構築工程で示すもの
+## 何を作ったか
 
-| 工程 | 成果物・実行内容 | 現在の状態 |
+監視対象の Web アプリと、異常を見つける監視基盤を構築しました。
+
+```mermaid
+flowchart LR
+    U[利用者] --> N[Nginx<br>入口]
+    N --> A[Flask / Gunicorn<br>Web アプリ]
+    P[Prometheus<br>数値を集める] --> G[Grafana<br>グラフで見る]
+    L[Loki / Alloy<br>ログを集める] --> G
+    P --> M[Alertmanager<br>異常を知らせる]
+```
+
+覚え方は **「入口・本体・計測・表示・通知」** です。
+
+| 役割 | 技術 | 簡単な説明 |
 | --- | --- | --- |
-| 要件・設計 | [要件定義、基本・詳細設計、パラメータシート、ネットワーク設計](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | **実装済み**（文書を作成） |
-| 構築・試験 | Ansible `site.yml` の適用、2 回目の冪等性、network / UFW、監視スタック、バックアップ / 復元 | **実測済み**（使い捨て Ubuntu 24.04 runner、23/23 PASS） |
-| 監視・切り分け | Prometheus / Grafana / Loki の実データ表示、通信断の原因切り分け | **実測済み**（手元 WSL2） |
-| 障害復旧 | app 停止からの自動復旧、D-1 の RTO 計測 | **実測済み**（手元 WSL2、RTO 13 秒） |
-| 変更・引き渡し | Git SHA を固定した変更・ロールバック、引き渡しチェックリスト | ロールバックは **実測済み**（使い捨て runner）。独立した対象ホストへの引き渡しは **未実施（NOT RUN）** |
+| 入口 | Nginx | 外部からの通信を受け、アプリへ渡す |
+| 本体 | Flask / Gunicorn | 画面や応答を返す |
+| 計測 | Prometheus / Loki / Alloy | 数値とログを集める |
+| 表示 | Grafana | 状態をグラフで確認する |
+| 通知 | Alertmanager | 異常を検知して知らせる |
+| 自動構築 | Ansible / Docker Compose | 同じ環境を繰り返し作れるようにする |
 
-状態は、成果物やコードが存在する **実装済み**、日付・環境・commit SHA を含む結果がある **実測済み**、実行ログがない **未実施（NOT RUN）** の 3 つに分けます。正本は [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) です。
+## サーバー構築で示したこと
 
-## 志望と現況
-
-製造・物流の現場で 15 年以上続けてきた「計測する・原因を絞る・手順化する・改善を定着させる」を、サーバーの構築・監視・障害対応に生かします。
-
-**現況（2026-08）**: 派遣社員としてトライアル就業中です。第一志望は **Linux サーバー設計・構築**、入口業務としてインフラ監視・運用にも対応します。IT サポート・社内 SE 補助は応募先に応じた補助トラックです。
-
-採用ご担当者さま向けの要約は [1 ページ版](./docs/overview-for-recruiters.md)、経歴とスキルは [職務経歴書・スキルシート](./docs/resume.md) にまとめています。
-
-## 実測できていること
-
-| 実施した検証 | 結果・証跡 |
-| --- | --- |
-| 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、試験項目 23 件中 23 件合格](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)（[PR #75](https://github.com/ns7jp/server-monitor/pull/75)、2026-08-22 に main 反映済み） |
-| Git SHA を指定した変更・ロールバック実演 | [候補 `84e1492` を配備後、旧版 `59aa88e` へ復帰し、稼働中の版番号、実行ファイルのハッシュ、app コンテナ再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで PASS](./docs/evidence/2026-08-23-server-monitor-git-rollback-ci.md)（[PR #77](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)、PR ブランチ上の使い捨て runner での結果） |
-| Docker API の権限制御とログ経路 | [read-only proxy の GET 成功、POST 拒否、固有 Nginx log の Alloy 経由 Loki 到達を同じ E2E で確認](https://github.com/ns7jp/server-monitor/actions/runs/32572409469) |
-| Ansible 4 ロールを Linux 上で適用し、2 回目の冪等性と期待状態を確認 | [`molecule test` 4 ロール PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)。途中で静的検査では見つからなかった欠陥 2 件を修正 |
-| 監視スタック 9 サービスを Linux (WSL2) 上で起動 | [Grafana の実データ表示、Loki のログ取得を確認](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
-| app プロセスを意図的に停止し、自動復旧を計測 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
-| client → proxy → app の二セグメント構成で通信断を注入 | [障害再現 → 経路・名前解決の切り分け → 復旧まで PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md) |
-
-## 実行環境と未実測の範囲
-
-すべて使い捨て環境上の実測です。独立した引き渡し対象ホストでの実績ではありません。
-
-| 検証項目 | 実行環境 |
-| --- | --- |
-| Full-stack E2E ／ Git SHA ロールバック ／ Docker API 検証 | 使い捨て GitHub Actions runner（Ubuntu 24.04、Docker 導入済み） |
-| 監視スタック起動 ／ D-1 復旧演習 | 手元 WSL2（Ubuntu 24.04） |
-| B-1 ディスク設計・LVM 拡張 | AI 支援セッション上の qemu ゲスト（loop device） |
-| B-2 3 層切り分け ／ B-3 DB 復元 | 同上の Docker コンテナ。**面接の場での再実演は、手元の WSL2 + Docker で再現できるこの 2 演習に限りお約束できます** |
-| B-4 L2 / L3 切り分け | 同上の network namespace |
-
-未実測: 独立した引き渡し対象ホスト、組織 DNS、Slack 実配信、AWS `apply`、ホスト再起動後の永続性、長期稼働、AlmaLinux 実機への適用。何がどこまで確認済みかは[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)に 1 か所へまとめています。実行ログのない項目を実績として書くことはしません。
-
-## 追加の実測演習
-
-2026-08-24 に実行・採録した演習です。スクリプトが実行結果から証跡を自動生成し、判定は期待値との比較なので、手で PASS を書き込む余地がありません。証跡ファイルの「実施環境」欄に採録時の `uname` をそのまま残しています（B-2 / B-3 / B-4 は `Linux 6.18.44-fc-v21`）。独立した物理／VPS ホストや手元 WSL2 での再採録ではなく、現時点で面接時に再実演を約束できるのは手元 WSL2 + Docker で再現できる B-2 / B-3 です。実行者欄を含む再採録は着手予定です（[STATUS](./STATUS.md) 参照）。
-
-| 演習 | 内容 | 結果 |
+| 工程 | 作成・実行したもの | 状態 |
 | --- | --- | --- |
-| [B-1 ディスク設計・LVM 拡張](https://github.com/ns7jp/server-monitor/blob/main/scripts/labs/lvm-drill.sh) | VG / LV を作り、容量を使い切り、PV を足して online 拡張する | [5 PASS / 0 FAIL](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md)（220M→457M） |
-| [B-2 3 層構成の障害切り分け](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier) | Web / AP / DB のどの層で止まっているかを層別 health で絞り込む | [9 PASS / 0 FAIL](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md) |
-| [B-3 DB バックアップ・復元](https://github.com/ns7jp/server-monitor/blob/main/labs/three-tier/run-restore-drill.sh) | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | [7 PASS / 0 FAIL](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒） |
-| [B-4 L2 / L3 切り分け](https://github.com/ns7jp/server-monitor/tree/main/labs/routing) | 静的ルート、`ip_forward`、802.1Q VLAN ID 不一致を切り分ける | [6 PASS / 0 FAIL / 3 SKIP-ENV](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md)（VLAN 部は kernel 都合で未検証） |
+| 設計 | 要件定義、基本・詳細設計、パラメータシート、ネットワーク設計 | **作成済み** |
+| 構築 | Ansible と Docker Compose による自動構築 | **実測済み** |
+| 試験 | 通信、Firewall、監視、通知、バックアップ・復元を確認 | **23/23 PASS** |
+| 監視 | Prometheus / Grafana / Loki でメトリクスとログを確認 | **実測済み** |
+| 障害対応 | アプリ停止、通信断、DB 復元、LVM 拡張を演習 | **実測済み** |
+| 変更管理 | Git SHA を指定した更新と旧版へのロールバック | **実測済み** |
+| 引き渡し | チェックリストを作成 | 独立ホストでは **未実施** |
 
-実行して初めて見つかった実バグは、1 件ずつ「症状 / 原因 / どの静的検査が見逃したか / 修正 PR」を [欠陥台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/defects-found.md) に起こしました。件数はこの台帳が正本です。
+状態の意味：
 
-Ansible role は Ubuntu 22.04 / 24.04 に加えて **AlmaLinux / Rocky 9** に対応しています（`dnf`、firewalld、SELinux、dnf-automatic）。Molecule の `el9` シナリオは [2026-08-25 に実行証跡を採録しました](https://github.com/ns7jp/server-monitor/actions/runs/32811100007)（コンテナ上での検証）。実機の AlmaLinux ホストへ適用した証跡はまだありません。
+- **作成済み**：コードや文書がある
+- **実測済み**：日時・環境・結果を記録して実行した
+- **未実施（NOT RUN）**：計画やコードはあるが、実行記録がない
 
-## 詰まった記録
+実行結果の正本は [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) です。
 
-うまくいった結果より、**外した仮説**のほうが読んでいただく価値があると考えています。実機を触って初めて分かったことを、症状 → 原因 → 対処 → 学びの順で [LEARNINGS.md](./LEARNINGS.md) に残しています。
+## 主な実測結果
 
-| 症状 | 何を取り違えていたか |
+| 検証 | 結果 | 実行環境 |
+| --- | --- | --- |
+| Full-stack E2E | [試験 23 件中 23 件 PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) | GitHub Actions / Ubuntu 24.04 |
+| Ansible の再実行 | [2 回目 `changed=0`](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) | Linux コンテナ |
+| アプリ停止からの自動復旧 | [PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) | 手元 WSL2 / Ubuntu 24.04 |
+| 3 層障害切り分け | [9 PASS / 0 FAIL](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md) | Docker コンテナ |
+| DB バックアップ・復元 | [7 PASS / 0 FAIL、RTO 0.149 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md) | Docker コンテナ |
+| Git 版指定ロールバック | [旧版への復帰を確認](./docs/evidence/2026-08-23-server-monitor-git-rollback-ci.md) | GitHub Actions runner |
+
+### まだ実測していないこと
+
+独立した引き渡し対象ホスト、組織 DNS、Slack への実配信、AWS `apply`、ホスト再起動後の永続性、長期稼働、AlmaLinux 実機への適用は未実施です。実行していない項目を実績とは表現しません。
+
+## 失敗から学んだこと
+
+成功結果だけでなく、失敗を **「症状 → 原因 → 対処 → 学び」** の順に [LEARNINGS.md](./LEARNINGS.md) に記録しています。
+
+| 症状 | 原因から得た学び |
 | --- | --- |
-| UFW を設定する playbook が、2 回目に必ず `changed` になる | `allow` と `limit` が同じ port を奪い合っていた。静的検査は通っていた |
-| 「コンテナだから systemd が動かせない」と診断した | 診断そのものが誤りだった。動かせない理由は別にあった |
-| `docker kill` したのにコンテナが戻ってこない | `restart: unless-stopped` の対象外になる操作だと分かっていなかった |
-| Hyper-V 上の AD ドメイン参加で「ドメインが見つかりません」 | DC が動いていることと、クライアントがその DC を DNS として見ていることは別だった |
+| UFW の設定が毎回 `changed` になる | 同じポートへの `allow` と `limit` が競合していた |
+| `docker kill` 後にコンテナが戻らない | 停止方法と再起動ポリシーの関係を理解できていなかった |
+| AD ドメインが見つからない | クライアントの DNS が DC を向いていなかった |
 
-**この 4 件のうち、UFW の競合と systemd の誤診は、事実（環境・症状・原因・対処）を AI 支援で下書きしたのち、学びの言語化は私自身が書きました。docker kill の 2 件は、私が伝えた核心の一文を AI が文章に起こしたもの、Hyper-V AD の 1 件は研修中の作業メモを AI が本文化したものです**（`git log -- LEARNINGS.md` で確認できます）。[AI の利用について](#ai-の利用について)のとおり、このリポジトリの他の文書には AI 支援が広く入っており、`LEARNINGS.md` も例外ではありませんでした。2026-08-25 以降は、新規エントリも含めすべて本人のみが編集します（[STATUS §0](./STATUS.md) のルール 7）。
+切り分けの覚え方は **「事実を見る → 範囲を絞る → 1 つ変える → 再確認する」** です。
 
-## 採用担当者向けの最短レビュー順
+## 学習中の方へ
 
-1. [主作品 `server-monitor`](https://github.com/ns7jp/server-monitor)で、構成と実行方法を確認
-2. [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)で、設計、構築、試験、変更、引き渡しの成果物を確認
-3. [実測証跡ダイジェスト](https://ns7jp.github.io/evidence-demo.html)と[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)で、実行結果と **NOT RUN** を確認
-4. [詰まった記録](./LEARNINGS.md)で、症状から原因を切り分けた過程を確認
+同じく未経験から始める方が再利用できるよう、[24 週の学習プラン](./docs/learning-plan/README.md)を公開しています。最初からすべて覚えるのではなく、毎回次の 5 点を残します。
 
-[案件概要](https://ns7jp.github.io/project-brief.html)はブラウザ向けの要約です。使用技術の一覧、資格、他の学習作品は [職務経歴書・スキルシート](./docs/resume.md)、未着手を含む学習計画は [STATUS](./STATUS.md) に分離しています。README の項目数を増やすより、主作品で実際に構築・検証・復旧した結果を優先して更新します。
+1. 何を作るか
+2. なぜ必要か
+3. どのコマンドを使ったか
+4. 何を見て成功と判断したか
+5. 失敗したとき、どう戻すか
+
+## 経験・資格
+
+- 製造・物流業務 15 年以上
+- Python 3 エンジニア認定基礎・実践
+- PHP 8 技術者認定初級
+- IT パスポート
+- 基本情報技術者を学習中
+
+詳しい職歴とスキルは [職務経歴書・スキルシート](./docs/resume.md)、現場改善の経験は [業務改善レポート](./docs/business-improvement/picking-improvement.md) にまとめています。
 
 ## AI の利用について
 
-AI 支援を使っている範囲を、`git log` で確認できる実態に合わせて書きます。
-
-| 範囲 | 具体例 |
-| --- | --- |
-| 文書の構成・整形・調査 | README、設計書、ランブックの下書きと推敲 |
-| **実装コードの生成** | Ansible role、Terraform module、CI workflow、テスト、ラボの雛形 |
-| コードレビュー、リンク・表記の確認 | PR 上でのレビューと修正提案 |
-
-**範囲は `server-monitor` に限りません。3 リポジトリすべての履歴に `Author: Claude <noreply@anthropic.com>` または `Co-Authored-By: Claude` のコミットが含まれます。** この職務経歴書・この README 自体も対象です。マージコミットを除いた実作業コミットに占める割合は次のとおりです（2026-08-25 時点、`git log --no-merges` で再現できます）。
-
-| リポジトリ | Claude が著者または共同著者 | 実作業コミット総数 |
-| --- | --- | --- |
-| [ns7jp/ns7jp](https://github.com/ns7jp/ns7jp)（このプロフィール） | 42 | 71 |
-| [ns7jp/server-monitor](https://github.com/ns7jp/server-monitor)（主作品） | 49 | 95 |
-| [ns7jp/ns7jp.github.io](https://github.com/ns7jp/ns7jp.github.io)（サイト） | 19 | 77 |
-
-文書の整形だけでなく、実装コードの生成にも使っている、という意味です。
-
-**AI が生成した手順や説明を、本人が実行・理解していない状態で実績にはしません。** 実機の操作、結果の採録、機密情報のマスク、技術選定の最終判断、面接での説明は本人が担当します。
-
-本人が実機を操作し、仮説を外した経緯も含めて記録したものが [学習の一次記録（つまずきログ）](./LEARNINGS.md) と [server-monitor の証跡](https://github.com/ns7jp/server-monitor/tree/main/docs/evidence) です。たとえば、UFW の競合、Molecule 上の systemd に対する誤診、`docker kill` と再起動ポリシーの違い、Hyper-V 上の AD ドメイン参加での DNS 向き先を、症状 → 原因 → 対処 → 学びの順で残しています。
-
-## 現場経験から生かせること
-
-物流現場では作業時間を 15 分単位で計測し、棚配置・補充ルール・OJT 用マップを改善して、1 日あたり約 1 時間の作業時間短縮につなげました。この経験を、metrics / logs に基づく切り分け、構築手順とランブックの標準化、変更後の確認に生かします。
-
-詳細：[業務改善レポート](./docs/business-improvement/picking-improvement.md) ／ [現場経験とインフラの橋渡し](./docs/career-bridge.md)
-
-## 経歴・資格・その他の作品
-
-Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級、IT パスポートを取得し、基本情報技術者を学習中です。技術ごとの習熟度、職歴、他の作品は [職務経歴書・スキルシート](./docs/resume.md)、応募先ごとの提示順は [志望トラックと証跡](./docs/target-roles.md) を参照してください。
+文書の構成・推敲、コードの雛形、レビューに AI 支援を利用しています。ただし、AI が生成した内容を未確認のまま実績にはしません。実機操作、結果の採録、秘密情報のマスク、技術選定の最終判断、面接での説明は本人が担当します。詳しい方針と進捗は [STATUS.md](./STATUS.md) を参照してください。
 
 ## Contact
 
