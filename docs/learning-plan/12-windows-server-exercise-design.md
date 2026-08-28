@@ -185,10 +185,10 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | 仮想化基盤 | Hyper-V | [05](./05-phase1-exercise-design.md#前提条件)が明らかにした「本人の実施環境は Hyper-V」に加え、既存の Windows 系実施キット（[ad-exercise-kit](./ad-exercise-kit/README.md)・[python-ops-kit](./python-ops-kit/README.md)）がいずれも Hyper-V 用 PowerShell スクリプトのため、Windows 側は Hyper-V を本文の標準にする（[01 学習環境](./01-environment.md)が既定とする VirtualBox は Linux 側（05）の主環境のまま変えない） |
 | ネットワークセグメント | 専用の Internal スイッチ `lab-winbase-internal`、`192.168.60.0/24`、恒久的な外部接続なし | [07 §1 の隔離原則](./07-python-ops-automation-exercise-design.md#前提条件)を踏襲し、Linux ラボ（`192.168.56.0/24`、[01 学習環境](./01-environment.md#命名と-ip-の割り当て規則)）や[05 付録 A-3 の検証用セグメント](./05-phase1-exercise-design.md#a-3-検証用セグメントの一時追加p-1p-7-の代替)（`192.168.57.0/24`）と衝突しない新しいオクテットを採番する。`ADLAB`・`LAB-WINOPS1` のセグメントは各資料で具体的な IP を固定していないため、それらとの衝突可能性も排除できる |
 | ローカル管理者戦略 | 名前付きローカル管理者 `opsadmin` を新設し、組み込み `Administrator` は改名のうえ無効化する | Linux 側の「`root` の直接ログインを禁止し、`sudo` 経由の名前付きユーザー `opsadmin` で運用する」（[05](./05-phase1-exercise-design.md#3-パラメータシート)）と同じ考え方を Windows に適用し、ユーザー名も意図的に揃える。組み込みアカウントを無効化まで行うのは、改名だけでは SID ベースの照会で依然として特定できるため（[付録 A](#付録-a-windows-server-基礎用語辞典)） |
-| リモート管理方式 | **WinRM**（HTTP + `TrustedHosts`、ラボセグメント限定）を主、**RDP**（NLA 必須、ラボセグメント限定）を副として両方有効化する | WinRM は PowerShell リモーティングの土台であり、[06](./06-shell-scripting-exercise-design.md)・[07](./07-python-ops-automation-exercise-design.md)・[08 の `gpupdate` 適用確認](./08-ad-exercise-design.md#46-gpo-のリンクとクライアント側の適用確認)など後続の演習が前提にする。RDP は[志望トラック](../target-roles.md)の補助トラック（IT サポート・社内 SE 補助）の実務で使用頻度が高いため併設する。HTTPS 化・証明書運用は基礎の範囲を超えるため対象外にし、[付録 A](#付録-a-windows-server-基礎用語辞典)に将来課題として記す |
-| ネットワークカテゴリ | 隔離 Internal スイッチの NIC を明示的に **Private** に設定する | 未識別のネットワークは既定で **Public** に分類され、`Enable-PSRemoting` が作成する WinRM 既定ファイアウォール規則は Public プロファイルを対象に含まない。カテゴリを明示せずに進めると「WinRM を有効化したのに接続できない」という典型的な詰まりになるため、[4.7](#47-リモート管理の有効化winrm)の先頭で対処する（[05 の netplan/cloud-init 順序](./05-phase1-exercise-design.md#3-5-固定-ip-の設定)や[06 の UTF-8 BOM 問題](../../STATUS.md)と同種の「知らないと必ず踏む」落とし穴） |
+| リモート管理方式 | **WinRM**（HTTP + `TrustedHosts`、ラボセグメント限定）を主、**RDP**（NLA 必須、ラボセグメント限定）を副として両方有効化する | WinRM は PowerShell リモーティングの標準基盤であり、複数ホストにまたがる一括管理・監視など将来の演習に備えた汎用インフラとして有効化する。現時点で設計済みの [06](./06-shell-scripting-exercise-design.md)・[07](./07-python-ops-automation-exercise-design.md)・[08](./08-ad-exercise-design.md#46-gpo-のリンクとクライアント側の適用確認)はいずれも対象ホスト自身のローカルコンソール上で完結しており WinRM 経由のリモート実行を前提にしていない（07 は複数ホストをまたぐリモート一括実行を明示的に対象外としている）が、Windows Server の基礎として PSRemoting を正しく構成・スコープ限定できることの確認自体に価値がある。RDP は[志望トラック](../target-roles.md)の補助トラック（IT サポート・社内 SE 補助）の実務で使用頻度が高いため併設する。HTTPS 化・証明書運用は基礎の範囲を超えるため対象外にし、[付録 A](#付録-a-windows-server-基礎用語辞典)に将来課題として記す |
+| ネットワークカテゴリ | 隔離 Internal スイッチの NIC を明示的に **Private** に設定する | 未識別のネットワークは既定で **Public** に分類される。Windows Server では `Enable-PSRemoting` は Public プロファイル向けにもファイアウォール規則を作成するが、その `RemoteAddress` は既定で「同一ローカルサブネット」に限定される（`-SkipNetworkProfileCheck` はサーバー版には影響しない）。本ラボはホスト PC（`192.168.60.1`）と VM（`192.168.60.10`）が同一サブネットにあるため、この既定規則だけで接続できてしまう可能性があるが、その暗黙の制約に依存せず意図を明示するため、[4.7](#47-リモート管理の有効化winrm)の先頭でカテゴリを明示する（[05 の netplan/cloud-init 順序](./05-phase1-exercise-design.md#3-5-固定-ip-の設定)や[06 の UTF-8 BOM 問題](../../STATUS.md)と同種の「知らないと見落とす」落とし穴） |
 | ファイアウォールの既定方針 | Windows Defender ファイアウォールは**既定で有効・既定で受信拒否**のまま変更せず、WinRM と RDP の 2 つの受信許可だけをラボセグメントへ限定して追加する | Ubuntu の `ufw` は既定で無効なため[05](./05-phase1-exercise-design.md#3-9-ファイアウォール)で明示的に有効化するが、Windows Server は既定で有効・既定でブロックのため、本書では「既定を変えない」判断そのものが確認事項になる。許可ルールを最小 2 本に絞るのは[05 の「22/tcp のみ許可」](./05-phase1-exercise-design.md#3-パラメータシート)と同じ最小権限の考え方 |
-| Windows Update の運用 | 恒久的なインターネット接続は持たず、更新作業の間だけ外部スイッチを一時的に追加し、完了後に外す | [windows-ad-lab.md §3](../evidence/templates/windows-ad-lab.md#3-公開前の安全条件)（「internet 接続が必要な更新時だけ NAT を一時追加し、検証前に外した」）・[07 の `03-enable-external-nat.ps1`/`04-disable-external-nat.ps1`](./python-ops-kit/hyperv/01-create-lab-winops1-vm.ps1)と同じ運用を踏襲し、Windows ラボ全体で例外を増やさない |
+| Windows Update の運用 | 恒久的なインターネット接続は持たず、更新作業の間だけ外部スイッチを一時的に追加し、完了後に外す | [windows-ad-lab.md §3](../evidence/templates/windows-ad-lab.md#3-公開前の安全条件)（「internet 接続が必要な更新時だけ NAT を一時追加し、検証前に外した」）・07 の [`03-enable-external-nat.ps1`](./python-ops-kit/hyperv/03-enable-external-nat.ps1)/[`04-disable-external-nat.ps1`](./python-ops-kit/hyperv/04-disable-external-nat.ps1)と同じ運用を踏襲し、Windows ラボ全体で例外を増やさない |
 | ロール・機能の扱い | 新規のロール・機能は一切追加せず、`Get-WindowsFeature` によるベースライン記録のみ行う | AD DS/DNS は [windows-ad-lab.md](../evidence/templates/windows-ad-lab.md)、IIS・ファイルサーバー等は将来の演習が扱うべき範囲であり、本書が兼務すると「基礎」の輪郭がぼやける |
 | サービス／イベントログ演習の対象 | 実在する既定サービス（Print Spooler）を使った、起動・停止・診断の基礎操作に限定する | [06 §4.3 演習 B・演習 C](./06-shell-scripting-exercise-design.md#4-windowspowershell演習設計)が同じ題材（`Get-Service`／`*-EventLog`）を実務水準までスクリプト化しており、重複を避けるため本書は「素の cmdlet の挙動を手で確認する」段階に留める |
 | タスクスケジューラ演習の対象 | 単純な日次ハートビート記録タスク 1 本の登録・実行確認に限定する | [06 演習 C フラッグシップ `Invoke-EnvironmentCheck.ps1` の日次登録](./06-shell-scripting-exercise-design.md#演習-cフラッグシップ-invoke-environmentcheckps1)と重複させないため、本書はタスクスケジューラという機構そのものの基礎操作（アクション・トリガー・実行結果の確認）だけを扱う |
@@ -251,7 +251,7 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | 項目 | 値 |
 | --- | --- |
 | 作業用ローカル管理者 | `opsadmin`（Administrators グループに所属） |
-| 組み込み `Administrator` | 改名（`legacy-admin-disabled` 等、実施時に固有名を避けて決める）のうえ無効化 |
+| 組み込み `Administrator` | 改名（`legacy-admin-disabled`）のうえ無効化 |
 | 組み込み `Guest` | 無効（既定のまま。確認のみ） |
 | 認証方式 | ローカルアカウントのパスワード認証（ワークグループのためドメイン認証は使わない） |
 
@@ -270,7 +270,7 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | --- | --- | --- |
 | ドメイン | ブロック（既定のまま。ワークグループのため実質未使用） | なし |
 | プライベート | ブロック（既定のまま） | `WINRM-HTTP-In-TCP`・`Remote Desktop - User Mode (TCP-In)` を `192.168.60.0/24` に限定して有効化 |
-| パブリック | ブロック（既定のまま） | なし |
+| パブリック | ブロック（既定のまま） | 追加なし。ただし `Enable-PSRemoting`（[4.7-2](#47-リモート管理の有効化winrm)）が同一ローカルサブネット限定の WinRM 許可規則を自動作成するため、明示的に追加した規則ではない点に注意（[2 章の決定事項](#決定事項選定と理由)） |
 
 ### ロール・機能ベースライン
 
@@ -294,7 +294,7 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | 項目 | 値 |
 | --- | --- |
 | ログ出力先 | イベントビューアー（`Application` / `System` ログ）、`Get-WinEvent` で参照 |
-| 監視・バックアップ | この演習では対象外。Hyper-V チェックポイント（`base-clean`）のみ取得 |
+| 監視・バックアップ | この演習では対象外。Hyper-V チェックポイント（`base-clean`・異常系着手前の `before-drill`）を取得 |
 
 ---
 
@@ -353,8 +353,8 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | --- | --- | --- | --- | --- |
 | 4.4-1 | ホスト名変更 | `Rename-Computer -NewName LAB-WINBASE01 -Restart` | VM が再起動する | 再起動後 `(Get-CimInstance Win32_ComputerSystem).Name` が `LAB-WINBASE01` |
 | 4.4-2 | タイムゾーン設定 | `Set-TimeZone -Id "Tokyo Standard Time"` | 出力なし | `(Get-TimeZone).Id` が `Tokyo Standard Time` |
-| 4.4-3 | 時刻同期状態の確認 | `w32tm /query /status` | `Source: time.windows.com` を含む出力 | `time.windows.com` が表示される |
-| 4.4-4 | 手動同期（必要な場合） | `w32tm /resync /force` | `コマンドは正常に完了しました。` | 4.4-3 を再実行し `Last Successful Sync Time` が更新されている |
+| 4.4-3 | 時刻同期状態の確認（未同期であることの確認） | `w32tm /query /status` | この時点では隔離 Internal スイッチのみで DNS・ゲートウェイとも未設定のため `time.windows.com` に到達できず、`Source: Local CMOS Clock` 相当の未同期表示になる | `time.windows.com` への同期が**まだ成立していない**ことを確認する（実際の同期成功確認は [4.10](#410-windows-update-の適用)の一時的な外部疎通時に行う） |
+| 4.4-4 | 手動同期の試行（失敗の確認） | `w32tm /resync /force` | 外部到達性が無いため失敗する（例:「このコンピューターは、使用できる時刻データがなかったため、再同期されませんでした。」） | 想定内の失敗であることを確認し、次工程へ進む |
 
 > **4.4-1 の注意（Linux 版との違い）**: `hostnamectl set-hostname` は再起動不要で即時反映されるが（[05 の 3-4-1](./05-phase1-exercise-design.md#3-4-初期ログインとホスト名時刻設定)）、
 > Windows の `Rename-Computer` は**再起動するまで反映されない**。
@@ -399,10 +399,11 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | 4.7-6 | 疎通確認（ホスト PC 側） | `Test-WSMan -ComputerName 192.168.60.10` | `wsmid` を含む応答 | エラーなく返る |
 | 4.7-7 | **リモートセッションの動作確認（重要・必須）（ホスト PC 側）** | `Enter-PSSession -ComputerName 192.168.60.10 -Credential (Get-Credential opsadmin)` | プロンプトが `[192.168.60.10]: PS ...` に変わる | 別セッションで成功を確認してから次へ進む |
 
-> **4.7-1 の注意**: `Enable-PSRemoting` が作成する既定のファイアウォール規則は、ネットワークカテゴリが
-> **Public**（未識別ネットワークの既定値）のままだと対象に含まれない。隔離 Internal スイッチはドメインに
-> 参加していないため既定では Public に分類され、これを先に済ませないと「WinRM を有効化したのに繋がらない」
-> という詰まりになる（[2 章の決定事項](#決定事項選定と理由)）。
+> **4.7-1 の注意**: Windows Server では `Enable-PSRemoting` はネットワークカテゴリが **Public**（未識別ネット
+> ワークの既定値）のままでもファイアウォール規則自体は作成するが、`RemoteAddress` が同一ローカルサブネットに
+> 限定される。隔離 Internal スイッチはホスト PC・VM とも同一サブネット（`192.168.60.0/24`）にあるため、この
+> 既定規則だけで接続できてしまう場合がある。本書ではその暗黙の挙動に依存せず、カテゴリを明示的に Private に
+> してから WinRM を有効化する（[2 章の決定事項](#決定事項選定と理由)）。
 
 ### 4.8 リモートデスクトップの有効化
 
@@ -410,8 +411,8 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | --- | --- | --- | --- | --- |
 | 4.8-1 | RDP の有効化 | `Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0` | 出力なし | 同キーの値が `0` |
 | 4.8-2 | NLA の要求 | `(Get-WmiObject -Class "Win32_TSGeneralSetting" -Namespace root\cimv2\terminalservices -Filter "TerminalName='RDP-tcp'").SetUserAuthenticationRequired(1)` | 戻り値 `ReturnValue: 0` | 成功 |
-| 4.8-3 | RDP ファイアウォール規則の有効化 | `Enable-NetFirewallRule -DisplayGroup "Remote Desktop"` | 出力なし | `Get-NetFirewallRule -DisplayGroup "Remote Desktop" -Enabled True` に複数件表示される |
-| 4.8-4 | RDP ファイアウォール規則のスコープ限定 | `Get-NetFirewallRule -DisplayGroup "Remote Desktop" -Enabled True \| Set-NetFirewallRule -RemoteAddress 192.168.60.0/24` | 出力なし | 対象ルールの `RemoteAddress` が `192.168.60.0/24` |
+| 4.8-3 | RDP ファイアウォール規則の有効化 | `Enable-NetFirewallRule -Name "RemoteDesktop-UserMode-In-TCP"` | 出力なし | `Get-NetFirewallRule -Name "RemoteDesktop-UserMode-In-TCP" -Enabled True` が 1 件表示される |
+| 4.8-4 | RDP ファイアウォール規則のスコープ限定 | `Set-NetFirewallRule -Name "RemoteDesktop-UserMode-In-TCP" -RemoteAddress 192.168.60.0/24` | 出力なし | `(Get-NetFirewallRule -Name "RemoteDesktop-UserMode-In-TCP" \| Get-NetFirewallAddressFilter).RemoteAddress` が `192.168.60.0/24` |
 | 4.8-5 | **RDP 接続確認（ホスト PC 側）** | `mstsc /v:192.168.60.10` を起動し `opsadmin` で接続 | NLA 認証後に接続できる | デスクトップが表示される |
 
 ### 4.9 ファイアウォール
@@ -427,8 +428,9 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | --- | --- | --- | --- | --- |
 | 4.10-1 | 一時的な外部疎通の追加（ホスト PC 側） | 既存の External スイッチ（または `Default Switch`）を確認し、`Add-VMNetworkAdapter -VMName LAB-WINBASE01 -SwitchName "Default Switch" -Name "temp-update-nic"` | アダプタが追加される | `Get-VMNetworkAdapter -VMName LAB-WINBASE01` に 2 枚目が表示される |
 | 4.10-2 | 疎通確認 | `Test-NetConnection www.microsoft.com -Port 443` | `TcpTestSucceeded: True` | 到達できる |
+| 4.10-2b | 時刻同期の確認（外部疎通時。[4.4-3/4.4-4](#44-初期ログインホスト名タイムゾーン時刻同期)の未同期状態を解消する） | `w32tm /resync /force` に続けて `w32tm /query /status` | `コマンドは正常に完了しました。`、`Source: time.windows.com` を含む出力 | `time.windows.com` への同期成功を確認する（[4.10-5](#410-windows-update-の適用)で外部アダプタを撤去する前に実施） |
 | 4.10-3 | 更新の確認と適用 | 設定アプリの「Windows Update」から「更新プログラムのチェック」を実行し、提示された更新をすべて適用する | 更新が適用される（再起動を伴う場合あり） | 完了メッセージが表示される |
-| 4.10-4 | 適用結果の確認 | `Get-HotFix \| Sort-Object InstalledOn -Descending \| Select-Object -First 10` | 直近の更新が一覧表示される | 4.10-3 で適用した更新が含まれる |
+| 4.10-4 | 適用結果の確認 | `Get-HotFix \| Sort-Object InstalledOn -Descending \| Select-Object -First 10` に加え、`winver` またはレジストリの `UBR`（`(Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion').UBR`）でビルド番号を確認する | 直近の更新が一覧表示される（`Get-HotFix` は `Win32_QuickFixEngineering` を参照するため、Windows Update サイト経由で配信される更新、特に累積更新プログラムは表示されないことがある点に注意） | `UBR` が更新されている、または設定アプリの「更新の履歴」に 4.10-3 で適用した更新が記載されている |
 | 4.10-5 | 外部アダプタの撤去（ホスト PC 側） | `Remove-VMNetworkAdapter -VMName LAB-WINBASE01 -Name "temp-update-nic"` | 出力なし | `Get-VMNetworkAdapter -VMName LAB-WINBASE01` に隔離スイッチの 1 枚だけが残る |
 | 4.10-6 | 隔離状態の復帰確認 | `Test-NetConnection www.microsoft.com -Port 443` | 失敗する（到達不能） | 恒久的な外部接続を持たない状態に戻っている |
 
@@ -511,13 +513,13 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | T-01 | 単体 | ホスト名 | [4.4](#44-初期ログインホスト名タイムゾーン時刻同期)完了 | `(Get-CimInstance Win32_ComputerSystem).Name` | `LAB-WINBASE01` | | | | |
 | T-02 | 単体 | タイムゾーン | 同上 | `(Get-TimeZone).Id` | `Tokyo Standard Time` | | | | |
-| T-03 | 単体 | 時刻同期 | 同上 | `w32tm /query /status` | `Source: time.windows.com` を含む | | | | |
+| T-03 | 単体 | 時刻同期 | [4.10-2b](#410-windows-update-の適用)（一時的な外部疎通時、4.10-5 の撤去前）完了 | `w32tm /query /status` | `Source: time.windows.com` を含む | | | | |
 | T-04 | 単体 | 固定 IP | [4.5](#45-固定-ip-の設定)完了 | `Get-NetIPAddress -InterfaceAlias "Ethernet" -AddressFamily IPv4` | `192.168.60.10/24` | | | | |
 | T-05 | 単体 | `opsadmin` の Administrators 所属 | [4.6](#46-ローカル管理者ユーザーと組み込みアカウントの整理)完了 | `Get-LocalGroupMember -Group "Administrators"` | `opsadmin` が含まれる | | | | |
 | T-06 | 単体 | 組み込み `Administrator` の無効化 | 同上 | `(Get-LocalUser -Name "legacy-admin-disabled").Enabled` | `False` | | | | |
 | T-07 | 単体 | `Guest` の既定確認 | OS 導入済み | `(Get-LocalUser -Name "Guest").Enabled` | `False` | | | | |
 | T-08 | 単体 | WinRM リスナー | [4.7](#47-リモート管理の有効化winrm)完了 | `Get-ChildItem WSMan:\localhost\Listener` | `Transport = HTTP` のリスナーが 1 件 | | | | |
-| T-09 | 単体 | RDP 有効化と NLA | [4.8](#48-リモートデスクトップの有効化)完了 | `Get-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name fDenyTSConnections` | `0` | | | | |
+| T-09 | 単体 | RDP 有効化と NLA | [4.8](#48-リモートデスクトップの有効化)完了 | `Get-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name fDenyTSConnections` および `(Get-WmiObject -Class "Win32_TSGeneralSetting" -Namespace root\cimv2\terminalservices -Filter "TerminalName='RDP-tcp'").UserAuthenticationRequired` | `fDenyTSConnections` が `0`、`UserAuthenticationRequired` が `1` | | | | |
 | T-10 | 単体 | ファイアウォール既定ポリシー | OS 導入済み | `Get-NetFirewallProfile \| Select-Object Enabled, DefaultInboundAction` | 3 プロファイルとも `True` / `Block` | | | | |
 | T-11 | 単体 | タスク登録 | [4.13](#413-タスクスケジューラの基礎)完了 | `Get-ScheduledTask -TaskName "LabHeartbeat"` | `State: Ready` | | | | |
 | T-12 | 単体 | ロール・機能ベースライン | [4.11](#411-ロール機能ベースラインの記録)完了 | `Get-WindowsFeature \| Where-Object InstallState -eq "Installed"` | [4.11-1](#411-ロール機能ベースラインの記録)の記録と一致（AD DS・DNS・IIS 等を含まない） | | | | |
@@ -525,16 +527,24 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | T-14 | 結合 | RDP 接続（ホスト PC 側） | [4.8](#48-リモートデスクトップの有効化)完了 | `mstsc /v:192.168.60.10` で `opsadmin` 接続 | デスクトップが表示される | | | | |
 | T-15 | 結合 | サービス再起動のイベントログ記録 | [4.12](#412-サービス操作とイベントログの確認)完了 | `Restart-Service -Name Spooler -Force` 後 `Get-WinEvent -LogName System -MaxEvents 20` | Service Control Manager のイベントに記録される | | | | |
 | T-16 | 結合 | タスク実行結果 | [4.13](#413-タスクスケジューラの基礎)完了 | `Start-ScheduledTask -TaskName "LabHeartbeat"` 後 `Get-ScheduledTaskInfo` | `LastTaskResult: 0`、`heartbeat.log` に追記 | | | | |
-| T-17 | 総合 | 再起動後の設定保持 | [4.14](#414-再起動試験とチェックポイント取得)完了 | `Restart-Computer -Force` 後、T-01・T-04・T-08・T-10・T-11 を再実行 | 全項目が再起動前と同じ結果になる | | | | |
+| T-17 | 総合 | 再起動後の設定保持 | [4.14](#414-再起動試験とチェックポイント取得)完了 | `Restart-Computer -Force` 後、T-01・T-04・T-08・T-09・T-10・T-11 を再実行 | 全項目が再起動前と同じ結果になる | | | | |
 | T-18 | 総合 | チェックポイント復元 | `base-clean` 取得済み | `Rename-Computer -NewName TEMP-CHANGE` 後、`Restore-VMSnapshot` で `base-clean` へ復元 | 復元後ホスト名が `LAB-WINBASE01` に戻る | | | | |
 | T-19 | 異常系 | ラボセグメント外からの WinRM 接続拒否 | [検証用セグメントの一時追加](#t-19t-20-の前提検証用セグメントの一時追加) Q-1〜Q-4 実施済み | 検証用セグメント側 IP から `Test-WSMan -ComputerName 192.168.60.10` | タイムアウトまたは拒否される | | | | |
 | T-20 | 異常系 | ラボセグメント外からの RDP 接続拒否 | 同上 | 検証用セグメント側 IP から `Test-NetConnection 192.168.60.10 -Port 3389` | `TcpTestSucceeded: False` | | | | |
 | T-21 | 異常系 | 無効化済み組み込みアカウントでの認証失敗 | [4.6](#46-ローカル管理者ユーザーと組み込みアカウントの整理)完了。`before-drill` 取得済み | ホスト PC 側から `Enter-PSSession -ComputerName 192.168.60.10 -Credential (Get-Credential legacy-admin-disabled)` | 認証を拒否される（アカウント無効） | | | | |
-| T-22 | 異常系 | `TrustedHosts` 未設定時の WinRM 接続失敗 | ホスト PC 側 `TrustedHosts` を一時的にクリア（`Clear-Item WSMan:\localhost\Client\TrustedHosts -Force`） | 同上コマンドで `Enter-PSSession` を試行し、失敗を確認後 [4.7-5](#47-リモート管理の有効化winrm)の値へ復元 | 「アクセスが拒否されました」相当のエラーで失敗し、復元後は再び成功する | | | | |
+| T-22 | 異常系 | `TrustedHosts` 未設定時の WinRM 接続失敗 | ホスト PC 側 `TrustedHosts` を一時的にクリア（`Clear-Item WSMan:\localhost\Client\TrustedHosts -Force`） | `Enter-PSSession -ComputerName 192.168.60.10 -Credential (Get-Credential opsadmin)`（**T-21 の無効化済みアカウントではなく、有効な `opsadmin` を使う**。`TrustedHosts` だけを変数にするため）を試行し、失敗を確認後 [4.7-5](#47-リモート管理の有効化winrm)の値へ復元 | 「アクセスが拒否されました」相当のエラーで失敗し、復元後は再び成功する | | | | |
 | T-23 | 異常系 | 重要サービス停止からの障害診断と復旧 | [4.12](#412-サービス操作とイベントログの確認)完了。`before-drill` 取得済み | `Stop-Service -Name Spooler -Force` 後、印刷ジョブの投入を試みて失敗を確認 → `Get-Service`/`Get-WinEvent` で診断 → `Start-Service -Name Spooler` で復旧 | 停止による失敗を確認でき、復旧後は正常に戻る | | | | |
 | T-24 | 異常系 | スケジュールタスク無効化時の非実行確認 | [4.13](#413-タスクスケジューラの基礎)完了。`before-drill` 取得済み | `Disable-ScheduledTask -TaskName "LabHeartbeat"` 後 `Start-ScheduledTask` を試行 → 実行結果とログを確認 → `Enable-ScheduledTask` で復旧 | 無効化中は手動実行しても `LastTaskResult` が更新されない、または実行自体が拒否される。復旧後は正常に実行される | | | | |
 | T-25 | 異常系 | ファイアウォールルールの誤緩和検知 | [4.7](#47-リモート管理の有効化winrm)完了 | 一時的に `Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP" -RemoteAddress Any` へ緩め、`Get-NetFirewallRule -Name "WINRM-HTTP-In-TCP" \| Get-NetFirewallAddressFilter` で検知した後、[4.7-4](#47-リモート管理の有効化winrm)の値へ戻す | 緩和が `RemoteAddress: Any` として検知でき、戻した後は `192.168.60.0/24` に一致する | | | | |
 | T-26 | 異常系 | 誤った固定 IP からのコンソール復旧 | [4.5](#45-固定-ip-の設定)完了。`before-drill` 取得済み | `New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.60.99 -PrefixLength 24` で別 IP を追加し、ホスト PC 側から `192.168.60.10` への疎通が失われることを確認 → **コンソール接続**（Hyper-V マネージャーの「接続」、リモート接続不要）から `Remove-NetIPAddress -IPAddress 192.168.60.99` で復旧 | 誤設定後は `192.168.60.10` への到達性を失うが、コンソールから復旧できる | | | | |
+
+### T-21・T-23・T-24・T-26 の前提：`before-drill` チェックポイントの取得
+
+T-19〜T-26（異常系）に着手する前に、T-01〜T-18（正常系・結合・総合試験）が完了した状態を一つ確保しておく。
+
+| No | 作業内容 | コマンド | 想定結果 | 判定 |
+| --- | --- | --- | --- | --- |
+| D-1 | `before-drill` チェックポイント取得（ホスト PC 側。T-01〜T-18 完了後・異常系着手前） | `Checkpoint-VM -Name LAB-WINBASE01 -SnapshotName before-drill` | チェックポイントが作成される | `Get-VMSnapshot -VMName LAB-WINBASE01` に `before-drill` が表示される |
 
 ### T-19・T-20 の前提：検証用セグメントの一時追加
 
@@ -557,7 +567,7 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | 経過時間 | 区分 | 内容 |
 | --- | --- | --- |
 | 0:00 | [4.1](#41-作業前確認)〜[4.3](#43-os-インストール) | 作業前確認・VM 作成・OS インストール |
-| 1:15 | [4.4](#44-初期ログインホスト名タイムゾーン時刻同期)〜[4.5](#45-固定-ip-の設定) | ホスト名・時刻・固定 IP |
+| 1:15 | [4.4](#44-初期ログインホスト名タイムゾーン時刻同期)〜[4.5](#45-固定-ip-の設定) | ホスト名・時刻・固定 IP（時刻同期の成功確認は [4.10](#410-windows-update-の適用)で実施） |
 | 1:45 | [4.6](#46-ローカル管理者ユーザーと組み込みアカウントの整理) | ローカル管理者の作成〜組み込みアカウントの整理（**`opsadmin` サインイン確認後**に無効化へ進む） |
 | 2:15 | [4.7](#47-リモート管理の有効化winrm)〜[4.8](#48-リモートデスクトップの有効化) | WinRM・RDP の有効化とスコープ限定 |
 | 2:45 | [4.9](#49-ファイアウォール) | ファイアウォールの確認 |
@@ -565,18 +575,18 @@ G（WinRM 有効化）より先に行う**のは、[決定事項](#決定事項�
 | 3:30 | [4.11](#411-ロール機能ベースラインの記録)〜[4.13](#413-タスクスケジューラの基礎) | ロール・機能ベースライン、サービス／イベントログ、タスクスケジューラ |
 | 4:00 | [4.14](#414-再起動試験とチェックポイント取得) | 再起動試験・`base-clean` チェックポイント取得 |
 | 4:15 | [5 章](#5-試験項目書) T-01〜T-18 | 正常系・結合・総合試験の実施 |
-| 4:45 | `before-drill` チェックポイント取得 | 異常系に入る前に取得済みであること |
+| 4:45 | [D-1](#t-21t-23t-24t-26-の前提before-drill-チェックポイントの取得) | `Checkpoint-VM -Name LAB-WINBASE01 -SnapshotName before-drill` を実行し取得する |
 | 4:50 | [検証用セグメントの追加](#t-19t-20-の前提検証用セグメントの一時追加) Q-1〜Q-4 | `192.168.61.10` へ疎通する |
 | 5:10 | 異常系 T-19〜T-26 の実施 | 全項目で「期待結果」どおりの失敗・復旧が再現する |
 | 5:50 | 異常系の後始末（Q-5〜Q-6、各異常系で緩めた設定の復元） | [4.14](#414-再起動試験とチェックポイント取得)完了直後と同じ状態に戻っている |
-| 6:00 | **終了目標**。未完了の試験項目は次セッションへ繰り越す | 中断基準 4 と対応 |
+| 6:15 | **終了目標**。未完了の試験項目は次セッションへ繰り越す | 中断基準 4 と対応 |
 
 ### 中断基準
 
 1. [4.6-3 の `opsadmin` サインイン確認](#46-ローカル管理者ユーザーと組み込みアカウントの整理)が 3 回試行しても成功しない場合、組み込みアカウントの無効化に進まず原因調査へ切り替える
 2. 単一の環境トラブルに 30 分以上かかった場合、[01 学習環境 §7 の 30 分ルール](./01-environment.md#7-環境トラブルの対処)に従う
 3. チェックポイント取得前に取り返しのつかない状態になった場合、VM を作り直す（症状は先に記録する）
-4. 開始から 6:00 を過ぎた時点で未実施の試験項目が残っている場合、その日は打ち切り、残りを次セッションで実施する
+4. 開始から 6:15 を過ぎた時点で未実施の試験項目が残っている場合、その日は打ち切り、残りを次セッションで実施する
 
 ---
 
@@ -649,9 +659,12 @@ PowerShell 中心の構成）と **Desktop Experience**（デスクトップ環�
 | プライベート | 自宅・信頼できる小規模ネットワーク | 比較的緩い既定ルールセット |
 | パブリック | 空港・カフェ等、信頼できないネットワーク（**未識別ネットワークの既定値でもある**） | 最も厳しい既定ルールセット |
 
-`Enable-PSRemoting` を含む多くの機能は、既定でパブリックプロファイルを対象から除外する。隔離した Hyper-V
-Internal スイッチは、ドメインコントローラも見えず「識別されていないネットワーク」としてパブリックに
-分類されるため、[4.7-1](#47-リモート管理の有効化winrm)で明示的にプライベートへ変更する。
+`Enable-PSRemoting` は、Windows Server では Public プロファイル向けにもファイアウォール規則を作成するが、
+その規則は既定で同一ローカルサブネットからの接続のみを許可する（クライアント版 Windows は既定でこの規則を
+作成せず、`-SkipNetworkProfileCheck` を指定した場合のみ同様の規則を作成する）。隔離した Hyper-V Internal
+スイッチは、ドメインコントローラも見えず「識別されていないネットワーク」としてパブリックに分類され、かつ
+ホスト PC と VM が同一サブネットにあるため、この既定規則だけで接続できてしまう場合がある。本書ではこの
+暗黙の挙動に依存せず、[4.7-1](#47-リモート管理の有効化winrm)で明示的にプライベートへ変更する。
 
 ### WinRM（WS-Management）と PowerShell リモーティング
 
