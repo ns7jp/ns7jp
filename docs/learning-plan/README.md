@@ -60,6 +60,7 @@
 | [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md) | Phase 6（W21-W22）のクラウド・IaC ハンズオンを、本ラボの主系統である AWS + Terraform（[ADR-0005](../adr/0005-terraform-for-iac.md)）とは別に Azure で具体化した補完演習。ガバナンス/ID・ネットワーク・コンピュート・Terraform（`azurerm` provider）・監視/バックアップまで扱う。**設計のみ・未実施** |
 | [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md) | Phase 6（W21-W22）の見出しだけのハンズオンを、VPC・EC2 1 台の最小構成でコンソール手動構築 → Terraform化 → `apply`/`destroy` まで具体化した演習設計。[STATUS.md の「Terraform 約 3,000 行が `apply` 0 回」](../../STATUS.md#コードでは埋められない残っている穴)を破る最初の一歩であり、[server-monitor 改善設計 03](../server-monitor-improvements/03-terraform-aws.md)の本番想定設計とは別物の前段演習。**設計のみ・未実施** |
 | [12 Windows Server 基礎構築演習設計](./12-windows-server-exercise-design.md) | [windows-ad-lab.md](../evidence/templates/windows-ad-lab.md)・[07](./07-python-ops-automation-exercise-design.md)がいずれも「OS は初期構築済み」を前提条件の箇条書きで済ませていた差分を埋め、空の VM への Windows Server 導入からホスト名・固定 IP・ローカル管理者・WinRM/RDP・ファイアウォール・Windows Update・サービス／タスクの基礎までを、05 と同じ密度で具体化した演習設計（`LAB-WINBASE01`）。**設計のみ・未実施** |
+| [13 恒久ホスト構築演習設計](./13-persistent-host-exercise-design.md) | [STATUS.md の「恒久ホストが 1 台も無い」](../../STATUS.md#コードでは埋められない残っている穴)（残っている穴の 1 番目）に対応し、[05](./05-phase1-exercise-design.md)がローカルの使い捨て VM に対して行った初期構築を、**独立した VPS**（`lab-persist01`）に対して行う演習として具体化。実インターネット向けの `ufw`/`fail2ban`、実ドメインの DNS 設定、Let's Encrypt による TLS 化、再起動試験、24 / 72 時間後の継続稼働確認、使用終了時の解約手順までを扱う。**設計のみ・未実施** |
 
 ---
 
@@ -444,6 +445,7 @@ gantt
 - [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md)
 - [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md)
 - [12 Windows Server 基礎構築演習設計](./12-windows-server-exercise-design.md)
+- [13 恒久ホスト構築演習設計](./13-persistent-host-exercise-design.md)
 - [資格取得ロードマップ](../certifications/roadmap.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [志望トラックと証跡の対応](../target-roles.md)

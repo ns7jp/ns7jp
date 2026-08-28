@@ -2,7 +2,9 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-27（[STATUS.md の「コードでは埋められない、残っている穴」4 番目](#コードでは埋められない残っている穴)（Terraform 約 3,000 行が `apply` 0 回）に対応する最初の一歩として、VPC・EC2 1 台の最小構成でコンソール手動構築 → Terraform化 → `apply`/`destroy` まで具体化した [11 AWS基礎構築演習設計](./docs/learning-plan/11-aws-foundational-exercise-design.md)を新規作成。[server-monitor 改善設計 03](./docs/server-monitor-improvements/03-terraform-aws.md)が扱う ALB・マルチ AZ を含む本番想定の大規模設計とは別物で、その前段に位置する演習として設計のみ・未実施）
+最終更新：2026-08-28（[STATUS.md の「コードでは埋められない、残っている穴」1 番目](#コードでは埋められない残っている穴)（恒久ホストが 1 台も無い）に対応する最初の一歩として、独立した VPS 1 台への OS 初期構築、実ドメイン・Let's Encrypt TLS 化、再起動試験、24 / 72 時間後の継続稼働確認までを具体化した [13 恒久ホスト構築演習設計](./docs/learning-plan/13-persistent-host-exercise-design.md)を新規作成。[証跡採録チェックリストの現在の残タスク](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)順位 1・2 にはこれまで具体設計が無く、その差分を埋める。設計のみ・未実施）
+
+2026-08-27（[STATUS.md の「コードでは埋められない、残っている穴」4 番目](#コードでは埋められない残っている穴)（Terraform 約 3,000 行が `apply` 0 回）に対応する最初の一歩として、VPC・EC2 1 台の最小構成でコンソール手動構築 → Terraform化 → `apply`/`destroy` まで具体化した [11 AWS基礎構築演習設計](./docs/learning-plan/11-aws-foundational-exercise-design.md)を新規作成。[server-monitor 改善設計 03](./docs/server-monitor-improvements/03-terraform-aws.md)が扱う ALB・マルチ AZ を含む本番想定の大規模設計とは別物で、その前段に位置する演習として設計のみ・未実施）
 
 2026-08-27（career-bridge.md の AWS → Azure 概念対応表を実機で検証する補完演習として 10 Azure構築演習設計を新規作成。ADR-0005（IaC に Terraform を採用）の主系統は変更せず、既存の AWS + Terraform に加えて Azure 環境を独立して追加する設計。詳細は下記「1. 本リポジトリ」の該当エントリを参照。以下は 2026-08-26 時点の更新内容。ポートフォリオの網羅範囲を「Linux サーバー構築」第一志望へ絞り直す整理を実施。
 `docs/it-support/` と Windows / winget 端末セットアップのテンプレートを削除し、`docs/roadmap/` 配下の
@@ -97,6 +99,24 @@ server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を 
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-08-28 の更新内容（13 恒久ホスト構築演習設計：恒久ホストが 1 台も無い、を破る最初の一歩）
+
+[STATUS.md の「コードでは埋められない、残っている穴」1 番目](#コードでは埋められない残っている穴)（恒久ホストが 1 台も無い。
+再起動後の永続性、24 / 72 時間稼働、Slack 実配信、実 DNS / TLS、インターネット越しの UFW がここで止まっている）と、
+[証跡採録チェックリストの現在の残タスク](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)
+順位 1・2 に具体設計が無かった差分の両方に対応するため、[05 Phase 1 演習設計](./docs/learning-plan/05-phase1-exercise-design.md)
+と同じ密度で、独立した VPS 1 台に対する演習設計を新規作成した。
+
+| 項目 | 内容 |
+| --- | --- |
+| 新規作成 | [13 恒久ホスト構築演習設計](./docs/learning-plan/13-persistent-host-exercise-design.md)（VPS 契約、OS 初期構築（`lab-persist01`）、`ufw` + `fail2ban` による実インターネット向けの到達制御、実ドメインの DNS 設定、Let's Encrypt（`certbot`）による TLS 証明書取得と自動更新、再起動試験、24 / 72 時間後の継続稼働確認、使用終了時の解約・データ消去手順まで。試験項目書 T-01〜T-21（異常系 7 件）。設計のみ・未実施） |
+| 11 AWS基礎構築演習設計との関係 | [11](./docs/learning-plan/11-aws-foundational-exercise-design.md)は「1 セッションで `apply` から `destroy` まで完了させる」ことが目的の演習であり、本書は逆に「継続稼働させ続ける」ことが目的の別演習。目的・課金モデル・所要時間の設計が異なるため、どちらか一方で代替しない（本書 2 章に比較表を追加） |
+| 証跡採録チェックリストとの関係 | 順位 1（Docker 未導入の独立した Ubuntu 対象ホストへの `site.yml` 適用）・順位 3（Slack 実配信）は対象外のまま維持し、本書は順位 1 の適用先になり得る「素の独立ホスト」の構築と、順位 2（再起動・24 / 72 時間後の継続稼働）の詳細設計だけを担う。役割分担は本書付録 B に一覧化した |
+| 運用ルールとの関係 | [新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象は server-monitor の改善設計 06 以降であり、本件は学習計画（[05](./docs/learning-plan/05-phase1-exercise-design.md)〜[12](./docs/learning-plan/12-windows-server-exercise-design.md)と同じ位置付け）のため対象外 |
+| 技術情報の裏取り | AI 支援セッションで Web 検索を実行し、国内 VPS の最安プラン帯（月額 600 円台〜）、Ubuntu 24.04 の `certbot` パッケージが既定で作成する `certbot.timer`（1 日 2 回の自動更新）を確認した。VPS 料金は変動が大きいため実施前に最新料金の再確認を前提とする旨を明記した。この AI 支援セッションにはインターネットに公開した実ホストが無く、本書のコマンドは一つも実行して確認していない |
+| 相互参照の追加 | [学習プラン README](./docs/learning-plan/README.md)、[証跡採録チェックリストの順位 1・2](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)から本書へのリンクを追加 |
+| 整合性チェック | markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェックをいずれも実行し、0 件を確認 |
 
 ### 2026-08-27 の更新内容（追補：12 Windows Server 基礎構築演習設計の技術的レビュー修正）
 
