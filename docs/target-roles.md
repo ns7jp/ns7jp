@@ -8,7 +8,9 @@
 | --- | --- | --- | --- | --- |
 | 1 | Linux サーバー構築・運用 | OS 初期設定、ミドルウェア配備、試験、手順・パラメータ更新 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、[使い捨て Ubuntu 24.04 の Full-stack E2E（試験項目 23 件中 23 件合格）](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)、[AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common)、[LVM storage role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/storage) | Docker 未導入の独立した対象ホストでの新規構築、AlmaLinux 実機への適用、network / UFW・再起動後・受け入れ確認 |
 | 2 | インフラ監視・運用 | 監視確認、一次切り分け、障害対応、定型作業 | Prometheus / Grafana / Loki（実データ表示済み）、local webhook の FIRING / RESOLVED、ランブック、[障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)（PASS） | Alertmanager → Slack の実配信記録 |
+| 2b | データセンター現地オペレーター | 入退室管理、ラックマウント、ケーブル配線、資産棚卸し、一次切り分け（オンサイト） | 物流現場での重量物取扱い・現物管理実績、[現場経験とインフラの橋渡し §2.8](./career-bridge.md#28-現物スキルの転用物流現場--データセンター現地作業デスクワーク適応) | ラックマウント・ケーブル配線の実技（**未着手**） |
 | 3 | IT サポート・社内 SE 補助 | 問い合わせ、キッティング、棚卸し | [AD 操作演習設計](./learning-plan/06-shell-scripting-exercise-design.md#44-level-4-active-directory-運用スクリプト)、[AD構築演習設計](./learning-plan/08-ad-exercise-design.md)、[Windows / AD 公開再現ラボ](./evidence/templates/windows-ad-lab.md)（**設計サンプル。実務対応実績ではありません**） | 実機出力を添えた Windows / AD 切り分け記録 |
+| 3b | コールセンター型ヘルプデスク | 電話・チャットでの一次受付、切り分け、エスカレーション記録 | 現場での「困りごとを数値化し上長へ報告」した経験（[業務改善レポート](./business-improvement/picking-improvement.md)） | 想定問答・エスカレーション記録の練習（**未着手**） |
 | 発展 | Cloud / IaC | Terraform の修正・レビュー、構築補助 | AWS Terraform modules、AWS / cost / backup 設計 | `plan / apply / destroy`、費用、復元 |
 | 発展 | アプリ基盤 / DB | 3 層構成の構築補助、復元試験 | [Web / AP / DB 3 層ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier)、`pg_dump` / `pg_restore` 演習 | 実 VM 上での 3 層構築、DB 復元の実行証跡 |
 
