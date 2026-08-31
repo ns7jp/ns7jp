@@ -486,6 +486,11 @@ flowchart TB
 スクリプト、進捗チェックリスト）を [vps-persist-kit/](./vps-persist-kit/README.md) に用意した。インターネットに
 公開した実ホストが無いこの AI 支援セッションでは一度も実行しておらず、上記の実施ステータスを変えるものではない。
 
+同日、有料 VPS を契約せず AWS の無料利用枠だけで本演習の目的（再起動後の永続性・24/72 時間稼働・実インターネット
+越しの host 側ファイアウォール）を満たしたい場合の代替ルートとして、[aws-exercise-kit/persistence-addon.md](./aws-exercise-kit/persistence-addon.md)
+も用意した（[11 AWS基礎構築演習](./11-aws-foundational-exercise-design.md)の EC2 を `destroy` する前に追加で実施する）。
+独自ドメインでの DNS 検証（4.7）は対象外になる代わりに VPS 契約費・ドメイン費が掛からない、という設計判断のトレードオフを伴う。
+
 **次のアクション**
 
 1. VPS 事業者・プランを確定し、[4.1](#41-作業前確認)の作業前確認を実施する

@@ -34,6 +34,7 @@
 
 ## 終了処理（最優先）
 
+- [ ] （13 番の目的も兼ねる場合のみ）[persistence-addon.md](./persistence-addon.md) の再起動試験・24/72 時間チェックまで実施した
 - [ ] `terraform destroy` を実行し `Destroy complete!` を確認した
 - [ ] コンソールで VPC・EC2・IAM ロールに残骸が無いことを目視確認した
 - [ ] 翌日、Cost Explorer で実費（T-13）を確認し記録した
