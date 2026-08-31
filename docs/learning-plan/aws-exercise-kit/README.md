@@ -35,6 +35,9 @@
 5. [checklist.md](./checklist.md) に沿って SSM 接続・Nginx 導入・動作確認（[11 §5](../11-aws-foundational-exercise-design.md#5-terraform化後半適用と削除まで実行) B-8〜B-10）
 6. [7 章 試験項目書](../11-aws-foundational-exercise-design.md#7-試験項目書)・[6 章 障害演習](../11-aws-foundational-exercise-design.md#6-障害演習検知から復旧まで)を実施
 7. **必ず `terraform destroy` まで実施してから終了する**（[9 章の課金ストップ基準](../11-aws-foundational-exercise-design.md#9-実施タイムテーブルと中断基準)）
+   - 有料 VPS を契約せず、この無料利用枠の EC2 で [13 恒久ホスト構築演習](../13-persistent-host-exercise-design.md)の
+     目的（再起動後の永続性・24/72 時間稼働）も一緒に満たしたい場合は、`destroy`する前に
+     [persistence-addon.md](./persistence-addon.md) を実施する
 8. 完了後、[11 章](../11-aws-foundational-exercise-design.md#11-実施ステータスと次のアクション)の手順で STATUS.md・証跡採録チェックリスト・資格ロードマップを更新する
 
 ## 未検証の範囲
@@ -56,5 +59,6 @@
 ## 関連ドキュメント
 
 - [11 AWS基礎構築演習設計](../11-aws-foundational-exercise-design.md)
+- [persistence-addon.md（この EC2 で 13 番の目的も無料枠内で兼ねる場合の追加手順）](./persistence-addon.md)
 - [証跡採録チェックリスト](../../evidence-capture-checklist.md)
 - [資格取得ロードマップ](../../certifications/roadmap.md)
