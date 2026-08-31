@@ -28,7 +28,8 @@
 
 ## 使い方の想定順序
 
-1. [11 §4](../11-aws-foundational-exercise-design.md#4-構築手順書前半コンソールでの手動構築) A-1〜A-3（ルート MFA・IAM Identity Center・**予算アラート**）を先にコンソールで実施する
+1. [11 §4](../11-aws-foundational-exercise-design.md#4-構築手順書前半コンソールでの手動構築) A-1〜A-3（ルート MFA・IAM Identity Center・**予算アラート**）を先にコンソールで実施する。
+   IAM Identity Center の権限セット（カスタム許可セット）は [iam-identity-center-permission-set.json](./iam-identity-center-permission-set.json) をそのまま貼り付けられる
 2. `aws configure sso` でプロファイル `lab-aws`（`variables.tf` の既定値）を作成する
 3. このディレクトリで `terraform init` → `terraform plan`（8 種類前後のリソースが追加されることを確認）
 4. 内容を確認したうえで `terraform apply`
@@ -39,6 +40,15 @@
      目的（再起動後の永続性・24/72 時間稼働）も一緒に満たしたい場合は、`destroy`する前に
      [persistence-addon.md](./persistence-addon.md) を実施する
 8. 完了後、[11 章](../11-aws-foundational-exercise-design.md#11-実施ステータスと次のアクション)の手順で STATUS.md・証跡採録チェックリスト・資格ロードマップを更新する
+
+## `iam-identity-center-permission-set.json` について
+
+[11 §2](../11-aws-foundational-exercise-design.md#2-要件と基本設計)が定める「VPC・EC2・IAM（ロール操作限定）・
+CloudWatch・SNS・Budgets に絞ったカスタム許可セット」を、IAM Identity Center の Permission set にそのまま
+貼り付けられる形にしたインラインポリシーです。`AdministratorAccess` は使わず、かつ IAM ユーザー・グループ・
+他人の権限を変更する操作は許可していません（EC2 インスタンスにアタッチする IAM ロールの作成・削除に必要な
+範囲のみ）。実運用のような最小権限まで絞り込んだものではなく、この演習が触る範囲を大まかに区切ったものである
+点に注意してください。
 
 ## 未検証の範囲
 

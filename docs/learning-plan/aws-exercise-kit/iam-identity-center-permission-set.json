@@ -1,0 +1,60 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EC2AndNetworking",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "IAMForInstanceRoleOnly",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:GetRole",
+        "iam:ListRoles",
+        "iam:PassRole",
+        "iam:TagRole",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:ListAttachedRolePolicies",
+        "iam:CreateInstanceProfile",
+        "iam:DeleteInstanceProfile",
+        "iam:GetInstanceProfile",
+        "iam:AddRoleToInstanceProfile",
+        "iam:RemoveRoleFromInstanceProfile",
+        "iam:ListInstanceProfilesForRole"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudWatchAndSNS",
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:*",
+        "sns:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "Budgets",
+      "Effect": "Allow",
+      "Action": [
+        "budgets:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CallerIdentity",
+      "Effect": "Allow",
+      "Action": [
+        "sts:GetCallerIdentity"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
