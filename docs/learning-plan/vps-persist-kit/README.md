@@ -1,0 +1,60 @@
+# 恒久ホスト構築演習 実施キット（`lab-persist01`）
+
+> **状態: 未使用の雛形（2026-08-31 に AI 支援セッションで作成）。**
+> このキットを置いただけでは [13 恒久ホスト構築演習設計](../13-persistent-host-exercise-design.md) の実施ステータスは変わらない。
+> 実施ステータスは、本人が実際に VPS を契約し、再起動試験・24 / 72 時間チェックまで通した後、
+> [8 章の手順](../13-persistent-host-exercise-design.md#8-実施ステータスと次のアクション)に従って更新する。
+
+## これは何か
+
+[13 恒久ホスト構築演習設計](../13-persistent-host-exercise-design.md) §4 の構築手順書のうち、
+**対話操作を含まない・冪等な部分**（4.2 ホスト名等・4.4 パッケージ更新・4.6 ufw・4.8 Nginx・4.10 heartbeat）
+だけをコピー&ペーストの手間とタイプミスを減らすために 1 本のスクリプトにまとめたものです（[phase1-kit](../phase1-kit/README.md) と同じ考え方）。
+新しい設計判断は加えていません。
+
+## このキットに含まれないもの（意図的に手作業のまま）
+
+| 手順 | 対象外にした理由 |
+| --- | --- |
+| VPS の契約・支払い | 本人のクレジットカード・アカウントが必要（[4.1 作業前確認](../13-persistent-host-exercise-design.md#41-作業前確認)） |
+| 4.3 作業用ユーザー作成（`adduser`） | パスワード設定を含む対話操作。ここを自動化すると弱いパスワードが仕込まれるリスクがある |
+| 4.5 SSH 鍵ログイン確認・パスワード認証禁止 | **鍵ログインを別セッションで確認してから禁止する、という順序そのものが演習の目的**（設計書 4.5 の注記）。自動化すると締め出しリスクの体験が失われる |
+| 4.7 ドメインの DNS 設定 | レジストラの管理画面での操作。ドメインを取得していないと実行できない |
+| 4.9 Let's Encrypt 証明書の取得（`certbot`） | メールアドレス入力・利用規約同意が対話式 |
+| 4.11 再起動試験、5 章の試験項目書 | 実際の VPS 再起動・複数日の待機を伴うため、スクリプトでは代替できない |
+| 付録 A 解約・データ消去 | 本人の判断（継続するか解約するか）が必要 |
+
+## 使い方の想定順序
+
+1. [13 §4.1](../13-persistent-host-exercise-design.md#41-作業前確認) の作業前確認（VPS 事業者・プラン・ドメイン費用）
+2. VPS を契約し、初期ログイン（4.2-1）
+3. [checklist.md](./checklist.md) を見ながら 4.3（ユーザー作成）・4.5（SSH 鍵登録・鍵ログイン確認・パスワード認証禁止）を手作業で実施
+4. 作成した一般ユーザーで VPS にログインし、`bootstrap.sh` を転送して実行する
+   ```sh
+   scp bootstrap.sh opsadmin@<VPS_GLOBAL_IP>:~/
+   ssh opsadmin@<VPS_GLOBAL_IP> "chmod +x bootstrap.sh && ./bootstrap.sh"
+   ```
+5. [13 §4.7](../13-persistent-host-exercise-design.md#47-ドメインの-dns-設定)（DNS）→ [§4.9](../13-persistent-host-exercise-design.md#49-lets-encrypttls証明書の取得)（certbot）を手作業で実施
+6. [§4.11](../13-persistent-host-exercise-design.md#411-再起動試験) 再起動試験、[5 章 試験項目書](../13-persistent-host-exercise-design.md#5-試験項目書) T-01〜T-22 を実施
+7. [6 章の実施タイムテーブル](../13-persistent-host-exercise-design.md#6-実施タイムテーブルと運用ガード)通り、24 時間後・72 時間後のチェックまで実施
+8. 完了後、[継続 or 解約の判断](../13-persistent-host-exercise-design.md#継続-or-解約の判断)を行い、[8 章](../13-persistent-host-exercise-design.md#8-実施ステータスと次のアクション)を更新
+
+## 未検証の範囲
+
+このスクリプトは、この AI 支援セッションの実行環境にインターネットに公開した実ホストが無いため、
+**一度も実行して確認していません。**
+
+- `bash -n` による構文チェックは通過を確認しました
+- Ubuntu 24.04 LTS の実機（VPS）上でのコマンドの実際の挙動・パッケージの既定動作・エラーメッセージは未検証です
+- 4.8 の Nginx 設定は、設計書が示す「既存の `default` サーバーブロックへの追記」ではなく、
+  **専用の site 設定ファイルを追加して `default` を無効化する**方式に変更しています（再実行しても安全にするため）。
+  挙動は同じはずですが、[試験項目書](../13-persistent-host-exercise-design.md#5-試験項目書) T-08（Nginx 稼働）で実機確認してください
+- certbot（4.9）はこのスクリプトの Nginx 設定を書き換えます。実施順序（bootstrap.sh → 4.7 DNS → 4.9 certbot）を守ってください
+
+実施して差分（実バグ・想定と異なる挙動）が見つかった場合は、[phase1-kit](../phase1-kit/README.md) の
+「未検証の範囲」と同じ扱いで、このファイルと [LEARNINGS.md](../../../LEARNINGS.md) に記録してください。
+
+## 関連ドキュメント
+
+- [13 恒久ホスト構築演習設計](../13-persistent-host-exercise-design.md)
+- [証跡採録チェックリスト](../../evidence-capture-checklist.md)

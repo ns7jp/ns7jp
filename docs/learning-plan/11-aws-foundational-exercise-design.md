@@ -494,7 +494,11 @@ resource "aws_instance" "web" {
 
 ## 11. 実施ステータスと次のアクション
 
-- **現在の状態**: 設計のみ・未実施（2026-08-27 時点）。本書の技術情報は AI 支援セッションでの Web 調査（本書冒頭「技術情報の裏取りについて」を参照）に基づくものであり、本人が実機で構築・検証した記録ではない
+- **現在の状態**: 設計のみ・未実施（2026-08-27 時点）。本書の技術情報は AI 支援セッションでの Web 調査（本書冒頭「技術情報の裏取りについて」を参照）に基づくものであり、本人が実機で構築・検証した記録ではない。
+  2026-08-31 に、実施を楽にするための実施キット（本章 5 章のコード例を完全な形にした Terraform コード一式、
+  進捗チェックリスト）を [aws-exercise-kit/](./aws-exercise-kit/README.md) に用意した。`terraform fmt` の通過は
+  確認したが、この AI 支援セッションには AWS アカウントが無く `apply` は未実行であり、これも上記の実施ステータスを
+  変えるものではない
 - **次のアクション**:
   1. [01 学習環境 §5](./01-environment.md#5-クラウド検証と課金事故の防止)の課金ガードが未実施なら先に済ませ、実施前に本書のバージョン・料金情報を [AWS 公式ドキュメント](https://docs.aws.amazon.com/)・[Terraform Registry](https://registry.terraform.io/providers/hashicorp/aws/latest)で再確認したうえで [4 章](#4-構築手順書前半コンソールでの手動構築)の A-1 から着手する
   2. 手動構築完了後、`aws-exercise-kit/`（未作成）を新規作成し、[5 章](#5-terraform化後半適用と削除まで実行)の Terraform 化を進める
@@ -519,6 +523,7 @@ resource "aws_instance" "web" {
 - [08 AD構築演習設計](./08-ad-exercise-design.md)
 - [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md)
 - [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md)
+- [AWS基礎構築演習 実施キット（Terraform、未使用の雛形）](./aws-exercise-kit/README.md)
 - [server-monitor 改善設計 03: AWS + Terraform化（本番想定の大規模設計）](../server-monitor-improvements/03-terraform-aws.md)
 - [資格取得ロードマップ](../certifications/roadmap.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
