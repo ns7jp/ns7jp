@@ -44,8 +44,8 @@ flowchart LR
 | --- | --- | --- |
 | 15 分単位の作業時間記録 | SLI 計測（Prometheus / Loki） | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
 | 「忙しい時間帯」の特定 | アラートで負荷のピークを検知する | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
-| 出庫頻度の集計 | アラート発火頻度・ノイズ率の集計 | [今後の興味リスト](roadmap/README.md) |
-| 容量上限の把握（棚・倉庫） | キャパシティ計画（CPU / Mem / Disk / RPS） | [今後の興味リスト](roadmap/README.md) |
+| 出庫頻度の集計 | アラート発火頻度・ノイズ率の集計 | [今後の興味リスト](roadmap/README.md)（未着手） |
+| 容量上限の把握（棚・倉庫） | キャパシティ計画（CPU / Mem / Disk / RPS） | [今後の興味リスト](roadmap/README.md)（未着手） |
 
 ### 2.2 標準化・属人化排除
 
@@ -59,21 +59,21 @@ flowchart LR
 
 | 物流現場 | インフラ運用 | 該当ドキュメント |
 | --- | --- | --- |
-| 動線改善（ABC で棚再配置） | アラート最適化（ノイズ削減） | [今後の興味リスト](roadmap/README.md) |
+| 動線改善（ABC で棚再配置） | アラート最適化（ノイズ削減） | [今後の興味リスト](roadmap/README.md)（未着手） |
 | 季節要因で計測期間を見直す | 月次のふりかえり、指標の確認 | [04. SLO 設計](./server-monitor-improvements/04-slo-design.md) |
 | 「カイゼンのリバウンド防止」 | IaC + CI で「設定が手動で戻らない」 | [02. Ansible](./server-monitor-improvements/02-ansible-automation.md) |
 | 棚卸し（実物と帳簿の突合） | 構成棚卸し（Ansible / AWS Config） | [02. Ansible](./server-monitor-improvements/02-ansible-automation.md) |
 | 「変えてはいけない時期」を決めておく | 変更を控える期間（年末年始・連休前） | [11. 変更管理](./server-monitor-improvements/11-change-management.md) |
-| 想定外への備え（停電演習） | 意図的に障害を起こして復旧を練習する（カオスエンジニアリング） | [今後の興味リスト](./roadmap/README.md) |
+| 想定外への備え（停電演習） | 意図的に障害を起こして復旧を練習する（カオスエンジニアリング） | [今後の興味リスト](./roadmap/README.md)（未着手） |
 
 ### 2.4 セキュリティ・統制（5S → セキュリティ統制）
 
 | 物流現場の 5S | インフラ運用 | 該当ドキュメント |
 | --- | --- | --- |
-| 整理（要らない物を捨てる） | 不要 IAM ロール・古いシークレット削除 | [今後の興味リスト](roadmap/README.md) |
+| 整理（要らない物を捨てる） | 不要 IAM ロール・古いシークレット削除 | [今後の興味リスト](roadmap/README.md)（未着手） |
 | 整頓（定位置管理） | リソースタグ規約・Namespace 分離 | [03. Terraform 化](./server-monitor-improvements/03-terraform-aws.md) |
-| 清掃（日々の点検） | 監査ログ日次チェック | [今後の興味リスト](roadmap/README.md) |
-| 清潔（清掃の標準化） | 自動化された脆弱性スキャン CI | [今後の興味リスト](roadmap/README.md) |
+| 清掃（日々の点検） | 監査ログ日次チェック | [今後の興味リスト](roadmap/README.md)（未着手） |
+| 清潔（清掃の標準化） | 自動化された脆弱性スキャン CI | [職務経歴書「テクニカルスキル」（Trivy / pip-audit 実装済み）](./resume.md)（実装済み） |
 | 躾（ルールの定着） | セルフチェックと CI による自動チェック | 各設計書の CI セクション |
 
 ### 2.5 災害対応・BCP
@@ -81,7 +81,7 @@ flowchart LR
 | 物流現場 | インフラ運用 | 該当ドキュメント |
 | --- | --- | --- |
 | 機械停止時の手作業フォロー | プロセス障害時のフェイルオーバー | [server-monitor ランブック](https://github.com/ns7jp/server-monitor/blob/main/docs/runbooks/service-down.md) |
-| 繁忙期のピーク対応 | 負荷スパイク時のオートスケール / 帯域制御 | [今後の興味リスト](./roadmap/README.md) |
+| 繁忙期のピーク対応 | 負荷スパイク時のオートスケール / 帯域制御 | [今後の興味リスト](./roadmap/README.md)（未着手） |
 | 棚卸しズレ発生時の原因追跡 | データ不整合時の調査・復旧 | [05. 復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 | 災害時の代替動線 | 2 AZ 冗長化、リージョン障害対応 | [03. Terraform 化](./server-monitor-improvements/03-terraform-aws.md) [05. 復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 

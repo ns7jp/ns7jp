@@ -482,6 +482,10 @@ flowchart TB
 | T-01〜T-22 | 未実施（実測結果欄はすべて空欄） |
 | 継続 or 解約の判断 | 未実施 |
 
+2026-08-31 に、実施を楽にするための実施キット（4.2・4.4・4.6・4.8・4.10 の非対話部分をまとめたブートストラップ
+スクリプト、進捗チェックリスト）を [vps-persist-kit/](./vps-persist-kit/README.md) に用意した。インターネットに
+公開した実ホストが無いこの AI 支援セッションでは一度も実行しておらず、上記の実施ステータスを変えるものではない。
+
 **次のアクション**
 
 1. VPS 事業者・プランを確定し、[4.1](#41-作業前確認)の作業前確認を実施する
@@ -528,6 +532,7 @@ flowchart TB
 - [05 Phase 1 演習設計](./05-phase1-exercise-design.md)
 - [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md)
 - [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md)
+- [恒久ホスト構築演習 実施キット（未使用の雛形）](./vps-persist-kit/README.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
 - [ADR-0006: 監視は自前運用](../adr/0006-self-host-monitoring.md)
 - [ADR-0007: Slack 通知](../adr/0007-slack-notifications.md)
