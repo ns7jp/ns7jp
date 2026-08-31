@@ -30,10 +30,12 @@
 2. VPS を契約し、初期ログイン（4.2-1）
 3. [checklist.md](./checklist.md) を見ながら 4.3（ユーザー作成）・4.5（SSH 鍵登録・鍵ログイン確認・パスワード認証禁止）を手作業で実施
 4. 作成した一般ユーザーで VPS にログインし、`bootstrap.sh` を転送して実行する
+
    ```sh
    scp bootstrap.sh opsadmin@<VPS_GLOBAL_IP>:~/
    ssh opsadmin@<VPS_GLOBAL_IP> "chmod +x bootstrap.sh && ./bootstrap.sh"
    ```
+
 5. [13 §4.7](../13-persistent-host-exercise-design.md#47-ドメインの-dns-設定)（DNS）→ [§4.9](../13-persistent-host-exercise-design.md#49-lets-encrypttls証明書の取得)（certbot）を手作業で実施
 6. [§4.11](../13-persistent-host-exercise-design.md#411-再起動試験) 再起動試験、[5 章 試験項目書](../13-persistent-host-exercise-design.md#5-試験項目書) T-01〜T-22 を実施
 7. [6 章の実施タイムテーブル](../13-persistent-host-exercise-design.md#6-実施タイムテーブルと運用ガード)通り、24 時間後・72 時間後のチェックまで実施
