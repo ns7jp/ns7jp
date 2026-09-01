@@ -272,6 +272,14 @@ flowchart LR
 | 3-4-3 | NTP 同期確認 | `timedatectl show --property=NTPSynchronized --value` | `yes`（数分待って再実行が必要な場合あり） | `yes` が返る |
 | 3-4-4 | ロケール設定 | `sudo locale-gen ja_JP.UTF-8 && sudo update-locale LANG=ja_JP.UTF-8` | ロケール生成メッセージが表示される | `locale -a` に `ja_JP.utf8` が含まれる |
 
+> **vi の最低限の操作**（3-5-4 以降、`sudo vi` で設定ファイルを新規作成・編集する箇所が複数ある）
+>
+> - `i` キーを押すと挿入モードに入り、編集を開始できる
+> - 挿入モードのまま、内容を入力・修正する
+> - 編集が終わったら `Esc` キーを押してコマンドモードに戻る
+> - `:wq` と入力して Enter を押すと、保存して終了する（保存せずに終了したい場合は `:q!`）
+> - `vi` の操作に不慣れな場合は、同じファイルを `sudo nano <ファイル名>` で編集してもよい（保存は `Ctrl+O`、終了は `Ctrl+X`）
+
 #### 3-5 固定 IP の設定
 
 | No | 作業内容 | コマンド | 想定結果 | 判定 |

@@ -234,7 +234,7 @@ flowchart TB
 | No | 段階 | 追加する内容 | 想定結果 | 判定 |
 | --- | --- | --- | --- | --- |
 | A-1 | ルートユーザーの保護 | ルートユーザーに MFA を設定する（未設定の場合、AWS から 35 日以内の設定を求められる） | IAM ダッシュボードの「セキュリティ状況」でルート MFA が緑になる | MFA 有効 |
-| A-2 | IAM Identity Center 有効化 | IAM Identity Center を有効化し、学習者本人用ユーザーを 1 つ作成。VPC・EC2・IAM（ロール操作限定）・CloudWatch・SNS・Budgets に絞ったカスタム許可セットを割り当てる | 作成したユーザーで Identity Center のポータル URL からサインインできる | サインイン成功 |
+| A-2 | IAM Identity Center 有効化 | IAM Identity Center を有効化し、学習者本人用ユーザーを 1 つ作成。許可セット画面で「カスタム許可セット」を選び、インラインポリシーに [`iam-identity-center-permission-set.json`](./aws-exercise-kit/iam-identity-center-permission-set.json)（VPC・EC2・IAM のロール操作限定・CloudWatch・SNS・Budgets に絞った定義済みポリシー）の内容をそのまま貼り付けて割り当てる | 作成したユーザーで Identity Center のポータル URL からサインインできる | サインイン成功 |
 | A-3 | 予算アラート設定 | AWS Budgets で月額 1,000 円の予算を作成し、80%／100% でメール通知。あわせて Zero-spend budget テンプレートも作成する | Budgets の一覧に 2 件のアラートが表示される | 2 件とも `OK` 状態で表示 |
 | A-4 | VPC 作成 | VPC コンソールで `lab-aws-vpc`（`10.0.0.0/16`）を作成する | VPC 一覧に状態 `Available` で表示される | 状態が `Available` |
 | A-5 | パブリックサブネット作成 | `lab-aws-public`（`10.0.1.0/24`、AZ `ap-northeast-1a`）を作成し、「パブリック IPv4 自動割り当て」を有効にする | サブネット一覧で自動割り当てが `Yes` と表示される | `Yes` と表示 |

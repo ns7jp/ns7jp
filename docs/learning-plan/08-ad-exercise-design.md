@@ -368,9 +368,20 @@ OU 階層の再編 → AGDLP グループ再設計 → オブジェクトの配�
 | 4.10-3 | 障害注入（誤削除の再現） | `Remove-ADUser "pf-restore-target" -Confirm:$false` | 出力なし | `Get-ADUser "pf-restore-target"` が `Cannot find an object with identity` で失敗する |
 | 4.10-4 | DSRM への再起動 | `bcdedit /set safeboot dsrepair` の後 `Restart-Computer` | 再起動後、DSRM セーフモードで起動する | サインイン画面が「セーフ モード」の表示になる |
 | 4.10-5 | DSRM でサインインし非権威復元を実行 | ローカル `.\Administrator`（**ドメインアカウントではなく、windows-ad-lab.md §4.3 で設定した DSRM パスワードを使うローカル管理者**）でサインイン後、`wbadmin start systemstaterecovery -version:<4.10-2で控えたバージョン> -backupTarget:E: -quiet` | `The recovery operation completed successfully.` | 成功メッセージ。この時点ではまだ `pf-restore-target` は他 DC のレプリケーションに巻き戻される可能性がある状態（本ラボは単一 DC のため実際には巻き戻されないが、手順は本番と同じ順序で行う） |
-| 4.10-6 | 権威復元のマーキング（DSRM のまま） | `ntdsutil` を起動し `activate instance ntds`、続けて `authoritative restore`、続けて `restore subtree OU=TestRestore,OU=PortfolioLab,DC=ad,DC=example,DC=test`、`quit`、`quit` | 対象オブジェクトのバージョン番号が引き上げられた旨のログが出力される | エラーなく完了する |
+| 4.10-6 | 権威復元のマーキング（DSRM のまま） | `ntdsutil` を起動し、対話プロンプトの遷移に沿って表の直後のコードブロックの通り1コマンドずつ入力（`activate instance ntds` → `authoritative restore` → `restore subtree <対象 OU>` → `quit` → `quit`） | 対象オブジェクトのバージョン番号が引き上げられた旨のログが出力される | エラーなく完了する |
 | 4.10-7 | 通常起動へ戻す | `bcdedit /deletevalue safeboot` の後 `Restart-Computer` | 通常のドメインサインイン画面に戻る | ドメインアカウントでサインインできる |
 | 4.10-8 | 復旧確認 | `Get-ADUser "pf-restore-target"` | オブジェクトが復活している | エラーなく取得できる |
+
+**4.10-6 の `ntdsutil` 対話プロンプト**: `ntdsutil` は対話シェルであり、コマンドを1つ入力するたびにプロンプト自体が遷移する。そのため以下のように、遷移後のプロンプト文字列とそこに入力するコマンドの組を1行ずつ確認しながら進める（`restore subtree` の対象 OU は 4.10-1 で作成した `TestRestore` OU）。
+
+```text
+C:\> ntdsutil
+ntdsutil: activate instance ntds
+ntdsutil: authoritative restore
+authoritative restore: restore subtree OU=TestRestore,OU=PortfolioLab,DC=ad,DC=example,DC=test
+authoritative restore: quit
+ntdsutil: quit
+```
 
 > **DSRM サインインの注意**: DSRM で使う `.\Administrator` は、ドメインの `Administrator` アカウントとは別物の
 > **ローカル管理者アカウント**であり、パスワードも DC 昇格時に個別に設定した値（DSRM パスワード）を使う。

@@ -21,6 +21,9 @@
    [phase1-kit](../phase1-kit/README.md)と同じ制約）。付録で実行した Linux 側の検証も、
    lab-base01 実機ではなくこの AI 支援セッション自身のコンテナ上での実行である。
 
+lab-base01・LAB-WINOPS1 を動かす Hyper-V ホスト（物理 PC）自体にも、Windows 10 または 11 の
+Pro・Enterprise・Education のいずれかが必要である。Home エディションでは Hyper-V 自体を有効化できない。
+
 このディレクトリは、実施そのものを代行するのではなく、**実施時にコピー&ペーストの手間と
 タイプミスを減らすための補助ファイル**を集めたものである。[07 章 4 章 構築手順書](../07-python-ops-automation-exercise-design.md#4-構築手順書)の
 記述をコマンド単位で自動化・省略するものではない。
@@ -66,6 +69,13 @@
 
 ## 使い方の想定順序
 
+> **実行ポリシーに関する注記**: Windows の既定の実行ポリシーでは `.ps1` の実行がブロックされることがある。
+> `hyperv/*.ps1` や `windows/register-tasks/*.ps1` を実行する前に、管理者権限の PowerShell で次を一度実行しておく。
+>
+> ```powershell
+> Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+> ```
+
 1. Hyper-V ホスト（Windows PC）で PowerShell を管理者として開き、`hyperv/00-create-lab-winops1-switch.ps1` →
    `hyperv/01-create-lab-winops1-vm.ps1` を実行する（lab-base01 側は既に [phase1-kit](../phase1-kit/README.md)で
    構築済みの前提。未構築なら先にそちらを実施する）
@@ -75,6 +85,7 @@
    順に進める。lab-base01 側は付録の実行結果を出発点にできるが、実機での再実施が必要
 4. `linux/` 配下のファイルは lab-base01 へ、`windows/` 配下のファイルは LAB-WINOPS1 へそれぞれコピーする
 5. `hyperv/02-checkpoint-helpers.ps1` を dot-source して `base-clean` を取得する
+   （先頭にピリオドと半角スペースを置いてスクリプトパスを指定する。例: `. .\hyperv\02-checkpoint-helpers.ps1`）
 6. [5 章 試験項目書](../07-python-ops-automation-exercise-design.md#5-試験項目書)を実施し、`evidence-template.md` に
    実測結果を記入する。T-05 / TCK-05 のときだけ `hyperv/03-enable-external-nat.ps1` →
    （確認後）`hyperv/04-disable-external-nat.ps1` を使う

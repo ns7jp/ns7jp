@@ -11,12 +11,14 @@
 
 ## 0. 事前準備
 
+- [ ] Hyper-V ホストが Windows 11 / Windows Server の Pro・Enterprise・Education エディションである（Home エディションでは使えない）
 - [ ] [windows-ad-lab.md §4](../../evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)でフォレスト昇格済み（ADLAB-DC1 稼働中）
 - [ ] [windows-ad-lab.md §7.2](../../evidence/templates/windows-ad-lab.md#72-ou--group--test-user-の安全な作成)でラボ OU（`PortfolioLab`）・グループ（`pf-ops-readers`）・ユーザー（`pf-user01`）作成済み
 - [ ] [windows-ad-lab.md §9](../../evidence/templates/windows-ad-lab.md#9-dns-障害注入から-domain-参加復旧まで)でクライアント（ADLAB-CLI1）がドメイン参加済み
 - [ ] DC 昇格時の DSRM 管理者パスワードを本人が安全に保管・入力できる
 - [ ] ADLAB-DC1 へ追加仮想ディスク（20 GB 以上）を Hyper-V 側で取り付け済み（未初期化のままでよい）
-- [ ] `hyperv/00-checkpoint-helpers.ps1` を dot-source し `New-AdLabCheckpoint -Name before-ad-design` を実行
+- [ ] 管理者権限の PowerShell で `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` を一度実行し、既定の実行ポリシーによる `.ps1` 実行のブロックを解除した
+- [ ] `hyperv/00-checkpoint-helpers.ps1` を dot-source し（`. .\hyperv\00-checkpoint-helpers.ps1` のように、先頭にピリオドと半角スペースを置いてからスクリプトパスを指定する）、`New-AdLabCheckpoint -Name before-ad-design` を実行
 
 ## 1. 構築（4 章 構築手順書）
 

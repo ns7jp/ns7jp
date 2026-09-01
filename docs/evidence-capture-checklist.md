@@ -209,11 +209,12 @@
 
 > 具体的な手順（パラメータシート・構築手順書・試験項目書・課金ストップ基準）は [11 AWS基礎構築演習設計](./learning-plan/11-aws-foundational-exercise-design.md)にまとめている（設計のみ・未実施）。以下は概要のみ。
 
-1. **短時間で破棄する前提**で `terraform plan` → `apply` を実行する。
-2. ALB health / CloudWatch alarm の動作を確認し、スクショする。
-3. すぐに `terraform destroy` する。
-4. 翌日 Cost Explorer で**実費**を確認し、金額をスクショ（account ID はマスク）。
-5. account ID・public IP・秘密値は**全てマスク**する。
+1. `terraform apply` の**前に**予算アラート（AWS Budgets 等）を設定する。しきい値超過時の**通知のみ**であり、課金を自動的に止める機能ではない点に注意する。
+2. **短時間で破棄する前提**で `terraform plan` → `apply` を実行する。
+3. ALB health / CloudWatch alarm の動作を確認し、スクショする。
+4. すぐに `terraform destroy` する。**`destroy` が失敗し一部リソースが削除されずに残った場合**は、AWS コンソールで残存リソースを手動確認し、個別に削除する。
+5. 翌日 Cost Explorer で**実費**を確認し、金額をスクショ（account ID はマスク）。
+6. account ID・public IP・秘密値は**全てマスク**する。
 
 ---
 
