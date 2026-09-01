@@ -4,7 +4,7 @@
 
 製造・物流の現場で 15 年以上培った「計測する・原因を絞る・手順化する・改善を続ける」を、サーバー構築と運用に生かします。
 
-主作品は **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** です。Linux サーバーを題材に、設計して終わりではなく、次の一連の作業をコード・手順書・実行記録で示しています。
+主作品は **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** です。Linux サーバーを主題にし、設計して終わりではなく、次の一連の作業をコード・手順書・実行記録で示しています。
 
 > **設計する → 構築する → 試験する → 監視する → 壊して直す → 記録する**
 
