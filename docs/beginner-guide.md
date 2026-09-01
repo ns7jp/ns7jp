@@ -2,6 +2,8 @@
 
 このページは、サーバーを初めて学ぶ人が本ポートフォリオを読むための入口です。用語を丸暗記せず、**役割と確認方法をセット**で覚えます。
 
+読むだけで終わらせず、次に **[初心者向けスタートガイド](./learning-plan/00-start-here.md)** で開始前診断と「最初の30分」を実行してください。PC性能に応じた軽量ルートや、Phase 1の合格例も掲載しています。
+
 ## まず覚える 1 本の流れ
 
 サーバー構築の仕事は、次の 6 語で整理できます。
@@ -81,7 +83,8 @@
 
 ## 次に読むページ
 
-1. [プロフィール README](../README.md)で全体像を見る
-2. [24 週の学習プラン](./learning-plan/README.md)で学ぶ順番を決める
-3. [詰まった記録](../LEARNINGS.md)で障害対応の考え方を見る
-4. [主作品 server-monitor](https://github.com/ns7jp/server-monitor)で実装と証跡を見る
+1. [初心者向けスタートガイド](./learning-plan/00-start-here.md)で開始前診断と「最初の30分」を行う
+2. [プロフィール README](../README.md)で全体像を見る
+3. [24 週の学習プラン](./learning-plan/README.md)で学ぶ順番を決める
+4. [詰まった記録](../LEARNINGS.md)で障害対応の考え方を見る
+5. [主作品 server-monitor](https://github.com/ns7jp/server-monitor)で実装と証跡を見る
