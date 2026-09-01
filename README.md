@@ -17,7 +17,7 @@
 | [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | 要件から引き渡しまでの構築工程 | 5 分 |
 | [実測証跡ダイジェスト](https://ns7jp.github.io/evidence-demo.html) | 実際に動かした結果と未実施の範囲 | 2 分 |
 
-初学者の方は、先に **[やさしい用語・見方ガイド](./docs/beginner-guide.md)** をご覧ください。
+初学者の方は、**[やさしい用語・見方ガイド](./docs/beginner-guide.md)** を読んだ後、[開始前診断と最初の30分](./docs/learning-plan/00-start-here.md)から始めてください。
 学習設計として不足している点と改善順は、[不足点セルフレビュー](./docs/learning-plan/README.md#11-学習設計の不足点セルフレビュー)に明記しています。
 
 ## 何を作ったか
