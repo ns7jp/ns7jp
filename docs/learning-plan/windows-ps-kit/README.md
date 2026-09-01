@@ -68,6 +68,12 @@ Linux コンテナへ PowerShell 7.4.6（公式 tar.gz、GitHub Releases から�
 
 ## 使い方の想定順序
 
+> **実行ポリシーに関する注記**: Windows で `.ps1` スクリプトを初めて実行すると、既定の実行ポリシー
+> （`Restricted`）によりスクリプトの実行自体がブロックされ、「このシステムではスクリプトの実行が
+> 無効になっている」という趣旨のエラーになることがある。管理者権限の PowerShell で
+> `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` を一度実行しておく（[06 文書の同注記](../06-shell-scripting-exercise-design.md#4-windowspowershell演習設計)と
+> 同じ内容。組織管理の PC ではポリシーの変更が禁止されている場合があるため、その場合は管理者に確認する）。
+
 1. **4.1・4.2・4.3 演習A**: 実機（Windows 11 または Windows Server 評価版）でも同じ結果になるか、
    [06 文書](../06-shell-scripting-exercise-design.md#41-level-1-基礎文法)のハンズオン列と
    `backup-rotate/Backup-Rotate.ps1` を実行して比較する

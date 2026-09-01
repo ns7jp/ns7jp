@@ -15,7 +15,8 @@
 1. **Hyper-V ホストと、その上で稼働する ADLAB-DC1（`windows-ad-lab.md` §4 でフォレスト昇格済み）**。
    この AI 支援セッションの実行環境には Hyper-V が無く、実機 VM の作成・OS インストール・
    AD DS 昇格ができない（[phase1-kit](../phase1-kit/README.md)・[python-ops-kit](../python-ops-kit/README.md)と
-   同じ制約）。
+   同じ制約）。また、Hyper-V は Windows 11 / Windows Server の Pro・Enterprise・Education
+   エディションでのみ使え、**Home エディションでは使えない**（[01-environment.md 2 章](../01-environment.md#2-仮想化環境の選び方)を参照）。
 2. **`ActiveDirectory` / `GroupPolicy` PowerShell モジュール**。これらは Windows Server の RSAT 機能
    （AD DS 昇格時に導入される）であり、Linux 上の PowerShell 7 には存在しない。
 
@@ -97,9 +98,16 @@ wbadmin start systemstatebackup $backupTargetArg -quiet
 
 ## 使い方の想定順序
 
+> **実行ポリシーに関する注記**: Windows で `.ps1` スクリプトを初めて実行すると、既定の実行ポリシー
+> （`Restricted`）によりスクリプトの実行自体がブロックされ、「このシステムではスクリプトの実行が
+> 無効になっている」という趣旨のエラーになることがある。管理者権限の PowerShell で
+> `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` を一度実行しておく（[06 文書の同注記](../06-shell-scripting-exercise-design.md#4-windowspowershell演習設計)と
+> 同じ内容。組織管理の PC ではポリシーの変更が禁止されている場合があるため、その場合は管理者に確認する）。
+
 1. [windows-ad-lab.md §4・§7・§9](../../evidence/templates/windows-ad-lab.md)が完了済みであることを確認する
    （ADLAB-DC1 稼働中、ラボ OU・グループ・ユーザー作成済み、クライアント ADLAB-CLI1 がドメイン参加済み）
-2. Hyper-V ホストで `hyperv/00-checkpoint-helpers.ps1` を dot-source し、`before-ad-design` を取得する
+2. Hyper-V ホストで `hyperv/00-checkpoint-helpers.ps1` を dot-source し（`. .\hyperv\00-checkpoint-helpers.ps1`
+   のように、先頭にピリオドと半角スペースを置いてからスクリプトパスを指定する）、`before-ad-design` を取得する
 3. ADLAB-DC1 の管理者 PowerShell で `scripts/01-ou-and-groups.ps1` → `scripts/02-gpo-setup.ps1` の順に実行する
 4. ADLAB-CLI1 の管理者 PowerShell で `scripts/02b-client-verify-gpo.ps1` を実行する
 5. ADLAB-DC1 側へ戻り `scripts/03-password-policy-and-pso.ps1` → `scripts/04-fsmo-and-health-check.ps1`

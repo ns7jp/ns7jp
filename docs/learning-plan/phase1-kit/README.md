@@ -11,6 +11,9 @@
 実際の VM 作成・OS インストールは Hyper-V を持つ本人の PC でしか行えない
 （この AI 支援セッションの実行環境には KVM/qemu が無く、VirtualBox/Hyper-V での実機 VM 作成ができない）。
 
+Hyper-V ホスト（物理 PC）自体にも、Windows 10 または 11 の Pro・Enterprise・Education のいずれかが必要である。
+Home エディションでは Hyper-V 自体を有効化できないため、このキットは前提として使えない。
+
 このディレクトリは、実施そのものを代行するのではなく、**実施時にコピー&ペーストの手間と
 タイプミスを減らすための補助ファイル**を集めたものである。設計書の記述をコマンド単位で
 自動化・省略するものではない（特に OS インストール〈3-3〉は Subiquity インストーラを
@@ -34,10 +37,18 @@
 
 ## 使い方の想定順序
 
+> **実行ポリシーに関する注記**: Windows の既定の実行ポリシーでは `.ps1` の実行がブロックされることがある。
+> `hyperv/*.ps1` を実行する前に、管理者権限の PowerShell で次を一度実行しておく。
+>
+> ```powershell
+> Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+> ```
+
 1. Hyper-V ホスト（Windows PC）で PowerShell を管理者として開き、`hyperv/00-create-internal-switch.ps1` → `hyperv/01-create-vm.ps1` を実行する
 2. Hyper-V マネージャーから VM に接続し、Subiquity インストーラで OS を手作業でインストールする（[4 章 構築手順書](../05-phase1-exercise-design.md#4-構築手順書)の 3-1〜3-3。SSH 鍵は取り込まない）
 3. `checklist.md` を開きながら、[4 章 構築手順書](../05-phase1-exercise-design.md#4-構築手順書)を上から実施する。`netplan/` と `sshd/` のファイルはこの過程でゲスト側にコピーする
 4. `hyperv/02-checkpoint-helpers.ps1` を dot-source して `key-login-ok` / `base-clean` / `before-drill` を取得する
+   （先頭にピリオドと半角スペースを置いてスクリプトパスを指定する。例: `. .\hyperv\02-checkpoint-helpers.ps1`）
 5. [5 章 試験項目書](../05-phase1-exercise-design.md#5-試験項目書)を実施し、`evidence-template.md` に実測結果を記入する（異常系は `hyperv/03-test-segment-setup.ps1` / `04-test-segment-teardown.ps1` を使う）
 6. 完了後、[8 章](../05-phase1-exercise-design.md#8-実施ステータスと次のアクション)のとおり STATUS.md・学習プラン・02 フェーズ別カリキュラムを更新する
 

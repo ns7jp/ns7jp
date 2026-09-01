@@ -488,6 +488,8 @@ cleanup_max_age_days: 14
 | 12 | タイマー登録確認 | `systemctl list-timers routine-dryrun.timer --all` | `NEXT` 列に当日または翌日 `03:00` 相当の日時が表示される | 表示された `NEXT` が設定した `OnCalendar` と一致する |
 | 13 | 初回稼働確認 | `sudo systemctl start routine-dryrun.service && systemctl status routine-dryrun.service --no-pager` | `Active: inactive (dead)`（`Type=oneshot` のため実行完了後は dead）で直前の起動が正常終了している | `journalctl -u routine-dryrun.service -n 20 --no-pager` にエラーがない |
 
+> 手順 8・9 の `sudo vi` の基本操作は [05 Phase 1 演習設計](./05-phase1-exercise-design.md#3-4-初期ログインとホスト名時刻設定)を参照。慣れない場合は `sudo nano` でも編集できる。
+
 手順 8 で作成する `routine-dryrun.service`:
 
 ```ini
