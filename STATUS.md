@@ -366,7 +366,7 @@ lab-base01 / LAB-WINOPS1 という実機（VM）での実施はこの AI 支援�
 `New-VMSwitch` が失敗しても PowerShell の既定動作（非終了エラー）のままだと後続の `Write-Host` がそのまま実行され、
 失敗したのに成功したと表示していた（`スイッチ 'lab-internal'（Internal）を作成しました。`）。`hyperv/*.ps1` 全 5 本に
 `$ErrorActionPreference = 'Stop'` と `try/catch` を追加し、実際の成否を判定してから成功メッセージを出すよう修正した
-（詳細は [phase1-kit/README.md の未検証の範囲](./docs/learning-plan/phase1-kit/README.md#未検証の範囲)）。元の権限エラー
+（詳細は [phase1-kit/README.md の実機で見つかった不具合](./docs/learning-plan/phase1-kit/README.md#実機で見つかった不具合修正済み)）。元の権限エラー
 自体（Hyper-V の実行権限・グループ設定）はスクリプトの不具合ではなく、実施者側の環境の問題として引き続き対応中。
 
 **追記2（同日・`01-create-vm.ps1` の実行で見つかった 2 件目の実バグ）**: `hyperv/*.ps1` が UTF-8（BOM 無し）で

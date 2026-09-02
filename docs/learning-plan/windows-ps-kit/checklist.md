@@ -13,7 +13,7 @@
 ## 0. 事前準備
 
 - [ ] [1 章 前提条件](../06-shell-scripting-exercise-design.md#前提条件)を満たしている（Windows 11 または Windows Server 評価版、[01 学習環境 §6](../01-environment.md#6-windows-server-の学習環境任意)）
-- [ ] PowerShell のバージョンを確認済み（演習C・演習D はバージョン依存の制約があるため、[06 文書 4.3 演習C の版制約](../06-shell-scripting-exercise-design.md#演習-c-イベントログの操作)を先に読む）
+- [ ] PowerShell のバージョンを確認済み（演習C・演習D はバージョン依存の制約があるため、[06 文書 4.3 演習C-1 の版制約](../06-shell-scripting-exercise-design.md#演習-c-1-イベントログの操作)を先に読む）
 
 ## 1. Level 1・Level 2（4.1・4.2）
 
@@ -32,7 +32,7 @@
 ## 3. 演習B・演習C（4.3、サービス・イベントログ）
 
 - [ ] S-1〜S-5（サービス操作、単体の Windows 端末）
-- [ ] E-1〜E-4（イベントログ操作。Windows PowerShell 5.1 が前提。[版制約](../06-shell-scripting-exercise-design.md#演習-c-イベントログの操作)を参照）
+- [ ] E-1〜E-4（イベントログ操作。Windows PowerShell 5.1 が前提。[版制約](../06-shell-scripting-exercise-design.md#演習-c-1-イベントログの操作)を参照）
 - [ ] E-5（サービス異常のイベント記録への応用）
 
 ## 4. 演習C（フラッグシップ）`Invoke-EnvironmentCheck.ps1`（4.3）

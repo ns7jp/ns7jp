@@ -30,10 +30,17 @@ Pro・Enterprise・Education のいずれかが必要である。Home エディ�
 
 ### このキットで新たに行ったファイル分割について
 
-`backup.py` と `routine_windows.py` は、07 章の「ファイル/関数構成」表が示す
-`backup_common.py`/`backup_linux.py`/`backup_windows.py`/`backup.py`、
-`routine_common.py`/`routine_windows.py` という複数ファイル構成を、07 章の中核コード例
-（可読性のため単一ファイルにまとめられている）から**このキットを作る際に分割したもの**である。
+一言でいうと、**07 章が 1 ファイルにまとめて載せているコードを、07 章の表が本来示している複数ファイル構成に、
+このキットで分けた**、というだけの話である。処理そのものを新しく作り直したわけではない。
+
+- 07 章の「ファイル/関数構成」表が示す構成: `backup_common.py`（OS 共通の処理）/ `backup_linux.py`（Linux 固有の
+  アーカイブ生成）/ `backup_windows.py`（Windows 固有のアーカイブ生成）/ `backup.py`（コマンドとして実行する入口）、
+  および Windows 側の `routine_common.py`（OS 共通の処理）/ `routine_windows.py`（Windows 固有の本体）
+- 07 章の中核コード例（[4.4 章](../07-python-ops-automation-exercise-design.md#44-backuppylinux--windows-共通コアと-os-別実装)の
+  `backup.py`、[4.3 章](../07-python-ops-automation-exercise-design.md#43-routinepywindows-lab-winops1)の
+  `routine_windows.py`）: 可読性のため、上記を 1 ファイルにまとめた形で載せている
+- このキット: 前者の複数ファイル構成に分割して配置した（07 章のコード例が省略していた argparse の CLI 部分だけは、
+  実際に動かせるよう `backup.py` に補ってある）
 
 分割後の **Linux 側**（`linux/backup-tool/*`・`linux/routine/routine.py`・`linux/check/check.py`）は、
 この AI 支援セッションの作業環境（Python 3.12.3 の venv）で分割済みファイル構成のまま実際に動かし、
@@ -84,8 +91,9 @@ Pro・Enterprise・Education のいずれかが必要である。Home エディ�
 3. `checklist.md` を開きながら、[4.1 章 作業前確認](../07-python-ops-automation-exercise-design.md#41-作業前確認共通)から
    順に進める。lab-base01 側は付録の実行結果を出発点にできるが、実機での再実施が必要
 4. `linux/` 配下のファイルは lab-base01 へ、`windows/` 配下のファイルは LAB-WINOPS1 へそれぞれコピーする
-5. `hyperv/02-checkpoint-helpers.ps1` を dot-source して `base-clean` を取得する
-   （先頭にピリオドと半角スペースを置いてスクリプトパスを指定する。例: `. .\hyperv\02-checkpoint-helpers.ps1`）
+5. `. .\hyperv\02-checkpoint-helpers.ps1` と、先頭にピリオドと半角スペースを置いて実行し（dot-source。
+   スクリプト内で定義した関数を今の PowerShell に残す読み込み方）、`New-Winops1Checkpoint -Name base-clean` で
+   LAB-WINOPS1 のチェックポイント（VM のその時点の状態を丸ごと保存したもの）`base-clean` を作る
 6. [5 章 試験項目書](../07-python-ops-automation-exercise-design.md#5-試験項目書)を実施し、`evidence-template.md` に
    実測結果を記入する。T-05 / TCK-05 のときだけ `hyperv/03-enable-external-nat.ps1` →
    （確認後）`hyperv/04-disable-external-nat.ps1` を使う
