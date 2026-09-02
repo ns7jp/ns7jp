@@ -8,7 +8,14 @@
 >
 > Windows（PowerShell）を扱う理由は、[STATUS.md](../../STATUS.md) が「コードでは埋められない、残っている穴」に挙げる**研修で触れている Windows Server / AD が実測に出ていないこと**に対応するためです。本書はそのうち、Active Directory のユーザー・グループ操作、Windows サービス、イベントログという**運用スクリプトの基礎**を演習として 1 から組み立てます。ドメインコントローラの構築そのもの（forest promotion）は引き続き [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)の領域とし、本書はそのラボが構築済みであることを前提にした操作スクリプトを対象にします。
 >
-> 本ドキュメントは主に**設計**です。3 章（Bash：Level 1・Level 2・演習A `backup-rotate.sh`・演習B `env-check.sh`）と、4 章のうち Level 1・Level 2・演習A `Backup-Rotate.ps1`（4.1〜4.3 演習Aまで）は、AI 支援セッションの作業環境（Linux コンテナに PowerShell 7 を導入したもの）で実行し記述に反映済みですが、これは**本人が実機（Windows を含む）で再現・検証した記録ではありません**。4 章のうち `Get-Service`／`*-EventLog`／`ActiveDirectory` モジュールに依存する範囲（演習B・演習C・演習D・演習E）は、Windows 実行環境が無いこの AI 支援セッションでは原理的に実行できないため、実施キット（[windows-ps-kit](./windows-ps-kit/README.md)、構文検証済み・機能未実行）としてのみ用意しています。詳細は [8. 実施ステータス](#8-実施ステータスと次のアクション)を参照してください。
+> 本ドキュメントは主に**設計**です。どこまで実際に動かしたかは、次の 2 つに分かれます。
+>
+> | 範囲 | 状態 | 補足 |
+> | --- | --- | --- |
+> | 3 章の Bash 全体（Level 1・Level 2・演習A `backup-rotate.sh`・演習B `env-check.sh`）と、4 章の 4.1〜4.3 演習A まで（PowerShell の Level 1・Level 2・演習A `Backup-Rotate.ps1`） | AI 支援セッションでは**実行済み** | AI 支援セッションの作業環境（Linux コンテナに PowerShell 7 を導入したもの）で実行し、記述に反映済み。ただしこれは**本人が実機（Windows を含む）で再現・検証した記録ではありません** |
+> | 4 章のうち `Get-Service`／`*-EventLog`／`ActiveDirectory` モジュールに依存する範囲（演習B・演習C-1・演習C-2・演習D・演習E） | **未実行** | Windows 実行環境が無いこの AI 支援セッションでは原理的に実行できないため、実施キット（[windows-ps-kit](./windows-ps-kit/README.md)、構文検証済み・機能未実行）としてのみ用意しています |
+>
+> 詳細は [8. 実施ステータス](#8-実施ステータスと次のアクション)を参照してください。
 
 最終更新: 2026-08-26
 
@@ -67,7 +74,7 @@
 | 前提知識 | [02 W1-W3](./02-curriculum.md#phase-1-linux-基礎w1-w4)（コマンド・パーミッション・プロセス）を終えていること | Windows のファイル操作・タスクスケジューラ・サービス管理の GUI 操作に慣れていること |
 | 位置付け | [24 週学習プラン](./README.md)の**主軸**（第一志望：Linux サーバー構築・運用に直結） | [社内 SE / Windows トラックの位置付け](../evidence-capture-checklist.md#社内-se--windows-トラックの位置付け2026-07-見直し)と同じ**補助トラック**。Linux を優先し、時間が余れば着手する |
 
-> Level 4（AD 操作）は、[Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)が使う fail-closed の考え方は踏襲しますが、forest promotion のような承認 marker・二重確認プロンプトまでは要求しません。対象が**ラボ専用 OU 内のユーザー・グループ**に限られ、ドメインコントローラの構築そのものより影響範囲が小さいためです。同じ重さの手順を機械的にコピーしないという判断自体が、[STATUS.md](../../STATUS.md) の「未経験者としての実力に対して内容が高度すぎる」設計を避ける方針に沿っています。
+> Level 4（AD 操作）は、[Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)が使う **fail-closed**（確認すべき条件が 1 つでも満たせなければ、先へ進まずその場で止める）の考え方は踏襲します。ただし、同ラボが forest promotion に課している重い安全策までは要求しません。forest promotion とは、何もない状態から新しい AD ドメインを作り、1 台目のドメインコントローラ（ユーザー情報を保持し、ログオン認証を担当するサーバー）に昇格させる操作です。同ラボはその実行前に、承認済みであることを示すファイルを事前に置かせる仕組み（承認 marker）と、決められた文言を 2 回入力させる確認プロンプトを課しています。本書が対象とするのは**ラボ専用の OU（Organizational Unit。AD の中でユーザー・グループ・コンピュータをまとめる、フォルダのような入れ物）内のユーザー・グループ**に限られ、ドメインコントローラの構築そのものより影響範囲が小さいためです。同じ重さの手順を機械的にコピーしないという判断自体が、[STATUS.md](../../STATUS.md) の「未経験者としての実力に対して内容が高度すぎる」設計を避ける方針に沿っています。
 
 ---
 
@@ -179,8 +186,23 @@ flowchart LR
 | A-3 | ロック | `exec 200>"$dst/.backup.lock"; flock -n 200 \|\| exit 4` を関数化する | 同じバックアップ先に対して 2 つ目を同時実行すると即座に終了コード `4` | 1 つ目は継続して正常終了する |
 | A-4 | ログ関数 | `log() { printf '%(%F %T)T [%s] %s\n' -1 "$1" "$2" \| tee -a "$logfile" >&2; }` のようなログ関数を用意し、各段階で呼ぶ | `log INFO "backup started"` がログファイルと標準エラー出力の両方に出る | タイムスタンプの書式が統一されている |
 | A-5 | バックアップ本体 | `tar -czf "$dst/backup-$(date +%Y%m%d-%H%M%S).tar.gz" -C "$(dirname "$src")" "$(basename "$src")"` | 生成された `tar.gz` を別ディレクトリへ展開し、元の対象ディレクトリと `diff -r` で差分なし | 展開後の内容が一致する |
-| A-6 | `trap` によるロック解放・後始末の保証 | `trap 'rc=$?; flock -u 200 2>/dev/null; [[ $rc -ne 0 && -n "${outfile:-}" && -e "$outfile" ]] && rm -f "$outfile"; log INFO "exit code=$rc"; exit "$rc"' EXIT` を **A-3（ロック取得）の直後**に置く（`$?` を `rc` へ退避してから解放・後始末を行い、最後に `exit "$rc"` で本来の終了コードを明示的に復元する。単に `flock -u 200; log INFO "exit code=$?"` だと `$?` が `flock -u` 自身の終了コードに上書きされ、`log` の終了コードがそのままスクリプトの最終終了コードになってしまう） | `kill -TERM` で中断させても、ロックファイルが解放され次回実行がブロックされない。`tar` 失敗時は中途半端な `.tar.gz` が残らない | 中断後すぐに再実行が成功する。呼び出し元が見る終了コードが常に元の値（2/3/4/5 等）と一致する。A-1・A-2 のように A-3 より前で終了する経路ではこの trap は未登録のため発火しない（後始末対象がまだ無いので問題ない） |
+| A-6 | `trap` によるロック解放・後始末の保証 | 終了時にロック解放と後始末を必ず行う `trap` を、**A-3（ロック取得）の直後**に置く（コードと 4 つの動作の説明は表の直後） | `kill -TERM` で中断させても、ロックファイルが解放され次回実行がブロックされない。`tar` 失敗時は中途半端な `.tar.gz` が残らない | 中断後すぐに再実行が成功する。呼び出し元が見る終了コードが常に元の値（2/3/4/5 等）と一致する。A-1・A-2 のように A-3 より前で終了する経路ではこの trap は未登録のため発火しない（後始末対象がまだ無いので問題ない） |
 | A-7 | 世代管理 | バックアップ先の `backup-*.tar.gz` を更新日時順に並べ、`-n` で指定した世代数を超えた分だけ `rm` する（`ls -t` を使い、移植性の低い `find -printf` は避ける） | 世代数を `3` にして 5 回実行すると、最新 3 世代だけが残る | 削除順が古い順になっている（新しいものを誤って消していない）。`ls` 出力のパースは一般にファイル名の空白等で壊れうる（shellcheck SC2012）が、本演習の生成ファイル名は `backup-YYYYmmdd-HHMMSS.tar.gz` の固定形式のため許容している |
+
+##### A-6 で置く `trap` の中身
+
+```bash
+trap 'rc=$?; flock -u 200 2>/dev/null; [[ $rc -ne 0 && -n "${outfile:-}" && -e "$outfile" ]] && rm -f "$outfile"; log INFO "exit code=$rc"; exit "$rc"' EXIT
+```
+
+この 1 行がやっているのは 4 つだけです。
+
+1. `rc=$?` … 終了しようとした時点の終了コードを、真っ先に変数へ退避する
+2. `flock -u 200` … ロックを解放する（次回の実行がブロックされないようにする）
+3. `[[ ... ]] && rm -f "$outfile"` … 失敗して終わるときだけ、作りかけの `.tar.gz` を消す
+4. `exit "$rc"` … 1 で退避した本来の終了コードで、あらためて終了する
+
+1 が必要な理由: `$?` は「直前のコマンドの終了コード」なので、`rc` へ退避せずに `flock -u 200; log INFO "exit code=$?"` と素直に書くと、`$?` が `flock -u` 自身の終了コードに上書きされてしまいます。すると、ログに残る `exit code=` の値も、3 の「失敗したときだけ消す」判定も、本来の終了コードではなく `flock -u` の結果を見ることになります。4 の `exit "$rc"` は、退避しておいた本来の終了コードで明示的に終了し直し、呼び出し元が受け取る値（`2`/`3`/`4`/`5`）を設計どおりに揃えるためのものです。ただしシグナルで強制終了された場合の `rc` の値については[試験項目書の注 3](#試験項目書)を参照してください。
 
 ##### 試験項目書
 
@@ -227,6 +249,19 @@ flowchart LR
 
 ## 4. Windows（PowerShell）演習設計
 
+本章の演習は 6 つあります。3 章（Bash）にも同じ記号の演習があるため、先に対応を示します。
+
+| 演習 | 作るもの | 位置付け |
+| --- | --- | --- |
+| 演習 A | `Backup-Rotate.ps1` | 基礎ハンズオン。3 章 演習 A（Bash の `backup-rotate.sh`）の PowerShell 版 |
+| 演習 B | Windows サービスの操作 | 基礎ハンズオン |
+| 演習 C-1 | イベントログの操作 | 基礎ハンズオン |
+| 演習 C-2 | `Invoke-EnvironmentCheck.ps1` | **フラッグシップ**。演習 B・C-1 と、3 章 演習 B（`env-check.sh`）の PowerShell 版を統合する |
+| 演習 D | AD オブジェクトの読み取り・作成 | 基礎ハンズオン（Level 4・AD） |
+| 演習 E | `New-LabUserBatch.ps1` | **フラッグシップ**（Level 4・AD） |
+
+このうち 4 本は到達確認までの基礎ハンズオン、2 本（演習 C-2・演習 E）は仕様・構築手順・試験項目書まで作り込むフラッグシップ演習です。
+
 > **実行ポリシーに関する注記**: Windows で `.ps1` スクリプトを初めて実行すると、既定の実行ポリシー（`Restricted`）によりスクリプトの実行自体がブロックされ、「このシステムではスクリプトの実行が無効になっている」という趣旨のエラーになることがある。管理者権限の PowerShell で `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` を一度実行しておくとよい（組織管理の PC ではポリシーの変更が禁止されている場合があるため、その場合は管理者に確認する）。
 
 ### 4.1 Level 1 基礎文法
@@ -255,7 +290,7 @@ flowchart LR
 
 ### 4.3 Level 3: システム操作（サービス・イベントログ）
 
-02 W18 の「環境チェックスクリプトを書く」を PowerShell 側でも設計します。加えて、Windows 特有の運用対象である**サービス**と**イベントログ**を単独の演習として設計し、両方を組み合わせたスクリプトを本書 2 本目のフラッグシップ演習（演習 C）とします。AD DS のような破壊的操作は伴わず、単体の Windows 端末で完結するため、補助トラックの中でも着手しやすい設計にしています。
+02 W18 の「環境チェックスクリプトを書く」を PowerShell 側でも設計します。加えて、Windows 特有の運用対象である**サービス**と**イベントログ**を単独の演習として設計し、両方を組み合わせたスクリプトを本書 2 本目のフラッグシップ演習（演習 C-2）とします。AD DS のような破壊的操作は伴わず、単体の Windows 端末で完結するため、補助トラックの中でも着手しやすい設計にしています。
 
 #### 演習 A: `Backup-Rotate.ps1`
 
@@ -282,11 +317,11 @@ flowchart LR
 | S-2 | 起動・停止 | 非重要なサービス（例: `Spooler`）を `Stop-Service` → `Start-Service` で操作し、状態遷移を確認する | 依存関係のあるサービスを停止しようとした場合の挙動（`-Force` の要否）を説明できる | 依存されているサービスを `-Force` なしで停止しようとするとエラーになる。事前に `-WhatIf` で確認する習慣をつける |
 | S-3 | スタートアップ種別の変更 | `Set-Service -StartupType Manual` / `Automatic` を試し、再起動なしで設定が反映されることを確認する | `Automatic`・`Manual`・`Disabled` の違いを説明できる。「自動（遅延開始）」は Windows PowerShell 5.1 の `Set-Service` では設定できず `sc.exe config <name> start= delayed-auto` の併用が必要だが、PowerShell 7.1 以降は `Set-Service -StartupType AutomaticDelayedStart` で直接設定できることを知っている | `Set-Service` はバージョンによってコマンドレットだけで完結しない設定項目があり、古い `sc.exe` を併用する場面が残っている（`sc.exe` の `key= value` 形式は `=` の直後に半角スペースが必須） |
 | S-4 | 障害時の自動復旧設定 | `sc.exe failure <サービス名> reset= 86400 actions= restart/60000` で「失敗時に 60 秒後リスタート」を設定し、直後に `if ($LASTEXITCODE -ne 0) { throw "sc.exe failed: $LASTEXITCODE" }` で成否を確認する | この設定が PowerShell 標準コマンドレットには存在しない（`sc.exe` 併用が必要な）ことを説明できる | `sc.exe` はネイティブ exe のため、失敗しても `try`/`catch` では捕まらない。[4.2 L2-4](#42-level-2-制御入出力エラー処理)と同じく `$LASTEXITCODE` を自分で確認する必要がある。Linux の `systemd` の `Restart=on-failure`（[02 W3](./02-curriculum.md#w3-プロセスサービスログ)）に相当する機能だが、設定方法が全く異なる |
-| S-5 | サービス障害の検知 | 対象サービスを意図的に `Stop-Service` した状態を「異常」とみなし、`Get-Service` の結果から検知するチェック関数 `Test-ServiceRunning` を書く | [演習 C](#演習-cフラッグシップ-invoke-environmentcheckps1)のサービス確認部分がこの関数を再利用できる設計になっている | サービスが「存在しない」（`Get-Service` がエラー）のと「存在するが停止中」は別のエラーとして扱う必要がある（[4.2 L2-2](#42-level-2-制御入出力エラー処理)の非終端エラーの扱いと同じ論点） |
+| S-5 | サービス障害の検知 | 対象サービスを意図的に `Stop-Service` した状態を「異常」とみなし、`Get-Service` の結果から検知するチェック関数 `Test-ServiceRunning` を書く | [演習 C-2](#演習-c-2フラッグシップ-invoke-environmentcheckps1)のサービス確認部分がこの関数を再利用できる設計になっている | サービスが「存在しない」（`Get-Service` がエラー）のと「存在するが停止中」は別のエラーとして扱う必要がある（[4.2 L2-2](#42-level-2-制御入出力エラー処理)の非終端エラーの扱いと同じ論点） |
 
-#### 演習 C: イベントログの操作
+#### 演習 C-1: イベントログの操作
 
-> **バージョン制約**: `New-EventLog`/`Write-EventLog`/`Clear-EventLog`/`Remove-EventLog` など classic の `*-EventLog` 系コマンドレットは、PowerShell 7（Core）への移植時に含まれず存在しません（Windows PowerShell 5.1 専用）。読み取り専用の `Get-WinEvent` は両バージョンで動作しますが、本演習の書き込み・作成・クリア操作（E-1・E-2・E-4、および [演習 C（フラッグシップ）の C-6](#演習-cフラッグシップ-invoke-environmentcheckps1)）は **Windows PowerShell 5.1 での実施を前提**にします。
+> **バージョン制約**: `New-EventLog`/`Write-EventLog`/`Clear-EventLog`/`Remove-EventLog` など classic の `*-EventLog` 系コマンドレットは、PowerShell 7（Core）への移植時に含まれず存在しません（Windows PowerShell 5.1 専用）。読み取り専用の `Get-WinEvent` は両バージョンで動作しますが、本演習の書き込み・作成・クリア操作（E-1・E-2・E-4、および [演習 C-2 の C-6](#演習-c-2フラッグシップ-invoke-environmentcheckps1)）は **Windows PowerShell 5.1 での実施を前提**にします。
 
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
@@ -296,9 +331,9 @@ flowchart LR
 | E-4 | エクスポートとクリア | `Get-WinEvent \| Export-Csv` で外部保存してから `Clear-EventLog` でログをクリアする（**ラボ専用ログのみ**に限定する） | クリア前にエクスポートが完了していることを確認する運用を徹底できる | `Clear-EventLog`/`Remove-EventLog` はシステムログ（`Application`/`System` 等）に対しては実施しない。本演習はラボ専用ログ `PortfolioLab` のみを対象にする |
 | E-5 | 障害検知への応用 | [演習 B](#演習-b-windows-サービスの操作)で検知したサービス異常を、イベントとして記録する処理を組み合わせる | サービス異常発生 → イベント記録 → `Get-WinEvent` で検知、という一連の流れを再現できる | イベントログへの書き込み自体が失敗するケース（権限不足）も想定し、書き込み失敗時にせめて transcript には残す設計にする |
 
-#### 演習 C（フラッグシップ）: `Invoke-EnvironmentCheck.ps1`
+#### 演習 C-2（フラッグシップ）: `Invoke-EnvironmentCheck.ps1`
 
-演習 B・演習 C（サービス・イベントログ）と、Bash 側 [演習 B](#演習-b-env-checksh) の PowerShell 版（ディスク使用率・証明書残日数）を統合します。
+演習 B（Windows サービス）・演習 C-1（イベントログ）と、Bash 側 [演習 B `env-check.sh`](#演習-b-env-checksh) の PowerShell 版（ディスク使用率・証明書残日数）を 1 本に統合します。
 
 > **実施記録（2026-08-26）**: 実装は [windows-ps-kit](./windows-ps-kit/README.md) の `flagship/Invoke-EnvironmentCheck.ps1` に用意しました。`Get-Service`（C-3）・`Write-EventLog`（C-6）・`Cert:` ドライブ（C-4）は AI 支援セッションの Linux コンテナでは利用できないため未実行です。ディスク使用率チェック（C-2、`Get-PSDrive -PSProvider FileSystem` を利用）だけは関数を単体で切り出して実行し、しきい値超過時に `WARN` になることを確認しました。スクリプト全体は PowerShell の構文パーサーでエラーが無いことを確認済みですが、Windows 実機での通し実行（C-1・C-5・C-7・C-8、[試験項目書](#試験項目書)の T-01〜T-14）は未実施です。
 
@@ -309,9 +344,9 @@ flowchart LR
 | 目的 | ディスク使用率・対象サービスの稼働・証明書の残日数を一括確認し、結果をカスタムイベントログへ記録したうえで、異常があれば非ゼロで終了する |
 | 呼び出し形式 | `Invoke-EnvironmentCheck.ps1 -Services <String[]> -DiskThresholdPercent <int> -CertPath <String[]> -CertExpiryWarningDays <int> -EventLogName <string> -EventSource <string>` |
 | 終了コード | `0`=すべて正常／`1`=パラメータ不正／`2`=1 件以上 `WARN`／`3`=1 件以上 `FAIL` |
-| ログ出力先 | `Start-Transcript` によるフル記録に加え、[演習 C](#演習-c-イベントログの操作)のログ・ソースへサマリを記録する。標準出力へは各チェック結果を `[pscustomobject]` の配列として返す |
+| ログ出力先 | `Start-Transcript` によるフル記録に加え、[演習 C-1](#演習-c-1-イベントログの操作)のログ・ソースへサマリを記録する。標準出力へは各チェック結果を `[pscustomobject]` の配列として返す |
 | 対象範囲 | ドメインコントローラを前提にしない。単体の Windows 端末（評価版 Windows Server、または Windows 11）で完結する |
-| 実行環境の制約 | [演習 C（フラッグシップ）の C-6](#演習-cフラッグシップ-invoke-environmentcheckps1)（イベントログへの記録）が `Write-EventLog` を使うため、[演習 C のバージョン制約](#演習-c-イベントログの操作)により Windows PowerShell 5.1 での実施が前提になる |
+| 実行環境の制約 | [演習 C-2 の C-6](#演習-c-2フラッグシップ-invoke-environmentcheckps1)（イベントログへの記録）が `Write-EventLog` を使うため、[演習 C-1 のバージョン制約](#演習-c-1-イベントログの操作)により Windows PowerShell 5.1 での実施が前提になる |
 | Windows の時刻同期確認 | `w32tm /query /status` を使うが、本書では確認コマンドの提示に留め、演習の必須項目には含めない（Bash 版の演習 B にある `timedatectl` 相当項目との非対称は意図的） |
 
 ##### 構築手順（段階的に機能を積む）
@@ -323,8 +358,8 @@ flowchart LR
 | C-3 | サービス稼働チェック | [演習 B の S-5](#演習-b-windows-サービスの操作)で作った `Test-ServiceRunning` を呼び出す | 存在しないサービス名を指定しても例外で止まらず、「該当サービスなし」として `FAIL` に計上できる | `Get-Service` は既定では存在しないサービス名でエラーを投げる。`-ErrorAction SilentlyContinue` と結果の `null` チェックで明示的に扱う |
 | C-4 | 証明書残日数チェック | `Get-ChildItem -Path $CertPath` （`Cert:\LocalMachine\My` 等）から `NotAfter` を取得し、`(Get-Date)` との差分日数を計算する関数 `Test-CertificateExpiry` | 残日数がしきい値未満の証明書を `WARN`（期限切れ済みは `FAIL`）として計上する | `Cert:` ドライブへのアクセスは実行ユーザーの権限によって見える証明書が変わる |
 | C-5 | ログとサマリ集約 | `Start-Transcript`（`try`/`finally` で確実に `Stop-Transcript`）と、各チェック結果を `[pscustomobject]` の配列にまとめて出力する | `$results \| Format-Table` で `Check` / `Target` / `Status` / `Detail` の一覧が見える | `Write-Host` で個別に表示するのではなく、オブジェクトとして返すことで後工程（CSV 出力・通知等）に繋げられる設計にする |
-| C-6 | イベントログへの記録 | [演習 C](#演習-c-イベントログの操作)のログ・ソースへ、サマリを 1 件のイベントとして `Write-EventLog` で記録する（詳細は `Message` に JSON 等でまとめる） | `Get-WinEvent` でこのチェック結果のイベントを検索できる | 書き込み失敗（権限不足等）を `try`/`catch` で捕捉し、失敗してもチェック処理自体は継続する設計にする |
-| C-7 | 終了コード決定 | `$results` を集計し、`FAIL` があれば `exit 3`、`WARN` のみなら `exit 2`、すべて正常なら `exit 0` | タスクスケジューラから実行した場合でも、履歴に終了コードが記録される | スクリプト内の `exit` はスクリプトプロセス自体を終了させる。Bash の `return`（関数だけを抜ける）との違いを意識する（関数内から `exit` を呼ぶとスクリプト全体が終了する）。`powershell.exe -File`（[演習 C の C-8](#演習-cフラッグシップ-invoke-environmentcheckps1)のタスクスケジューラ経由はこの形）は新しいプロセスとして実行されるため `exit` は OS まで終了コードが届くが、対話セッションで `.` によるドットソース実行をすると `exit` はそのセッション自体を終了させてしまう。動作確認は必ず `powershell.exe -File` 経由で行う |
+| C-6 | イベントログへの記録 | [演習 C-1](#演習-c-1-イベントログの操作)のログ・ソースへ、サマリを 1 件のイベントとして `Write-EventLog` で記録する（詳細は `Message` に JSON 等でまとめる） | `Get-WinEvent` でこのチェック結果のイベントを検索できる | 書き込み失敗（権限不足等）を `try`/`catch` で捕捉し、失敗してもチェック処理自体は継続する設計にする |
+| C-7 | 終了コード決定 | `$results` を集計し、`FAIL` があれば `exit 3`、`WARN` のみなら `exit 2`、すべて正常なら `exit 0` | タスクスケジューラから実行した場合でも、履歴に終了コードが記録される | スクリプト内の `exit` はスクリプトプロセス自体を終了させる。Bash の `return`（関数だけを抜ける）との違いを意識する（関数内から `exit` を呼ぶとスクリプト全体が終了する）。`powershell.exe -File`（[演習 C-2 の C-8](#演習-c-2フラッグシップ-invoke-environmentcheckps1)のタスクスケジューラ経由はこの形）は新しいプロセスとして実行されるため `exit` は OS まで終了コードが届くが、対話セッションで `.` によるドットソース実行をすると `exit` はそのセッション自体を終了させてしまう。動作確認は必ず `powershell.exe -File` 経由で行う |
 | C-8 | タスクスケジューラ登録（任意） | `Register-ScheduledTask` で日次実行のタスクを登録する（トリガー・アクション・実行アカウントを指定） | タスクスケジューラの GUI にタスクが表示され、手動実行で成功する | サービスアカウントで登録する場合、対話ログオンとは異なる実行コンテキストになるため、相対パスに依存したスクリプトは失敗しやすい |
 
 ##### 試験項目書
@@ -459,9 +494,9 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 | --- | --- | --- |
 | 0:00 | PowerShell Level 1・2（4.1・4.2）のハンズオン | 各項目の到達確認を満たす |
 | 1:00 | 演習 A `Backup-Rotate.ps1`、演習 B（サービス）のハンズオン | 各項目の到達確認を満たす |
-| 1:45 | 演習 C（イベントログ）のハンズオン | 各項目の到達確認を満たす |
-| 2:15 | 演習 C（フラッグシップ）`Invoke-EnvironmentCheck.ps1` の構築（C-1〜C-8） | 各段階の想定結果が一致する |
-| 3:15 | 演習 C の試験項目書（T-01〜T-14） | 全項目で期待結果どおりの成功・失敗が再現する |
+| 1:45 | 演習 C-1（イベントログ）のハンズオン | 各項目の到達確認を満たす |
+| 2:15 | 演習 C-2（フラッグシップ）`Invoke-EnvironmentCheck.ps1` の構築（C-1〜C-8） | 各段階の想定結果が一致する |
+| 3:15 | 演習 C-2 の試験項目書（T-01〜T-14） | 全項目で期待結果どおりの成功・失敗が再現する |
 | 4:00 | **セッション 1 の終了目標** | 未完了は次セッションへ繰り越す |
 
 ### Windows セッション 2（Level 4・AD、ラボドメイン構築後）
@@ -502,11 +537,11 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 
 - **現在の状態**:
   - Bash 側（3 章）を、AI 支援セッションの作業環境ですべて実行した（Level 1・Level 2 のハンズオン全項目、演習 A `backup-rotate.sh` 12/12 OK、演習 B `env-check.sh`。2026-08-26）
-  - Windows 側（4 章）は、AI 支援セッションの作業環境（Linux コンテナに PowerShell 7.4.6 を導入したもの）で Level 1・Level 2・演習A `Backup-Rotate.ps1`（4.1〜4.3 演習Aまで）を実行した（2026-08-26）。演習B（サービス）・演習C（イベントログ）・演習C フラッグシップ `Invoke-EnvironmentCheck.ps1`・演習D（AD）・演習E フラッグシップ `New-LabUserBatch.ps1` は、`Get-Service`/`*-EventLog`/`ActiveDirectory` モジュールがこの環境に存在しないため未実行。実装は [windows-ps-kit](./windows-ps-kit/README.md) として用意し、構文パーサーでの検証と、AD/Windows 非依存部分（ディスク使用率チェック、CSV 読み込み・検証ロジック）の実行確認は済ませた
+  - Windows 側（4 章）は、AI 支援セッションの作業環境（Linux コンテナに PowerShell 7.4.6 を導入したもの）で Level 1・Level 2・演習A `Backup-Rotate.ps1`（4.1〜4.3 演習Aまで）を実行した（2026-08-26）。演習B（サービス）・演習C-1（イベントログ）・演習C-2 フラッグシップ `Invoke-EnvironmentCheck.ps1`・演習D（AD）・演習E フラッグシップ `New-LabUserBatch.ps1` は、`Get-Service`/`*-EventLog`/`ActiveDirectory` モジュールがこの環境に存在しないため未実行。実装は [windows-ps-kit](./windows-ps-kit/README.md) として用意し、構文パーサーでの検証と、AD/Windows 非依存部分（ディスク使用率チェック、CSV 読み込み・検証ロジック）の実行確認は済ませた
   - いずれも **本人が実機（`lab-base01`／Windows 実機等）で再現・検証した記録ではない**点、[7 章](#7-証跡採録計画)が想定する `server-monitor` 側への一次証跡保存がまだの点、演習 B（Bash）の B-1・B-4 がコンテナに systemd が無いため十分に検証できていない点は、各節の実施記録の注記のとおり
 - **次のアクション**:
   1. [1 章の前提条件](#前提条件)の Linux VM（`lab-base01`）が整い次第、本人の実機で 3 章（Level 1・2・演習 A・演習 B）を再現し、AI 実行との差分（特に演習 B の B-1・B-4 は systemd が動く実機でなければ検証できない）があれば記録する
-  2. Windows 実機（[01 学習環境 §6](./01-environment.md#6-windows-server-の学習環境任意)）が整い次第、本人が 4.1〜4.3 演習Aを再実施して AI 実行との差分を確認し、[windows-ps-kit](./windows-ps-kit/README.md) の演習B・演習C・演習C フラッグシップを実施する
+  2. Windows 実機（[01 学習環境 §6](./01-environment.md#6-windows-server-の学習環境任意)）が整い次第、本人が 4.1〜4.3 演習Aを再実施して AI 実行との差分を確認し、[windows-ps-kit](./windows-ps-kit/README.md) の演習B・演習C-1・演習C-2 フラッグシップを実施する
   3. Level 4（AD 操作、4.4）は、[Windows / AD 公開再現ラボ §4](../evidence/templates/windows-ad-lab.md#4-greenfield-ad-ds--dns-forest-の構築)のラボドメイン構築が先行条件になる。**このラボ自体、本書執筆時点で `NOT RUN`** のため、Level 4 の着手はさらにその後になる
 - **完了後に更新するもの**:
   - [02 フェーズ別カリキュラム W4 / W18](./02-curriculum.md#w4-ディスクファイルシステムシェルスクリプト) の該当ハンズオンから、本書の実施記録へのリンク

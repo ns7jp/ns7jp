@@ -1,10 +1,12 @@
 # 10 Azure構築演習設計：基礎からのクラウド基盤構築
 
+**この演習を一言でいうと**: Azure 上に Web / AP / DB の 3 層構成（VM 3 台）を作り、VM にパブリック IP を持たせず Azure Bastion 経由で運用し、同じ構成を Terraform でコード化してから、監視・バックアップ・障害対応まで一通り試す演習の設計書です。オンプレの 3 層ラボ（[01 学習環境](./01-environment.md#3-ラボ構成3-台構成)）と AWS の構成を、Azure の言葉に置き換えて説明できるようになることを狙います。
+
 > **本ドキュメントの位置付け**
 >
 > [サーバー構築エンジニア学習プラン](./README.md) Phase 6（[W21 クラウド基礎](./02-curriculum.md#w21-クラウド基礎)・[W22 Terraform によるコード化](./02-curriculum.md#w22-terraform-によるコード化)）のハンズオンを、[05](./05-phase1-exercise-design.md)・[06](./06-shell-scripting-exercise-design.md)・[07](./07-python-ops-automation-exercise-design.md)・[08](./08-ad-exercise-design.md)・[09](./09-zabbix-monitoring-exercise-design.md)と同じ様式で具体化した演習設計です。対象は **Microsoft Azure** です。
 >
-> **本書は [ADR-0005](../adr/0005-terraform-for-iac.md) を覆すものではありません。** 本ポートフォリオの主要クラウド／IaC 系統は AWS + Terraform のまま（[03 AWS + Terraform](../server-monitor-improvements/03-terraform-aws.md)）とし、本演習はそれとは独立に Azure 環境をもう 1 つ追加で構築します。[target-roles.md](../target-roles.md)・[career-bridge.md「志望の経緯」](../career-bridge.md#志望の経緯)が記すとおり、現在の派遣先では Windows Server / AD / Linux / AWS / Azure の構築研修に就いており、Azure は志望領域そのものに直結します。国内 SIer・大手企業の社内基盤では Microsoft 365 / Entra ID との親和性から Azure の採用例が多いことも踏まえ、AWS 一本足の実務経験を Azure でも説明できる状態へ引き上げるための補完演習として設計します（[09 Zabbix](./09-zabbix-monitoring-exercise-design.md)が Prometheus 系を置き換えずに Zabbix を追加したのと同じ位置付け）。
+> **本書は [ADR-0005](../adr/0005-terraform-for-iac.md) を覆すものではありません。** 本ポートフォリオの主要クラウド／IaC 系統は AWS + Terraform のまま（[03 AWS + Terraform](../server-monitor-improvements/03-terraform-aws.md)）とし、本演習はそれとは独立に Azure 環境をもう 1 つ追加で構築します。[target-roles.md](../target-roles.md)・[career-bridge.md「志望の経緯」](../career-bridge.md#志望の経緯)が記すとおり、現在の派遣先では Windows Server / AD / Linux / AWS / Azure の構築研修に就いており、Azure は志望領域そのものに直結します。また、国内 SIer・大手企業の社内基盤では、Microsoft 365 や Entra ID と相性がよいことから Azure の採用例が多いと理解しています。そこで本書は、AWS だけの実務経験を Azure でも説明できる状態へ引き上げる補完演習として設計します。位置付けは [09 Zabbix](./09-zabbix-monitoring-exercise-design.md) と同じです。09 が主監視スタックの Prometheus 系を置き換えずに Zabbix を 1 つ足したのと同様に、本書も主系統の AWS + Terraform を置き換えずに Azure を 1 つ足します。
 >
 > 本リポジトリの「[新規設計を増やさない運用ルール](../evidence-capture-checklist.md#新規設計を増やさない運用ルール)」の対象は **server-monitor の改善設計 06 以降**です。本書は改善設計ではなく学習計画（[05](./05-phase1-exercise-design.md)〜[09](./09-zabbix-monitoring-exercise-design.md)と同じ位置付け）のため対象外です。
 >
@@ -222,6 +224,17 @@ career-bridge.md §2.7（本書と同時に新設）の対応表に、本演習�
 ## 5. Azure 基盤設計（Level 1〜Level 5）
 
 Azure 固有の「ガバナンス・ネットワーク・コンピュート・IaC・監視/バックアップ」という設計層です。[09 の Level 構造](./09-zabbix-monitoring-exercise-design.md#5-監視設計itemtriggeractiontemplatediscovery)と同じく、段階を追って積み上げます。
+
+**この章で出てくる略語**。以降の 5.1〜5.5 の表、とくに「つまずきやすい点」列を読むときに必要になります。
+
+| 略語 | 正式名 | 一言でいうと |
+| --- | --- | --- |
+| RBAC | Role-Based Access Control（ロールベースアクセス制御） | 「誰に」「どの範囲で」「何をしてよいか」をロール（役割）の割り当てで決める仕組み。AWS でいえば IAM のうち、ロール・ポリシーを割り当てる部分に当たる（ユーザー・グループ側は Entra ID が担う） |
+| VNet | Virtual Network（仮想ネットワーク） | Azure 上に自分で作る、外から隔離されたネットワーク。AWS の VPC に当たる |
+| NSG | Network Security Group | 通信を許可・拒否するルール表。サブネットまたは NIC に付ける。AWS のセキュリティグループに当たる |
+| NIC | Network Interface Card（ネットワークインターフェイス） | VM に付く仮想の LAN ポート。IP アドレスは VM 本体ではなく NIC に付く |
+| SKU | Stock Keeping Unit | 同じサービスの中の「グレード」（性能・機能・料金の違い）。本書では Bastion の Basic / Standard、パブリック IP の Standard が該当する |
+| KQL | Kusto Query Language | Azure Monitor / Log Analytics のログを検索する言語。Prometheus の PromQL に当たる位置づけ |
 
 ### 5.1 Level 1: ガバナンス・ID
 

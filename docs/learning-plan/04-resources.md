@@ -46,6 +46,14 @@
 | 公式 | [Ubuntu Server ドキュメント](https://ubuntu.com/server/docs) | - (随時更新) | 実機設定時の正解の確認 |
 | 公式 | [AlmaLinux](https://almalinux.org/) | - (随時更新) | RHEL 系を触るときの導入元 |
 
+> **発行年 2015 の本を Phase 1 の主教材にしている理由**:
+> [1. 教材の選び方](#1-教材の選び方)の「発行年とバージョンを見る」が警戒しているのは、
+> バージョンに依存する**手順**が古くなることです。`ls` `cd` `grep` などのコマンドの使い方やシェルの文法は
+> 変化が緩やかなため、この本は基礎の習得に使います。
+> 一方で**インストール手順・パッケージ名・設定ファイルの置き場所は公式で今の版を確認**します
+> （Ubuntu なら上表の[Ubuntu Server ドキュメント](https://ubuntu.com/server/docs)）。
+> 「変わりにくい基礎は書籍、変わりやすい手順は公式」が、以降のフェーズも含めた教材の使い分けです。
+
 ### Phase 2: ネットワーク基礎
 
 | 種別 | 教材の例 | 発行年 | 使い方 |
@@ -77,14 +85,24 @@
 
 ### Phase 5: 自動化・IaC
 
+IaC（Infrastructure as Code）は、サーバーの設定を手作業で行わず、**コードとして書いて実行して作る**やり方です。
+このフェーズの教材は、次の 3 つの道具を軸に並んでいます（あわせて、変更の履歴を残す Git も扱います）。
+
+- Ansible: すでにある OS の設定作業を自動化する
+- Docker: アプリを箱（コンテナ）に入れて、同じ構成で動かせるようにする
+- Terraform: クラウド上のサーバーやネットワークそのものをコードから作る
+
+冪等性などの用語は[やさしい用語・見方ガイド](../beginner-guide.md)にもまとめています
+（冪等性 = 同じ操作を何度実行しても結果が変わらない性質）。
+
 | 種別 | 教材の例 | 発行年 | 使い方 |
 | --- | --- | --- | --- |
 | 公式 | [Ansible ドキュメント](https://docs.ansible.com/) | - (随時更新) | モジュール選定と冪等性の確認 |
-| 書籍 | 『Ansible実践ガイド』 | 要確認 | role 設計と実務パターン |
+| 書籍 | 『Ansible実践ガイド』 | 要確認 | role（設定のまとまり）の設計と実務パターン |
 | 公式 | [Docker ドキュメント](https://docs.docker.com/) | - (随時更新) | Dockerfile と Compose の正解 |
 | 書籍 | 『Docker/Kubernetes 実践コンテナ開発入門』 | 要確認 | コンテナの考え方の整理 |
 | 公式 | [Terraform チュートリアル](https://developer.hashicorp.com/terraform/tutorials) | - (随時更新) | 手を動かしながら進められる |
-| 書籍 | 『詳解 Terraform』 | 要確認 | state・モジュール設計の理解 |
+| 書籍 | 『詳解 Terraform』 | 要確認 | state（作成済み構成の記録ファイル）とモジュール設計の理解 |
 | 公式 | [Pro Git](https://git-scm.com/book/ja/v2) | - (随時更新) | 日本語で無料。Git の基礎はここで足りる |
 
 ### Phase 6: クラウド・監視
@@ -101,11 +119,18 @@
 | 本リポジトリ | [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md) | - | AWS 無料利用枠 + Terraform を、VPC・EC2 1 台の最小構成で実際に `apply`/`destroy` まで回す演習設計（設計のみ・未実施） |
 
 > 国内の運用現場では Zabbix や JP1 などの製品が使われることも多くあります。
-> ツールが違っても**監視の考え方は共通**です。対応関係は[現場経験とインフラ運用の橋渡し](../career-bridge.md)にも整理しています。
-> Zabbix を実機で構築・検証する演習設計は [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md)にまとめています（設計のみ・未実施）。
-> AWS Skill Builder で学ぶ内容を実機で裏付ける演習設計は [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md)にまとめています（設計のみ・未実施）。
+> ツールが違っても**監視の考え方は共通**です。対応関係は[現場経験とインフラ運用の橋渡し](../career-bridge.md)に整理しています。
 >
-> 本ラボの主要クラウド／IaC 系統は AWS + Terraform（[ADR-0005](../adr/0005-terraform-for-iac.md)）ですが、現在の派遣先研修（[target-roles.md](../target-roles.md)）や国内エンタープライズ案件で頻出する Azure についても、[career-bridge.md §2.7 の概念対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)を実機で検証する演習設計を [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md)にまとめています（設計のみ・未実施）。
+> このラボで主に使うクラウドは AWS、その構成をコードで管理するツールは Terraform です。
+> Terraform を選んだ理由は [ADR-0005](../adr/0005-terraform-for-iac.md) に記録しています
+> （ADR は「何を決めたか」と「なぜそう決めたか」を 1 件 1 ファイルで残す記録です）。
+> ただし現在の派遣先研修（[target-roles.md](../target-roles.md)）や国内エンタープライズ案件では Azure も頻出するため、上の表には Azure の教材も入れています。
+>
+> 上の教材を実機で裏付けるための演習を、次の 3 本設計しています。**いずれも設計だけで、実行はしていません（設計のみ・未実施）**。
+>
+> - [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md): Zabbix を自分で構築して監視を試す
+> - [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md): AWS Skill Builder で学ぶ内容を実機で裏付ける
+> - [10 Azure構築演習設計](./10-azure-foundational-exercise-design.md): AWS で覚えたことが Azure でどこまで通じるかを、[career-bridge.md §2.7 の概念対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)に沿って確かめる
 
 ---
 

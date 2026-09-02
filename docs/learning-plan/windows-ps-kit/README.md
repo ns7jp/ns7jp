@@ -8,6 +8,12 @@
 
 ## これは何か
 
+**先に押さえる 3 語**（この節の説明と下の表は、この 3 語が前提になっている）
+
+- **コマンドレット**: PowerShell の命令ひとつひとつのこと。`Get-Service` のように「動詞-名詞」の形をしている
+- **Windows PowerShell 5.1 と PowerShell 7 は別物**: 5.1 は Windows に最初から入っている古い方で、Windows 専用。7 は後から入れる新しい方で、Windows / Linux / macOS で動く。使えるコマンドレットも、`.ps1` ファイルの文字コードの読み取り方も違うため、この先は「Windows PowerShell 5.1」と「PowerShell 7」のどちらの話なのかを見ながら読む
+- **RSAT（Remote Server Administration Tools）**: Windows に追加で有効化するサーバー管理ツール一式。AD（Active Directory）をコマンドで操作するための `ActiveDirectory` モジュールはこれに含まれるため、Linux 上の PowerShell 7 には存在しない
+
 [06 シェルスクリプト演習設計](../06-shell-scripting-exercise-design.md)の 4 章（Windows／PowerShell）のうち、
 この AI 支援セッションには **PowerShell 7（Core）をインストールできる Linux コンテナ**がある。
 Windows 実機・AD ラボドメインは無いが、PowerShell の言語機能とクロスプラットフォーム対応の
@@ -56,7 +62,7 @@ Linux コンテナへ PowerShell 7.4.6（公式 tar.gz、GitHub Releases から�
 | [`checklist.md`](./checklist.md) | 4 章全体 | 実施中に開いておく進捗チェックリスト（正本ではない） | — |
 | [`evidence-template.md`](./evidence-template.md) | [5 章](../06-shell-scripting-exercise-design.md#5-到達確認)・[7 章](../06-shell-scripting-exercise-design.md#7-証跡採録計画) | 実測結果・エビデンスの記入用テンプレート | — |
 | `backup-rotate/Backup-Rotate.ps1` | [4.3 演習A](../06-shell-scripting-exercise-design.md#演習-a-backup-rotateps1) | A-1〜A-4 の実装 | **実行済み** |
-| `flagship/Invoke-EnvironmentCheck.ps1` | [4.3 演習C（フラッグシップ）](../06-shell-scripting-exercise-design.md#演習-cフラッグシップ-invoke-environmentcheckps1) | C-1〜C-7 の実装（C-8 は別ファイル） | ディスクチェック部分のみ実行済み。`Get-Service`/`Write-EventLog` 依存部分は未実行 |
+| `flagship/Invoke-EnvironmentCheck.ps1` | [4.3 演習C-2（フラッグシップ）](../06-shell-scripting-exercise-design.md#演習-c-2フラッグシップ-invoke-environmentcheckps1) | C-1〜C-7 の実装（C-8 は別ファイル） | ディスクチェック部分のみ実行済み。`Get-Service`/`Write-EventLog` 依存部分は未実行 |
 | `register-task/Register-EnvironmentCheckTask.ps1` | 同上 C-8 | タスクスケジューラへの日次登録 | 未実行（`ScheduledTasks` モジュールが Windows 専用） |
 | `flagship/New-LabUserBatch.ps1` | [4.4 演習E（フラッグシップ）](../06-shell-scripting-exercise-design.md#演習-eフラッグシップ-new-labuserbatchps1) | E-1〜E-6 の実装 | CSV/検証ロジックのみ実行済み。AD 依存部分は未実行 |
 | `sample-data/new-lab-users.csv` | 同上 | `New-LabUserBatch.ps1` の動作確認用サンプル CSV（3 件、うち 1 件は接頭辞なしでスキップ経路を試験できる） | 列検証・接頭辞判定・グループ名導出をこの CSV で実行済み |

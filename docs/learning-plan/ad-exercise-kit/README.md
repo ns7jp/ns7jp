@@ -106,8 +106,9 @@ wbadmin start systemstatebackup $backupTargetArg -quiet
 
 1. [windows-ad-lab.md §4・§7・§9](../../evidence/templates/windows-ad-lab.md)が完了済みであることを確認する
    （ADLAB-DC1 稼働中、ラボ OU・グループ・ユーザー作成済み、クライアント ADLAB-CLI1 がドメイン参加済み）
-2. Hyper-V ホストで `hyperv/00-checkpoint-helpers.ps1` を dot-source し（`. .\hyperv\00-checkpoint-helpers.ps1`
-   のように、先頭にピリオドと半角スペースを置いてからスクリプトパスを指定する）、`before-ad-design` を取得する
+2. Hyper-V ホストで `. .\hyperv\00-checkpoint-helpers.ps1` と、先頭にピリオドと半角スペースを置いて実行し
+   （dot-source。スクリプト内で定義した関数を今の PowerShell に残す読み込み方）、
+   `New-AdLabCheckpoint -Name before-ad-design` で ADLAB-DC1 のチェックポイント `before-ad-design` を作る
 3. ADLAB-DC1 の管理者 PowerShell で `scripts/01-ou-and-groups.ps1` → `scripts/02-gpo-setup.ps1` の順に実行する
 4. ADLAB-CLI1 の管理者 PowerShell で `scripts/02b-client-verify-gpo.ps1` を実行する
 5. ADLAB-DC1 側へ戻り `scripts/03-password-policy-and-pso.ps1` → `scripts/04-fsmo-and-health-check.ps1`
