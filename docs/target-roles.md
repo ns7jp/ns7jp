@@ -1,6 +1,6 @@
 # 志望トラックと証跡の対応
 
-第一志望は **Linux サーバー設計・構築**で、すべての応募先で主作品の [server-monitor](https://github.com/ns7jp/server-monitor) を最初に提示します。成果物やコードがある状態を **実装済み**、日付・環境・commit SHA を含む結果がある状態を **実測済み**、実行ログがない状態を **未実施（NOT RUN）** と表記します。
+第一志望は **Linux サーバー設計・構築**で、すべての応募先で主作品の [server](https://github.com/ns7jp/server) を最初に提示します。成果物やコードがある状態を **実装済み**、日付・環境・commit SHA を含む結果がある状態を **実測済み**、実行ログがない状態を **未実施（NOT RUN）** と表記します。
 
 ## 優先順位
 
@@ -19,7 +19,7 @@
 | 応募先 | 最初に見せるもの | 面接で実演するもの |
 | --- | --- | --- |
 | サーバー構築 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | Ansible の check / apply / 2 回目の冪等性、試験結果 |
-| インフラ運用・監視 | [server-monitor](https://github.com/ns7jp/server-monitor) | Grafana → alert → logs → recovery |
+| インフラ運用・監視 | [server](https://github.com/ns7jp/server) | Grafana → alert → logs → recovery |
 | ネットワークを含む運用 | [L2 / L3 切り分けラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/routing) | 静的ルート、`ip_forward`、VLAN ID 不一致の切り分け |
 | RHEL 系が主な現場 | [AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common) | `dnf` / firewalld / SELinux の差分と、[Molecule `el9` シナリオの実行証跡](https://github.com/ns7jp/server-monitor/actions/runs/32811100007) |
 | IT サポート・社内 SE | [AD 操作演習設計](./learning-plan/06-shell-scripting-exercise-design.md#44-level-4-active-directory-運用スクリプト) | 現職の Windows Server / AD 研修に基づく再現条件、確認順、記録方法 |
@@ -27,7 +27,7 @@
 ## 現時点の境界
 
 実務でのサーバー構築・大規模インフラ運用経験はこれからです。
-`server-monitor` は単一ホスト中心の学習ラボで、本番冗長化の実績ではありません。
+`server` は単一ホスト中心の学習ラボで、本番冗長化の実績ではありません。
 
 **どの試験項目がどこまで実測済みかは
 [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
