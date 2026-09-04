@@ -4,7 +4,7 @@
 
 第一志望は **Linux サーバー設計・構築**です。主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** では、使い捨て Ubuntu 24.04 runner 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元までを検証し、試験項目 23 件中 23 件合格を採録しました。[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映済みです。検証範囲の区切り（独立ホストでの実績ではない、等）は本ページ末尾の[「正直な境界」](#正直な境界)にまとめています。
 
-| [主作品 `server-monitor`](https://github.com/ns7jp/server-monitor) | [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) |
+| [主作品 `server`](https://github.com/ns7jp/server-monitor) | [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) |
 | --- | --- | --- |
 | 構成、コード、実行方法を確認 | 要件定義から引き渡しまでを工程順に確認 | 23/23 PASS の結果、実行環境、未実測範囲を確認 |
 
