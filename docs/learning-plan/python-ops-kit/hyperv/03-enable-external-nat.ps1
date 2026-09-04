@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     TLS 証明書チェック試験（T-05 / TCK-05）のためだけに LAB-WINOPS1 へ外部疎通を一時追加する。
 
@@ -16,11 +16,19 @@
 
     これは "実施キット"（未実行の雛形）であり、このスクリプト自体を実行した時点では
     まだ演習の実施記録にはならない。
+
+.NOTES
+    Add-VMNetworkAdapter 等が失敗すると PowerShell の既定動作（非終了エラー）では
+    後続の行がそのまま実行され、失敗したのに成功したかのようなメッセージが出てしまう
+    （phase1-kit/hyperv/00-create-internal-switch.ps1 の実機初回実行で発見・修正した不具合と同種）。
+    これを防ぐため、以下は -ErrorAction Stop と try/catch で実際の成否を判定する。
 #>
 
 param(
     [string]$VMName = 'LAB-WINOPS1'
 )
+
+$ErrorActionPreference = 'Stop'
 
 $DefaultSwitch = 'Default Switch'
 
@@ -28,11 +36,18 @@ if (-not (Get-VMSwitch -Name $DefaultSwitch -ErrorAction SilentlyContinue)) {
     throw "'$DefaultSwitch' が見つかりません。Windows Server の Hyper-V には無いことが多い（付録 A-2 と同じ制約）。External スイッチ等の代替を用意し、Add-VMNetworkAdapter で割り当ててください。"
 }
 
-if (Get-VMNetworkAdapter -VMName $VMName | Where-Object { $_.SwitchName -eq $DefaultSwitch }) {
-    Write-Host "VM '$VMName' は既に '$DefaultSwitch' に接続済みです。"
-} else {
-    Add-VMNetworkAdapter -VMName $VMName -SwitchName $DefaultSwitch
-    Write-Host "VM '$VMName' に '$DefaultSwitch' 経由の NIC を追加しました。"
+try {
+    if (Get-VMNetworkAdapter -VMName $VMName | Where-Object { $_.SwitchName -eq $DefaultSwitch }) {
+        Write-Host "VM '$VMName' は既に '$DefaultSwitch' に接続済みです。"
+    } else {
+        Add-VMNetworkAdapter -VMName $VMName -SwitchName $DefaultSwitch -ErrorAction Stop
+        Write-Host "VM '$VMName' に '$DefaultSwitch' 経由の NIC を追加しました。"
+    }
+} catch {
+    $ErrorActionPreference = 'Continue'
+    Write-Error "失敗しました: $($_.Exception.Message)"
+    Write-Error '管理者として PowerShell を実行しているか、Hyper-V Administrators グループに所属しているかを確認してください。'
+    exit 1
 }
 
 Write-Host ''

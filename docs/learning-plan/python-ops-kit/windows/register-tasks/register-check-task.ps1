@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     check.py をタスクスケジューラに登録する（MonitoringCheckPy、5 分毎）。
 
@@ -15,10 +15,23 @@
 
     これは "実施キット"（未実行の雛形）であり、このスクリプト自体を実行した時点では
     まだ演習の実施記録にはならない。
+
+.NOTES
+    schtasks はネイティブコマンドであり、失敗しても PowerShell の $ErrorActionPreference の
+    対象にならず、失敗を検知しないまま次の行が実行されてしまう
+    （phase1-kit/hyperv/00-create-internal-switch.ps1 の実機初回実行で発見・修正した、
+    非終了エラーが黙って成功表示になる不具合と同種の失敗検知漏れ）。
+    これを防ぐため、実行直後の $LASTEXITCODE を確認する。
 #>
 
 schtasks /create /tn "MonitoringCheckPy" /tr '"C:\ProgramData\monitoring\check\venv\Scripts\python.exe" "C:\ProgramData\monitoring\check\check.py" --config "C:\ProgramData\monitoring\check\check.yaml" --status-file "C:\ProgramData\monitoring\check-status.json"' /sc minute /mo 5 /ru SYSTEM /rl LIMITED /f
 
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "タスク 'MonitoringCheckPy' の登録に失敗しました（schtasks の終了コード: $LASTEXITCODE）。管理者として PowerShell を実行しているか確認してください。"
+    exit 1
+}
+
+Write-Host "タスク 'MonitoringCheckPy' を登録しました。"
 Write-Host ''
 Write-Host '確認 (W-7): schtasks /query /tn "MonitoringCheckPy" /v /fo LIST'
 Write-Host '手動実行確認 (W-8): schtasks /run /tn "MonitoringCheckPy"'

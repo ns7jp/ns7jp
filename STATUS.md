@@ -2,7 +2,9 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-08-30（採用担当者・第三者視点での外部レビューを受け、コードや実機演習では埋まらない「採用資料の見せ方」と「キャリア接続の抜け」を修正。
+最終更新：2026-09-04（[LEARNINGS.md 記入待ちリスト 8 番目](#0-b-learningsmd-記入待ちリスト本人が書く)（Phase 1 演習キット `00-create-internal-switch.ps1` を Hyper-V ホストで初回実行した際、`New-VMSwitch` が権限不足で失敗したのに、PowerShell の既定の非終了エラーのため「作成しました」と誤成功表示していた不具合）を踏まえ、同じ操作方針の兄弟キット [python-ops-kit](./docs/learning-plan/python-ops-kit/README.md) にはこの是正が一度も横展開されていなかった差分を埋めた。Hyper-V 系 5 本・タスク登録系 3 本、計 8 本の `.ps1` に `$ErrorActionPreference = 'Stop'` と `-ErrorAction Stop` を伴う try/catch（ネイティブコマンド `schtasks` を呼ぶ 2 本は `$LASTEXITCODE` 確認）を追加し、失敗が「成功」として表示される経路を塞いだ。監査の過程で、同じ 8 本が他キットと異なり UTF-8 BOM を一度も付与されていなかったことも判明したため（2026-08-26 に windows-ps-kit で発見・修正した文字化け・構文エラーの不具合と同種）、あわせて BOM を付与した。詳細は下記「1. 本リポジトリ」の該当エントリを参照。以下は 2026-08-30 時点の更新内容。
+
+2026-08-30（採用担当者・第三者視点での外部レビューを受け、コードや実機演習では埋まらない「採用資料の見せ方」と「キャリア接続の抜け」を修正。
 (1) [資格取得ロードマップ](./docs/certifications/roadmap.md)に AWS CLF-C02 / Azure AZ-900 / 情報セキュリティマネジメント試験（SG）を追加。LPIC-1 と FE の順序矛盾には気づいて是正済みだったが、同じ判断基準を AWS / Azure 側に適用できていなかった差分を埋める。
 (2) [現場経験とインフラの橋渡し](./docs/career-bridge.md)に、物流現場の現物スキル（重量物運搬・ハンディ端末での資産管理）とデータセンター現地作業（ラックマウント・資産棚卸し）の対応（§2.8）を追加。既存の転用マップが PDCA・5S という概念レベルに留まり、この現物スキルの接続が抜けていた。
 (3) [志望トラックと証跡](./docs/target-roles.md)に、データセンター現地オペレーター（2b）とコールセンター型ヘルプデスク（3b）を追加。監視・運用・IT サポートの入口が既存カテゴリに限られ、物流現場との親和性が高い入口が候補から漏れていた。
@@ -108,6 +110,26 @@ server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を 
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-09-04 の更新内容（python-ops-kit：Phase 1 演習キットで見つかった不具合 2 件の横展開）
+
+[LEARNINGS.md 記入待ちリスト 8 番目](#0-b-learningsmd-記入待ちリスト本人が書く)は、Phase 1 演習キットの
+`00-create-internal-switch.ps1` を Hyper-V ホストで初回実行した際、`New-VMSwitch` が権限不足で失敗した
+のに、PowerShell の既定の非終了エラーのため「作成しました」と誤成功表示していた事実を記録している
+（同ファイルは 2026-08-26 に修正済み）。この事実を踏まえてリポジトリ内の `.ps1` 全 28 本を棚卸ししたところ、
+同じ操作方針（Hyper-V 上に隔離した検証用 VM を構築する）の兄弟キットである
+[python-ops-kit](./docs/learning-plan/python-ops-kit/README.md) だけが、この是正と、[追補5](#2026-08-26-の更新内容追補5windows-ps-kit-の-utf-8-bom-欠落バグを実機で発見修正)
+で見つかった UTF-8 BOM 欠落バグの是正の、どちらも一度も受けていなかった差分が見つかったため、両方を埋めた。
+
+| 項目 | 内容 |
+| --- | --- |
+| 対象 | `docs/learning-plan/python-ops-kit/hyperv/`（`00-create-lab-winops1-switch.ps1`〜`04-disable-external-nat.ps1` の 5 本）と `docs/learning-plan/python-ops-kit/windows/register-tasks/`（3 本）の計 8 本 |
+| 監査方法 | リポジトリ内の `.ps1` 全 28 本を `$ErrorActionPreference` の有無で棚卸しした。無かった 10 本のうち、`ad-exercise-kit/hyperv/00-checkpoint-helpers.ps1` と `phase1-kit/hyperv/02-checkpoint-helpers.ps1` の 2 本は、dot-source して使う関数集であるため意図的にファイル先頭で `$ErrorActionPreference` を変更しておらず、代わりに関数ごとに try/catch + `-ErrorAction Stop` を備えていた（対応済みと判断し対象外）。残り 8 本（すべて python-ops-kit）を今回の対象にした |
+| 修正 1（誤成功表示） | `00-create-lab-winops1-switch.ps1`・`01-create-lab-winops1-vm.ps1`・`03-enable-external-nat.ps1`・`04-disable-external-nat.ps1` は、`New-VMSwitch`/`New-VM`/`Add-VMNetworkAdapter`/`Remove-VMNetworkAdapter` 等の操作系コマンドレットに `-ErrorAction Stop` を付け、スクリプト先頭の `$ErrorActionPreference = 'Stop'` と try/catch（失敗時は `Write-Error` して `exit 1`）で囲み、`00-create-internal-switch.ps1` と同じ形にした。`02-checkpoint-helpers.ps1` は dot-source 用の関数集のため、代わりに `phase1-kit/hyperv/02-checkpoint-helpers.ps1` と同じ「関数内 try/catch」パターンに揃えた。`register-backup-task.ps1`（`Register-ScheduledTask`）にも同じ try/catch パターンを適用した。`register-check-task.ps1`・`register-routine-task.ps1` は `schtasks`（PowerShell のコマンドレットではなくネイティブコマンドのため `$ErrorActionPreference` の対象にならない）を呼ぶため、実行直後に `$LASTEXITCODE` を確認し、非 0 なら `exit 1` する方式にした |
+| 修正 2（UTF-8 BOM 欠落） | 監査の過程で、対象の 8 本すべてに UTF-8 BOM が付与されていないことが判明した（windows-ps-kit・ad-exercise-kit・phase1-kit の `.ps1` は、[追補5](#2026-08-26-の更新内容追補5windows-ps-kit-の-utf-8-bom-欠落バグを実機で発見修正)の修正以降すべて BOM 付き）。Windows PowerShell 5.1 が BOM 無し UTF-8 を既定のシステム ANSI コードページ（Shift-JIS）として読み込み、日本語コメント・文字列が文字化けして構文エラーになる、同じ不具合が python-ops-kit にも当てはまるため、対象の 8 本すべてに BOM を付与した |
+| 技術検証 | この AI 支援セッションに Hyper-V 実行環境は無いため、Linux コンテナへ PowerShell 7.4.6（公式 GitHub Releases の tar.gz）を導入し、`[System.Management.Automation.Language.Parser]::ParseFile()` でリポジトリ内の `.ps1` 全 28 本（今回変更した 8 本を含む）を構文検証し、0 件を確認した（BOM 付与後に再検証済み）。加えて、修正内容を独立した別セッションでも再検証し、8 本すべてで想定どおりの成否判定になっていることを確認した |
+| 状態 | 構文検証のみ完了。**Hyper-V 上での機能面の実行確認（`New-VMSwitch`/`New-VM`/`Register-ScheduledTask`/`schtasks` 等が実際の成功・失敗を正しく判定するか）は未実施。** python-ops-kit 自体も引き続き「未実行の雛形」であり、本エントリはこの演習を実施済みにするものではない |
+| LEARNINGS.md との関係 | [STATUS §0 ルール 7](#0-更新の運用ルール2026-07-03-制定)により `LEARNINGS.md` は本人のみが編集するため、[0-b リスト 8 番目](#0-b-learningsmd-記入待ちリスト本人が書く)の「学び」欄への記入はここでは行わない。本エントリは、その事実に基づいてコード側に残っていた横展開漏れを埋めた記録である |
 
 ### 2026-08-28 の更新内容（13 恒久ホスト構築演習設計：恒久ホストが 1 台も無い、を破る最初の一歩）
 
