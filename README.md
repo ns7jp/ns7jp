@@ -17,7 +17,7 @@
 | 見てほしいもの | 分かること | 所要時間 |
 | --- | --- | --- |
 | [採用ご担当者さま向け 1 ページ](./docs/overview-for-recruiters.md) | 経験、強み、入社後に任せやすい業務 | 1 分 |
-| [主作品 `server-monitor`](https://github.com/ns7jp/server-monitor) | Linux、Docker、Ansible、監視の実装 | 3 分 |
+| [主作品 `server`](https://github.com/ns7jp/server-monitor) | Linux、Docker、Ansible、監視の実装 | 3 分 |
 | [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | 要件から引き渡しまでの構築工程 | 5 分 |
 | [実測証跡ダイジェスト](https://ns7jp.github.io/evidence-demo.html) | 実際に動かした結果と未実施の範囲 | 2 分 |
 
