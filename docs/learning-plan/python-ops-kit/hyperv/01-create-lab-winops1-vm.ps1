@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     LAB-WINOPS1 VM（Windows Server 2022 評価版）を作成する。
 
@@ -27,6 +27,12 @@
 
 .PARAMETER VmRoot
     VHDX の保存先ディレクトリ。既定は D:\HyperV\LAB-WINOPS1。
+
+.NOTES
+    New-VM 等が権限不足や ISO パス誤りなどで失敗すると PowerShell の既定動作（非終了エラー）では
+    後続の行がそのまま実行され、失敗したのに成功したかのようなメッセージが出てしまう
+    （phase1-kit/hyperv/00-create-internal-switch.ps1 の実機初回実行で発見・修正した不具合と同種）。
+    これを防ぐため、以下は -ErrorAction Stop と try/catch で実際の成否を判定する。
 #>
 
 param(
@@ -35,6 +41,8 @@ param(
 
     [string]$VmRoot = 'D:\HyperV\LAB-WINOPS1'
 )
+
+$ErrorActionPreference = 'Stop'
 
 $VmName = 'LAB-WINOPS1'
 $InternalSwitch = 'lab-winops-internal'
@@ -47,21 +55,28 @@ if (Get-VM -Name $VmName -ErrorAction SilentlyContinue) {
     throw "VM '$VmName' は既に存在します。作り直す場合は先に Remove-VM -Name $VmName -Force を実行してください（VHDX の削除は別途）。"
 }
 
-New-Item -ItemType Directory -Path $VmRoot -Force | Out-Null
+try {
+    New-Item -ItemType Directory -Path $VmRoot -Force -ErrorAction Stop | Out-Null
 
-New-VM -Name $VmName -Generation 2 -MemoryStartupBytes 4GB `
-    -NewVHDPath "$VmRoot\$VmName.vhdx" -NewVHDSizeBytes 40GB
+    New-VM -Name $VmName -Generation 2 -MemoryStartupBytes 4GB `
+        -NewVHDPath "$VmRoot\$VmName.vhdx" -NewVHDSizeBytes 40GB -ErrorAction Stop | Out-Null
 
-Set-VMProcessor $VmName -Count 2
-Set-VMMemory $VmName -DynamicMemoryEnabled $false
-# Windows ゲストの既定テンプレート。lab-base01（Linux ゲスト）とは異なり変更不要だが、
-# 意図を明示するためスクリプト側でも明示的に設定する。
-Set-VMFirmware $VmName -SecureBootTemplate MicrosoftWindows
-Add-VMDvdDrive $VmName -Path $IsoPath
+    Set-VMProcessor $VmName -Count 2 -ErrorAction Stop
+    Set-VMMemory $VmName -DynamicMemoryEnabled $false -ErrorAction Stop
+    # Windows ゲストの既定テンプレート。lab-base01（Linux ゲスト）とは異なり変更不要だが、
+    # 意図を明示するためスクリプト側でも明示的に設定する。
+    Set-VMFirmware $VmName -SecureBootTemplate MicrosoftWindows -ErrorAction Stop
+    Add-VMDvdDrive $VmName -Path $IsoPath -ErrorAction Stop
 
-# 既定では外部接続を持たない。[1 章 前提条件]どおり隔離した状態からセットアップを始める。
-Get-VMNetworkAdapter -VMName $VmName | Connect-VMNetworkAdapter -SwitchName $InternalSwitch
-Write-Host "NIC を '$InternalSwitch' のみに接続しました（外部接続なし）。"
+    # 既定では外部接続を持たない。[1 章 前提条件]どおり隔離した状態からセットアップを始める。
+    Get-VMNetworkAdapter -VMName $VmName | Connect-VMNetworkAdapter -SwitchName $InternalSwitch -ErrorAction Stop
+    Write-Host "NIC を '$InternalSwitch' のみに接続しました（外部接続なし）。"
+} catch {
+    $ErrorActionPreference = 'Continue'
+    Write-Error "失敗しました: $($_.Exception.Message)"
+    Write-Error '管理者として PowerShell を実行しているか、Hyper-V Administrators グループに所属しているかを確認してください。'
+    exit 1
+}
 
 Write-Host ''
 Write-Host "VM '$VmName' を作成しました。次の手順:"
