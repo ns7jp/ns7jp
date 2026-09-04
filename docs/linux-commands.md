@@ -1541,6 +1541,7 @@ RHEL系(CentOS Stream, Rocky Linux, Alma Linuxなど)では、パッケージ管
 ## 次に読むページ
 
 1. [やさしい用語・見方ガイド](./beginner-guide.md)で Nginx や systemd などの役割を、コマンドより一段抽象的なレベルで知る
-2. [24 週の学習プラン](./learning-plan/README.md)で、このコマンド集をどの週にどう使うかを含めた学習順序を確認する
-3. [初心者向けスタートガイド](./learning-plan/00-start-here.md)で、実際に手を動かす「最初の30分」からコマンドを試し始める
-4. [詰まった記録](../LEARNINGS.md)で、コマンドを使った障害対応や詰まった記録の実例を見る
+2. [Windows コマンド集](./windows-commands.md)で、対になる Windows 側のコマンドリファレンスを見る
+3. [24 週の学習プラン](./learning-plan/README.md)で、このコマンド集をどの週にどう使うかを含めた学習順序を確認する
+4. [初心者向けスタートガイド](./learning-plan/00-start-here.md)で、実際に手を動かす「最初の30分」からコマンドを試し始める
+5. [詰まった記録](../LEARNINGS.md)で、コマンドを使った障害対応や詰まった記録の実例を見る

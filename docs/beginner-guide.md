@@ -104,7 +104,8 @@
 
 1. [初心者向けスタートガイド](./learning-plan/00-start-here.md)で開始前診断と「最初の30分」を行う
 2. [Linux コマンド集](./linux-commands.md)で、目的から逆引きできるコマンドの保存版リファレンスを見る
-3. [プロフィール README](../README.md)で全体像を見る
-4. [24 週の学習プラン](./learning-plan/README.md)で学ぶ順番を決める
-5. [詰まった記録](../LEARNINGS.md)で障害対応の考え方を見る
-6. [主作品 server-monitor](https://github.com/ns7jp/server-monitor)で実装と証跡を見る
+3. [Windows コマンド集](./windows-commands.md)で、コマンドプロンプトと PowerShell の基本コマンドを目的別に覚える
+4. [プロフィール README](../README.md)で全体像を見る
+5. [24 週の学習プラン](./learning-plan/README.md)で学ぶ順番を決める
+6. [詰まった記録](../LEARNINGS.md)で障害対応の考え方を見る
+7. [主作品 server-monitor](https://github.com/ns7jp/server-monitor)で実装と証跡を見る
