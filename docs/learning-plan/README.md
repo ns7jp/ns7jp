@@ -58,6 +58,7 @@
 | [02 フェーズ別カリキュラム](./02-curriculum.md) | 週ごとの学習項目・ハンズオン課題・到達確認 | 必須 |
 | [03 構築工程の実務ドキュメント](./03-build-process.md) | 現場で書く 4 種類の書類（パラメータシート / 構築手順書 / 試験項目書 / 移行・切り戻し）のテンプレート | 必須 |
 | [04 教材と資格の対応](./04-resources.md) | 使う本・無料教材・資格と費用の目安 | 参考 |
+| [Windows コマンド集](../windows-commands-guide.md) | コマンドプロンプトと PowerShell の基本コマンドを、目的別・危険度つきでまとめた初心者向けリファレンス | 参考 |
 | [05 Phase 1 演習設計](./05-phase1-exercise-design.md) | 空の仮想マシン 1 台を、03 の書類つきで初期構築する演習（Phase 1 / `lab-base01`）。**設計のみ・未実施** | 演習設計 |
 | [06 シェルスクリプト演習設計](./06-shell-scripting-exercise-design.md) | 定型作業を Bash（Linux）と PowerShell（Windows）で自動化する演習（W4 / W18）。**設計のみ・未実施** | 演習設計 |
 | [07 Python 運用自動化演習設計](./07-python-ops-automation-exercise-design.md) | 06 と同じ題材（定型作業・バックアップ・監視チェック）を Python で書く版（Linux / Windows 両対応）。**設計のみ・未実施** | 演習設計 |

@@ -557,6 +557,7 @@ Level 1〜3 で身につけた基礎（`param()` 検証、`try`/`catch`、transc
 - [02 フェーズ別カリキュラム](./02-curriculum.md)
 - [03 構築工程の実務ドキュメント](./03-build-process.md)
 - [05 Phase 1 演習設計](./05-phase1-exercise-design.md)
+- [Windows コマンド集（初心者向け）](../windows-commands-guide.md)
 - [windows-ps-kit（Windows/PowerShell 側 実施キット）](./windows-ps-kit/README.md)
 - [Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)
