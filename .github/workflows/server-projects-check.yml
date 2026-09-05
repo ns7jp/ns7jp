@@ -1,0 +1,24 @@
+name: server-projects-check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  project-delivery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate project workflow
+        run: node scripts/server-projects.mjs check
+      - name: Test project state, tasks, evidence and reviews
+        run: node --test tests/server-projects.test.mjs
+      - name: Check project and learning navigation
+        run: node scripts/check-engineer-links.mjs

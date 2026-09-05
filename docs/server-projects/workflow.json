@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "title": "サーバー案件の受付から終結まで",
+  "stages": [
+    {
+      "id": "PJ00",
+      "title": "受付・担当可否",
+      "document": "docs/server-projects/stages/00-intake.md",
+      "reviewRole": "sponsor",
+      "prerequisites": [],
+      "criteria": [
+        {
+          "id": "PJ00-C1",
+          "title": "依頼の目的・窓口・対象と情報区分を記録"
+        },
+        {
+          "id": "PJ00-C2",
+          "title": "担当可能範囲と不足能力・権限を確認"
+        },
+        {
+          "id": "PJ00-C3",
+          "title": "受ける・調査する・断る判断と次の期限を合意"
+        }
+      ]
+    },
+    {
+      "id": "PJ01",
+      "title": "要件・見積の合意",
+      "document": "docs/server-projects/stages/01-scope-estimate.md",
+      "reviewRole": "sponsor",
+      "prerequisites": [
+        "PJ00"
+      ],
+      "criteria": [
+        {
+          "id": "PJ01-C1",
+          "title": "対象・対象外・前提・受入条件を合意"
+        },
+        {
+          "id": "PJ01-C2",
+          "title": "作業分解・見積幅・依存・納期と費用の前提を整理"
+        },
+        {
+          "id": "PJ01-C3",
+          "title": "役割・変更扱い・連絡と合意版を確定"
+        }
+      ]
+    },
+    {
+      "id": "PJ02",
+      "title": "設計・実行計画",
+      "document": "docs/server-projects/stages/02-design-plan.md",
+      "reviewRole": "technical",
+      "prerequisites": [
+        "PJ01"
+      ],
+      "criteria": [
+        {
+          "id": "PJ02-C1",
+          "title": "要件から構成・設定・試験へ対応を付ける"
+        },
+        {
+          "id": "PJ02-C2",
+          "title": "構築・移行・戻し・データ保護の計画を整える"
+        },
+        {
+          "id": "PJ02-C3",
+          "title": "作業分担・日程・レビューと実行場所を確定"
+        }
+      ]
+    },
+    {
+      "id": "PJ03",
+      "title": "検証完了・本番変更の承認",
+      "document": "docs/server-projects/stages/03-readiness.md",
+      "reviewRole": "change",
+      "prerequisites": [
+        "PJ02"
+      ],
+      "criteria": [
+        {
+          "id": "PJ03-C1",
+          "title": "検証環境で必須試験と復元を実行し差分を整理"
+        },
+        {
+          "id": "PJ03-C2",
+          "title": "対象・変更窓・中止閾値・戻しと連絡を確定"
+        },
+        {
+          "id": "PJ03-C3",
+          "title": "残リスクと未解決事項を示し対象版の変更承認を得る"
+        }
+      ]
+    },
+    {
+      "id": "PJ04",
+      "title": "本番作業・結果確認",
+      "document": "docs/server-projects/stages/04-execution.md",
+      "reviewRole": "change",
+      "prerequisites": [
+        "PJ03"
+      ],
+      "criteria": [
+        {
+          "id": "PJ04-C1",
+          "title": "直前確認と対象版・対象ホストを照合"
+        },
+        {
+          "id": "PJ04-C2",
+          "title": "承認範囲内で実行し時系列と差分を記録"
+        },
+        {
+          "id": "PJ04-C3",
+          "title": "必須事後試験・戻し判断・結果報告を完了"
+        }
+      ]
+    },
+    {
+      "id": "PJ05",
+      "title": "検収・引き渡し",
+      "document": "docs/server-projects/stages/05-acceptance.md",
+      "reviewRole": "customer",
+      "prerequisites": [
+        "PJ04"
+      ],
+      "criteria": [
+        {
+          "id": "PJ05-C1",
+          "title": "合意した受入試験を受領者と確認"
+        },
+        {
+          "id": "PJ05-C2",
+          "title": "手順・アクセス・教育・残事項を引き渡す"
+        },
+        {
+          "id": "PJ05-C3",
+          "title": "検収結果・範囲・日時・保守開始条件を記録"
+        }
+      ]
+    },
+    {
+      "id": "PJ06",
+      "title": "初期保守・運用移管",
+      "document": "docs/server-projects/stages/06-support.md",
+      "reviewRole": "operations",
+      "prerequisites": [
+        "PJ05"
+      ],
+      "criteria": [
+        {
+          "id": "PJ06-C1",
+          "title": "合意した期間の監視・問い合わせと欠測を記録"
+        },
+        {
+          "id": "PJ06-C2",
+          "title": "障害・変更・残課題を責任者と期限へ割り当て"
+        },
+        {
+          "id": "PJ06-C3",
+          "title": "運用担当の実操作と対応範囲・終了条件を確認"
+        }
+      ]
+    },
+    {
+      "id": "PJ07",
+      "title": "終結・振り返り",
+      "document": "docs/server-projects/stages/07-closure.md",
+      "reviewRole": "sponsor",
+      "prerequisites": [
+        "PJ06"
+      ],
+      "criteria": [
+        {
+          "id": "PJ07-C1",
+          "title": "完了範囲・未完了の移管と契約上の事務を照合"
+        },
+        {
+          "id": "PJ07-C2",
+          "title": "実績工数・差異・改善と再利用物を整理"
+        },
+        {
+          "id": "PJ07-C3",
+          "title": "保管・アクセス終了と案件終結を責任者が確認"
+        }
+      ]
+    }
+  ]
+}

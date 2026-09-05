@@ -1,0 +1,40 @@
+name: 案件演習の相談・改善
+description: 架空案件の受付、見積、計画、進行について相談する
+title: "[案件演習] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        公開用の架空演習だけを記載します。顧客情報、実IP、契約書、生ログ、秘密値を貼り付けないでください。
+        このIssueの受付や返信は、本番作業の承認・契約合意・検収を意味しません。
+  - type: checkboxes
+    id: public-example
+    attributes:
+      label: 公開する内容の確認
+      options:
+        - label: 独立した架空演習の内容で、業務原本や秘密情報を含みません
+          required: true
+  - type: input
+    id: phase
+    attributes:
+      label: 工程・条件IDと教材の版
+      placeholder: PJ01-C2 / コミットSHA
+    validations:
+      required: true
+  - type: textarea
+    id: situation
+    attributes:
+      label: 目的・合意条件・現在困っていること
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 確認した事実・未確認事項・試したこと
+      description: 実施していないことはNOT RUN、提案は採否待ちと記載します。
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: 選択肢・推奨案・必要な判断
