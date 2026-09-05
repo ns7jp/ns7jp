@@ -7,3 +7,6 @@ package.json
 docs/evidence/raw/
 docs/evidence/**/raw/
 docs/evidence/**/*.raw.*
+
+# 個人の学習台帳・添付証跡は非公開で保存する。
+.local/

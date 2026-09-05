@@ -1,0 +1,24 @@
+name: server-engineer-check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  learning-system:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate curriculum
+        run: node scripts/server-engineer.mjs check
+      - name: Test evidence and review gates
+        run: node --test tests/server-engineer.test.mjs
+      - name: Check learning navigation
+        run: node scripts/check-engineer-links.mjs

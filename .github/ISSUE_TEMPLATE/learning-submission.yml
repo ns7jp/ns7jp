@@ -1,0 +1,43 @@
+name: 学習の提出
+description: 匿名化した学習結果について確認を依頼する
+title: "[学習] SE00-C1: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        公開Issueです。生ログ・接続情報・秘密鍵・パスワード・個人情報は貼らず、確認した要約だけを記入してください。
+        正式な個人記録はローカル台帳へ保存します。このIssueを作成しただけでは合格になりません。
+  - type: input
+    id: criterion
+    attributes:
+      label: 能力IDと教材版
+      placeholder: SE00-C1 / curriculum 1.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: 目的・環境・実行したGit SHA
+      description: 個別の接続先を除き、OS版、VMかコンテナか、実施日時と支援量を書いてください。
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: 期待結果と実際の結果
+      description: 試験ID、PASS／FAIL／BLOCKED／NOT RUN、匿名化した根拠を分けてください。
+    validations:
+      required: true
+  - type: textarea
+    id: next
+    attributes:
+      label: 説明できない点・質問・未実施
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 公開前の確認
+      options:
+        - label: 添付内容を確認し、秘密情報と他者の個人情報を除きました
+          required: true

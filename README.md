@@ -20,6 +20,7 @@
 | 仕組みを理解する | [やさしい用語・見方ガイド](./docs/beginner-guide.md) | 役割、通信の流れ、用語の意味 |
 | 自分で動かす | [主作品の初心者向け学習ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md) | 小さく起動し、結果を確認する手順 |
 | 面接で説明する | [30 秒・3 分の説明練習](./docs/portfolio-explanation.md) | 例文、問い返し、自分の記録を使った説明 |
+| 初心者から構築を担当できるまで進む | [8段階の育成システム](./docs/server-engineer/README.md) | 演習・32の到達条件・個人台帳・再試験・引き渡し |
 
 PC や Linux の準備から必要な方は、[開始前診断と最初の30分](./docs/learning-plan/00-start-here.md)へ。体系的な学習には [24 週の学習プラン](./docs/learning-plan/README.md)を使います。
 
@@ -92,7 +93,7 @@ flowchart LR
 3. [説明練習](./docs/portfolio-explanation.md)の記録欄に、自分の実施範囲・結果・未実施を記入する。
 4. 手順を閉じて「目的 → 構成 → 自分の操作 → 確認結果 → 次の課題」を説明する。詰まった箇所だけ読み直す。
 
-さらに学ぶ際は [24 週の学習プラン](./docs/learning-plan/README.md)へ進みます。学習期間は目安です。本人による演習と説明の確認をもって習得を判断します。
+さらに学ぶ際は [24 週の学習プラン](./docs/learning-plan/README.md)へ進みます。[育成システム](./docs/server-engineer/README.md)で今日の課題と提出物を決め、24週後は条件変更・初見障害・第三者への引き渡しを含む総合演習へ進めます。学習期間は目安です。本人による演習と説明の確認をもって習得を判断します。
 
 ## 経験・資格
 
