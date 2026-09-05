@@ -1,0 +1,285 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "title": "サーバー構築エンジニア育成システム",
+  "stages": [
+    {
+      "id": "SE00",
+      "title": "準備と学び方",
+      "period": "開始前",
+      "document": "docs/server-engineer/stages/00-orientation.md",
+      "prerequisites": [],
+      "criteria": [
+        {
+          "id": "SE00-C1",
+          "title": "実行場所と対象を説明して状態を採録する",
+          "environment": "any",
+          "independent": false
+        },
+        {
+          "id": "SE00-C2",
+          "title": "学習用VMを用意し再作成・接続経路を記録する",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE00-C3",
+          "title": "期待結果・実際の結果・未確認を分ける",
+          "environment": "any",
+          "independent": false
+        },
+        {
+          "id": "SE00-C4",
+          "title": "秘密情報を除いた質問と翌日の再説明を行う",
+          "environment": "any",
+          "independent": false
+        }
+      ]
+    },
+    {
+      "id": "SE01",
+      "title": "Linuxを一台構築する",
+      "period": "W1–W4",
+      "document": "docs/server-engineer/stages/01-linux.md",
+      "prerequisites": [
+        "SE00"
+      ],
+      "criteria": [
+        {
+          "id": "SE01-C1",
+          "title": "新規VMにOSを導入し構成表と照合する",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE01-C2",
+          "title": "ユーザー・権限の許可と拒否を試験する",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE01-C3",
+          "title": "サービス・ログ・更新を確認し不具合を直す",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE01-C4",
+          "title": "追加の学習用ディスクと永続マウントを再起動後に確認する",
+          "environment": "vm",
+          "independent": false
+        }
+      ]
+    },
+    {
+      "id": "SE02",
+      "title": "通信経路を設計して調べる",
+      "period": "W5–W8",
+      "document": "docs/server-engineer/stages/02-network.md",
+      "prerequisites": [
+        "SE01"
+      ],
+      "criteria": [
+        {
+          "id": "SE02-C1",
+          "title": "IP・サブネット・経路を図と実測で対応付ける",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE02-C2",
+          "title": "名前解決の成功と失敗を切り分ける",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE02-C3",
+          "title": "SSHとFirewallの許可・拒否・復旧経路を試験する",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE02-C4",
+          "title": "未知の通信障害を観測から特定して復旧する",
+          "environment": "vm",
+          "independent": true
+        }
+      ]
+    },
+    {
+      "id": "SE03",
+      "title": "Web・アプリ・DBをつなぐ",
+      "period": "W9–W12",
+      "document": "docs/server-engineer/stages/03-services.md",
+      "prerequisites": [
+        "SE02"
+      ],
+      "criteria": [
+        {
+          "id": "SE03-C1",
+          "title": "最小Web構成の応答・認証・停止と再開を確認する",
+          "environment": "runtime",
+          "independent": false
+        },
+        {
+          "id": "SE03-C2",
+          "title": "TLSの名前・信頼・有効期限と逆プロキシを試験する",
+          "environment": "runtime",
+          "independent": false
+        },
+        {
+          "id": "SE03-C3",
+          "title": "3層の接続とDB最小権限を試験する",
+          "environment": "runtime",
+          "independent": false
+        },
+        {
+          "id": "SE03-C4",
+          "title": "別DBへ復元してデータ一致と実測復旧時間を確認する",
+          "environment": "runtime",
+          "independent": false
+        }
+      ]
+    },
+    {
+      "id": "SE04",
+      "title": "要件を設計・試験へ落とす",
+      "period": "W13–W16",
+      "document": "docs/server-engineer/stages/04-design.md",
+      "prerequisites": [
+        "SE03"
+      ],
+      "criteria": [
+        {
+          "id": "SE04-C1",
+          "title": "要件・対象外・非機能の測定条件を合意用に作る",
+          "environment": "any",
+          "independent": false
+        },
+        {
+          "id": "SE04-C2",
+          "title": "構成・設定値・技術選択理由を整合させる",
+          "environment": "any",
+          "independent": false
+        },
+        {
+          "id": "SE04-C3",
+          "title": "要件ごとに正常・異常・復旧試験と証跡を結ぶ",
+          "environment": "runtime",
+          "independent": false
+        },
+        {
+          "id": "SE04-C4",
+          "title": "変更・切戻し・引き渡し手順を第三者が追える形にする",
+          "environment": "any",
+          "independent": false
+        }
+      ]
+    },
+    {
+      "id": "SE05",
+      "title": "再現できる構築と変更",
+      "period": "W17–W20",
+      "document": "docs/server-engineer/stages/05-automation.md",
+      "prerequisites": [
+        "SE04"
+      ],
+      "criteria": [
+        {
+          "id": "SE05-C1",
+          "title": "Gitの差分・レビュー・対象版を追跡する",
+          "environment": "any",
+          "independent": false
+        },
+        {
+          "id": "SE05-C2",
+          "title": "自動化の事前確認・失敗停止・秘密値分離を試験する",
+          "environment": "runtime",
+          "independent": false
+        },
+        {
+          "id": "SE05-C3",
+          "title": "Ansibleを2回適用し冪等性と実サービスを試験する",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE05-C4",
+          "title": "新規VMをコードから再構築し旧版への切戻しを試す",
+          "environment": "vm",
+          "independent": true
+        }
+      ]
+    },
+    {
+      "id": "SE06",
+      "title": "監視・復旧・継続運用",
+      "period": "W21–W24",
+      "document": "docs/server-engineer/stages/06-operations.md",
+      "prerequisites": [
+        "SE05"
+      ],
+      "criteria": [
+        {
+          "id": "SE06-C1",
+          "title": "利用者視点の監視と隔離した通知先で検知を確認する",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE06-C2",
+          "title": "障害の検知・切分け・連絡・復旧を時系列で記録する",
+          "environment": "vm",
+          "independent": true
+        },
+        {
+          "id": "SE06-C3",
+          "title": "別対象への復元で復旧時間とデータ損失を測る",
+          "environment": "vm",
+          "independent": false
+        },
+        {
+          "id": "SE06-C4",
+          "title": "再起動と7日間の観測で永続性と欠測を記録する",
+          "environment": "vm",
+          "independent": false
+        }
+      ]
+    },
+    {
+      "id": "SE07",
+      "title": "条件変更から引き渡しまで",
+      "period": "24週後・4〜8週を目安",
+      "document": "docs/server-engineer/stages/07-capstone.md",
+      "prerequisites": [
+        "SE06"
+      ],
+      "criteria": [
+        {
+          "id": "SE07-C1",
+          "title": "要件から新規VMへ自力で構築し全必須試験を通す",
+          "environment": "vm",
+          "independent": true
+        },
+        {
+          "id": "SE07-C2",
+          "title": "別日・別セッションに条件を変えた新規VMを再構築する",
+          "environment": "vm",
+          "independent": true
+        },
+        {
+          "id": "SE07-C3",
+          "title": "評価者が選んだ未知障害を復旧し中止判断を説明する",
+          "environment": "vm",
+          "independent": true
+        },
+        {
+          "id": "SE07-C4",
+          "title": "別の人が手順書で操作し受領・残課題を記録する",
+          "environment": "vm",
+          "independent": true
+        }
+      ]
+    }
+  ]
+}

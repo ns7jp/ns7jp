@@ -1,0 +1,38 @@
+name: 評価・再提出
+description: 実際に観察した評価の公開可能な要約を残す
+title: "[評価] SE00: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        人の観察後に記入します。評価者の個人情報や生ログを公開しないでください。
+        詳細な評価記録と試行IDの対応は、非公開の個人台帳で管理します。
+  - type: input
+    id: stage
+    attributes:
+      label: 対象段階・提出Issueまたは公開可能な参照
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: 観察日時・方法・確認した範囲・提供した支援
+      description: 実技と書類だけの確認を区別してください。
+    validations:
+      required: true
+  - type: dropdown
+    id: decision
+    attributes:
+      label: 判断
+      options:
+        - 未評価
+        - 再提出
+        - 観察した範囲を承認
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 条件ごとの判断・根拠・不足・補習先
+    validations:
+      required: true

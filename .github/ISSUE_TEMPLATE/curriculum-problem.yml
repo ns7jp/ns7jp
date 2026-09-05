@@ -1,0 +1,28 @@
+name: 教材の不具合
+description: 手順・リンク・判定・説明の問題を報告する
+title: "[教材] "
+body:
+  - type: input
+    id: location
+    attributes:
+      label: ページ・能力ID・教材のGit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 実行場所と再現手順
+      description: 秘密情報を除き、OS版、ターミナル、前提を記入してください。
+    validations:
+      required: true
+  - type: textarea
+    id: mismatch
+    attributes:
+      label: 期待結果・実際の結果・止めた位置
+    validations:
+      required: true
+  - type: textarea
+    id: recovery
+    attributes:
+      label: 影響・戻せたか・改善案
+      description: 未確認のものは未確認と記入してください。
