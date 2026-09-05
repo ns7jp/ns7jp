@@ -10,17 +10,19 @@
 
 | 項目 | 状態 | 確認先 |
 | --- | --- | --- |
-| 実測結果 | 公開済み | [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
+| 実測結果 | 公開済み | [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) |
 | 実測証跡リプレイ | **公開済み** | [字幕・文字起こし・一次記録付きデモページ](https://ns7jp.github.io/demo.html) |
-| 自動デモ | 実装済み・実行結果は E2E 証跡で確認 | [`scripts/demo/run-demo.sh`](https://github.com/ns7jp/server-monitor/blob/main/scripts/demo/run-demo.sh) |
-| 一気通貫の構成検証 | 実装済み・PR #75 で 23/23 ID PASS | [`scripts/e2e/run-full-stack.sh`](https://github.com/ns7jp/server-monitor/blob/main/scripts/e2e/run-full-stack.sh) / [実測記録](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
+| 自動デモ | 実装済み・実行結果は E2E 証跡で確認 | [`scripts/demo/run-demo.sh`](https://github.com/ns7jp/server/blob/main/scripts/demo/run-demo.sh) |
+| 一気通貫の構成検証 | 実装済み・PR #75 で 23/23 ID PASS | [`scripts/e2e/run-full-stack.sh`](https://github.com/ns7jp/server/blob/main/scripts/e2e/run-full-stack.sh) / [実測記録](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
 | 実操作の連続録画 | **未公開** | E2E を実行した端末 cast は GitHub Actions artifact として保存 |
 
 証跡リプレイとライブ実行は混同しません。自動デモの実行結果は、日時・環境・commit・終了コードを含む E2E artifact が生成された場合だけ成功と扱います。
 
 ## デモで伝えること
 
-「設計資料がある」だけでなく、同じ commit から次の流れを再現できることを 3 分以内で示します。
+初回の学習では、まず[主作品の最小起動ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md)で起動・確認・終了を行います。以下は構築・監視を習得した後の発展デモです。口頭説明だけを練習する場合は[30 秒・3 分の説明練習](./portfolio-explanation.md)へ進んでください。
+
+「設計資料がある」だけでなく、同じ commit から次の流れを再現できることを示します。下の時間配分は事前構築済み環境を使った説明・収録の目安です。初回インストールや構築の所要時間、未実施のライブ実演を 3 分以内と保証するものではありません。
 
 1. 構成コードから環境を起動する
 2. 正常性と監視データを確認する
@@ -67,8 +69,8 @@ Slack 通知は実配信の証跡がまだないため、動画の必須条件�
 
 ## 関連ドキュメント
 
-- [実測証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
+- [実測証跡](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)
 - [構成図](./architecture-diagram.md)
 - [証跡採録チェックリスト](./evidence-capture-checklist.md)
 - [ビジュアルショーケース](./showcase/README.md)
-- [D-1 復旧演習（RTO 13 秒）](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)
+- [D-1 復旧演習（RTO 13 秒）](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)
