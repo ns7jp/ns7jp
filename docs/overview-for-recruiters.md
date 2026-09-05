@@ -2,9 +2,13 @@
 
 ## 30 秒の結論
 
-第一志望は **Linux サーバー設計・構築**です。主作品の **[Server Monitor Infrastructure Lab](https://github.com/ns7jp/server-monitor)** では、使い捨て Ubuntu 24.04 runner 上で `site.yml` による新規構築から監視・障害復旧・バックアップ復元までを検証し、試験項目 23 件中 23 件合格を採録しました。[配備の再現性と権限制御を強化した PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へ反映済みです。検証範囲の区切り（独立ホストでの実績ではない、等）は本ページ末尾の[「正直な境界」](#正直な境界)にまとめています。
+第一志望は **Linux サーバー設計・構築**です。主作品 **[サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server)** で、小さな Web アプリの稼働環境、異常を調べる監視、復旧手順をコードと文書にしています。**個人の学習・検証の成果物で、サーバー構築の実務経験とは区別します。**
 
-| [主作品 `server`](https://github.com/ns7jp/server-monitor) | [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) | [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) |
+2026-08-22 の使い捨て Ubuntu での一連の試験は 23/23 PASS。2026-09-04 には本人の Hyper-V VM で Ubuntu / 再利用 AlmaLinux の基礎設定を適用した記録が加わりました。それぞれ実行環境・対象手順が異なり、現在のコード全体や本番運用の合格を意味しません。詳細は[実測したこと](#実測したこと)と[正直な境界](#正直な境界)に記載します。
+
+初めて技術に触れる方は[やさしいガイド](./beginner-guide.md)、本人の説明練習は[30 秒・3 分の説明練習](./portfolio-explanation.md)をご覧ください。
+
+| [主作品 `server`](https://github.com/ns7jp/server) | [Linux サーバー構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package) | [日付・環境付きの実測証跡](https://ns7jp.github.io/evidence-demo.html) |
 | --- | --- | --- |
 | 構成、コード、実行方法を確認 | 要件定義から引き渡しまでを工程順に確認 | 23/23 PASS の結果、実行環境、未実測範囲を確認 |
 
@@ -20,7 +24,7 @@
 | 変更 | Git SHA を固定した配備と旧版へのロールバック | **実測済み**（PR ブランチの使い捨て runner） |
 | 引き渡し | チェックリストと受け入れ手順 | **実装済み**。独立した対象ホストへの引き渡しは **未実施（NOT RUN）** |
 
-**実装済み**は成果物・コードが存在する状態、**実測済み**は日付・環境・commit SHA を含む結果がある状態、**未実施（NOT RUN）**は実行ログがない状態です。判定の正本は [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) です。
+**実装済み**は成果物・コードが存在する状態、**実測済み**は日付・環境・commit SHA を含む結果がある状態、**未実施（NOT RUN）**は実行ログがない状態です。判定の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
 
 ## 志望と現況
 
@@ -40,37 +44,48 @@
 
 ## 実測したこと
 
+### 2026-09-04 の基礎設定の実測
+
+| 記録 | 確認できること | 確認できないこと |
+| --- | --- | --- |
+| [Ubuntu / Hyper-V](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-build.md) | 本人の VM へ `foundation.yml`（OS の共通設定と Docker）を適用し、再実行で変更 0 件 | 監視ラボ全体の `site.yml`、再起動後・長期稼働・引き渡し |
+| [AlmaLinux / Hyper-V](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md) | 再利用 VM へ同じ基礎設定を適用し、再実行と SELinux 設定の修正を確認 | まっさらな新規構築、SSH だけの最小公開、監視全体の構築 |
+
+### 2026-08 の記録済み環境・コード版での結果
+
+以下の件数・復旧秒数は当時の記録です。復旧時間は環境と条件に依存するため、本番の保証値として使いません。
+
 | 検証 | 結果 |
 | --- | --- |
-| 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、試験項目 23 件中 23 件合格](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
+| 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、試験項目 23 件中 23 件合格](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
 | Git SHA を固定した変更・ロールバック | [候補 `84e1492` → 旧版 `59aa88e` の配備・復帰後に、稼働中の版番号、実行ファイルのハッシュ、app コンテナ再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みを確認](./evidence/2026-08-23-server-monitor-git-rollback-ci.md) |
-| Docker API の権限制御とログ経路 | [read-only proxy の GET 成功、POST 拒否、固有 Nginx log の Alloy 経由 Loki 到達を確認](https://github.com/ns7jp/server-monitor/actions/runs/32572409469) |
-| Ansible 4 ロールの適用・2 回目の冪等性・期待状態 | [全ロール PASS、欠陥 2 件を修正](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) |
-| 監視スタック 9 サービスの起動と実データ表示 | [Grafana / Loki を Linux (WSL2) 上で確認](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) |
-| app プロセス停止からの自動復旧 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
-| 二セグメント構成の通信断 | [再現、切り分け、復旧まで PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md) |
+| Docker API の権限制御とログ経路 | [read-only proxy の GET 成功、POST 拒否、固有 Nginx log の Alloy 経由 Loki 到達を確認](https://github.com/ns7jp/server/actions/runs/32572409469) |
+| Ansible 4 ロールの適用・2 回目の冪等性・期待状態 | [全ロール PASS、欠陥 2 件を修正](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md) |
+| 監視スタック 9 サービスの起動と実データ表示 | [Grafana / Loki を Linux (WSL2) 上で確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-18-local-observability.md) |
+| app プロセス停止からの自動復旧 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
+| 二セグメント構成の通信断 | [再現、切り分け、復旧まで PASS](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-19-network-drill.md) |
 
-設計、パラメータ、構築、試験、変更、引き渡しの成果物は [案件概要](https://ns7jp.github.io/project-brief.html) と [Linux サーバー構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) に分離しています。このページでは技術名を広く並べるより、実際に実行して結果を残した項目を優先します。
+設計、パラメータ、構築、試験、変更、引き渡しの成果物は [案件概要](https://ns7jp.github.io/project-brief.html) と [Linux サーバー構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package) に分離しています。このページでは技術名を広く並べるより、実際に実行して結果を残した項目を優先します。
 
 ## 追加の実測演習
 
 2026-08-24 に実行し、証跡を採録しました。判定はスクリプトが期待値と実測値を比較した結果で、証跡ファイルも自動生成されます。手で PASS を書き込む余地を残さない作りです。
 
-**実行環境を正確に書きます。** B-1 は仮想ディスク（loop device）を割り当てた Ubuntu 24.04 ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace での実行で、**いずれも AI 支援セッションの作業環境上のものです。** 独立した物理／VPS ホストや手元 WSL2 での再実行証跡ではありません（証跡ファイルの「実施環境」欄に採録時の `uname` をそのまま残しています）。**現時点で面接の場での再実演をお約束できるのは、手元の WSL2 + Docker で再現できる B-2 / B-3 です。**
+**実行環境を正確に書きます。** B-1 は仮想ディスク（loop device）を割り当てた Ubuntu 24.04 ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace での実行で、**いずれも AI 支援セッションの作業環境上のものです。** 独立した物理／VPS ホストや手元 WSL2 での再実行証跡ではありません（証跡ファイルの「実施環境」欄に採録時の `uname` をそのまま残しています）。面接で再実演する項目は、本人が手元の環境で事前に再実行し、所要時間と結果を確認したものから選びます。
 
 | 演習 | 実演内容 | 所要 | 結果 |
 | --- | --- | --- | --- |
-| B-1 | LVM で VG / LV を作り、容量を使い切らせ、PV を足して online 拡張する | 10 分 | [5 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md) |
-| B-2 | Web / AP / DB の 3 層構成で、どの層が原因かを層別 health から絞り込む | 10 分 | [9 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md) |
-| B-3 | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | 10 分 | [7 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒） |
-| B-4 | 静的ルート、`ip_forward`、VLAN ID 不一致の 3 パターンを切り分ける | 10 分 | [6 PASS / 3 SKIP-ENV](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md) |
+| B-1 | LVM で VG / LV を作り、容量を使い切らせ、PV を足して online 拡張する | 10 分 | [5 PASS](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-1.md) |
+| B-2 | Web / AP / DB の 3 層構成で、どの層が原因かを層別 health から絞り込む | 10 分 | [9 PASS](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-2.md) |
+| B-3 | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | 10 分 | [7 PASS](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒） |
+| B-4 | 静的ルート、`ip_forward`、VLAN ID 不一致の 3 パターンを切り分ける | 10 分 | [6 PASS / 3 SKIP-ENV](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-4.md) |
 
 Ansible role は Ubuntu に加えて **AlmaLinux / Rocky 9** に対応しています
 （`dnf`、firewalld、SELinux、dnf-automatic、`sshd_config.d` の上書き検査）。
-[Molecule の `el9` シナリオ](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common/molecule/el9)
-は [2026-08-25 に実行証跡を採録](https://github.com/ns7jp/server-monitor/actions/runs/32811100007)しました
+[Molecule の `el9` シナリオ](https://github.com/ns7jp/server/tree/main/ansible/roles/common/molecule/el9)
+は [2026-08-25 に実行証跡を採録](https://github.com/ns7jp/server/actions/runs/32811100007)しました
 （コンテナ上での検証。CI は `workflow_dispatch` のみで、
-push / PR では走りません）。実機の AlmaLinux ホストへ適用した証跡もありません。
+push / PR では走りません）。9 月 4 日の再利用 AlmaLinux VM での基礎設定適用は上記の別証跡です。監視全体の `site.yml` 適用を示すものではありません。
 
 ## 入社後に任せやすいこと
 
@@ -91,13 +106,12 @@ push / PR では走りません）。実機の AlmaLinux ホストへ適用し�
 
 実務での大規模インフラ経験はこれからです。**コードや設計書があること**と、
 **実環境で成功した結果があること**を混同しないよう、
-[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
-の 1 か所で区別しています。上の「実測したこと」はすべて、使い捨て runner または
-WSL2 上での結果です。
+[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)
+の 1 か所で区別しています。上の結果は、使い捨て runner、WSL2、AI 支援環境、本人の Hyper-V VM での個別記録です。環境と対象手順を各証跡で確認します。
 
 未実測の主なもの: Slack 実配信、AWS `apply / destroy`、D-2 復旧演習、
 独立した管理端末・引き渡し対象ホスト、組織 DNS、再起動後の永続性、長期稼働、
-AlmaLinux 実機への適用。**実行ログが無い項目を実績として書くことはしません。**
+AlmaLinux への監視全体の `site.yml` 適用と、専用の新規 VM での最小公開確認。**実行ログが無い項目を実績として書くことはしません。**
 
 **AI 支援の範囲も同じ基準で開示しています。** 文書だけでなく実装コード（Ansible role、
 Terraform module、CI workflow、テスト、ラボ）の生成にも AI を使っています。
@@ -105,8 +119,7 @@ Terraform module、CI workflow、テスト、ラボ）の生成にも AI を使�
 [職務経歴書・スキルシート §4-b](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)に置いています。
 **その中で、実機を触って外した仮説の一次記録
 [LEARNINGS.md](../LEARNINGS.md) は、2026-08-25 以降、新規エントリを本人のみが書く
-運用にしています**（それ以前の各エントリで AI がどこまで下書きしたかは
-[README](../README.md#失敗から学んだこと)参照）。技術的な深さより、ここを
+運用にしています**（各記録と [STATUS](../STATUS.md) に示す作成経緯も併せて確認します）。技術的な深さより、ここを
 読んでいただくのが、私の現在地を最も正確に伝える方法だと考えています。
 
 ## 経歴・学習

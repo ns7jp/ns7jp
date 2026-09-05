@@ -1,6 +1,6 @@
 # アーキテクチャ図：実装済み構成と検証境界
 
-サーバー監視ラボ（[server-monitor](https://github.com/ns7jp/server-monitor)）について、
+サーバー監視ラボ（[server](https://github.com/ns7jp/server)）について、
 構成コードとして実装した範囲と、実環境での証跡をまだ必要とする範囲を分けて示す。
 
 ## ローカルラボ構成（Docker Compose に実装済み）
@@ -12,17 +12,19 @@ flowchart TB
     subgraph Host[Linux Docker host]
         Nginx --> App[Flask + Gunicorn]
         Prom[Prometheus] -->|Bearer token /metrics| App
-        Node[node-exporter] --> Prom
+        Prom -->|数値を取得| Node[node-exporter]
         Probe[blackbox-exporter] -->|GET /healthz| Nginx
-        Probe --> Prom
-        Prom --> Alert[Alertmanager]
-        Prom --> Grafana[Grafana]
+        Prom -->|probe 結果を取得| Probe
+        Prom -->|条件に合った警告を送る| Alert[Alertmanager]
+        Grafana[Grafana] -->|数値を問い合わせる| Prom
         Alloy[Grafana Alloy] -->|GET / HEAD| Proxy[Docker API read-only proxy]
         Proxy -->|private network| Engine[(Docker Engine API)]
         Alloy -->|logs| Loki[Loki]
-        Loki --> Grafana
+        Grafana -->|ログを問い合わせる| Loki
     end
 ```
+
+矢印は要求・取得・送信を始める側から相手へ向けています。応答は要求元へ返ります。Prometheus は対象から数値を取りに行く方式（pull）で、Grafana は保存済みの数値・ログを問い合わせます。Prometheus が警告条件を判定し、Alertmanager が通知をまとめて送ります。
 
 | 観点 | 状態 |
 | --- | --- |
@@ -30,7 +32,7 @@ flowchart TB
 | Logs | Loki + Grafana Alloy を実装。Docker API は GET / HEAD 限定 proxy 経由。Promtail は 2026-03-02 の EOL に伴い不採用 |
 | SLO | blackbox-exporter、burn-rate rules、dashboard を実装 |
 | 構成管理 | Ansible roles / playbook を実装 |
-| Full-stack E2E | [2026-08-22](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) に使い捨て Ubuntu 24.04 上で `site.yml` を 2 回適用し、2 回目 `changed=0`、計 11 containers、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、network / UFW、local webhook、D-1 RTO 1 秒、3 volumes の backup / restore を確認。23/23 ID PASS |
+| Full-stack E2E | [2026-08-22](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) に使い捨て Ubuntu 24.04 上で `site.yml` を 2 回適用し、2 回目 `changed=0`、計 11 containers、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、network / UFW、local webhook、D-1 RTO 1 秒、3 volumes の backup / restore を確認。23/23 ID PASS |
 | 既存の実測履歴 | Linux (WSL2) 上で 9 サービス起動、Grafana / Loki 表示、2026-08-19 の D-1 RTO 13 秒、4 ロールの full Molecule を採録済み |
 | 未実測の境界 | Slack 実配信、AWS `apply / destroy`、D-2、Docker 未導入の引き渡し対象ホストと別の独立管理端末、組織 DNS、ホスト再起動後の永続性、24時間・72時間の継続稼働。local webhook と runner 内 network / UFW の結果をこれらの代替にはしない |
 
@@ -45,12 +47,12 @@ blackbox-exporter は対象サービスと同じホスト内にあるため、�
 
 実装済みなのはコードのみで、実際に `terraform apply` した実績・実費は未収録。
 詳細な構成図とセキュリティ設定は
-[server-monitor 側のAWS設計](https://github.com/ns7jp/server-monitor/blob/main/docs/aws-architecture.md)
+[server-monitor 側のAWS設計](https://github.com/ns7jp/server/blob/main/docs/aws-architecture.md)
 を正本とする。
 
 複数 EC2 をまたぐ metrics / logs の一元化や、対象ホスト外からの外形監視は
 未実装の将来構想として
-[外部 probe / 中央 telemetry 設計](https://github.com/ns7jp/server-monitor/blob/main/docs/roadmap/external-probe-central-telemetry.md)
+[外部 probe / 中央 telemetry 設計](https://github.com/ns7jp/server/blob/main/docs/roadmap/external-probe-central-telemetry.md)
 に整理している。
 
 ---
@@ -80,8 +82,8 @@ Logs または中央 Loki の導入を先に証明する。
 ## 関連ドキュメント
 
 - [改善設計の実装対応表](./server-monitor-improvements/README.md)
-- [server-monitor の検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
-- [外部 probe / 中央 telemetry 設計](https://github.com/ns7jp/server-monitor/blob/main/docs/roadmap/external-probe-central-telemetry.md)
+- [server-monitor の検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)
+- [外部 probe / 中央 telemetry 設計](https://github.com/ns7jp/server/blob/main/docs/roadmap/external-probe-central-telemetry.md)
 - [server-monitor 改善計画 一覧](./server-monitor-improvements/README.md)（中長期テーマ 4 本は [ロードマップ](./roadmap/README.md) へ分離）
 - [ADR（アーキテクチャ決定記録）一覧](./adr/README.md)
 - [資格取得ロードマップ](./certifications/roadmap.md)
