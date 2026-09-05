@@ -4,19 +4,20 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { execute } from '../scripts/server-engineer.mjs';
 
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const original = JSON.parse(fs.readFileSync(path.join(repository, 'docs/server-engineer/curriculum.json'), 'utf8').replace(/^\uFEFF/, ''));
 const revision = 'a'.repeat(40);
 
-function fixture(t) {
-  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'server-engineer-test-')));
+function fixture(t, { nested = false } = {}) {
+  const sandbox = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'server-engineer-test-')));
+  const root = nested ? path.join(sandbox, 'extracted-copy') : sandbox;
   t.after(() => {
-    assert.equal(path.dirname(root), fs.realpathSync(os.tmpdir()));
-    assert.ok(path.basename(root).startsWith('server-engineer-test-'));
-    fs.rmSync(root, { recursive: true, force: true });
+    assert.equal(path.dirname(sandbox), fs.realpathSync(os.tmpdir()));
+    assert.ok(path.basename(sandbox).startsWith('server-engineer-test-'));
+    fs.rmSync(sandbox, { recursive: true, force: true });
   });
   fs.mkdirSync(path.join(root, 'docs/server-engineer/stages'), { recursive: true });
   fs.mkdirSync(path.join(root, 'incoming'));
@@ -40,7 +41,18 @@ function fixture(t) {
   const review = (stage = 'SE00', overrides = {}) => run(['review', ...Object.entries({ learner: 'learner', stage, reviewer: 'observer', decision: 'APPROVE', evidence: 'incoming/log.txt', note: 'Synthetic observation for automated tests', ...overrides }).flatMap(([key, value]) => [`--${key}`, value]), '--sanitized']);
   const status = stage => JSON.parse(run(['report', '--learner', 'learner', '--json'])).stages.find(item => item.id === stage);
   const fill = (stage, overrides = {}) => { for (const criterion of original.stages.find(item => item.id === stage).criteria) record(criterion.id, overrides); };
-  return { root, run, read, rewrite, init, record, review, status, fill, clock: value => { clock = new Date(value); } };
+  return { root, sandbox, run, read, rewrite, init, record, review, status, fill, clock: value => { clock = new Date(value); } };
+}
+
+function initializeFixtureRepository(directory) {
+  assert.ok(path.basename(directory).startsWith('server-engineer-test-'));
+  assert.equal(path.dirname(directory), fs.realpathSync(os.tmpdir()));
+  const hooks = path.join(directory, 'empty-test-hooks');
+  fs.mkdirSync(hooks);
+  const git = args => execFileSync('git', args, { cwd: directory, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true }).trim();
+  git(['-c', 'init.defaultBranch=main', 'init', '--quiet']);
+  git(['-c', 'user.name=Test Fixture', '-c', 'user.email=test@example.invalid', '-c', 'commit.gpgsign=false', '-c', `core.hooksPath=${hooks}`, 'commit', '--quiet', '--allow-empty', '-m', 'Synthetic fixture only']);
+  return git(['rev-parse', '--verify', 'HEAD']);
 }
 
 test('init is empty NOT RUN, preserves an existing ledger, and requires a bounded learner ID', t => {
@@ -67,6 +79,26 @@ test('records copy actual file bytes and metadata; changed source does not chang
   fs.writeFileSync(path.join(f.root, 'incoming/log.txt'), 'Changed later');
   assert.match(f.run(['check', '--learner', 'learner']), /record integrity \(1 attempts, 0 reviews\)/);
   assert.equal(f.status('SE00').status, 'IN PROGRESS');
+});
+
+test('default revision records HEAD only when the curriculum root is the actual Git root', t => {
+  const f = fixture(t);
+  const head = initializeFixtureRepository(f.root);
+  f.init();
+  f.record('SE00-C1', { revision: undefined });
+  assert.equal(f.read().attempts[0].revision, head);
+});
+
+test('an extracted copy inside another Git repository cannot inherit its ancestor HEAD', t => {
+  const f = fixture(t, { nested: true });
+  const unrelatedHead = initializeFixtureRepository(f.sandbox);
+  assert.equal(execFileSync('git', ['rev-parse', '--verify', 'HEAD'], { cwd: f.root, encoding: 'utf8', windowsHide: true }).trim(), unrelatedHead);
+  f.init();
+  assert.throws(() => f.record('SE00-C1', { revision: undefined }), /Cannot read Git HEAD for this repository root.*--revision/);
+  assert.equal(f.read().attempts.length, 0);
+  assert.ok(!fs.existsSync(path.join(f.root, '.local/server-engineer/learner/evidence')));
+  f.record('SE00-C1', { revision });
+  assert.equal(f.read().attempts[0].revision, revision);
 });
 
 test('unknown criterion, malformed options, revision and missing/empty evidence cannot append', t => {

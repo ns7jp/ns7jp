@@ -352,8 +352,12 @@ export function execute(argv, { root = DEFAULT_ROOT, now = () => new Date() } = 
       requireThat(instant(performedAt, 'performedAt') <= time.getTime(), 'performedAt cannot be in the future');
       let revision = options.revision;
       if (!revision) {
-        try { revision = execFileSync('git', ['rev-parse', '--verify', 'HEAD'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true }).trim(); }
-        catch { fail('Cannot read Git HEAD; provide --revision with the full revision actually used'); }
+        try {
+          const gitOptions = { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true };
+          const gitRoot = execFileSync('git', ['rev-parse', '--show-toplevel'], gitOptions).trim();
+          requireThat(path.relative(root, fs.realpathSync(gitRoot)) === '', 'Git top-level does not match this repository root');
+          revision = execFileSync('git', ['rev-parse', '--verify', 'HEAD'], gitOptions).trim();
+        } catch { fail('Cannot read Git HEAD for this repository root; provide --revision with the full revision actually used'); }
       }
       requireThat(REVISION.test(revision), '--revision must be a full lowercase Git SHA (40 or 64 hex characters)');
       const evidence = copyEvidence(root, learnerBase, options);
