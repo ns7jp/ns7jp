@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const folder = path.join(root, 'docs/server-engineer');
+const folders = ['docs/server-engineer', 'docs/server-projects'].map(folder => path.join(root, folder));
 function markdownFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
     const file = path.join(dir, entry.name);
@@ -11,7 +11,7 @@ function markdownFiles(dir) {
   });
 }
 const files = [
-  ...markdownFiles(folder),
+  ...folders.flatMap(markdownFiles),
   ...['README.md', 'docs/learning-plan/README.md', 'docs/learning-plan/00-start-here.md',
     'docs/learning-plan/02-curriculum.md'].map(file => path.join(root, file)),
 ];

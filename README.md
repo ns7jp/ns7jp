@@ -21,6 +21,7 @@
 | 自分で動かす | [主作品の初心者向け学習ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md) | 小さく起動し、結果を確認する手順 |
 | 面接で説明する | [30 秒・3 分の説明練習](./docs/portfolio-explanation.md) | 例文、問い返し、自分の記録を使った説明 |
 | 初心者から構築を担当できるまで進む | [8段階の育成システム](./docs/server-engineer/README.md) | 演習・32の到達条件・個人台帳・再試験・引き渡し |
+| 案件を受付から終結まで進める | [サーバー案件の運用システム](./docs/server-projects/README.md) | 要件・見積・作業配分・本番承認・検収・保守・変更対応 |
 
 PC や Linux の準備から必要な方は、[開始前診断と最初の30分](./docs/learning-plan/00-start-here.md)へ。体系的な学習には [24 週の学習プラン](./docs/learning-plan/README.md)を使います。
 
