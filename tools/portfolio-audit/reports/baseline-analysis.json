@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "input_kind": "curated_public_records",
+  "observed_at": "2026-09-07T01:33:00Z",
+  "evaluation_at": "2026-09-07T01:33:00Z",
+  "snapshot_status": "AVAILABLE_AS_SUPPLIED",
+  "authorization": "NONE",
+  "findings": [
+    {
+      "id": "LIMITED_PROVENANCE:el9-foundation-idempotency-20260904",
+      "rule": "LIMITED_PROVENANCE",
+      "subject": "el9-foundation-idempotency-20260904",
+      "priority": 2,
+      "message": "Keep the historical record; resolve the exact execution revision before an automated current claim."
+    },
+    {
+      "id": "LIMITED_PROVENANCE:ubuntu-foundation-idempotency-20260904",
+      "rule": "LIMITED_PROVENANCE",
+      "subject": "ubuntu-foundation-idempotency-20260904",
+      "priority": 2,
+      "message": "Keep the historical record; resolve the exact execution revision before an automated current claim."
+    },
+    {
+      "id": "NOT_VALIDATED:profile-persistent-gap",
+      "rule": "NOT_VALIDATED",
+      "subject": "profile-persistent-gap",
+      "priority": 2,
+      "message": "The recorded result remains NOT_RUN. This is a gap, not an incorrect claim."
+    }
+  ],
+  "candidate_queue": [
+    {
+      "id": "structured-claim-index",
+      "fingerprint": "37987fdc000415fee87645d5",
+      "title": "正本と表示の対応を機械可読な索引にする",
+      "priority": 1,
+      "score": 12.6,
+      "state": "NO_OBSERVED_CONFLICT",
+      "related_prs": [],
+      "publication_allowed": false
+    },
+    {
+      "id": "foundation-composition",
+      "fingerprint": "f88bdb4369d0b379499f243a",
+      "title": "foundation合成のCI検証を既存PRへ集約する",
+      "priority": 1,
+      "score": 10.33,
+      "state": "EXISTING_PR_REVIEW",
+      "related_prs": [
+        160
+      ],
+      "publication_allowed": false
+    },
+    {
+      "id": "ubuntu22-package-guard",
+      "fingerprint": "3f88c9fe57a4772cbe867597",
+      "title": "Ubuntu 22.04パッケージ分岐の既存修正を確認する",
+      "priority": 1,
+      "score": 10.33,
+      "state": "EXISTING_PR_REVIEW",
+      "related_prs": [
+        161
+      ],
+      "publication_allowed": false
+    },
+    {
+      "id": "fresh-el9-vm",
+      "fingerprint": "d90979d78167dff3dc5497ab",
+      "title": "新規AlmaLinux VMで構築と最小公開を実測する",
+      "priority": 2,
+      "score": 7.1,
+      "state": "AWAITING_OWNER",
+      "related_prs": [],
+      "publication_allowed": false
+    }
+  ],
+  "limitations": [
+    "No live fetching or evidence authentication.",
+    "No writing, publication, or lab execution.",
+    "Candidate values are proposed priorities, not measurements."
+  ]
+}
