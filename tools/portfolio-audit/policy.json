@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "target_role": "Linux server design and construction engineer",
+  "repositories": [
+    "ns7jp/server",
+    "ns7jp/ns7jp",
+    "ns7jp/ns7jp.github.io"
+  ],
+  "snapshot_max_age_hours": 48,
+  "score_weights": {
+    "job_fit": 5,
+    "evidence_gain": 5,
+    "reproducibility": 3,
+    "readability": 2
+  },
+  "publish_enabled": false,
+  "auto_merge": false,
+  "lab_execution_enabled": false,
+  "limits": {
+    "topics_per_run": 1,
+    "active_changes": 1,
+    "open_prs": 3,
+    "normal_files": 5,
+    "normal_changed_lines": 250,
+    "repair_minutes": 45,
+    "retries": 2
+  },
+  "protected_paths": [
+    "LEARNINGS.md",
+    "docs/resume.md",
+    ".github/workflows/**",
+    "docs/evidence/logs/**",
+    "tools/portfolio-audit/policy.json"
+  ],
+  "schedules_proposed_jst": {
+    "read_only_audit": "daily 07:37",
+    "improvement": "Saturday 08:17",
+    "owner_review": "monthly"
+  },
+  "enforcement_note": "Only snapshot_max_age_hours and score_weights are consumed by this prototype. Other fields specify future implementation policy."
+}

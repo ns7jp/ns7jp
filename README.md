@@ -111,6 +111,8 @@ flowchart LR
 
 文書の構成・推敲に加え、実装コードの生成・レビューにも AI 支援を利用しています。生成物や自動試験の成功を、本人の習得や実務経験へ読み替えません。本人の作業・判断・説明は個別の記録で確認します。範囲と方針は [STATUS.md](./STATUS.md)と[職務経歴書・スキルシート](./docs/resume.md)に記載しています。
 
+継続改善の仕組みは[ポートフォリオ自動改善の詳細設計](./docs/portfolio-automation/design.md)にまとめています。設計とローカル監査の試作品を公開し、定期実行・自動公開は未導入です。
+
 ## Contact
 
 - Email: [net7jp@gmail.com](mailto:net7jp@gmail.com)

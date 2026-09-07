@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "data_kind": "curated_public_records",
+  "observed_at": "2026-09-07T01:33:00Z",
+  "evaluation_at": "2026-09-07T01:33:00Z",
+  "collection_complete": true,
+  "collection_scope": "Manually curated records listed here only; no exhaustive live or runtime audit.",
+  "repositories": [
+    {
+      "id": "1227986187",
+      "full_name": "ns7jp/server",
+      "head_sha": "7f7e5c9d792faef2569d02e181399effa9ba56d5"
+    },
+    {
+      "id": "1222104783",
+      "full_name": "ns7jp/ns7jp",
+      "head_sha": "0e813b66f6581dd937dd56b07beeefa5e7feb386"
+    },
+    {
+      "id": "1222186977",
+      "full_name": "ns7jp/ns7jp.github.io",
+      "head_sha": "50b5d9de24b433d0d810d8ab9ca7d23a4826713c"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ubuntu-foundation-idempotency-20260904",
+      "repository": "ns7jp/server",
+      "scope": "foundation-ubuntu-idempotency",
+      "environment": "local-vm",
+      "result": "PASS",
+      "revision": null,
+      "revision_verified": false,
+      "revision_note": "Source records short SHA 44cf16a and subsequent corrections; exact execution state not independently verified.",
+      "record_url": "https://github.com/ns7jp/server/blob/7f7e5c9d792faef2569d02e181399effa9ba56d5/docs/evidence/2026-09-04-ansible-foundation-build.md",
+      "executed_on": "2026-09-04",
+      "provenance": "repository_record",
+      "limitations": "Foundation roles only; not site.yml, reboot, or sustained operation."
+    },
+    {
+      "id": "el9-foundation-idempotency-20260904",
+      "repository": "ns7jp/server",
+      "scope": "foundation-el9-idempotency-reused",
+      "environment": "local-vm",
+      "result": "PASS",
+      "revision": null,
+      "revision_verified": false,
+      "revision_note": "Source records 537d9be equivalent, not an exact fully identified execution tree.",
+      "record_url": "https://github.com/ns7jp/server/blob/7f7e5c9d792faef2569d02e181399effa9ba56d5/docs/evidence/2026-09-04-ansible-foundation-el9-build.md",
+      "executed_on": "2026-09-04",
+      "provenance": "repository_record",
+      "limitations": "Reused VM; not fresh installation or least exposure."
+    },
+    {
+      "id": "persistent-host-stack",
+      "repository": "ns7jp/server",
+      "scope": "site-persistent-host",
+      "environment": "persistent-host",
+      "result": "NOT_RUN",
+      "revision": null,
+      "revision_verified": false,
+      "record_url": "https://github.com/ns7jp/server/blob/7f7e5c9d792faef2569d02e181399effa9ba56d5/docs/evidence/README.md",
+      "executed_on": null,
+      "provenance": "repository_record",
+      "limitations": "Persistent host restart and sustained monitoring stack evidence remain unrun in the cited summary."
+    }
+  ],
+  "claims": [
+    {
+      "id": "profile-ubuntu-history",
+      "repository": "ns7jp/server",
+      "scope": "foundation-ubuntu-idempotency",
+      "environment": "local-vm",
+      "result": "PASS",
+      "timeframe": "historical",
+      "evidence_ids": [
+        "ubuntu-foundation-idempotency-20260904"
+      ],
+      "display_reference": "ns7jp/ns7jp README.md main measured results"
+    },
+    {
+      "id": "profile-el9-history",
+      "repository": "ns7jp/server",
+      "scope": "foundation-el9-idempotency-reused",
+      "environment": "local-vm",
+      "result": "PASS",
+      "timeframe": "historical",
+      "evidence_ids": [
+        "el9-foundation-idempotency-20260904"
+      ],
+      "display_reference": "ns7jp/ns7jp README.md main measured results"
+    },
+    {
+      "id": "profile-persistent-gap",
+      "repository": "ns7jp/server",
+      "scope": "site-persistent-host",
+      "environment": "persistent-host",
+      "result": "NOT_RUN",
+      "timeframe": "current",
+      "evidence_ids": [
+        "persistent-host-stack"
+      ],
+      "display_reference": "ns7jp/ns7jp README.md remaining unmeasured scope"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "structured-claim-index",
+      "rule_id": "SY-01",
+      "repository": "ns7jp/ns7jp",
+      "scope": "portfolio-evidence-index",
+      "title": "正本と表示の対応を機械可読な索引にする",
+      "paths": [
+        "tools/portfolio-audit/claims.json"
+      ],
+      "priority": 1,
+      "requires_owner": false,
+      "values": {
+        "job_fit": 5,
+        "evidence_gain": 3,
+        "reproducibility": 5,
+        "readability": 4
+      },
+      "effort": 3,
+      "risk": 1
+    },
+    {
+      "id": "foundation-composition",
+      "rule_id": "CI-01",
+      "repository": "ns7jp/server",
+      "scope": "foundation-composition",
+      "title": "foundation合成のCI検証を既存PRへ集約する",
+      "paths": [
+        ".github/workflows/ansible-integration.yml"
+      ],
+      "priority": 1,
+      "requires_owner": false,
+      "values": {
+        "job_fit": 5,
+        "evidence_gain": 4,
+        "reproducibility": 5,
+        "readability": 1
+      },
+      "effort": 2,
+      "risk": 2
+    },
+    {
+      "id": "ubuntu22-package-guard",
+      "rule_id": "CI-01",
+      "repository": "ns7jp/server",
+      "scope": "ubuntu22-package-guard",
+      "title": "Ubuntu 22.04パッケージ分岐の既存修正を確認する",
+      "paths": [
+        "ansible/roles/common/tasks/packages.yml"
+      ],
+      "priority": 1,
+      "requires_owner": false,
+      "values": {
+        "job_fit": 5,
+        "evidence_gain": 4,
+        "reproducibility": 5,
+        "readability": 1
+      },
+      "effort": 2,
+      "risk": 2
+    },
+    {
+      "id": "fresh-el9-vm",
+      "rule_id": "HM-01",
+      "repository": "ns7jp/server",
+      "scope": "fresh-el9-minimal-exposure",
+      "title": "新規AlmaLinux VMで構築と最小公開を実測する",
+      "paths": [
+        "docs/evidence/new-el9-validation.md"
+      ],
+      "priority": 2,
+      "requires_owner": true,
+      "values": {
+        "job_fit": 5,
+        "evidence_gain": 5,
+        "reproducibility": 5,
+        "readability": 3
+      },
+      "effort": 4,
+      "risk": 3
+    }
+  ],
+  "open_prs": [
+    {
+      "id": "server-160",
+      "repository": "ns7jp/server",
+      "number": 160,
+      "paths": [
+        ".github/workflows/ansible-check.yml",
+        ".github/workflows/ansible-integration.yml",
+        "ansible/molecule/foundation-default/converge.yml",
+        "ansible/molecule/foundation-default/molecule.yml",
+        "ansible/molecule/foundation-default/verify.yml",
+        "ansible/molecule/foundation-el9/converge.yml",
+        "ansible/molecule/foundation-el9/molecule.yml",
+        "ansible/molecule/foundation-el9/verify.yml",
+        "tests/test_os_support_and_labs.py"
+      ]
+    },
+    {
+      "id": "server-161",
+      "repository": "ns7jp/server",
+      "number": 161,
+      "paths": [
+        "ansible/roles/common/tasks/packages.yml",
+        "ansible/roles/common/vars/Debian.yml",
+        "ansible/roles/docker/tasks/main.yml",
+        "docs/evidence/defects-found.md",
+        "tests/test_os_support_and_labs.py"
+      ]
+    }
+  ],
+  "candidate_note": "Candidate priorities, values, future paths, and efforts are design proposals, not measured facts.",
+  "source_note": "The main profile read through GitHub was already updated. Cached web profile text is intentionally not used as a stale-content finding."
+}
