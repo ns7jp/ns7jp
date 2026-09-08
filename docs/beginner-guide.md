@@ -103,7 +103,7 @@ flowchart LR
 
 OS の `systemctl` と Compose の `docker compose ps` は、調べる対象が違います。主作品の基本構成では、Docker 内の app を調べるときに `systemctl status app` と入力するわけではありません。
 
-詳しいオプションは[Linux コマンド集](./linux-commands.md)、Windows 側の操作は[Windows コマンド集](./windows-commands.md)へ進みます。
+詳しいオプションは[Linux コマンド集](./linux-commands.md)、Windows 側の操作は[Windows コマンド集](./windows-commands.md)へ進みます。このページに出てこない一般的な IT 用語は[IT 基礎用語集](./it-glossary.md)にまとめています。
 
 ## 5. 構築と障害対応を一巡する
 
@@ -139,6 +139,7 @@ CI（変更時などに自動で試験を実行する仕組み）の成功は、
 | 仕組みを話してみたい | [説明練習と自分の記録](./portfolio-explanation.md) | 図を見ずに主要な役割を話し、質問に答える |
 | 主作品を自分で動かしたい | [主作品の初心者向け学習ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md) | 前提を確認し、app と Nginx の最小構成の操作と判定を残す |
 | 最小構成から範囲を広げたい | [主作品の一本道ラーニングパス](https://github.com/ns7jp/server/blob/main/docs/learning-path.md) | 監視・自動化・復旧を Level ごとに実施し、記録する |
+| 用語そのものを体系的に覚えたい | [IT 基礎用語集](./it-glossary.md) | 分野ごとに読み、章末のセルフチェックに答える |
 | Linux の基本操作から始めたい | [初心者向けスタートガイド](./learning-plan/00-start-here.md) | 開始前診断と最初の状態確認を記録する |
 | 基礎から継続して学びたい | [24 週の学習プラン](./learning-plan/README.md) | 自分の環境と時間に合わせて範囲を選ぶ |
 | 失敗の考え方を知りたい | [詰まった記録](../LEARNINGS.md) | 一事例の症状・確認・変更・再確認を区別する |

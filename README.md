@@ -18,6 +18,7 @@
 | --- | --- | --- |
 | 採用の観点で知る | [採用ご担当者さま向け 1 ページ](./docs/overview-for-recruiters.md) | 志望、成果物、検証範囲 |
 | 仕組みを理解する | [やさしい用語・見方ガイド](./docs/beginner-guide.md) | 役割、通信の流れ、用語の意味 |
+| IT の言葉を覚える | [IT 基礎用語集](./docs/it-glossary.md) | 20 分野・約 300 語の意味、対比、確認方法 |
 | 自分で動かす | [主作品の初心者向け学習ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md) | 小さく起動し、結果を確認する手順 |
 | 面接で説明する | [30 秒・3 分の説明練習](./docs/portfolio-explanation.md) | 例文、問い返し、自分の記録を使った説明 |
 | 初心者から構築を担当できるまで進む | [8段階の育成システム](./docs/server-engineer/README.md) | 演習・32の到達条件・個人台帳・再試験・引き渡し |
