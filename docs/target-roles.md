@@ -6,7 +6,7 @@
 
 | 優先 | 志望領域 | 想定する入口業務 | 提示する証拠 | 次に必要な実測 |
 | --- | --- | --- | --- | --- |
-| 1 | Linux サーバー構築・運用 | OS 初期設定、ミドルウェア配備、試験、手順・パラメータ更新 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、[使い捨て Ubuntu 24.04 の Full-stack E2E（試験項目 23 件中 23 件合格）](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)、[AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common)、[LVM storage role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/storage) | Docker 未導入の独立した対象ホストでの新規構築、AlmaLinux 実機への適用、network / UFW・再起動後・受け入れ確認 |
+| 1 | Linux サーバー構築・運用 | OS 初期設定、ミドルウェア配備、試験、手順・パラメータ更新 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)、[使い捨て Ubuntu 24.04 の Full-stack E2E（試験項目 23 件中 23 件合格）](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)、[AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/common)、[LVM storage role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/storage) | Docker 未導入の独立した対象ホストでの新規構築、新規AlmaLinux VMでの最小公開と監視全体（site.yml）の適用、network / UFW・再起動後・受け入れ確認 |
 | 2 | インフラ監視・運用 | 監視確認、一次切り分け、障害対応、定型作業 | Prometheus / Grafana / Loki（実データ表示済み）、local webhook の FIRING / RESOLVED、ランブック、[障害ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)（PASS） | Alertmanager → Slack の実配信記録 |
 | 2b | データセンター現地オペレーター | 入退室管理、ラックマウント、ケーブル配線、資産棚卸し、一次切り分け（オンサイト） | 物流現場での重量物取扱い・現物管理実績、[現場経験とインフラの橋渡し §2.8](./career-bridge.md#28-現物スキルの転用物流現場--データセンター現地作業デスクワーク適応) | ラックマウント・ケーブル配線の実技（**未着手**） |
 | 3 | IT サポート・社内 SE 補助 | 問い合わせ、キッティング、棚卸し | [AD 操作演習設計](./learning-plan/06-shell-scripting-exercise-design.md#44-level-4-active-directory-運用スクリプト)、[AD構築演習設計](./learning-plan/08-ad-exercise-design.md)、[Windows / AD 公開再現ラボ](./evidence/templates/windows-ad-lab.md)（**設計サンプル。実務対応実績ではありません**） | 実機出力を添えた Windows / AD 切り分け記録 |
@@ -37,7 +37,7 @@
 
 - 使い捨て runner 内の結果は、独立した管理端末・引き渡し対象ホストの証跡ではありません
 - local webhook の通知試験は Slack 実配信ではありません
-- role として実装済みでも、実機で適用していなければ実績としません（AlmaLinux 対応が該当）
+- AlmaLinux は[2026-09-04の再利用VMで基盤設定とDocker導入を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md)しています。新規VMでの最小公開と、監視全体の `site.yml` 適用は未実施です
 - B-1〜B-4 の演習は **AI 支援セッションの作業環境上での実行**で、独立した物理／VPS ホストや
   手元 WSL2 での再実行証跡ではありません（[README](../README.md#主な実測結果)に実行環境を明記）
 

@@ -51,3 +51,39 @@
 
 上記はローカル確認であり、GitHub Actionsの実行やサーバーの実測を示さない。
 GitHub側の検証はPRのChecksで対象コミットの結果を確認する。
+
+## 週次運用への拡張（2026-09-08）
+
+環境：Windows / Node.js v24.19.0。対象ブランチは `codex/weekly-portfolio-improvement-20260908`。
+基点は `1f51b578aff308ec513f27709f9499311d75137b`。以下は未コミット差分を含むローカル検証です。
+
+| 検証 | 結果 | 対象 |
+| --- | --- | --- |
+| Node.jsテスト | 54 passed / 0 failed / 0 skipped | 既存24件＋収集、整合性、異常系、状態、限定修正等30件 |
+| 構文確認 | PASS | audit.mjs、cycle.mjs、github.mjs、cycle.cases.mjs |
+| 過去baselineのCLI | PASS | 過去の観測日時と結果を保持、authorization=NONE |
+| 公開GitHubへの収集実行 | PASS | 2026-09-08 10:27 JST、3リポジトリ、指定11原本、6改善候補 |
+| 限定修正案の実生成 | PASS | target-roles.mdの2行、正本・ハッシュ・既存PRを照合 |
+| 生成patchの適用 | PASS | git apply --check後にローカル適用 |
+
+追加テストにはページング上限、HTTP再試行上限、取得中のHEAD/PR変更、truncated tree、symlink、
+ハッシュ不一致、古い・未来の観測、別SHAのCI、NOT_RUNからの誤昇格、曖昧な表、ディレクトリ競合、
+修正範囲の逸脱、同じ修正案・通知の重複、state/pending破損、連続失敗、排他ロック、リプレイの分離を含みます。
+公開前の独立レビューで、対象資料欠落時の例外、根拠訂正後の修正案生成、不正なリプレイ入力のライブ切替を修正しました。
+資料欠落、レビュー済み原本ハッシュの不一致、台帳行の矛盾・重複、null等の不正リプレイの回帰テストを追加しています。
+
+初回の読み取りで取得したHEADは次のとおりです。
+
+| リポジトリ | 取得SHA |
+| --- | --- |
+| ns7jp/server | f31d4bdc75b37b63cf388474657b50d4bfcbffd2 |
+| ns7jp/ns7jp | 1f51b578aff308ec513f27709f9499311d75137b |
+| ns7jp/ns7jp.github.io | 5b5d46a2136e3fddd2355dd775bcdeabe2ae0ad2 |
+
+GitHub側の既存runを読んだことは、今回変更した監査コードがGitHub Actionsで実行された証明ではありません。
+初回収集時のopen PRは0件で、作業開始時のPR #173は別途マージ済みと確認しています。
+限定修正案の適用で、AlmaLinuxの基盤構築の過去実績を正しく案内します。新しい実機実績は作っていません。
+
+今回のNOT RUN：変更後コードのGitHub Actions実行、VM／Ansible／Docker／AWS／Slack／障害復旧の実測、
+ホスト再起動・24h/72hの確認、将来の週次スケジュールによる初回起動。
+公開・push・PR作成・マージもこのローカル検証には含めません。

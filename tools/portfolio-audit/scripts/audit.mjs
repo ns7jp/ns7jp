@@ -1,6 +1,7 @@
 import { readFileSync, statSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
+import { overlap } from './cycle.mjs';
 
 const statuses = new Set(['PASS', 'FAIL', 'NOT_RUN', 'BLOCKED', 'SKIP_ENV']);
 const environments = new Set(['ci-runner', 'container', 'local-vm', 'persistent-host', 'network-namespace']);
@@ -143,7 +144,7 @@ export function assess(input, policy) {
     }
   }
   const candidates = input.candidates.map(c => {
-    const conflicts = input.open_prs.filter(pr => pr.repository === c.repository && pr.paths.some(p => c.paths.includes(p)))
+    const conflicts = input.open_prs.filter(pr => pr.repository === c.repository && pr.paths.some(p => c.paths.some(path => overlap(path, p))))
       .map(pr => pr.number).sort((a, b) => a - b);
     const value = Object.entries(policy.score_weights).reduce((sum, [k, w]) => sum + w * c.values[k], 0);
     const fingerprint = createHash('sha256').update(JSON.stringify([
