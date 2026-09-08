@@ -246,6 +246,29 @@ export function validateProgress(root, curriculum, progress, learner, now = new 
   return progress;
 }
 
+/** Read-only metadata for learning planners; source evidence is validated but never returned. */
+export function learningSnapshot(root, learner, now = new Date()) {
+  root = fs.realpathSync(root);
+  identifier(learner, 'learner');
+  requireThat(now instanceof Date && Number.isFinite(now.getTime()), 'Invalid snapshot time');
+  const curriculum = loadCurriculum(root);
+  const relative = `.local/server-engineer/${learner}/progress.json`;
+  const bytes = readBytes(root, relative);
+  const progress = validateProgress(root, curriculum, JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/, '')), learner, now);
+  return {
+    schema_version: 1, learner_id: learner, observed_at: now.toISOString(),
+    curriculum, curriculum_hash: curriculumHash(curriculum), ledger_hash: hash(bytes),
+    stages: evaluate(curriculum, progress).map(({ id, title, status, attemptIds, reviewId, criteria }) =>
+      ({ id, title, status, attemptIds, reviewId, criteria })),
+    attempts: progress.attempts.map(a => ({ id: a.id, criterion: a.criterion, result: a.result,
+      performed_at: a.performedAt, recorded_at: a.recordedAt, environment: a.environment,
+      assistance: a.assistance, session: a.session })),
+    reviews: progress.reviews.map(r => ({ id: r.id, stage: r.stage, decision: r.decision,
+      recorded_at: r.recordedAt, attempt_ids: r.attemptIds })),
+    basis: 'Validated record metadata and original evaluate() states; not authentication of skill or identity.'
+  };
+}
+
 function copyEvidence(root, learnerBase, options) {
   requireThat(options.sanitized === true, '--sanitized acknowledgement required; remove secrets before recording');
   requireThat(typeof options.evidence === 'string', '--evidence required');
