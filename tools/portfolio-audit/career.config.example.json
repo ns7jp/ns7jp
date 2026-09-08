@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "updated_at": null,
+  "phase": "job-search",
+  "phase_basis": "就職・定着を優先する計画区分。現在の雇用状態を示すものではない。",
+  "weekly_minutes": null,
+  "load_mode": "normal",
+  "commitments_minutes": 0,
+  "connections": {"learner_id": null, "project_board": false},
+  "opportunities": [],
+  "actions": [
+    {"id":"role-fit","title":"希望条件と比較軸を決め、公式求人の仕事内容を3件まで比較する","kind":"career","phase":"job-search","minutes":90,"priority":1,"owner":"human","status":"BACKLOG","depends_on":[],"due_at":null,"opportunity_id":null,"requires_fresh_opportunity":false,"evidence_ref":null,"reference":"docs/engineer-career/job-search.md","done_when":"必須条件・希望条件・未確認事項を分けた比較票があり、次の確認が1件決まる。応募数や給与を架空に埋めない。"},
+    {"id":"evidence-map","title":"主作品の証拠を整理し、永続ホスト受け入れの次の実測を一つに絞る","kind":"technical","phase":"job-search","minutes":180,"priority":1,"owner":"human","status":"BACKLOG","depends_on":[],"due_at":null,"opportunity_id":null,"requires_fresh_opportunity":false,"evidence_ref":null,"reference":"docs/portfolio-automation/weekly-operation.md","done_when":"正本URL、環境、対象版、本人実施か、未実施かを整理し、次の実測の対象・前提・期待結果・戻し方を確認する。実測自体の完了とは分ける。"},
+    {"id":"explain-proof","title":"実際の記録を使い3分説明と質問への回答を練習する","kind":"communication","phase":"job-search","minutes":60,"priority":2,"owner":"human","status":"BACKLOG","depends_on":[],"due_at":null,"opportunity_id":null,"requires_fresh_opportunity":false,"evidence_ref":null,"reference":"docs/portfolio-explanation.md","done_when":"本人が説明し、答えられなかった問いと次の練習を記録する。原稿作成だけで本人の説明能力を合格にしない。"},
+    {"id":"application-draft","title":"比較した1社に合わせて応募資料の下書きを確認する","kind":"career","phase":"job-search","minutes":90,"priority":2,"owner":"human","status":"BLOCKED","depends_on":["role-fit","evidence-map"],"due_at":null,"opportunity_id":null,"requires_fresh_opportunity":true,"evidence_ref":null,"reference":"docs/engineer-career/job-search.md","done_when":"実在する募集の確認日時・必須条件と本人の証拠が対応し、未経験範囲と質問が明確。送信は別判断。"},
+    {"id":"onboarding-scope","title":"配属先の相談先と任される範囲を確認する","kind":"workplace","phase":"onboarding","minutes":60,"priority":1,"owner":"human","status":"BACKLOG","depends_on":[],"due_at":null,"opportunity_id":null,"requires_fresh_opportunity":false,"evidence_ref":null,"reference":"docs/engineer-career/onboarding.md","done_when":"実際の上司・育成担当と期待成果、相談先、承認経路を確認し、組織の許可された場所へ記録する。"},
+    {"id":"quarterly-growth","title":"実際に困った作業から次の四半期の成長課題を一つ選ぶ","kind":"technical","phase":"growth","minutes":90,"priority":2,"owner":"human","status":"BACKLOG","depends_on":[],"due_at":null,"opportunity_id":null,"requires_fresh_opportunity":false,"evidence_ref":null,"reference":"docs/server-engineer/advanced/action-plan.md","done_when":"仕事やラボで確認した不足と既存SE/BX課題を結び、必要な支援・証拠・見直し日を決める。"}
+  ]
+}

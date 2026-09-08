@@ -23,6 +23,7 @@
 | 初心者から構築を担当できるまで進む | [8段階の育成システム](./docs/server-engineer/README.md) | 演習・32の到達条件・個人台帳・再試験・引き渡し |
 | 小規模案件の先へ進む | [初心者から熟練への橋渡し設計](./docs/server-engineer/advanced/README.md) | 7段階の能力見取り図、12の発展課題、評価と専門分岐 |
 | 案件を受付から終結まで進める | [サーバー案件の運用システム](./docs/server-projects/README.md) | 要件・見積・作業配分・本番承認・検収・保守・変更対応 |
+| 就職し、定着して成長を続ける | [就職・定着・継続成長のシステム](./docs/engineer-career/README.md) | 求人と証拠の対応、週の配分、応募準備、入社後の担当拡張 |
 
 PC や Linux の準備から必要な方は、[開始前診断と最初の30分](./docs/learning-plan/00-start-here.md)へ。体系的な学習には [24 週の学習プラン](./docs/learning-plan/README.md)を使います。
 
