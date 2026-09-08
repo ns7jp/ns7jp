@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { assess } from '../scripts/audit.mjs';
 import './cycle.cases.mjs';
 import './career.cases.mjs';
+import './growth.cases.mjs';
 
 const policy = JSON.parse(readFileSync(new URL('../policy.json', import.meta.url), 'utf8'));
 const baseline = JSON.parse(readFileSync(new URL('../data/baseline.json', import.meta.url), 'utf8'));

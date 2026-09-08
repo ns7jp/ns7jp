@@ -35,6 +35,9 @@ API制限に達したら取得不明として停止します。既に環境変�
 
 ## 旧判定CLIと歴史的サンプル
 
+[自律型成長のCLI](../../docs/autonomous-growth/tool-guide.md)は、検証済みSEメタデータから次の課題と再説明を選びます。
+`scripts/growth.mjs` は明示した既存学習枠だけを使い、技能の正本やcareerの計画を変更しません。
+
 キャリアを含む週次配分には[就職・定着のCLI](../../docs/engineer-career/tool-guide.md)を使います。
 `scripts/career.mjs` は私用の時間・機会・行動と既存SE/PJの読み取り結果を参照し、計画を作ります。
 GitHub監査の結果や教材の存在から、本人の技能合格・応募・入社を推定しません。
