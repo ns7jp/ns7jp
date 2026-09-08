@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "snapshot_max_age_hours": 24,
+  "reviewed_el9_evidence_sha256": "883399075f7235b63715a08c9b18af3aa15baf1396c70ac991d7154c01a3b794",
+  "repositories": [
+    {"full_name":"ns7jp/server","id":1227986187,"files":["README.md","docs/evidence/README.md","docs/evidence/2026-09-04-ansible-foundation-el9-build.md","docs/build-package-wsus/README.md"]},
+    {"full_name":"ns7jp/ns7jp","id":1222104783,"files":["README.md","docs/target-roles.md","docs/overview-for-recruiters.md"]},
+    {"full_name":"ns7jp/ns7jp.github.io","id":1222186977,"files":["README.md","work-readiness.html","project-brief.html","evidence-demo.html"]}
+  ],
+  "probes": [
+    {"id":"persistent-network","repository":"ns7jp/server","path":"docs/evidence/README.md","prefix":"| 独立した管理端末・対象hostでの network / UFW |","priority":1,"environment":"persistent-host","title":"独立した管理端末と対象ホストで通信・遮断を実測する","acceptance":"管理端末と対象を特定し、NW-01〜09の期待値・実出力・終了コード・日時・対象SHAを採録する。既存の09-network-validation-procedure.mdを使用する。"},
+    {"id":"persistent-acceptance","repository":"ns7jp/server","path":"docs/evidence/README.md","prefix":"| 引き渡し対象hostの受け入れ試験 |","priority":1,"environment":"persistent-host","title":"監視構成全体を永続ホストへ構築して受け入れる","acceptance":"専用対象ホスト、site.ymlの初回適用と再実行、認証、監視、障害復旧、バックアップ復元を同一対象版で確認する。10-host-bringup-and-acceptance.mdを使う。"},
+    {"id":"persistent-reboot-soak","repository":"ns7jp/server","path":"docs/evidence/README.md","prefix":"| 永続hostの再起動・24h / 72h確認 |","priority":1,"environment":"persistent-host","title":"ホスト再起動後と24時間・72時間の稼働を採録する","acceptance":"構築済み専用ホストでafter-reboot/soakの実記録、開始終了日時、boot ID、サービス状態、欠測、アラート、ディスク推移を保存する。時間短縮や過去CI結果で代用しない。"},
+    {"id":"el9-entire-stack","repository":"ns7jp/server","path":"docs/evidence/README.md","prefix":"| AlmaLinux / Rocky 9 実機への `site.yml` 適用 |","priority":2,"environment":"local-vm","title":"RHEL系の新規VMで監視全体と最小公開を確認する","acceptance":"foundation.ymlとsite.ymlを区別する。新規VMのOS版・公開ポート・SELinux・初回適用・冪等性・復旧の証跡を採録する。"},
+    {"id":"aws-lifecycle","repository":"ns7jp/server","path":"docs/evidence/README.md","prefix":"| AWS `apply` / `destroy` と実費 |","priority":3,"environment":"external-service","title":"応募先で必要ならAWS構築・削除・実費を検証する","acceptance":"本人が対象アカウント・予算・削除範囲を決めた後に実施する。Linuxの永続ホスト受け入れを優先し、資格情報未設定のまま実行しない。"}
+  ]
+}
