@@ -2,7 +2,7 @@
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-09-09（追補2：[11 AWS基礎構築演習設計](#2026-09-09-の更新内容追補11-aws基礎構築演習設計の技術的レビュー修正)に続けて、同じ内部一貫性レビューを一度も受けていなかった[10 Azure構築演習設計](./docs/learning-plan/10-azure-foundational-exercise-design.md)をレビューした。11 の記述誤りとは異なる種類の欠陥（§5.4 T4-2 が、[4 章](./docs/learning-plan/10-azure-foundational-exercise-design.md#4-構築手順書)で CLI 手動構築した `rg-azlab-core` を削除する手順を欠いたまま、同名のリソースグループを Terraform で `apply` する設計になっており、実施すれば同名リソースの重複エラーになる）を見つけ、[11 §5 B-1](./docs/learning-plan/11-aws-foundational-exercise-design.md#5-terraform化後半適用と削除まで実行)と同じ「Terraform 適用前に手動構築分を削除する」注記を追加した。設計のみ・未実施という実施ステータス自体は変わらない。詳細は下記「1. 本リポジトリ」の該当エントリを参照。以下は 2026-09-09（11 の修正）時点の更新内容。
+最終更新：2026-09-09（追補3：[09 Zabbix 監視基盤構築演習設計](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)は、10・11・12・13が受けた内部一貫性レビューを一度も受けていなかった差分を埋めるためレビューした。Z-1 のリポジトリ登録 URL に、実在しない `/release/` パスセグメントが混入していた誤りを、Web 検索で複数の一次情報源（Zabbix 公式リポジトリのディレクトリ構造、独立した 3 件のインストール手順記事）を突き合わせて確認し、`https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/...`（`/release/` なし）へ訂正した。試験項目書の異常系件数（7 件/全14件・50%）は表の実際の行数と一致しており誤りは無かった。設計のみ・未実施という実施ステータス自体は変わらない。詳細は下記「1. 本リポジトリ」の該当エントリを参照。以下は 2026-09-09（10 Azure の修正）時点の更新内容。
 
 2026-09-04（[LEARNINGS.md 記入待ちリスト 8 番目](#0-b-learningsmd-記入待ちリスト本人が書く)（Phase 1 演習キット `00-create-internal-switch.ps1` を Hyper-V ホストで初回実行した際、`New-VMSwitch` が権限不足で失敗したのに、PowerShell の既定の非終了エラーのため「作成しました」と誤成功表示していた不具合）を踏まえ、同じ操作方針の兄弟キット [python-ops-kit](./docs/learning-plan/python-ops-kit/README.md) にはこの是正が一度も横展開されていなかった差分を埋めた。Hyper-V 系 5 本・タスク登録系 3 本、計 8 本の `.ps1` に `$ErrorActionPreference = 'Stop'` と `-ErrorAction Stop` を伴う try/catch（ネイティブコマンド `schtasks` を呼ぶ 2 本は `$LASTEXITCODE` 確認）を追加し、失敗が「成功」として表示される経路を塞いだ。監査の過程で、同じ 8 本が他キットと異なり UTF-8 BOM を一度も付与されていなかったことも判明したため（2026-08-26 に windows-ps-kit で発見・修正した文字化け・構文エラーの不具合と同種）、あわせて BOM を付与した。詳細は下記「1. 本リポジトリ」の該当エントリを参照。以下は 2026-08-30 時点の更新内容。
 
@@ -112,6 +112,22 @@ server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を 
 ---
 
 ## 1. 本リポジトリ（ns7jp/ns7jp）
+
+### 2026-09-09 の更新内容（追補3：09 Zabbix 監視基盤構築演習設計の技術的レビュー修正）
+
+[10 Azure構築演習設計の技術的レビュー修正](#2026-09-09-の更新内容追補210-azure構築演習設計の技術的レビュー修正)（本ファイル下記）に続けて、
+10・11・12・13 が受けた内部一貫性レビューを一度も受けていなかった[09 Zabbix 監視基盤構築演習設計](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)をレビューした。
+
+| # | 内容 | 修正 |
+| --- | --- | --- |
+| 1 | [4 章 構築手順書](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md#4-構築手順書)の Z-1（公式リポジトリ登録）が示す `wget` の URL に、実在しない `/release/` パスセグメントが混入していた（`https://repo.zabbix.com/zabbix/7.0/release/ubuntu/pool/...`）。この AI 支援セッションのネットワーク方針で `zabbix.com`/`repo.zabbix.com` への直接アクセスは遮断されているため、Web 検索で複数の独立した情報源（Zabbix 公式リポジトリのディレクトリ一覧のタイトル、howtoforge・computingforgeeks の Ubuntu 24.04 インストール手順記事）を突き合わせて確認したところ、いずれも `/release/` を含まない `https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu24.04_all.deb` だった | URL から `/release/` セグメントを削除し、複数の一次情報源で確認した正しいパスに訂正 |
+
+試験項目書の異常系件数（§7「異常系 7 件 / 全 14 件（50%）」）、Z-2 の導入パッケージ数（6 パッケージ）、Z-7 の起動サービス数（4 サービス）は
+いずれも表・コマンドの実際の項目数と一致しており、11・13 で見つかったような数え間違いは無かった。
+レビュー方法は 10・11 と同じ内部一貫性チェックに加え、この URL 1 点は Web 検索による外部情報との突き合わせも行った（Zabbix 公式ドメインへの
+直接アクセスがセッションのネットワーク方針で遮断されているため、検索結果のスニペットと複数記事の記述一致で裏付けた）。
+実機での構築確認ではなく、本演習の実施ステータス（設計のみ・未実施）は変わらない。
+整合性チェック（markdownlint・Mermaid 構文検証・リポジトリ内リンク／アンカーの解決チェック）を実行し、0 件を確認した。
 
 ### 2026-09-09 の更新内容（追補2：10 Azure構築演習設計の技術的レビュー修正）
 

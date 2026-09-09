@@ -194,7 +194,7 @@ flowchart TB
 
 | No | 段階 | 追加する内容 | 想定結果 | 判定 |
 | --- | --- | --- | --- | --- |
-| Z-1 | 公式リポジトリ登録 | `wget https://repo.zabbix.com/zabbix/7.0/release/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu24.04_all.deb` → `sudo dpkg -i zabbix-release_latest_7.0+ubuntu24.04_all.deb` → `sudo apt update` | `apt-cache policy zabbix-server-pgsql` の Candidate に `7.0` 系のバージョンが表示される | バージョン文字列に `7.0` を含む |
+| Z-1 | 公式リポジトリ登録 | `wget https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu24.04_all.deb` → `sudo dpkg -i zabbix-release_latest_7.0+ubuntu24.04_all.deb` → `sudo apt update` | `apt-cache policy zabbix-server-pgsql` の Candidate に `7.0` 系のバージョンが表示される | バージョン文字列に `7.0` を含む |
 | Z-2 | パッケージ導入 | `sudo apt install zabbix-server-pgsql zabbix-frontend-php php8.3-pgsql zabbix-nginx-conf zabbix-sql-scripts zabbix-agent2` | `dpkg -l \| grep zabbix` で 6 パッケージが導入済み | エラーなく完了 |
 | Z-3 | DB 作成 | `sudo -u postgres createuser --pwprompt zabbix` → `sudo -u postgres createdb -O zabbix -E Unicode -T template0 zabbix` | `psql -U zabbix -d zabbix -h 127.0.0.1 -c '\dt'` が接続に成功し、テーブル 0 件と表示される | 接続エラーなし |
 | Z-4 | スキーマ投入 | `zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz \| sudo -u zabbix psql zabbix` | `psql -U zabbix -d zabbix -c '\dt'` で 100 件以上のテーブルが表示される | エラーなく完了 |
