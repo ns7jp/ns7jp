@@ -1,0 +1,26 @@
+name: linux-web-rehearsal
+
+on:
+  pull_request:
+    paths:
+      - scripts/rehearse-linux-web.py
+      - .github/workflows/linux-web-rehearsal.yml
+  workflow_dispatch:
+
+jobs:
+  rehearsal:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run disposable rehearsal
+        run: python scripts/rehearse-linux-web.py > rehearsal.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: linux-web-rehearsal
+          path: rehearsal.json
