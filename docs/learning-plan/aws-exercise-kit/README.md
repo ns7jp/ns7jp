@@ -23,10 +23,12 @@
 - IAM ロール／インスタンスプロファイル（`AmazonSSMManagedInstanceCore` のみ付与、長期アクセスキーは使わない）
 - EC2 インスタンス（Ubuntu 24.04 LTS、`t2.micro`、IMDSv2 必須、gp3 8GB 暗号化）
 
-を、設計書 §5 の `Plan: 8 to add` に対応する構成としてコード化しています。`Plan: 8 to add` は `terraform plan` の
-出力に現れる行で、「これから 8 個のリソースを追加します」という意味です。ただし設計書 §5 B-6 が「実際の内訳は
-資源分割により前後する」と注記しているとおり、この数字は目安であり、表示される個数が 8 と完全に一致しなくても
-異常ではありません（下の「使い方の想定順序」3 の「8 種類前後」も同じ理由です）。
+を、設計書 §5 の `Plan: 10 to add` に対応する構成としてコード化しています。`Plan: 10 to add` は `terraform plan` の
+出力に現れる行で、「これから 10 個のリソースを追加します」という意味です（[main.tf](./main.tf) の `resource` ブロック
+10 個：VPC・サブネット・IGW・ルートテーブル・ルートテーブル関連付け・SG・IAM ロール・IAM ロールポリシー
+アタッチメント・IAM インスタンスプロファイル・EC2）。ただし設計書 §5 B-6 が「実際の内訳は資源分割により
+前後する」と注記しているとおり、この数字は目安であり、表示される個数が 10 と完全に一致しなくても
+異常ではありません（下の「使い方の想定順序」3 の「10 種類前後」も同じ理由です）。
 
 ### なぜこの構成なのか（1 行で説明できるようにしておく）
 
@@ -48,7 +50,7 @@
 1. [11 §4](../11-aws-foundational-exercise-design.md#4-構築手順書前半コンソールでの手動構築) A-1〜A-3（ルート MFA・IAM Identity Center・**予算アラート**）を先にコンソールで実施する。
    IAM Identity Center の権限セット（カスタム許可セット）は [iam-identity-center-permission-set.json](./iam-identity-center-permission-set.json) をそのまま貼り付けられる
 2. `aws configure sso` でプロファイル `lab-aws`（`variables.tf` の既定値）を作成する
-3. このディレクトリで `terraform init` → `terraform plan`（8 種類前後のリソースが追加されることを確認）
+3. このディレクトリで `terraform init` → `terraform plan`（10 種類前後のリソースが追加されることを確認）
 4. 内容を確認したうえで `terraform apply`
 5. [checklist.md](./checklist.md) に沿って SSM 接続・Nginx 導入・動作確認（[11 §5](../11-aws-foundational-exercise-design.md#5-terraform化後半適用と削除まで実行) B-8〜B-10）
 6. [7 章 試験項目書](../11-aws-foundational-exercise-design.md#7-試験項目書)・[6 章 障害演習](../11-aws-foundational-exercise-design.md#6-障害演習検知から復旧まで)を実施
