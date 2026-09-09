@@ -274,7 +274,7 @@ flowchart TB
 | B-3 | ディレクトリ作成 | `aws-exercise-kit/`（`main.tf`／`variables.tf`／`outputs.tf`／`.gitignore`）を新規作成する | `terraform.tfstate` が `.gitignore` に含まれる | 含まれる |
 | B-4 | コード化 | [4 章](#4-構築手順書前半コンソールでの手動構築)の A-4〜A-10 と同じ構成を HCL で書く（下記コード例を参照） | `terraform fmt -check` が差分なし、`terraform validate` が `Success` | 両方成功 |
 | B-5 | `terraform init` | プロバイダをダウンロードする | `Terraform has been successfully initialized!` | 表示される |
-| B-6 | `terraform plan` | 出力を読み、作成されるリソース数が A-4〜A-10 の 8 種類と一致するか確認する | `Plan: 8 to add, 0 to change, 0 to destroy`（実際の内訳は資源分割により前後する） | 追加のみで変更・削除が 0 |
+| B-6 | `terraform plan` | 出力を読み、作成されるリソースが A-4〜A-10 の 7 段階（VPC・サブネット・IGW・ルートテーブル・SG・IAM ロール・EC2）に対応することを確認する。1 段階が複数の Terraform リソースに分かれる場合がある（[aws-exercise-kit の実コード](./aws-exercise-kit/main.tf)では `aws_route_table_association`・`aws_iam_role_policy_attachment`・`aws_iam_instance_profile` を含む計 10 リソース） | `Plan: 10 to add, 0 to change, 0 to destroy`（実際の内訳は資源分割により前後する） | 追加のみで変更・削除が 0 |
 | B-7 | `terraform apply` | `plan` の内容を確認したうえで `yes` を入力する | `Apply complete!` | エラーなく完了 |
 | B-8 | 動作確認 | Terraform が作った EC2 に SSM で接続し、[A-12・A-13](#4-構築手順書前半コンソールでの手動構築)と同じ手順で Nginx を導入し、ブラウザで確認する | 手動構築時と同じ結果が再現する | 再現する |
 | B-9 | 冪等性の確認 | 何も変更せずに 2 回目の `terraform apply` を実行する | `No changes. Your infrastructure matches the configuration.` | 変更ゼロ |
@@ -398,7 +398,7 @@ resource "aws_instance" "web" {
 
 ## 7. 試験項目書
 
-異常系 5 件 / 全 13 件（約 38%）で、[03 §4](./03-build-process.md#異常系を必ず入れる理由)が定める「異常系 3 割以上」を満たします。実測結果・判定・エビデンス・実施日は未記入（未実施のため）。
+異常系 6 件 / 全 13 件（約 46%）で、[03 §4](./03-build-process.md#異常系を必ず入れる理由)が定める「異常系 3 割以上」を満たします。実測結果・判定・エビデンス・実施日は未記入（未実施のため）。
 
 | No | 試験分類 | 観点 | 前提条件 | 手順 | 期待結果 | 実測結果 | 判定 | エビデンス | 実施日 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
