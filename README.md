@@ -35,13 +35,13 @@ PC や Linux の準備から必要な方は、[開始前診断と最初の30分]
 
 ```mermaid
 flowchart LR
-    U[利用者] -->|画面を要求| N[Nginx: 入口]
-    N -->|要求を渡す| A[Flask / Gunicorn: 本体]
-    P[Prometheus: 計測・条件判定] -->|数値を取りに行く| A
-    G[Grafana: 表示] -->|数値を問い合わせる| P
-    C[Alloy: ログを運ぶ] -->|送信| L[Loki: ログを保存・検索]
+    U["利用者"] -->|画面を要求| N["Nginx: 入口"]
+    N -->|要求を渡す| A["Flask / Gunicorn: 本体"]
+    P["Prometheus: 計測・条件判定"] -->|数値を取りに行く| A
+    G["Grafana: 表示"] -->|数値を問い合わせる| P
+    C["Alloy: ログを運ぶ"] -->|送信| L["Loki: ログを保存・検索"]
     G -->|ログを問い合わせる| L
-    P -->|警告を渡す| M[Alertmanager: 通知をまとめる]
+    P -->|警告を渡す| M["Alertmanager: 通知をまとめる"]
 ```
 
 矢印のラベルは、要求・取得・送信の動作です。応答は要求元へ返ります。一部を省略した図で、詳細は[構成図](./docs/architecture-diagram.md)にあります。ログは「いつ何が起きたか」の記録、数値は CPU 使用率などの測定値です。
