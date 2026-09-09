@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "case": "training-linux-web-01",
+  "performed_at": "2026-09-09T06:12:14.268365+00:00",
+  "actor": "AI-assisted execution; not learner assessment",
+  "environment": {
+    "system": "Linux",
+    "release": "6.18.33.2-microsoft-standard-WSL2",
+    "python": "3.12.3"
+  },
+  "script_sha256": "2a0d00a8fcd379cb0ef458906f961d1be33b8c94291ba98cfdbb20c23cd39e28",
+  "scope": "temporary directory; Python HTTP server; IPv4 loopback only",
+  "checks": [
+    {
+      "id": "T01-loopback-bind",
+      "expected": "127.0.0.1",
+      "actual": "127.0.0.1",
+      "result": "PASS"
+    },
+    {
+      "id": "T02-http-initial",
+      "expected": [
+        200,
+        "training-linux-web-01: version 1\n"
+      ],
+      "actual": [
+        200,
+        "training-linux-web-01: version 1\n"
+      ],
+      "result": "PASS"
+    },
+    {
+      "id": "T03-missing-resource",
+      "expected": 404,
+      "actual": 404,
+      "result": "PASS"
+    },
+    {
+      "id": "T04-backup-integrity",
+      "expected": "0ccbd61bb355b3a3bf01b3c18612ed532a39486c4fc212e0fd868561a527e8be",
+      "actual": "0ccbd61bb355b3a3bf01b3c18612ed532a39486c4fc212e0fd868561a527e8be",
+      "result": "PASS"
+    },
+    {
+      "id": "T05-change-visible",
+      "expected": [
+        200,
+        "training-linux-web-01: version 2\n"
+      ],
+      "actual": [
+        200,
+        "training-linux-web-01: version 2\n"
+      ],
+      "result": "PASS"
+    },
+    {
+      "id": "T06-restore-http",
+      "expected": [
+        200,
+        "training-linux-web-01: version 1\n"
+      ],
+      "actual": [
+        200,
+        "training-linux-web-01: version 1\n"
+      ],
+      "result": "PASS"
+    },
+    {
+      "id": "T07-restore-integrity",
+      "expected": "0ccbd61bb355b3a3bf01b3c18612ed532a39486c4fc212e0fd868561a527e8be",
+      "actual": "0ccbd61bb355b3a3bf01b3c18612ed532a39486c4fc212e0fd868561a527e8be",
+      "result": "PASS"
+    },
+    {
+      "id": "T08-worker-stopped",
+      "expected": false,
+      "actual": false,
+      "result": "PASS"
+    },
+    {
+      "id": "T09-service-stopped",
+      "expected": true,
+      "actual": true,
+      "result": "PASS"
+    },
+    {
+      "id": "T10-temporary-files-removed",
+      "expected": false,
+      "actual": false,
+      "result": "PASS"
+    }
+  ],
+  "not_run": [
+    "VM provisioning",
+    "Ansible",
+    "Docker",
+    "systemd",
+    "firewall",
+    "reboot",
+    "long-term monitoring",
+    "human acceptance",
+    "PJ stage approval"
+  ],
+  "finished_at": "2026-09-09T06:12:15.017589+00:00",
+  "result": "PASS"
+}
