@@ -52,7 +52,8 @@ export function buildSnapshot({ config = discoveryConfig, observedAt = FIXTURE_T
       conclusion: ciRuns === 'success' ? 'success' : 'failure', url: `https://github.com/${spec.full_name}/actions/runs/1`, updated_at: observedAt }];
     return { id: spec.id, full_name: spec.full_name, head_sha: head, default_branch: 'main', files, tree_paths: spec.files.slice(), open_prs: prs, ci_runs: runs };
   });
-  return { schema_version: 2, kind: 'github-api-read-only', observed_at: observedAt, completed_at: observedAt, collection_complete: true, errors: [], repositories };
+  // data_kind は合成の目印。ループはこの目印を持つスナップショットをデモか一時ルート以外で拒否する。
+  return { schema_version: 2, kind: 'github-api-read-only', data_kind: 'synthetic', observed_at: observedAt, completed_at: observedAt, collection_complete: true, errors: [], repositories };
 }
 export function updateFile(snapshot, fullName, path, text) {
   const repo = snapshot.repositories.find(r => r.full_name === fullName);

@@ -35,9 +35,9 @@ flowchart LR
 
 | ファイル | 役割 | 規模 |
 | --- | --- | --- |
-| `tools/portfolio-loop/loop.mjs` | 点検、工程の実行、作業枠の合成、取り込み、集約、次の一手、CLI | 約 550 行 |
+| `tools/portfolio-loop/loop.mjs` | 点検、工程の実行、作業枠の合成、取り込み、集約、次の一手、CLI | 約 600 行 |
 | `tools/portfolio-loop/fixture.mjs` | schema v2 の合成スナップショット、一時ルートの用意、フィクスチャ CLI | 約 100 行 |
-| `tools/portfolio-loop/tests/*.test.mjs` | ネットワークなしの回帰試験 | 22 件 |
+| `tools/portfolio-loop/tests/*.test.mjs` | ネットワークなしの回帰試験 | 30 件 |
 
 ## 3. 工程の順序と契約
 
@@ -49,7 +49,7 @@ flowchart LR
 | 1 | 監査 | `runCycle({ config, outputDir, now })`。`--offline` なら `replay` | `discovery.config.json`、前回 `state.json` | 監査の `latest.json`、`runs/<時刻>/`、収集状態 | なし。収集不全でも以降を続け、探索だけ止める |
 | 2 | キャリア計画 | `career.execute(['check'])` → `['plan']` | `profile.json` | 週の配分、信号、通知 | `profile.json` がないとき（未初期化として記録） |
 | 3 | 自律型成長 | `growth.execute(['check'])` → `['plan']` | career の結果、SE 台帳 | 学習候補、枠の接続状態 | career 未初期化、または `learner_id` が設定済みで SE 台帳が読めないとき |
-| 4 | 実測の取り込み | `validateProtocol` → `evaluate` → `recordFeedback` | `inbox/<実験ID>/` の実験票・結果・証拠 | 判定、`done/` への移動、台帳への記録 | inbox が空、または 3 点が揃わない項目 |
+| 4 | 実測の取り込み | `validateProtocol` → `evaluate` → `recordFeedback` | `inbox/<実験ID>/` の実験票・結果・証拠 | 判定、台帳への記録、`done/` への移動。全試行が揃わない NOT_READY は inbox に残す | inbox が空、または 3 点が揃わない項目 |
 | 5 | 作業枠の合成 | 独自 | 監査結果、pending、台帳、inbox | `{schema_version, reviewed_at, occupied, closed}` の 4 項目だけ | なし |
 | 6 | 探索 | `runDiscovery({ snapshot, context, outputDir, proposals, now })` | スナップショット、作業枠、独自提案 | 改善キュー、新候補、問い、実験票の下書き | 収集不全のとき |
 | 7 | 集約 | 独自 | 全工程の結果 | `summary.json`、`summary.md`、`latest.json`、次の一手 | なし |
@@ -57,8 +57,10 @@ flowchart LR
 取り込み（4）を探索（6）より前に置く理由は、同じ実行で「判定」と「その結果から派生する追試候補」の両方が出るためです。
 探索は終了した実測記録から vary / invert / combine の子候補を生成します。既存の運用手順は探索 → 取り込みの順で書かれていましたが、月曜に 2 回実行する必要をなくすため、この順に固定しました。
 
-時刻の扱いは次のとおりです。監査の収集が終わってから評価時刻を確定します。収集の完了時刻より前の評価時刻をスナップショットの検査が拒否するためです。
-career と growth には時刻を返す関数を、探索・登録・評価には ISO 文字列を渡します。CLI からは時刻を注入できません。テストとデモだけがライブラリ経由で固定時刻を使います。
+時刻の扱いは次のとおりです。監査の収集だけが実時刻を使い、収集が終わってから評価時刻を 1 つ確定します。収集の完了時刻より前の評価時刻をスナップショットの検査が拒否するためです。
+以降の career・growth・取り込み・探索・記録はすべてこの評価時刻を使います。CLI からは時刻を注入できません。テストとデモだけがライブラリ経由で固定時刻を使います。
+
+取り込みの順序は、検証 → 探索へ記録 → 採否台帳へ記録（同じ実験票は一度だけ）→ `done/` へ移動です。移動に失敗しても判定と台帳の記録は残り、警告として報告します。
 
 ## 4. 作業枠の判定規則
 
@@ -68,13 +70,15 @@ career と growth には時刻を返す関数を、探索・登録・評価に�
 | --- | --- | --- |
 | `AUDIT_DRAFT_PENDING` | 監査の修正案状態が CREATED / EXISTING_PENDING_DRAFT / PENDING_DRAFT_NEEDS_REBASE / PENDING_REQUIRES_REVIEW | 監査の `latest.json` |
 | `AUDIT_PENDING_FILE` | `pending.json` が存在する | 監査の保存先 |
-| `AUDIT_URGENT_OR_PR_REVIEW` | 優先度 1 の課題に EXISTING_PR_REVIEW または NEEDS_REVIEW がある（open PR、CI 失敗、資料欠落、主張境界の要確認） | 監査の `analysis.json` |
+| `AUDIT_URGENT_OR_PR_REVIEW` | 共通枠を実際に占有する優先度 1 の課題がある。open PR（EXISTING_PR_REVIEW）、当該 HEAD の CI 失敗、主張境界の要確認に限る。該当した課題 ID を `basis_findings` に残す | 監査の `analysis.json` |
 | `COLLECTION_INCOMPLETE` | 収集不全・古い観測 | 監査の収集状態 |
 | `EXPERIMENT_INBOX_PENDING` | 取り込めない inbox 項目が残っている | `inbox/` |
 | `EXPERIMENT_ITERATING` | 採否台帳の最新の本人判断に ITERATE がある | `decisions.json` |
 | `CAREER_CAPACITY_UNKNOWN` | キャリア計画が未初期化で容量が分からない | `profile.json` |
 | `FLAG_OCCUPIED` | `--occupied` を付けた | 引数 |
 | `HUMAN_CONFIRMED_FREE` / `_OVERRIDES` | `--free` を付けた。空いていると本人が確認した週だけ | 引数 |
+
+プローブ行の変化（SOURCE_REVIEW）や監査対象ファイルの欠落（SOURCE_MISSING）は作業枠を占有せず、次の一手 `REVIEW_AUDIT_FINDING` として個別に出します。
 
 除外 ID `closed` は、採否台帳の**候補ごとの最新の本人判断**が ADOPT / REJECT / PARK のものです。ITERATE と取り込みだけの記録は除外しません。
 既知の候補（カタログの 8 件と探索の登録簿）にない ID は捨て、警告として記録します。探索は未知の ID を含む作業枠を拒否するためです。
@@ -87,6 +91,7 @@ stateDiagram-v2
   候補 --> 下書き: run が選択し protocol.draft.json を作成
   下書き --> 登録済み: register が 4 項目を埋め inbox を用意
   登録済み --> 測定済み: 本人が全試行を測り results.json と証拠を置く
+  測定済み --> 測定済み: 全試行が揃わなければ NOT_READY のまま inbox に残る
   測定済み --> 判定済み: run が evaluate と recordFeedback を実行し done/ へ移動
   判定済み --> 採用: done ADOPT
   判定済み --> 見直し: done ITERATE
@@ -123,7 +128,8 @@ stateDiagram-v2
 ## 7. 手軽に回すための仕組み
 
 - **`run` だけ**。点検、収集、計画、取り込み、探索、集約、次の一手までを 1 回で行います。`status` と `demo` は任意の補助です。
-- **手書き JSON なし**。作業枠は合成、採否は `done`、実験票は `register`、却下は `dismiss` が書きます。
+- **手書き JSON なし**。作業枠は合成、採否は `done`、実験票は `register`、却下は `dismiss`、学習枠の接続は `bind-slot` が書きます。結果の雛形は `data_kind: NOT SET` で、実測した本人が `measured` に書き換えるまで取り込まれません。
+- **コマンド例は保存先付き**。`--root` を使った実行では、次の一手のコマンド例にも同じ `--root` が付きます。
 - **次の一手のカード**。優先順に並べた行動と、そのまま打てるコマンド例を出します。
 - **エラー分類**。元のメッセージを変えずに `[LOCKED]` `[NOT_INITIALIZED]` `[CORRUPT_STATE]` などの分類と日本語の対処を添えます。
 - **前提の早期停止**。ロック、壊れた pending、壊れた台帳、探索状態の不整合は、監査が `runs/` を書く前に止めます。
@@ -151,8 +157,8 @@ stateDiagram-v2
 | 4 | `REVIEW_PENDING_DRAFT` | 監査の修正案がレビュー待ち |
 | 5 | `INIT_CAREER` / `REVIEW_PROFILE` | 未初期化、または確認から 21 日以上（28 日で縮退） |
 | 6 | `COMPLETE_INBOX` / `FIX_INBOX` | inbox の不足、取り込み失敗 |
-| 7 | `DECIDE` | 判定済みで本人判断がない実験 |
-| 8 | `BIND_SLOT` | 学習枠が未接続・再接続要 |
+| 7 | `DECIDE` | 判定済みで本人判断がない実験。全試行が揃わない実験は `COMPLETE_MEASUREMENT` |
+| 8 | `BIND_SLOT` / `FIX_LEARNER_CONNECTION` / `REVIEW_AUDIT_FINDING` | 学習枠が未接続・再接続要。SE 台帳が読めず成長を飛ばした。プローブ行の変化や資料欠落の要確認 |
 | 9 | `REGISTER_PROTOCOL` | 選択候補の下書きが未登録 |
 | 10 | `PREPARE_CANDIDATE` | 選択候補あり |
 | 11 | `RESEARCH` / `DISMISS_OR_PARK` / `SLOT_OCCUPIED` | 探索の状態に応じて |
@@ -162,15 +168,15 @@ stateDiagram-v2
 
 | 不変条件 | 実装 | 試験 |
 | --- | --- | --- |
-| すべての出力に `authorization: NONE`、`publication_allowed: false`、`external_actions_allowed: false`、`se_record_writes_allowed: false`、`runtime_status: NOT_RUN` | `STAMP` を `stamp()` で付与 | 各試験の `stamped()` |
-| 合成データを実測にしない | 取り込みは `data_kind: measured` だけ受け付け、探索も合成を拒否。`demo` は `demo: true` と `合成` 表示 | synthetic inbox、demo |
-| 収集は `discovery.config.json` の 3 リポジトリだけ。GET 以外なし | 既存 `runCycle` のみ。ループ側にネットワークなし | 試験冒頭で `fetch` を例外化 |
-| 書き込みは `.local/` 配下だけ | 5 つの保存先を定数化。docs/ への書き込み経路なし | フィクスチャ CLI が docs/ を拒否 |
+| すべての JSON 出力と記録（既存ツールが鍵集合を固定する results の雛形を除く）に `authorization: NONE`、`publication_allowed: false`、`external_actions_allowed: false`、`se_record_writes_allowed: false`、`runtime_status: NOT_RUN`。文書出力には同じ内容のフッター | `STAMP` を `stamp()` で付与、`FOOTER` を末尾に付与 | 各試験の `stamped()` と `FOOTER` の照合 |
+| 合成データを実測にしない | 取り込みは `data_kind: measured` だけ受け付ける。探索そのものはスナップショットの由来を検査しないため、`data_kind: synthetic` の合成スナップショットは `demo` か一時ルート以外で拒否し、実行結果に `synthetic: true` と `合成` 表示を付ける | synthetic inbox、合成スナップショットの拒否、demo |
+| 収集は `discovery.config.json` の 3 リポジトリだけ。GET 以外なし | 既存 `runCycle` のみ。ループ側にネットワークなし。`PORTFOLIO_LOOP_NO_NETWORK=1` で収集自体を禁止できる | ライブラリ試験は `fetch` を例外化。CLI 試験は `--offline` と環境変数で守る |
+| 書き込みは `.local/` 配下だけ（`demo` と雛形のないルートでの `init` は、そのルートに雛形と参照文書の複製を置く） | 5 つの保存先を定数化。docs/ への書き込み経路なし。`demo` はリポジトリのルートと既存の `.local` を持つルートを拒否 | フィクスチャ CLI が docs/ を拒否、demo の拒否 |
 | 登録済み記録を上書きしない | `wx` 作成、tmp + rename、`done/` は移動のみ | register の重複拒否、rerun の下書き数 |
 | ロックを自動で外さない | `enforce` は停止するだけ。pid の生死を表示 | ロック残存の試験 |
 | 壊れた状態を黙って直さない | 点検で停止し元のメッセージを表示 | pending、台帳の試験 |
 | 作業枠は 4 項目だけ。既定は使用中 | `synthesize` 相当の合成部 | context.json の鍵集合、未初期化ルート |
-| 時刻は 1 実行 1 つ。収集後に確定 | `nowIso = clock()` を `runCycle` 後に取得 | 未来観測の拒否 |
+| 時刻は 1 実行 1 つ。収集後に確定し、career・growth を含む全工程で共有 | `nowIso = clock()` を `runCycle` 後に取得し、以降は `() => nowIso` を渡す | 未来観測の拒否、career / growth の `latest.at` が評価時刻と一致 |
 | 鮮度を迂回しない | 24 時間判定は既存ツールに委ね、古い再生は NEEDS_REFRESH | 古いスナップショットの試験 |
 | 本人の時間を増やさない | `profile.json`、`bind-slot`、SE 台帳を書かない | 未初期化ルートで `.local/engineer-career` が作られない |
 | 元のエラーメッセージを保つ | `Loop stopped: <元の文>` に分類を添えるだけ | CLI の試験 |
@@ -180,7 +186,7 @@ stateDiagram-v2
 | パス | 内容 |
 | --- | --- |
 | `.local/portfolio-loop/decisions.json` | 採否台帳 |
-| `.local/portfolio-loop/inbox/<実験ID>/` | `protocol.registered.json`、`evidence/context.json`、`results.template.json`。本人が `results.json` と証拠を追加 |
+| `.local/portfolio-loop/inbox/<実験ID>/` | `protocol.registered.json`、`evidence/context.json`、`results.template.json`（`data_kind: NOT SET`）。本人が `results.json`（実測なら `measured`）と証拠を追加 |
 | `.local/portfolio-loop/done/<実験ID>-<時刻>/` | 取り込み済みの実験（移動のみ） |
 | `.local/portfolio-loop/runs/<時刻>-<id>/` | `context.json`、`summary.json`、`summary.md` |
 | `.local/portfolio-loop/latest.json` | 最新実行の要約と次の一手 |

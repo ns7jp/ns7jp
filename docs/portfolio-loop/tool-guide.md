@@ -14,7 +14,9 @@ node tools/portfolio-loop/loop.mjs init 10
 node tools/portfolio-loop/loop.mjs run
 ```
 
-共通オプション `--root DIR` は保存先のルートです。既定はリポジトリのルートで、`.local/` 配下だけに書きます。
+共通オプションは `--root DIR`（保存先のルート。既定はリポジトリのルート）と `--json`（結果を JSON で出力）です。
+`--root` に雛形（`tools/portfolio-audit/career.config.example.json` と参照文書）がないディレクトリを指定した場合、`init` はデモと同じ複製をそのルートへ置いてから初期化します。それ以外の書き込みは `.local/` 配下だけです。
+環境変数 `PORTFOLIO_LOOP_NO_NETWORK=1` を設定すると、`--offline` のない `run` は収集を行わず停止します。
 
 ## 2. コマンド
 
@@ -26,20 +28,20 @@ node tools/portfolio-loop/loop.mjs run
 | `done ID DECISION "理由"` | 本人の採否を台帳へ記録 | `decisions.json` |
 | `register DRAFT.json ...` | 実験票の下書きを登録し inbox を用意 | `inbox/<実験ID>/` |
 | `dismiss INV-<16hex> "理由"` | 動的候補を探索の登録簿で却下し、台帳に REJECT を記録 | 探索の保存先、`decisions.json` |
-| `demo` | 一時ルートに雛形を複製し、合成データで全工程を実行 | 一時ディレクトリだけ |
+| `bind-slot ACTION_ID` | 既存 `growth.mjs bind-slot` を同じ `--root` で実行し、学習枠を明示して接続 | `.local/autonomous-growth/settings.json` |
+| `demo [--root 空のディレクトリ]` | 雛形を複製し、合成データで全工程を実行。既定は一時ディレクトリ。リポジトリのルートや既に `.local` を持つルートは拒否 | 指定したルート（雛形の複製を含む） |
 
 ### run のオプション
 
 | オプション | 意味 |
 | --- | --- |
-| `--offline SNAPSHOT.json` | 保存済みまたは合成の schema v2 スナップショットを再生。ネットワークなし。修正案を生成しない |
+| `--offline SNAPSHOT.json` | 保存済みの schema v2 スナップショットを再生。ネットワークなし。修正案を生成しない。`data_kind: synthetic` の合成スナップショットは `demo` か一時ディレクトリ配下の `--root` でだけ受け付ける |
 | `--proposals FILE` | `{ "schema_version": 1, "proposals": [] }` 形式の独自提案（最大 4 件）。現在の信号 ID が必要 |
 | `--occupied` | 作業枠を使用中として扱う |
 | `--free` | 空いていると本人が確認した週に付ける。根拠に `HUMAN_CONFIRMED_FREE` を残す |
-| `--json` | カードの代わりに summary の JSON を出力 |
 
-`--offline` に合成スナップショットを渡した実行は、実在の保存先でも `replay-state.json` に分けて記録され、修正案・pending は作られません。
-ただし探索の登録簿には合成の信号から候補が入ります。実在のルートで合成を再生する用途は試験だけにし、通常は `demo` を使います。
+保存済みの実スナップショットを `--offline` で再生した実行は、`replay-state.json` に分けて記録され、修正案・pending は作られません。
+探索はスナップショットの由来を検査しないため、合成スナップショットを実在のルートで再生すると合成由来の候補が登録簿に残ります。これを防ぐため、ループは合成の目印を持つスナップショットを `demo` か一時ディレクトリ以外で拒否します。
 
 ### register のオプション
 
@@ -60,17 +62,18 @@ ID は既知の候補（カタログの `INV-001`〜`INV-008` と探索の登録
 ```text
 .local/portfolio-loop/inbox/INV-001-<uuid>/
   protocol.registered.json   register が作成。変更しない
-  results.template.json      protocol_sha256 入りの雛形。runs を埋めて results.json として保存
-  results.json               本人が作成。data_kind は実測なら measured
+  results.template.json      protocol_sha256 入りの雛形。data_kind は NOT SET
+  results.json               本人が作成。runs を埋め、実測なら data_kind を measured に書き換える
   evidence/context.json      register が複製。ハッシュが実験票と一致する必要がある
   evidence/<artifact>        各試行の証拠。results の artifact.path と sha256 に対応
 ```
 
 3 点（実験票、`results.json`、`evidence/context.json`）が揃った項目だけを `run` が取り込みます。
 `results.json` の形式、各試行の項目、評価の判定は[改善実験の CLI](../server-innovation/tool-guide.md)の 5 節・6 節と同じです。
-`data_kind: synthetic` の結果は取り込みを拒否し、inbox に残し、作業枠を使用中にします。合成の練習値に `measured` と書かないでください。
+`data_kind` が `measured` 以外（`synthetic`、雛形のままの `NOT SET`）の結果は取り込みを拒否し、inbox に残し、作業枠を使用中にします。合成の練習値に `measured` と書かないでください。
+全試行が揃っていない結果は `NOT_READY` として inbox に残り、探索にも台帳にも記録されません。次の一手に `COMPLETE_MEASUREMENT` が出ます。
 
-取り込みが成功すると、項目は `done/<実験ID>-<時刻>/` へ移動し、台帳に `source: intake` の行が入ります。
+取り込みが成功すると、台帳に `source: intake` の行が入り、項目は `done/<実験ID>-<時刻>-<id>/` へ移動します。移動に失敗しても判定と台帳の記録は残り、警告として報告されます。
 同じ実験票と結果の再取り込みは重複として記録せず、移動だけ行います。
 
 ## 4. 採否台帳
@@ -93,7 +96,8 @@ ID は既知の候補（カタログの `INV-001`〜`INV-008` と探索の登録
 | `next_actions` | 優先順の行動。`code`、`title`、`command`、`detail` |
 | `notify` | いずれかの系統に意味のある変化があるか。時刻の変化では true にならない |
 
-`status` は `--json` で同じ形式の点検結果を出します。実行はしません。
+`status` は `--json` で点検結果を出します。実行はしません。次の一手は前回の `latest.json` と現在の状態から導き、直前の `run` と同じ判定になります。
+カードやテキスト出力の末尾には、JSON と同じ権限表示のフッター（authorization NONE など 5 項目）が付きます。
 
 ## 6. 終了コード
 
@@ -116,6 +120,7 @@ ID は既知の候補（カタログの `INV-001`〜`INV-008` と探索の登録
 | `SYNTHETIC_REJECTED` | `Synthetic results cannot update ...`、`must be measured` | 合成結果を inbox から外す |
 | `CONTEXT` | `Invalid work context` | 除外 ID が既知の候補か確認 |
 | `CAPACITY` | `... capacity reached` | 候補の却下・保留と過去の feedback を本人がレビュー |
+| `NO_NETWORK` | `Live collection is disabled by PORTFOLIO_LOOP_NO_NETWORK=1` | `--offline` を付けるか環境変数を外す |
 | `USAGE` | `Usage: ...`、`Unknown command` | `--help` |
 | `INVALID_INPUT` | 上記以外 | 入力ファイル・引数・状態を確認 |
 
@@ -126,5 +131,6 @@ ID は既知の候補（カタログの `INV-001`〜`INV-008` と探索の登録
 - `status` で「監査: 未実行」なら、まだ `run` していないか、保存先が違います。`--root` を確認します。
 - 探索の候補が `BACKLOG_FULL` なら、`dismiss` か `done ... PARK` で減らします。上限は未着手 12 件、登録 240 件、実測記録 100 件です。
 - キャリア計画が確認から 28 日を超えると週次見直しだけの計画になります。ループは `updated_at` を更新しません。本人が内容を確認して更新します。
-- `demo` のルートは一時ディレクトリです。残したい場合は `--root` を指定します。
+- `demo` のルートは一時ディレクトリです。残したい場合は空のディレクトリを `--root` に指定します。そのルートには雛形と参照文書の複製、合成由来の候補が入るため、実運用のルートと分けます。
+- 収集不全のときはカードと `summary.md` に収集エラーが出ます。HTTP 401/403 なら `GITHUB_TOKEN` の有効性を確認するか、未設定に戻します。
 - 定期実行は利用者側のタスク登録で行います。予定どおり動いたかは `latest.json` の時刻で確認します。

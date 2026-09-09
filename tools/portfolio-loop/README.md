@@ -13,7 +13,7 @@ node tools/portfolio-loop/loop.mjs run
 | --- | --- |
 | `loop.mjs` | 点検、工程の実行、作業枠の合成、実測の取り込み、集約、次の一手、CLI |
 | `fixture.mjs` | 合成スナップショット、一時ルートの用意、フィクスチャ CLI |
-| `tests/loop.test.mjs` | ループの回帰試験（ネットワークなし） |
+| `tests/loop.test.mjs` | ループの回帰試験（ライブラリ呼び出しは `fetch` を無効化、CLI は `--offline` と `PORTFOLIO_LOOP_NO_NETWORK` で保護） |
 | `tests/fixture.test.mjs` | フィクスチャの整合性試験 |
 
 設計・入力仕様・運用・検証記録は [docs/portfolio-loop](../../docs/portfolio-loop/README.md) にあります。
