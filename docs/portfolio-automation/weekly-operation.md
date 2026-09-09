@@ -14,6 +14,7 @@ Codexの修正は両方を合わせて原則1件・45分の枠とし、スケジ
 方法そのものの改善には[改善実験システム](../server-innovation/README.md)を接続します。
 同じスナップショットから仮説を並べ、実装前に既存の緊急修正・pending・career・growthと共通枠を照合します。
 改善実験の準備や修正も原則1件45分の内訳とし、事前登録した比較と実測の結果から次の方法を選びます。
+この一連の手順は[自律型ポートフォリオ改善イノベーションループ](../portfolio-loop/README.md)の `run` が同じ順で実行します。作業枠の context は採否台帳と pending から合成され、手書きは不要です。
 発火点の補充には[探索と学習](../server-innovation/discovery.md)を使います。既存cycleに拡張のdiscovery.config.jsonを渡して一度だけ収集し、
 discovery cycleで文章の不確実性・能動的な反例・新仮説を記録します。実測はfeedbackへ戻し、同じ根拠から無限に候補を量産しません。
 
