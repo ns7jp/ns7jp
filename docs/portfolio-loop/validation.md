@@ -25,6 +25,7 @@
 | Markdown lint（markdownlint-cli2、リポジトリ全体） | 164 files / 0 issues |
 | Mermaid 構文（`scripts/check-mermaid.mjs`、リポジトリ全体） | 46 diagrams / 0 failed（本件で 3 図追加） |
 | リポジトリ内リンク（`scripts/check-engineer-links.mjs` に `docs/portfolio-loop` を追加）とアンカーの解決 | 0 件 |
+| GitHub Actions（`docs-check` の markdownlint・mermaid-parse・link-check、`server-engineer-check`、`server-projects-check`） | PR #111 のコミット `282b1bf6b329b495201b380b72a95be2a94fcb8e`（main `34c6540` を取り込んだ版）で 5 ジョブ成功（2026-09-09 06:00 UTC）。以後のコミットは PR の CI で個別に確認する |
 
 試験はファイル冒頭で `fetch` を例外に置き換え、ネットワークを使わないことを保証しています。書き込み先は `mkdtemp` の一時ルートだけです。
 デモの所要時間は上記環境で 1 秒未満でしたが、参考値であり、実測記録として扱いません。
@@ -43,7 +44,7 @@
 
 ## NOT RUN
 
-- 本ループの差分に対する GitHub Actions の実行（`docs-check` へのステップ追加は行ったが、この差分での実行結果は未確認）。
+- GitHub Actions は上記コミットで確認済み。それ以後にこのブランチへ追加したコミットは、PR の CI 結果を個別に確認する。
 - 本ループ経由での GitHub API の実収集（`run` を `--offline` なしで実行すること）。この作業環境では Node.js 22 の `fetch` がプロキシ設定を使わないため、収集不全（終了コード 3）になる見込み。
 - 定期タスクからの週次実行、通知の実配信。
 - 実測結果の `register` → 測定 → inbox → 取り込み → `done` の一巡を、実際の測定値で行うこと（試験はテスト構築値で経路だけを確認）。
