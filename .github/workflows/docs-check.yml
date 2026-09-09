@@ -17,6 +17,8 @@ jobs:
         run: npx -y markdownlint-cli2 "**/*.md" "#node_modules"
       - name: Test portfolio audit prototype
         run: node --test tools/portfolio-audit/tests/audit.test.mjs
+      - name: Test server innovation decisions
+        run: node --test tools/server-innovation/tests/*.test.mjs
 
   mermaid-parse:
     runs-on: ubuntu-latest

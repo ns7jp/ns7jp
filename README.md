@@ -116,6 +116,8 @@ flowchart LR
 
 継続改善の仕組みは[詳細設計](./docs/portfolio-automation/design.md)と[週次運用手順](./docs/portfolio-automation/weekly-operation.md)にまとめています。最新GitHub情報の収集、実測課題の検出、重複管理、限定した修正案の生成を実装しています。定期実行は利用者側のタスク設定で管理し、公開や実機操作の許可とは分けています。
 
+構築・復旧・復元の方法を比較して改善する[改善実験システム](./docs/server-innovation/README.md)では、8つの初期仮説に加え、記録と能動的なローカル比較から新しい仮説を補充します。事前登録・全試行と証拠の照合・効果判定を行い、結果を次の探索へ戻します。本人の技能・実機の受け入れ・公開判断は別に記録します。
+
 ## Contact
 
 - Email: [net7jp@gmail.com](mailto:net7jp@gmail.com)
