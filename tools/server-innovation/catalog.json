@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "experiments": [
+    {
+      "id": "INV-001",
+      "title": "復旧計測をHTTP・healthy・再起動証拠へ分解する",
+      "priority": 1,
+      "value": 5,
+      "learning": 5,
+      "preparation_minutes": 35,
+      "marker": "## 2026-09-08：lab-base01のD-1アプリ自動復旧",
+      "hypothesis": "HTTP復帰とhealthy到達を別々に採録し、異常終了と再起動の証拠を同じ結果に結ぶと、復旧判定の見直し時間が減る。",
+      "change": "計測スクリプトのログ設計と結果検査を改善し、旧版と新版で同じ復旧記録の確認作業を比較する。実際の復旧速度が上がるとは仮定しない。",
+      "paths": [
+        "scripts/drills/d1-process-down.sh",
+        "docs/drills"
+      ],
+      "metric": {
+        "name": "復旧記録の判定に要した時間",
+        "unit": "seconds",
+        "direction": "lower",
+        "target_percent": 20
+      },
+      "rollback": "計測・結果検査の変更を旧版へ戻す。保存済みの旧ログと新ログは両方保持する。",
+      "repository": "ns7jp/server",
+      "source_path": "docs/evidence/README.md"
+    },
+    {
+      "id": "INV-002",
+      "title": "バックアップを内容の対応表付きで検証する",
+      "priority": 1,
+      "value": 5,
+      "learning": 4,
+      "preparation_minutes": 40,
+      "marker": "## 2026-09-08：lab-base01のLokiバックアップ・別ボリューム復元",
+      "hypothesis": "バックアップの取得条件と復元後に確認する内容を対応表にすると、破損・不足・誤った復元先を見つける割合が高まる。",
+      "change": "専用の小さなデータ集合に欠損等のケースを事前定義し、アーカイブ検査だけの手順と内容照合を加えた手順を比較する。",
+      "paths": [
+        "scripts/ops/restore-volumes.sh",
+        "docs/backup-restore.md"
+      ],
+      "metric": {
+        "name": "定義済み不具合の検出率",
+        "unit": "percent",
+        "direction": "higher",
+        "target_percent": 20
+      },
+      "rollback": "本番データを使わず別名の検証先で試す。異常時は検証用コンテナを停止し、元の保存先を保持する。",
+      "repository": "ns7jp/server",
+      "source_path": "docs/evidence/README.md"
+    },
+    {
+      "id": "INV-003",
+      "title": "新規ホストの構築を入力契約と受け入れ試験で再現する",
+      "priority": 1,
+      "value": 5,
+      "learning": 5,
+      "preparation_minutes": 45,
+      "marker": "| 引き渡し対象hostの受け入れ試験 |",
+      "hypothesis": "OS・ネットワーク・秘密値の前提診断を構築前にまとめると、専用の新規ホストを受け入れ可能にするまでの手戻りが減る。",
+      "change": "既存foundation.yml/site.ymlとacceptance-check.shをつなぐ入力一覧と事前診断を設計し、同等の初期状態から既存手順と改善手順を比較する。",
+      "paths": [
+        "ansible",
+        "scripts/ops/acceptance-check.sh",
+        "docs/build-package"
+      ],
+      "metric": {
+        "name": "受け入れ合格までの作業時間",
+        "unit": "minutes",
+        "direction": "lower",
+        "target_percent": 20
+      },
+      "rollback": "事前に作成した検証ホストの復元点へ戻し、管理経路を確認する。共有ホストへ適用しない。",
+      "repository": "ns7jp/server",
+      "source_path": "docs/evidence/README.md"
+    },
+    {
+      "id": "INV-004",
+      "title": "設定ずれの検出・修復を機能確認までつなぐ",
+      "priority": 2,
+      "value": 4,
+      "learning": 5,
+      "preparation_minutes": 30,
+      "marker": "## 2026-09-08：lab-base01のAnsible入門",
+      "hypothesis": "許可された設定ずれと期待される修復を表にすると、changedの数だけを見る場合より未修復の不具合を見つけやすくなる。",
+      "change": "ローカル教材のファイル変更から始め、3種類以上の固定ケースを旧判定と機能検査付き判定で比較する。OS全体への適用は別の実験とする。",
+      "paths": [
+        "ansible",
+        "docs/build-package/06-test-specification.md"
+      ],
+      "metric": {
+        "name": "事前定義した設定ずれの検出率",
+        "unit": "percent",
+        "direction": "higher",
+        "target_percent": 20
+      },
+      "rollback": "実験専用ファイルだけを登録前の状態へ戻す。SSH・FW・認証の実機変更はこの小実験に含めない。",
+      "repository": "ns7jp/server",
+      "source_path": "docs/evidence/README.md"
+    },
+    {
+      "id": "INV-005",
+      "title": "限られたメモリで監視の可視性を保つ",
+      "priority": 2,
+      "value": 4,
+      "learning": 4,
+      "preparation_minutes": 40,
+      "marker": "## 2026-09-08：lab-base01の6サービスログ監視",
+      "hypothesis": "監視の保持期間と収集設定を目的に合わせると、必要なログ・数値を維持しながら常駐メモリを減らせる。",
+      "change": "同じ入力負荷・保持時間・対象サービスで一つの設定だけ変更し、メモリと必要な検索・検知の成否を比較する。",
+      "paths": [
+        "compose.yaml",
+        "deploy"
+      ],
+      "metric": {
+        "name": "固定負荷時の監視構成メモリ",
+        "unit": "MiB",
+        "direction": "lower",
+        "target_percent": 15
+      },
+      "rollback": "変更前の設定へ戻す。容量削減のための元ログ削除は実施しない。",
+      "repository": "ns7jp/server",
+      "source_path": "docs/evidence/README.md"
+    },
+    {
+      "id": "INV-006",
+      "title": "認証の誤入力と拒否条件を再現できる試験にする",
+      "priority": 2,
+      "value": 4,
+      "learning": 4,
+      "preparation_minutes": 25,
+      "marker": "## 2026-09-08：lab-base01のDocker最小構成演習",
+      "hypothesis": "正しい認証だけでなく誤入力・欠落・別トークンのケースを固定すると、認証設定の回帰を短時間で確認できる。",
+      "change": "既存の認証仕様を使い、手動の状態確認と秘密値を出力しない自動のケース試験を比較する。",
+      "paths": [
+        "tests",
+        "app",
+        "deploy/nginx"
+      ],
+      "metric": {
+        "name": "所定の認証ケース確認時間",
+        "unit": "seconds",
+        "direction": "lower",
+        "target_percent": 30
+      },
+      "rollback": "追加試験と補助コマンドを取り除く。認証要件・公開範囲・秘密値を変更しない。",
+      "repository": "ns7jp/server",
+      "source_path": "docs/evidence/README.md"
+    },
+    {
+      "id": "INV-007",
+      "title": "第三者が引き継げる手順の不足を測る",
+      "priority": 2,
+      "value": 5,
+      "learning": 5,
+      "preparation_minutes": 40,
+      "marker": "| 引き渡し対象hostの受け入れ試験 |",
+      "hypothesis": "目的・入力値・期待出力・戻し方を一組にすると、別の人が手順を完了するまでに必要な質問が減る。",
+      "change": "同じ難しさの専用課題で旧手順と改善手順を比較する。初見条件と支援量を記録し、本人や第三者の回答をAIが作らない。",
+      "paths": [
+        "docs/build-package",
+        "docs/beginner-learning-guide.md"
+      ],
+      "metric": {
+        "name": "完了までの追加質問数",
+        "unit": "count",
+        "direction": "lower",
+        "target_percent": 25
+      },
+      "rollback": "旧手順も残し、本人・評価者の記録は編集しない。比較で困った場合は実験を止めて支援へ切り替える。",
+      "repository": "ns7jp/server",
+      "source_path": "docs/evidence/README.md"
+    },
+    {
+      "id": "INV-008",
+      "title": "再起動後の確認と継続運転の欠測を見つける",
+      "priority": 2,
+      "value": 4,
+      "learning": 4,
+      "preparation_minutes": 35,
+      "marker": "| 永続hostの再起動・24h / 72h確認 |",
+      "hypothesis": "定期記録にboot ID・取得時刻・必要項目を持たせると、欠測や再起動を含む観測の異常を早く特定できる。",
+      "change": "固定した保存ログの不具合ケースで既存点検と改善した記録検査を比較し、実ホストの24h/72hは別の受け入れ試験として残す。",
+      "paths": [
+        "scripts/ops/acceptance-check.sh",
+        "docs/build-package/10-host-bringup-and-acceptance.md"
+      ],
+      "metric": {
+        "name": "保存ログの異常特定時間",
+        "unit": "seconds",
+        "direction": "lower",
+        "target_percent": 20
+      },
+      "rollback": "点検補助を旧版に戻し、観測ログは追記のまま保持する。時間を短縮して24h/72h成功としない。",
+      "repository": "ns7jp/server",
+      "source_path": "docs/evidence/README.md"
+    }
+  ]
+}
