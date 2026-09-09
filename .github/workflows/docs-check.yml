@@ -19,6 +19,8 @@ jobs:
         run: node --test tools/portfolio-audit/tests/audit.test.mjs
       - name: Test server innovation decisions
         run: node --test tools/server-innovation/tests/*.test.mjs
+      - name: Test portfolio loop orchestrator
+        run: node --test tools/portfolio-loop/tests/*.test.mjs
 
   mermaid-parse:
     runs-on: ubuntu-latest

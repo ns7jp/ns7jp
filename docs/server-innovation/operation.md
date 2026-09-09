@@ -12,6 +12,8 @@ GitHub Actionsには今回、判定ロジックのテストだけを追加しま
 
 ## 週次処理の順番
 
+以下の 1〜10 は[自律型ポートフォリオ改善イノベーションループ](../portfolio-loop/operation.md)の `run` が一括で行います。手動で進める場合の順序として残します。
+
 1. 前回のlatest、pending、採否記録と既存の本人計画を読む。未公開の変更を消さない。
 2. 既存 `cycle.mjs` に `tools/server-innovation/discovery.config.json` を渡し、3リポジトリ17ファイルを再取得する。収集失敗なら、その情報に依存する修正を進めない。
 3. 既存careerとgrowthで計画・未達・再説明を確認する。今回の追加で本人の時間を増やさない。
