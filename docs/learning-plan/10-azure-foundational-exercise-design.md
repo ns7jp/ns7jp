@@ -267,10 +267,12 @@ Azure 固有の「ガバナンス・ネットワーク・コンピュート・Ia
 
 [ADR-0005](../adr/0005-terraform-for-iac.md)で学んだ Terraform の基本文法（`resource`/`variable`/`output`/`module`、`plan`/`apply`/`state`/`destroy`）を Azure へ転用する演習です。
 
+> **T4-2 の前に、[4 章](#4-構築手順書)で CLI 手動構築した `rg-azlab-core` 一式を削除してください。** [11 AWS基礎構築演習設計 §5 B-1](./11-aws-foundational-exercise-design.md#5-terraform化後半適用と削除まで実行)と同じ理由で、手動で作ったリソースを残したまま `azurerm_resource_group`（名前 `rg-azlab-core`）を含む構成を `apply` すると、同名リソースの重複でエラーになります（Azure のリソース名は既存のものと衝突するため、インポートしない限り新規作成できません）。`az group delete --name rg-azlab-core --yes` を実行し、`az group show --name rg-azlab-core` が `ResourceGroupNotFound` になったことを確認してから T4-1 に進んでください。
+
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
 | T4-1 | `azurerm` provider の初期化 | `provider "azurerm" { features {} }` を宣言し（バージョン制約は `~> 5.0`）、`terraform init` を実行する | [03 AWS + Terraform](../server-monitor-improvements/03-terraform-aws.md)のコードと見比べ、provider が変わっても `resource`/`variable`/`output`/`module` の基本文法は共通であることを確認できる | `azurerm` provider は `4.0.0` 以降、多くのリソースで `features {}` 内の既定動作が変わっている。AWS 版の感覚のままコードを書くと `plan` の時点でエラーになることがある。Bicep/ARM は対象外（[スコープ](#スコープ)）のため、文法の違いは概念比較にとどめる |
-| T4-2 | AZ-2〜AZ-6 のコード化 | リソースグループ・VNet・サブネット・NSG・VM 一式を `.tf` へ落とし込み、`terraform plan` で作成予定リソースを確認してから `apply` する | `az resource list --resource-group rg-azlab-core --output table` の一覧が、手動構築（[4 章](#4-構築手順書)）時と一致することを確認する | VM の SSH 公開鍵など、手動構築時に対話入力していた値を `variables.tf` へ変数化し忘れると、`apply` のたびに入力を求められる |
+| T4-2 | `rg-azlab-core` 削除確認・AZ-2〜AZ-6 のコード化 | 上記の削除確認後、リソースグループ・VNet・サブネット・NSG・VM 一式を `.tf` へ落とし込み、`terraform plan` で作成予定リソースを確認してから `apply` する | `az resource list --resource-group rg-azlab-core --output table` の一覧が、手動構築（[4 章](#4-構築手順書)）時と一致することを確認する | VM の SSH 公開鍵など、手動構築時に対話入力していた値を `variables.tf` へ変数化し忘れると、`apply` のたびに入力を求められる |
 | T4-3 | state とドリフト検出 | ポータルから手動でタグを 1 つ追加した後に `terraform plan` を実行する | 「手作業の変更とコードの乖離」（[02 W22 の到達確認](./02-curriculum.md#w22-terraform-によるコード化)と同じ論点）が実際に差分として検出されることを確認できる | 検出した差分を、コード側へ反映するか `-refresh-only` で追認するかの判断基準を、変更の意図（一時的な調査用か恒久設定か）から説明できる |
 | T4-4 | `destroy` での完全削除 | `terraform destroy` を実行する | `az group show --name rg-azlab-core` が `ResourceGroupNotFound` になることを確認する | `for_each`/`module` で作ったリソースは依存関係の逆順で削除される。依存が正しく書けていないと削除順序でエラーになることがある。Bastion 用の Standard SKU パブリック IP など、destroy 対象から漏れやすいリソースが残っていないか、ポータルでも目視確認する |
 
@@ -376,7 +378,7 @@ Azure 固有の「ガバナンス・ネットワーク・コンピュート・Ia
 
 | 経過時間 | 作業 | 判定ポイント |
 | --- | --- | --- |
-| 0:00 | T4-1〜T4-2（provider 初期化・コード化） | `terraform apply` が成功し手動構築と一致する |
+| 0:00 | `rg-azlab-core` の削除確認（[5.4 T4-2 前の注記](#54-level-4-iacterraform)）、T4-1〜T4-2（provider 初期化・コード化） | `terraform apply` が成功し手動構築と一致する |
 | 1:15 | T4-3（ドリフト検出） | 手動変更の差分が検出される |
 | 1:45 | T4-4（destroy） | リソースグループが存在しなくなる |
 | 2:00 | **セッション 3 の終了目標** | 未完了は次セッションへ繰り越す |
