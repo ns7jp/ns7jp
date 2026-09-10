@@ -284,12 +284,15 @@ function persist(root, state, result, previous, kind = 'cycle') {
   if (kind === 'cycle') {
     writeFileSync(join(run, 'report.md'), discoveryMarkdown(result), { flag: 'wx' });
     writeFileSync(join(run, 'catalog.json'), json({ schema_version: 1, experiments: [...seeds.experiments, ...state.candidates] }), { flag: 'wx' });
-    if (result.plan.selected && previous?.selected !== result.plan.selected) writeFileSync(join(run, 'protocol.draft.json'), json(draftProtocol(result.plan.queue.find(c => c.id === result.plan.selected), result.evaluated_at)), { flag: 'wx' });
+    const selected = result.plan.queue.find(c => c.id === result.plan.selected);
+    if (selected && (previous?.selected !== selected.id || previous?.selected_base_sha !== selected.base_sha))
+      writeFileSync(join(run, 'protocol.draft.json'), json(draftProtocol(selected, result.evaluated_at)), { flag: 'wx' });
   }
   const pointer = { schema_version: 2, kind, evaluated_at: result.evaluated_at, fingerprint: result.fingerprint,
     state_path: dir + '/state.json', state_sha256: digest(stateBytes), result_path: dir + '/result.json',
     report_path: kind === 'cycle' ? dir + '/report.md' : previous?.report_path ?? null,
-    selected: result.plan?.selected ?? null, notify: previous?.fingerprint !== result.fingerprint };
+    selected: result.plan?.selected ?? null, selected_base_sha: result.plan?.queue.find(c => c.id === result.plan.selected)?.base_sha ?? null,
+    notify: previous?.fingerprint !== result.fingerprint };
   const temp = join(root, '.latest-' + randomUUID()); writeFileSync(temp, json(pointer), { flag: 'wx' }); renameSync(temp, join(root, 'latest.json'));
   return pointer;
 }

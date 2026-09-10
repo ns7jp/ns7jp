@@ -12,6 +12,11 @@ JSONは従来項目に `prosperity` を追加し、`notify` は統合結果に�
 試行の `--rounds`（既定5、1〜8）、`--seed`（uint32）、`--budget-ms`（既定1000、1〜5000）は `run` / `weekly` / `iterate` / `iterate-demo` で指定できます。
 `iterate` の終了コードは0（判断完了）、3（観測の再取得が必要）、2（入力・ロック・保存物の不整合等）です。モデル成功は実機のPASSではありません。
 
+同日追加：`run` / `weekly` の探索前に[改善の橋渡し](../server-innovation/bridge.md)から自動提案を補い、選択後に一件の実装・検証一式を保存します。
+JSONの `bridge` に準備状態と保存先を追加し、次の行動は `PREPARE_IMPLEMENTATION` を `REGISTER_PROTOCOL` より前へ置きます。
+`bridge` は保存済み観測で同じ工程を実行し、`bridge-show` は保存物の検査と表示だけを行います。
+`bridge-demo` は一時領域で合成データを使います。試行設定の `--rounds` / `--seed` / `--budget-ms` は `bridge` と `bridge-demo` でも使えます。
+
 ## 1. 準備
 
 Node.js 22 以上、`ns7jp/ns7jp` のルートで実行します。追加パッケージ、AI API、API キーは不要です。

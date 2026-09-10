@@ -191,9 +191,12 @@ test('existing CLI JSON exposes a load-only notification at the aggregate level'
   await main(args);
   const unchanged = JSON.parse((await main(args)).text);
   assert.equal(unchanged.notify, false); assert.equal(unchanged.prosperity.notify, false);
+  const discoveryPath = path.join(root, '.local/server-innovation/discovery/latest.json');
+  const discoveryBefore = fs.readFileSync(discoveryPath);
   await checkIn(root, 'reduced');
   const changed = JSON.parse((await main(args)).text);
   for (const stage of ['audit', 'career', 'growth', 'discovery']) assert.equal(changed[stage].notify, false, stage);
+  assert.deepEqual(fs.readFileSync(discoveryPath), discoveryBefore);
   assert.equal(changed.intake.taken.length, 0); assert.equal(changed.intake.errors.length, 0);
   assert.equal(changed.prosperity.state, 'REVIEW_LOAD'); assert.equal(changed.prosperity.notify, true);
   assert.equal(changed.notify, true);
