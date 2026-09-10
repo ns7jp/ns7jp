@@ -21,6 +21,10 @@ node tools/portfolio-loop/loop.mjs demo
 本人の週次負荷は `node tools/portfolio-loop/loop.mjs check-in normal`（縮小なら `reduced`、停止なら `paused`）で入力します。
 別の定期実行は追加しません。`demo` とライブラリ `runLoop()` は従来の4系統の実行です。
 
+さらに `run` / `weekly` は[高速な試行錯誤](../server-innovation/fast-loop.md)を実行します。
+保存済みの新しい観測で反例と小変更を比較し、同条件の再実行は結果を再利用します。
+`node tools/portfolio-loop/loop.mjs iterate` ならGitHubの再取得や週次計画を省いて直接試せます。
+
 ```text
 node tools/portfolio-loop/loop.mjs init 10
 node tools/portfolio-loop/loop.mjs run

@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const folders = ['docs/server-engineer', 'docs/server-projects', 'docs/portfolio-loop', 'docs/autonomous-prosperity'].map(folder => path.join(root, folder));
+const folders = ['docs/server-engineer', 'docs/server-projects', 'docs/portfolio-loop', 'docs/autonomous-prosperity', 'docs/server-innovation'].map(folder => path.join(root, folder));
 function markdownFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
     const file = path.join(dir, entry.name);
