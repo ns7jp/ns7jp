@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "data_kind": "public_github_observation",
+  "observed_at": "2026-09-10T12:49:01.606Z",
+  "completed_at": "2026-09-10T12:49:10.588Z",
+  "collection_complete": true,
+  "method": "runLoop library GET collection; not owner check-in or scheduled run",
+  "repositories": [
+    {
+      "full_name": "ns7jp/server",
+      "head_sha": "fea043d30d3d2175d2dfa534d7890b75374e8062",
+      "file_count": 10,
+      "open_prs": [
+        {
+          "number": 211,
+          "head_sha": "ed8a76ed25870eaeda9b0f7b06af382d8b65c541",
+          "draft": false,
+          "url": "https://github.com/ns7jp/server/pull/211"
+        }
+      ]
+    },
+    {
+      "full_name": "ns7jp/ns7jp",
+      "head_sha": "d029f4bd7c1d059e43d44951dc41110ddeb46d4e",
+      "file_count": 3,
+      "open_prs": []
+    },
+    {
+      "full_name": "ns7jp/ns7jp.github.io",
+      "head_sha": "a973341fa5a4676951497675ddacf2e86a60496e",
+      "file_count": 4,
+      "open_prs": []
+    }
+  ],
+  "findings": [
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:persistent-acceptance",
+      "rule": "EVIDENCE_GAP",
+      "priority": 1,
+      "state": "AWAITING_OWNER",
+      "title": "監視構成全体を永続ホストへ構築して受け入れる"
+    },
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:persistent-network",
+      "rule": "EVIDENCE_GAP",
+      "priority": 1,
+      "state": "AWAITING_OWNER",
+      "title": "独立した管理端末と対象ホストで通信・遮断を実測する"
+    },
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:persistent-reboot-soak",
+      "rule": "EVIDENCE_GAP",
+      "priority": 1,
+      "state": "AWAITING_OWNER",
+      "title": "ホスト再起動後と24時間・72時間の稼働を採録する"
+    },
+    {
+      "id": "OPEN_PR:ns7jp/server:211",
+      "rule": "OPEN_PR",
+      "priority": 1,
+      "state": "EXISTING_PR_REVIEW",
+      "title": "進行中PR #211 の結果・差分を確認"
+    },
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:el9-entire-stack",
+      "rule": "EVIDENCE_GAP",
+      "priority": 2,
+      "state": "AWAITING_OWNER",
+      "title": "RHEL系の新規VMで監視全体と最小公開を確認する"
+    },
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:aws-lifecycle",
+      "rule": "EVIDENCE_GAP",
+      "priority": 3,
+      "state": "AWAITING_OWNER",
+      "title": "応募先で必要ならAWS構築・削除・実費を検証する"
+    }
+  ],
+  "personal_ledger": "NOT_CONNECTED_IN_THIS_COPY",
+  "runtime_status": "NOT_RUN"
+}

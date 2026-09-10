@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner_confirmed_at": null,
+  "weekly_budget_minutes": 600,
+  "baseline": {
+    "confirmed_at": null,
+    "weekly_actual_minutes": null,
+    "load": null
+  },
+  "experiments": [
+    {
+      "id": "P-001",
+      "title": "本人が次の一手を決めるまでの時間を観察する",
+      "action_id": "evidence-map",
+      "status": "PROPOSED",
+      "adopted_at": null,
+      "original_due_at": null,
+      "due_at": null,
+      "reschedule_reason": null,
+      "resume_condition": null,
+      "planned_minutes": 45,
+      "actual_minutes": null,
+      "metric": {
+        "name": "本人が記録を読み次の一手を決めるまでの時間",
+        "unit": "minutes",
+        "baseline": null,
+        "target": null,
+        "actual": null,
+        "direction": "decrease"
+      },
+      "evidence": null,
+      "decision": null,
+      "notes": null
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "data_kind": "public_github_observation",
+  "observed_at": "2026-09-09T23:11:55.381Z",
+  "completed_at": "2026-09-09T23:12:05.515Z",
+  "collection_complete": true,
+  "scope": "3 repositories, 17 configured source files; not an exhaustive audit",
+  "repositories": [
+    {
+      "full_name": "ns7jp/server",
+      "default_branch": "main",
+      "head_sha": "f23f9b888962e24eeaf679cc5771a64ecff3059d",
+      "file_count": 10,
+      "open_prs": [],
+      "ci_runs": [
+        {
+          "name": "Backup verify",
+          "head_sha": "f23f9b888962e24eeaf679cc5771a64ecff3059d",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/ns7jp/server/actions/runs/34330180374"
+        },
+        {
+          "name": "Security scan",
+          "head_sha": "f23f9b888962e24eeaf679cc5771a64ecff3059d",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/ns7jp/server/actions/runs/34316902385"
+        },
+        {
+          "name": "Python check",
+          "head_sha": "f23f9b888962e24eeaf679cc5771a64ecff3059d",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/ns7jp/server/actions/runs/34316902382"
+        }
+      ]
+    },
+    {
+      "full_name": "ns7jp/ns7jp",
+      "default_branch": "main",
+      "head_sha": "ae194a2df0aa3aed24f56961223de8fc15898796",
+      "file_count": 3,
+      "open_prs": [],
+      "ci_runs": [
+        {
+          "name": "server-engineer-check",
+          "head_sha": "ae194a2df0aa3aed24f56961223de8fc15898796",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/ns7jp/ns7jp/actions/runs/34322532255"
+        },
+        {
+          "name": "docs-check",
+          "head_sha": "ae194a2df0aa3aed24f56961223de8fc15898796",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/ns7jp/ns7jp/actions/runs/34322532195"
+        },
+        {
+          "name": "server-projects-check",
+          "head_sha": "ae194a2df0aa3aed24f56961223de8fc15898796",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/ns7jp/ns7jp/actions/runs/34322532193"
+        }
+      ]
+    },
+    {
+      "full_name": "ns7jp/ns7jp.github.io",
+      "default_branch": "main",
+      "head_sha": "c099aa7a7aebd051b6c91c653f393fe4491c823b",
+      "file_count": 4,
+      "open_prs": [],
+      "ci_runs": [
+        {
+          "name": "Static site check",
+          "head_sha": "c099aa7a7aebd051b6c91c653f393fe4491c823b",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/ns7jp/ns7jp.github.io/actions/runs/34351280375"
+        },
+        {
+          "name": "pages build and deployment",
+          "head_sha": "c099aa7a7aebd051b6c91c653f393fe4491c823b",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/ns7jp/ns7jp.github.io/actions/runs/34351279084"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:persistent-acceptance",
+      "rule": "EVIDENCE_GAP",
+      "priority": 1,
+      "state": "AWAITING_OWNER",
+      "title": "監視構成全体を永続ホストへ構築して受け入れる"
+    },
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:persistent-network",
+      "rule": "EVIDENCE_GAP",
+      "priority": 1,
+      "state": "AWAITING_OWNER",
+      "title": "独立した管理端末と対象ホストで通信・遮断を実測する"
+    },
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:persistent-reboot-soak",
+      "rule": "EVIDENCE_GAP",
+      "priority": 1,
+      "state": "AWAITING_OWNER",
+      "title": "ホスト再起動後と24時間・72時間の稼働を採録する"
+    },
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:el9-entire-stack",
+      "rule": "EVIDENCE_GAP",
+      "priority": 2,
+      "state": "AWAITING_OWNER",
+      "title": "RHEL系の新規VMで監視全体と最小公開を確認する"
+    },
+    {
+      "id": "EVIDENCE_GAP:ns7jp/server:aws-lifecycle",
+      "rule": "EVIDENCE_GAP",
+      "priority": 3,
+      "state": "AWAITING_OWNER",
+      "title": "応募先で必要ならAWS構築・削除・実費を検証する"
+    }
+  ],
+  "personal_ledger": "NOT_CONNECTED_IN_THIS_COPY",
+  "personal_outcomes": "UNKNOWN",
+  "scheduler_integration": "NOT_RUN",
+  "new_change_remote_ci": "NOT_RUN"
+}
