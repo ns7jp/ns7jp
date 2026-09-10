@@ -552,6 +552,8 @@ export function statusView(root = REPO_ROOT, now = wallClock()) {
 
 const USAGE = `Usage: ${CLI} <command> [options]
   run|weekly [--offline SNAPSHOT.json] [--proposals FILE] [--occupied] [--free]   週次ループを 1 回実行
+  iterate [--rounds 5] [--seed 0] [--budget-ms 1000] [--offline SNAPSHOT.json]    保存済み観測で反例と小変更を高速試行（ネットワークなし）
+  iterate-demo                                                               合成データで高速試行を体験（一時領域だけ）
   status                                                                         読み取り専用の点検と次の一手
   init [HOURS]                                                                   私用キャリア計画と採否台帳を初期化（既定 10 時間）
   check-in normal|reduced|paused                                                 本人の週次負荷を記録（繁栄判断へ接続）
@@ -572,21 +574,42 @@ function readProposals(path) {
 export async function main(argv) {
   const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: { root: { type: 'string' }, offline: { type: 'string' }, proposals: { type: 'string' },
     occupied: { type: 'boolean' }, free: { type: 'boolean' }, json: { type: 'boolean' }, help: { type: 'boolean' }, 'candidate-sha': { type: 'string' },
-    'environment-id': { type: 'string' }, scope: { type: 'string' }, context: { type: 'string' }, 'resume-condition': { type: 'string' } } });
+    'environment-id': { type: 'string' }, scope: { type: 'string' }, context: { type: 'string' }, 'resume-condition': { type: 'string' },
+    rounds: { type: 'string' }, seed: { type: 'string' }, 'budget-ms': { type: 'string' } } });
   const [command, ...rest] = positionals;
   if (!command || values.help) return { text: USAGE, exitCode: 0 };
   const root = resolve(values.root ?? REPO_ROOT);
+  const iterationSettings = { rounds: Number(values.rounds ?? 5), seed: Number(values.seed ?? 0), budgetMs: Number(values['budget-ms'] ?? 1000) };
+  assert(!['rounds', 'seed', 'budget-ms'].some(k => values[k] !== undefined) || ['run', 'weekly', 'iterate', 'iterate-demo'].includes(command), 'Iteration settings are only valid with run, weekly, iterate or iterate-demo');
+  if (['run', 'weekly', 'iterate', 'iterate-demo'].includes(command)) {
+    assert(Number.isInteger(iterationSettings.rounds) && iterationSettings.rounds >= 1 && iterationSettings.rounds <= 8, 'rounds must be 1..8');
+    assert(Number.isSafeInteger(iterationSettings.seed) && iterationSettings.seed >= 0 && iterationSettings.seed <= 0xffffffff, 'seed must be a uint32 integer');
+    assert(Number.isInteger(iterationSettings.budgetMs) && iterationSettings.budgetMs >= 1 && iterationSettings.budgetMs <= 5000, 'budget-ms must be 1..5000');
+  }
   const out = (value, text) => ({ text: values.json ? json(value) : text + FOOTER + '\n', exitCode: 0 });
   switch (command) {
     case 'run': case 'weekly': {
       assert(rest.length === 0, 'run takes no positional arguments');
-      const offline = values.offline ? readJson(resolve(values.offline)) : undefined;
+      const { runIteration, renderIteration, readSnapshotFile } = await import('../server-innovation/iterate.mjs');
+      const offline = values.offline ? readSnapshotFile(resolve(values.offline)) : undefined;
       const { cycle, render } = await import('../autonomous-prosperity/prosperity.mjs');
       const { loop_summary: summary, ...prosperity } = await cycle({ root, offline,
         proposals: values.proposals ? readProposals(values.proposals) : [], occupied: !!values.occupied, free: !!values.free });
-      return { text: values.json ? json(summary ? { ...summary, notify: prosperity.notify, prosperity } : { ...prosperity, outcome: 'NOT_RUN' })
-        : prosperity.notify ? render(prosperity) : '変化なし。新しい判断依頼はありません。\n' + FOOTER + '\n',
+      const iteration = summary ? await runIteration({ root, ...iterationSettings }) : null;
+      const notify = prosperity.notify || !!iteration?.notify;
+      return { text: values.json ? json(summary ? { ...summary, notify, prosperity, innovation_iteration: iteration } : { ...prosperity, outcome: 'NOT_RUN' })
+        : prosperity.notify ? render(prosperity) + (iteration ? `モデル試行: ${iteration.status}（実機 NOT RUN）\n` : '')
+          : iteration?.notify ? renderIteration(iteration) : '変化なし。新しい判断依頼はありません。\n' + FOOTER + '\n',
         exitCode: summary && summary.outcome !== 'PROCESSED' ? 3 : 0 };
+    }
+    case 'iterate': case 'iterate-demo': {
+      assert(rest.length === 0, 'iterate takes no positional arguments');
+      assert(!['proposals', 'occupied', 'free', 'candidate-sha', 'environment-id', 'scope', 'context', 'resume-condition'].some(k => values[k] !== undefined), 'Unsupported option for iterate');
+      assert(command !== 'iterate-demo' || (!values.root && !values.offline), 'iterate-demo uses a temporary root and its own synthetic snapshot');
+      const { runIteration, iterationDemo, renderIteration, readSnapshotFile } = await import('../server-innovation/iterate.mjs');
+      const result = command === 'iterate-demo' ? await iterationDemo(iterationSettings)
+        : await runIteration({ root, ...iterationSettings, snapshot: values.offline ? readSnapshotFile(resolve(values.offline)) : undefined });
+      return { text: values.json ? json(result) : renderIteration(result), exitCode: result.status === 'NEEDS_REFRESH' ? 3 : 0 };
     }
     case 'status': { assert(rest.length === 0, 'status takes no positional arguments'); const { text, ...view } = statusView(root); return { text: values.json ? json(view) : text, exitCode: 0 }; }
     case 'check-in': {

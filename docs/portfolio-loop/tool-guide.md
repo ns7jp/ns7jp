@@ -7,6 +7,11 @@ JSONは従来項目に `prosperity` を追加し、`notify` は統合結果に�
 負荷は `check-in normal` / `check-in reduced` / `check-in paused` のいずれかで入力できます。
 従来のテキストカードに代わり、一行動の表示または「変化なし」を返します。ライブラリと `demo` は従来どおりです。
 
+同日追加：`run` / `weekly` の最後に[高速な試行錯誤](../server-innovation/fast-loop.md)を実行し、JSONへ `innovation_iteration` を追加します。
+`iterate` は保存済み観測で直接実行、`iterate-demo` は一時領域の合成データで体験する入口です。
+試行の `--rounds`（既定5、1〜8）、`--seed`（uint32）、`--budget-ms`（既定1000、1〜5000）は `run` / `weekly` / `iterate` / `iterate-demo` で指定できます。
+`iterate` の終了コードは0（判断完了）、3（観測の再取得が必要）、2（入力・ロック・保存物の不整合等）です。モデル成功は実機のPASSではありません。
+
 ## 1. 準備
 
 Node.js 22 以上、`ns7jp/ns7jp` のルートで実行します。追加パッケージ、AI API、API キーは不要です。
