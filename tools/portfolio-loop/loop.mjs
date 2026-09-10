@@ -554,6 +554,7 @@ const USAGE = `Usage: ${CLI} <command> [options]
   run|weekly [--offline SNAPSHOT.json] [--proposals FILE] [--occupied] [--free]   週次ループを 1 回実行
   status                                                                         読み取り専用の点検と次の一手
   init [HOURS]                                                                   私用キャリア計画と採否台帳を初期化（既定 10 時間）
+  check-in normal|reduced|paused                                                 本人の週次負荷を記録（繁栄判断へ接続）
   done ID ADOPT|REJECT|PARK|ITERATE "理由" [--resume-condition "条件"]          本人の採否を記録
   register DRAFT.json --candidate-sha SHA --environment-id ID --scope "範囲" --context FILE
                                                                                  実験票を登録し inbox を用意
@@ -580,10 +581,19 @@ export async function main(argv) {
     case 'run': case 'weekly': {
       assert(rest.length === 0, 'run takes no positional arguments');
       const offline = values.offline ? readJson(resolve(values.offline)) : undefined;
-      const summary = await runLoop({ root, offline, proposals: values.proposals ? readProposals(values.proposals) : [], occupied: !!values.occupied, free: !!values.free });
-      return { text: values.json ? json(summary) : renderCard(summary), exitCode: summary.outcome === 'PROCESSED' ? 0 : 3 };
+      const { cycle, render } = await import('../autonomous-prosperity/prosperity.mjs');
+      const { loop_summary: summary, ...prosperity } = await cycle({ root, offline,
+        proposals: values.proposals ? readProposals(values.proposals) : [], occupied: !!values.occupied, free: !!values.free });
+      return { text: values.json ? json(summary ? { ...summary, notify: prosperity.notify, prosperity } : { ...prosperity, outcome: 'NOT_RUN' })
+        : prosperity.notify ? render(prosperity) : '変化なし。新しい判断依頼はありません。\n' + FOOTER + '\n',
+        exitCode: summary && summary.outcome !== 'PROCESSED' ? 3 : 0 };
     }
     case 'status': { assert(rest.length === 0, 'status takes no positional arguments'); const { text, ...view } = statusView(root); return { text: values.json ? json(view) : text, exitCode: 0 }; }
+    case 'check-in': {
+      assert(rest.length === 1, 'check-in requires normal, reduced or paused');
+      const { checkIn } = await import('../autonomous-prosperity/prosperity.mjs');
+      const result = await checkIn(root, rest[0]); return out(result, result.message + '\n');
+    }
     case 'init': { assert(rest.length <= 1, 'init takes at most HOURS'); const r = await init({ root, hours: rest[0] ?? '10' }); return out(r, `キャリア計画: ${r.career} / 採否台帳: ${r.decisions}\n次: ${r.next}\n`); }
     case 'done': { assert(rest.length === 3, 'Usage: done ID DECISION "REASON" [--resume-condition "..."]'); const r = decide({ root, id: rest[0], decision: rest[1], reason: rest[2], resumeCondition: values['resume-condition'] ?? null }); return out(r, `記録: ${r.entry.candidate_id} ${r.entry.decision}\n次回の除外候補: ${r.closed.join(', ') || 'なし'}\n`); }
     case 'register': {
@@ -599,13 +609,13 @@ export async function main(argv) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  try {
-    const result = await main(process.argv.slice(2));
+  // Finish module evaluation before loading the optional prosperity integration.
+  main(process.argv.slice(2)).then(result => {
     process.stdout.write(result.text);
     if (result.exitCode) process.exitCode = result.exitCode;
-  } catch (error) {
+  }).catch(error => {
     const c = classifyError(error.message);
     process.stderr.write(`Loop stopped: ${error.message}\n[${c.code}] ${c.hint}\n`);
     process.exitCode = 2;
-  }
+  });
 }

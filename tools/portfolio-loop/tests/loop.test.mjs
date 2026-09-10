@@ -343,7 +343,8 @@ test('CLI exit codes: 0 processed, 3 needs refresh, 2 stopped; every subcommand 
   assert.equal(run('--help').status, 0); assert.match(run().stdout, /Usage/);
   const ok = run('run', '--root', root, '--offline', snap, '--json'); assert.equal(ok.status, 0, ok.stderr);
   const summary = JSON.parse(ok.stdout); stamped(summary); assert.equal(summary.mode, 'OFFLINE_REPLAY'); assert.equal(summary.career.state, 'PLANNED'); assert.equal(summary.synthetic, true);
-  const card = run('weekly', '--root', root, '--offline', snap); assert.equal(card.status, 0); assert.match(card.stdout, /ループ完了: PROCESSED/); assert.ok(card.stdout.includes(FOOTER));
+  assert.equal(summary.prosperity.notify, summary.notify);
+  const card = run('weekly', '--root', root, '--offline', snap); assert.equal(card.status, 0); assert.match(card.stdout, /変化なし/); assert.ok(card.stdout.includes(FOOTER));
   const old = join(root, 'old.json'); writeFileSync(old, JSON.stringify(buildSnapshot({ observedAt: '2026-09-01T00:00:00.000Z' })));
   const stale = run('run', '--root', root, '--offline', old); assert.equal(stale.status, 3); assert.match(stale.stdout, /NEEDS_REFRESH/);
   const live = run('run', '--root', root); assert.equal(live.status, 2); assert.match(live.stderr, /Live collection is disabled/); assert.match(live.stderr, /\[NO_NETWORK\]/);
