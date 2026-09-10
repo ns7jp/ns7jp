@@ -159,7 +159,7 @@ async function locked(root, action) {
 
 // A single run performs only the existing authorized local pipeline and GitHub GET collection.
 // Check-ins remain explicit human input. No synthesized outcome, approval or skill record is written.
-export async function cycle({ root = ROOT, offline, proposals = [], occupied = false, free = false, now = () => new Date().toISOString() } = {}) {
+export async function cycle({ root = ROOT, offline, proposals = [], occupied = false, free = false, now = () => new Date().toISOString(), bridge = false, bridgeSettings = {} } = {}) {
   root = path.resolve(root);
   return locked(root, async () => {
     const previousPath = safe(root, BASE + '/latest.json');
@@ -167,11 +167,12 @@ export async function cycle({ root = ROOT, offline, proposals = [], occupied = f
     check(!previous || (previous.schema_version === 1 && /^[a-f0-9]{64}$/.test(previous.signature)), 'Invalid previous prosperity report');
     const before = await run({ root, now: now() }); // Validate private input before the existing loop can write.
     let upstream = null;
-    if (before.state !== 'PAUSED') upstream = await runLoop({ root, offline, proposals, occupied, free, now });
+    if (before.state !== 'PAUSED') upstream = await runLoop({ root, offline, proposals, occupied, free, now,
+      bridge: bridge && before.state !== 'REVIEW_LOAD', bridgeSettings, deferPreparation: bridge && before.state === 'REVIEW_LOAD' });
     const result = await run({ root, now: now() });
     const upstreamSignature = hash(json(upstream ? { outcome: upstream.outcome, next_actions: actionMeaning(upstream.next_actions),
       occupied: upstream.context.occupied, closed: upstream.context.closed, basis: upstream.context.basis,
-      findings: upstream.audit.findings, errors: upstream.audit.errors, intake_errors: upstream.intake.errors } : null));
+      findings: upstream.audit.findings, errors: upstream.audit.errors, intake_errors: upstream.intake.errors, bridge: upstream.bridge?.signature ?? null } : null));
     const signature = hash(result.signature + upstreamSignature);
     const report = { ...result, signature, notify: previous?.signature !== signature || (upstream?.intake.taken.length ?? 0) > 0,
       loop_outcome: upstream?.outcome ?? 'NOT_RUN' };

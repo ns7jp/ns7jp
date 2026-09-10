@@ -29,6 +29,7 @@
 | 週次の改善を 1 コマンドで回す | [自律型ポートフォリオ改善イノベーションループ](./docs/portfolio-loop/README.md) | 監査・計画・探索の一括実行、作業枠の判定、実測の取り込み、次の一手 |
 | 成果と負荷を確認して行動を続ける | [自律繁栄システム](./docs/autonomous-prosperity/README.md) | 既存のrunに成果比較を接続、週10時間内の振り返り、次の一行動 |
 | 反例から小変更を高速で試す | [自律型試行錯誤ループ](./docs/server-innovation/fast-loop.md) | 一コマンドのモデル比較、悪化しない案の選択、保存結果の再利用 |
+| 発火点から改善を準備する | [探索と改善の橋渡し](./docs/server-innovation/bridge.md) | 根拠付きの仮説、既存キューへの合流、実装・検証・戻し方の一式 |
 
 PC や Linux の準備から必要な方は、[開始前診断と最初の30分](./docs/learning-plan/00-start-here.md)へ。体系的な学習には [24 週の学習プラン](./docs/learning-plan/README.md)を使います。
 

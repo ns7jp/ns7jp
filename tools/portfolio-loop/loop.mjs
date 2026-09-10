@@ -19,7 +19,7 @@ import { buildSnapshot, seedRoot, REPO_ROOT } from './fixture.mjs';
 export { REPO_ROOT };
 export const DIRS = Object.freeze({ loop: '.local/portfolio-loop', audit: '.local/portfolio-operations', career: '.local/engineer-career',
   growth: '.local/autonomous-growth', discovery: '.local/server-innovation/discovery' });
-const LOCKS = [[DIRS.audit, 'cycle.lock'], [DIRS.career, 'plan.lock'], [DIRS.growth, 'plan.lock'], [DIRS.discovery, 'discovery.lock']];
+const LOCKS = [[DIRS.audit, 'cycle.lock'], [DIRS.career, 'plan.lock'], [DIRS.growth, 'plan.lock'], [DIRS.discovery, 'discovery.lock'], ['.local/improvement-bridge', 'bridge.lock']];
 // すべての JSON 出力と記録に付ける固定の権限表示。ループは何も許可せず、何も合格にしない。
 export const STAMP = Object.freeze({ authorization: 'NONE', publication_allowed: false, external_actions_allowed: false, se_record_writes_allowed: false, runtime_status: 'NOT_RUN' });
 export const FOOTER = '権限: authorization NONE / publication_allowed false / external_actions_allowed false / se_record_writes_allowed false / runtime_status NOT_RUN';
@@ -236,15 +236,19 @@ function takeInbox(root, facts, nowIso) {
 }
 
 // ---- 1 回の週次実行。順序: 点検 → 監査 → キャリア → 成長 → 取り込み → 作業枠 → 探索 → 集約。 ----
-export async function runLoop({ root = REPO_ROOT, offline, proposals = [], occupied: occupiedFlag = false, free = false, now, demo = false } = {}) {
+export async function runLoop({ root = REPO_ROOT, offline, proposals = [], occupied: occupiedFlag = false, free = false, now, demo = false,
+  bridge = false, bridgeSettings = {}, deferPreparation = false } = {}) {
   const clock = now ?? wallClock; root = resolve(root);
   assert(offline === undefined || (offline && typeof offline === 'object' && !Array.isArray(offline)), 'Invalid offline snapshot');
   assert(Array.isArray(proposals) && proposals.length <= 4, 'At most four custom proposals per cycle');
+  assert(typeof bridge === 'boolean', 'Invalid bridge flag');
+  assert(typeof deferPreparation === 'boolean', 'Invalid preparation deferral flag');
   const synthetic = offline?.data_kind === 'synthetic';
   // 合成スナップショットは、実在の探索登録簿に候補を残さないよう、デモか一時ルートに限る。
   assert(!synthetic || demo || insideTemp(root), 'Synthetic snapshot refused outside demo or a temporary root; use `demo`');
   assert(offline !== undefined || process.env[NO_NETWORK] !== '1', `Live collection is disabled by ${NO_NETWORK}=1; pass --offline SNAPSHOT.json`);
   const before = inspect(root, clock()); enforce(before);
+  if (bridge) { const { readBridge } = await import('../server-innovation/bridge.mjs'); readBridge(root); }
   const loopDir = join(root, DIRS.loop); mkdirSync(join(loopDir, 'inbox'), { recursive: true });
   // 1. 監査。オフラインは既存の replay 機能（REPLAY_NO_EDITS）を使い、修正案を生成しない。
   const auditDir = join(root, DIRS.audit);
@@ -300,10 +304,13 @@ export async function runLoop({ root = REPO_ROOT, offline, proposals = [], occup
   if (free && !occupiedFlag) basis.push(computed ? 'HUMAN_CONFIRMED_FREE_OVERRIDES' : 'HUMAN_CONFIRMED_FREE');
   const context = { schema_version: 1, reviewed_at: nowIso, occupied, closed };
   // 6. 探索。収集不全のときは古い原本で候補を作らない。
-  let discovery = { state: complete ? 'RUN' : 'SKIPPED_NEEDS_REFRESH', discovery_status: null, notify: false, selected: null, report: null, draft: null, added: [], skipped: [], questions: [], queue: [], counts: null, limits };
-  if (complete) {
+  let discovery = { state: complete ? (deferPreparation ? 'SKIPPED_LOAD_REVIEW' : 'RUN') : 'SKIPPED_NEEDS_REFRESH', discovery_status: null, notify: false, selected: null, report: null, draft: null, added: [], skipped: [], questions: [], queue: [], counts: null, limits };
+  let bridgeResult = bridge ? stamp({ state: 'NEEDS_REFRESH', notify: false, bundle: null }) : null;
+  if (complete && !deferPreparation) {
     const discoveryDir = join(root, DIRS.discovery);
-    const pointer = runDiscovery({ snapshot, context, outputDir: discoveryDir, proposals, now: nowIso });
+    const bridgePlanner = bridge ? await import('../server-innovation/bridge-plan.mjs') : null;
+    const prepared = bridge ? bridgePlanner.prepareBridge(snapshot, { now: nowIso, limit: Math.min(2, 4 - proposals.length), modelOptions: bridgeSettings }) : null;
+    const pointer = runDiscovery({ snapshot, context, outputDir: discoveryDir, proposals: [...proposals, ...(prepared?.proposals ?? [])], now: nowIso });
     const result = readJson(join(discoveryDir, pointer.result_path));
     const draftHere = join(discoveryDir, dirname(pointer.state_path), 'protocol.draft.json');
     const after = inspect(root, nowIso);
@@ -315,14 +322,18 @@ export async function runLoop({ root = REPO_ROOT, offline, proposals = [], occup
       questions: [...new Map(result.questions.map(q => [q.kind + '\n' + q.question, { kind: q.kind, question: q.question, source: q.source ?? null }])).values()],
       queue: result.plan.queue.slice(0, 8).map(x => ({ id: x.id, state: x.state, priority: x.priority, score: x.score, title: x.title, source: x.source, source_line: x.source_line, related_prs: x.related_prs })),
       counts: after.discovery.counts, limits };
+    if (bridge) {
+      const { persistBridge } = await import('../server-innovation/bridge.mjs');
+      bridgeResult = persistBridge(root, prepared, bridgePlanner.buildHandoff(snapshot, result, prepared), nowIso);
+    }
   }
   // 7. 集約。通知は各系統の意味差分と取り込みの有無だけから決め、時刻からは決めない。
   const after = inspect(root, nowIso);
   const summary = stamp({ schema_version: 1, evaluated_at: nowIso, mode: audit.mode, demo, synthetic, outcome: complete ? 'PROCESSED' : 'NEEDS_REFRESH', root,
     audit, career, growth, intake: { taken: intake.taken, errors: intake.errors, not_ready: intake.not_ready, remaining: intake.remaining.map(e => ({ id: e.id, missing: e.missing })) },
-    context: { ...context, basis, basis_findings: complete ? contention : [], computed_occupied: computed, dropped_closed: dropped }, discovery,
+    context: { ...context, basis, basis_findings: complete ? contention : [], computed_occupied: computed, dropped_closed: dropped }, discovery, bridge: bridgeResult,
     warnings: [...dropped.map(id => `除外指定 ${id} は既知の候補にないため無視しました`), ...intake.warnings],
-    notify: audit.notify || career.notify || growth.notify || discovery.notify || intake.taken.length > 0 || intake.errors.length > 0 });
+    notify: audit.notify || career.notify || growth.notify || discovery.notify || !!bridgeResult?.notify || intake.taken.length > 0 || intake.errors.length > 0 });
   summary.next_actions = nextActions(after, summary);
   const loopRun = join(loopDir, 'runs', `${safeTime(nowIso)}-${randomUUID().slice(0, 8)}`);
   assert(!existsSync(loopRun), 'Run directory collision'); mkdirSync(loopRun, { recursive: true });
@@ -332,7 +343,7 @@ export async function runLoop({ root = REPO_ROOT, offline, proposals = [], occup
   summary.run_dir = loopRun; summary.report = join(loopRun, 'summary.md');
   // status が run と同じ次の一手を導けるよう、判定に使う項目をそのまま残す。
   atomically(join(loopDir, 'latest.json'), json(stamp({ schema_version: 1, evaluated_at: nowIso, mode: summary.mode, demo, synthetic, outcome: summary.outcome, notify: summary.notify,
-    run_dir: loopRun, report: summary.report, audit: { state: audit.state, collection_status: audit.collection_status, draft_status: audit.draft_status, notify: audit.notify, errors: audit.errors, findings: audit.findings },
+    run_dir: loopRun, report: summary.report, bridge: bridgeResult, audit: { state: audit.state, collection_status: audit.collection_status, draft_status: audit.draft_status, notify: audit.notify, errors: audit.errors, findings: audit.findings },
     career: { state: career.state, notify: career.notify }, growth: { state: growth.state, binding_status: growth.binding_status, notify: growth.notify },
     intake: { taken: intake.taken.length, errors: intake.errors, not_ready: intake.not_ready },
     discovery: { state: discovery.state, discovery_status: discovery.discovery_status, selected: discovery.selected, notify: discovery.notify, draft: discovery.draft, report: discovery.report },
@@ -370,8 +381,11 @@ export function nextActions(facts, summary = null) {
   if (facts.career.initialized && facts.growth.binding_status && facts.growth.binding_status !== 'BOUND') add('BIND_SLOT', `学習枠が ${facts.growth.binding_status} です。本人が許可する技術行動を明示して接続します`, cli('bind-slot evidence-map'));
   const selected = src ? src.discovery?.selected ?? null : facts.discovery.selected;
   const draft = src ? src.discovery?.draft ?? null : (selected ? facts.discovery.drafts.find(d => d.candidate_id === selected) ?? null : null);
+  const handoffReady = src?.bridge?.state === 'READY' && src.bridge.candidate_id === selected && src.bridge.bundle;
+  if (handoffReady && !facts.registered_candidates.includes(selected)) add('PREPARE_IMPLEMENTATION', `候補 ${selected} の改善一式を読み、最小変更と回帰確認を準備します。実装後のSHAを実験登録へ渡します`, cli('bridge-show'), join(facts.root, src.bridge.bundle.implementation));
+  if (src?.bridge?.state && !['READY', 'NO_SELECTION', 'NEEDS_REFRESH'].includes(src.bridge.state)) add('REVIEW_BRIDGE', `改善への橋渡しは ${src.bridge.state} です。原本・作業枠・保存領域を確認します`);
   if (selected && draft && draft.status !== 'REGISTERED' && !facts.registered_candidates.includes(selected)) add('REGISTER_PROTOCOL', `候補 ${selected} の実験票の下書きがあります。比較条件を決め、実験の前に登録します`, cli(`register ${draft.path} --candidate-sha <40hex> --environment-id <環境ID> --scope "<比較の範囲>" --context <環境条件.json>`), draft.path);
-  if (selected) add('PREPARE_CANDIDATE', `候補 ${selected} を既存の 45 分枠で一件だけ準備します（根拠の原本・後続記録・コード・既存 PR を読む）`, null, src?.discovery?.report ?? facts.discovery.pointer?.report ?? null);
+  if (selected && !handoffReady) add('PREPARE_CANDIDATE', `候補 ${selected} を既存の 45 分枠で一件だけ準備します（根拠の原本・後続記録・コード・既存 PR を読む）`, null, src?.discovery?.report ?? facts.discovery.pointer?.report ?? null);
   const status = src?.discovery?.discovery_status ?? null;
   if (status === 'RESEARCH_REQUIRED') add('RESEARCH', '根拠のある新しい前提がありません。未収集の実測記録・別方式の根拠を読み、出典付きの独自提案を検討します');
   if (status === 'BACKLOG_FULL') add('DISMISS_OR_PARK', `未着手の動的候補が上限 ${limits.open_candidates} 件です。理由を付けて却下または保留します`, cli('dismiss <INV-16hex> "理由"'));
@@ -554,6 +568,9 @@ const USAGE = `Usage: ${CLI} <command> [options]
   run|weekly [--offline SNAPSHOT.json] [--proposals FILE] [--occupied] [--free]   週次ループを 1 回実行
   iterate [--rounds 5] [--seed 0] [--budget-ms 1000] [--offline SNAPSHOT.json]    保存済み観測で反例と小変更を高速試行（ネットワークなし）
   iterate-demo                                                               合成データで高速試行を体験（一時領域だけ）
+  bridge [--offline SNAPSHOT.json]                                            保存済み観測から探索・候補選択・改善一式まで接続
+  bridge-show                                                                保存した改善一式を検査して表示（読み取り専用）
+  bridge-demo                                                                合成データで探索から改善準備まで体験
   status                                                                         読み取り専用の点検と次の一手
   init [HOURS]                                                                   私用キャリア計画と採否台帳を初期化（既定 10 時間）
   check-in normal|reduced|paused                                                 本人の週次負荷を記録（繁栄判断へ接続）
@@ -580,27 +597,44 @@ export async function main(argv) {
   if (!command || values.help) return { text: USAGE, exitCode: 0 };
   const root = resolve(values.root ?? REPO_ROOT);
   const iterationSettings = { rounds: Number(values.rounds ?? 5), seed: Number(values.seed ?? 0), budgetMs: Number(values['budget-ms'] ?? 1000) };
-  assert(!['rounds', 'seed', 'budget-ms'].some(k => values[k] !== undefined) || ['run', 'weekly', 'iterate', 'iterate-demo'].includes(command), 'Iteration settings are only valid with run, weekly, iterate or iterate-demo');
-  if (['run', 'weekly', 'iterate', 'iterate-demo'].includes(command)) {
+  assert(!['rounds', 'seed', 'budget-ms'].some(k => values[k] !== undefined) || ['run', 'weekly', 'iterate', 'iterate-demo', 'bridge', 'bridge-demo'].includes(command), 'Iteration settings are only valid with run, weekly, iterate, iterate-demo, bridge or bridge-demo');
+  if (['run', 'weekly', 'iterate', 'iterate-demo', 'bridge', 'bridge-demo'].includes(command)) {
     assert(Number.isInteger(iterationSettings.rounds) && iterationSettings.rounds >= 1 && iterationSettings.rounds <= 8, 'rounds must be 1..8');
     assert(Number.isSafeInteger(iterationSettings.seed) && iterationSettings.seed >= 0 && iterationSettings.seed <= 0xffffffff, 'seed must be a uint32 integer');
     assert(Number.isInteger(iterationSettings.budgetMs) && iterationSettings.budgetMs >= 1 && iterationSettings.budgetMs <= 5000, 'budget-ms must be 1..5000');
   }
   const out = (value, text) => ({ text: values.json ? json(value) : text + FOOTER + '\n', exitCode: 0 });
   switch (command) {
-    case 'run': case 'weekly': {
+    case 'run': case 'weekly': case 'bridge': {
       assert(rest.length === 0, 'run takes no positional arguments');
-      const { runIteration, renderIteration, readSnapshotFile } = await import('../server-innovation/iterate.mjs');
-      const offline = values.offline ? readSnapshotFile(resolve(values.offline)) : undefined;
+      const { runIteration, renderIteration, readSnapshotFile, latestSnapshot } = await import('../server-innovation/iterate.mjs');
+      const offline = values.offline ? readSnapshotFile(resolve(values.offline)) : command === 'bridge' ? latestSnapshot(root, wallClock()) : undefined;
+      if (command === 'bridge' && !offline) return { text: values.json ? json(stamp({ state: 'NEEDS_REFRESH', bridge: null })) : '保存済み観測がありません。最初に run を実行してください。\n' + FOOTER + '\n', exitCode: 3 };
       const { cycle, render } = await import('../autonomous-prosperity/prosperity.mjs');
       const { loop_summary: summary, ...prosperity } = await cycle({ root, offline,
-        proposals: values.proposals ? readProposals(values.proposals) : [], occupied: !!values.occupied, free: !!values.free });
+        proposals: values.proposals ? readProposals(values.proposals) : [], occupied: !!values.occupied, free: !!values.free, bridge: true, bridgeSettings: iterationSettings });
       const iteration = summary ? await runIteration({ root, ...iterationSettings }) : null;
       const notify = prosperity.notify || !!iteration?.notify;
       return { text: values.json ? json(summary ? { ...summary, notify, prosperity, innovation_iteration: iteration } : { ...prosperity, outcome: 'NOT_RUN' })
-        : prosperity.notify ? render(prosperity) + (iteration ? `モデル試行: ${iteration.status}（実機 NOT RUN）\n` : '')
+        : prosperity.notify ? render(prosperity) + (summary?.bridge ? `改善への橋渡し: ${summary.bridge.state} / 発火点 ${summary.bridge.signal_count ?? 0} 件\n` : '') + (iteration ? `モデル試行: ${iteration.status}（実機 NOT RUN）\n` : '')
           : iteration?.notify ? renderIteration(iteration) : '変化なし。新しい判断依頼はありません。\n' + FOOTER + '\n',
         exitCode: summary && summary.outcome !== 'PROCESSED' ? 3 : 0 };
+    }
+    case 'bridge-show': {
+      assert(rest.length === 0 && !values.offline && !values.proposals && !values.free && !values.occupied, 'bridge-show only accepts --root and --json');
+      const { readBridge } = await import('../server-innovation/bridge.mjs');
+      const record = readBridge(root);
+      return { text: values.json ? json(record ?? stamp({ state: 'NOT_PREPARED' })) : record
+        ? `作成時点: ${record.latest.evaluated_at} / ${record.latest.state}\n適用前に bridge で観測と候補を再確認します。\n` + (record.markdown ?? '準備できる候補はまだありません。既存の次の行動を確認してください。\n')
+        : '改善一式はまだありません。run または bridge を実行してください。\n' + FOOTER + '\n', exitCode: 0 };
+    }
+    case 'bridge-demo': {
+      assert(rest.length === 0 && !values.root && !values.offline && !values.proposals && !values.free && !values.occupied, 'bridge-demo uses its own temporary root and synthetic snapshot');
+      const { sourceText } = await import('../server-innovation/fixtures/d1-model-source.mjs');
+      const demoRoot = mkdtempSync(join(tmpdir(), 'improvement-bridge-demo-')), now = wallClock();
+      await seedRoot(demoRoot, { now: () => now });
+      const result = await runLoop({ root: demoRoot, offline: buildSnapshot({ observedAt: now, d1Source: sourceText }), now: () => now, bridge: true, bridgeSettings: iterationSettings, demo: true });
+      return { text: values.json ? json({ ...result, demo_root: demoRoot }) : `合成デモ: ${result.bridge.state} / 発火点 ${result.bridge.signal_count} 件 / 自動提案 ${result.bridge.proposal_count} 件\n改善一式: ${result.bridge.bundle ? join(demoRoot, result.bridge.bundle.implementation) : '未作成'}\n` + FOOTER + '\n', exitCode: 0 };
     }
     case 'iterate': case 'iterate-demo': {
       assert(rest.length === 0, 'iterate takes no positional arguments');

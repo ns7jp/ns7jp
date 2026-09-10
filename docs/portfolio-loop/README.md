@@ -25,6 +25,10 @@ node tools/portfolio-loop/loop.mjs demo
 保存済みの新しい観測で反例と小変更を比較し、同条件の再実行は結果を再利用します。
 `node tools/portfolio-loop/loop.mjs iterate` ならGitHubの再取得や週次計画を省いて直接試せます。
 
+`run` / `weekly` は[発火点から改善への橋渡し](../server-innovation/bridge.md)も実行します。
+本人の独自提案を優先した残枠へ自動仮説を補い、既存キューが選んだ一件の実装準備と検証一式を用意します。
+保存済み観測では `bridge`、内容の表示は `bridge-show`、合成データでの体験は `bridge-demo` です。
+
 ```text
 node tools/portfolio-loop/loop.mjs init 10
 node tools/portfolio-loop/loop.mjs run

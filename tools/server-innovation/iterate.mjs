@@ -107,7 +107,7 @@ export async function runIteration({ root = ROOT, snapshot, rounds = 5, seed = 0
       return view;
     };
     const locks = ['.local/portfolio-operations/cycle.lock', '.local/engineer-career/plan.lock', '.local/autonomous-growth/plan.lock',
-      '.local/server-innovation/discovery/discovery.lock', '.local/autonomous-prosperity/run.lock'];
+      '.local/server-innovation/discovery/discovery.lock', '.local/autonomous-prosperity/run.lock', '.local/improvement-bridge/bridge.lock'];
     if (locks.some(relative => fs.existsSync(safe(root, relative)))) return finish('LOCKED');
     const status = await prosperityStatus({ root, now });
     if (['PAUSED', 'REVIEW_LOAD'].includes(status.state)) return finish(status.state);
