@@ -16,6 +16,11 @@ node tools/portfolio-loop/loop.mjs demo
 `demo` は一時ディレクトリに合成データで全工程を流し、次の一手のカードを表示します。ネットワーク、実在の `.local/`、公開情報には触れません。
 実際の週次運用は初回に `init`、以後は `run` の 1 行です。
 
+`run` / `weekly` は[自律繁栄システム](../autonomous-prosperity/README.md)にも接続しています。
+既存4系統の後に成果・負荷を確認し、最優先の一行動を表示します。同じ判断の再実行は短い「変化なし」表示です。
+本人の週次負荷は `node tools/portfolio-loop/loop.mjs check-in normal`（縮小なら `reduced`、停止なら `paused`）で入力します。
+別の定期実行は追加しません。`demo` とライブラリ `runLoop()` は従来の4系統の実行です。
+
 ```text
 node tools/portfolio-loop/loop.mjs init 10
 node tools/portfolio-loop/loop.mjs run

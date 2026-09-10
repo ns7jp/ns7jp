@@ -2,6 +2,11 @@
 
 [入口](README.md) / [詳細設計](design.md) / [月曜の運用](operation.md)
 
+2026-09-10追加：`run` / `weekly` のCLIは[自律繁栄の成果・負荷判断](../autonomous-prosperity/tool-guide.md)を実行します。
+JSONは従来項目に `prosperity` を追加し、`notify` は統合結果になります。本人停止中は `outcome: NOT_RUN` です。
+負荷は `check-in normal` / `check-in reduced` / `check-in paused` のいずれかで入力できます。
+従来のテキストカードに代わり、一行動の表示または「変化なし」を返します。ライブラリと `demo` は従来どおりです。
+
 ## 1. 準備
 
 Node.js 22 以上、`ns7jp/ns7jp` のルートで実行します。追加パッケージ、AI API、API キーは不要です。

@@ -21,6 +21,8 @@ jobs:
         run: node --test tools/server-innovation/tests/*.test.mjs
       - name: Test portfolio loop orchestrator
         run: node --test tools/portfolio-loop/tests/*.test.mjs
+      - name: Test autonomous prosperity integration
+        run: node --test tools/autonomous-prosperity/tests/*.test.mjs
 
   mermaid-parse:
     runs-on: ubuntu-latest
