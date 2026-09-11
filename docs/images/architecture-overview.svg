@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="654" viewBox="0 0 1060 654" role="img" aria-labelledby="diagram-title diagram-description">
+  <title id="diagram-title">アプリ・監視・ログの流れ</title>
+  <desc id="diagram-description">利用者はNginxへ画面を要求し、NginxはFlask / Gunicornへ要求を渡す。Prometheusはアプリの数値を取得し、警告をAlertmanagerへ渡す。GrafanaはPrometheusの数値とLokiのログを問い合わせる。AlloyはLokiへログを送信する。矢印は要求・取得・送信の向きで、応答は要求元へ返る。</desc>
+  <!-- Editable counterpart: ../architecture-overview-source.md. Keep all 8 nodes and 7 directed edges aligned. -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#52647e"/>
+    </marker>
+    <style>
+      text { font-family: "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif; fill: #172b4d; }
+      .heading { font-size: 24px; font-weight: 700; }
+      .name { font-size: 21px; font-weight: 700; text-anchor: middle; }
+      .role { font-size: 17px; text-anchor: middle; fill: #334e68; }
+      .edge-label { font-size: 16px; text-anchor: middle; }
+      .edge { fill: none; stroke: #52647e; stroke-width: 2; marker-end: url(#arrow); stroke-linejoin: round; }
+      .node { stroke: #9db6d2; stroke-width: 1.5; }
+    </style>
+  </defs>
+  <rect width="1060" height="654" rx="16" fill="#ffffff"/>
+  <rect x="1" y="1" width="1058" height="652" rx="15" fill="none" stroke="#d0dae5"/>
+  <text class="heading" x="40" y="48">アプリ・監視・ログの流れ</text>
+
+  <g id="edges">
+    <path id="edge-U-N" class="edge" d="M 220 134 H 374"/>
+    <text class="edge-label" x="297" y="119">画面を要求</text>
+    <path id="edge-N-A" class="edge" d="M 604 134 H 754"/>
+    <text class="edge-label" x="679" y="119">要求を渡す</text>
+    <path id="edge-P-A" class="edge" d="M 489 292 V 232 H 887 V 178"/>
+    <text class="edge-label" x="688" y="217">数値を取りに行く</text>
+    <path id="edge-G-P" class="edge" d="M 220 336 H 374"/>
+    <text class="edge-label" x="297" y="305"><tspan x="297">数値を</tspan><tspan x="297" dy="20">問い合わせる</tspan></text>
+    <path id="edge-P-M" class="edge" d="M 604 336 H 754"/>
+    <text class="edge-label" x="679" y="321">警告を渡す</text>
+    <path id="edge-C-L" class="edge" d="M 220 552 H 374"/>
+    <text class="edge-label" x="297" y="537">送信</text>
+    <path id="edge-G-L" class="edge" d="M 130 380 V 446 H 489 V 508"/>
+    <text class="edge-label" x="309" y="431">ログを問い合わせる</text>
+  </g>
+
+  <g id="node-U">
+    <rect class="node" x="40" y="90" width="180" height="88" rx="10" fill="#f1f5f9"/>
+    <text class="name" x="130" y="142">利用者</text>
+  </g>
+  <g id="node-N">
+    <rect class="node" x="374" y="90" width="230" height="88" rx="10" fill="#eaf3ff"/>
+    <text class="name" x="489" y="124">Nginx</text>
+    <text class="role" x="489" y="152">入口</text>
+  </g>
+  <g id="node-A">
+    <rect class="node" x="754" y="90" width="266" height="88" rx="10" fill="#eaf3ff"/>
+    <text class="name" x="887" y="124">Flask / Gunicorn</text>
+    <text class="role" x="887" y="152">本体</text>
+  </g>
+  <g id="node-G">
+    <rect class="node" x="40" y="292" width="180" height="88" rx="10" fill="#edf7f2"/>
+    <text class="name" x="130" y="326">Grafana</text>
+    <text class="role" x="130" y="354">表示</text>
+  </g>
+  <g id="node-P">
+    <rect class="node" x="374" y="292" width="230" height="88" rx="10" fill="#edf7f2"/>
+    <text class="name" x="489" y="326">Prometheus</text>
+    <text class="role" x="489" y="354">計測・条件判定</text>
+  </g>
+  <g id="node-M">
+    <rect class="node" x="754" y="292" width="266" height="88" rx="10" fill="#fff5e8"/>
+    <text class="name" x="887" y="326">Alertmanager</text>
+    <text class="role" x="887" y="354">通知をまとめる</text>
+  </g>
+  <g id="node-C">
+    <rect class="node" x="40" y="508" width="180" height="88" rx="10" fill="#f3efff"/>
+    <text class="name" x="130" y="542">Alloy</text>
+    <text class="role" x="130" y="570">ログを運ぶ</text>
+  </g>
+  <g id="node-L">
+    <rect class="node" x="374" y="508" width="230" height="88" rx="10" fill="#f3efff"/>
+    <text class="name" x="489" y="542">Loki</text>
+    <text class="role" x="489" y="570">ログを保存・検索</text>
+  </g>
+  <text x="40" y="631" font-size="16">矢印：要求・取得・送信の向き。応答は要求元へ返ります。一部を省略した図です。</text>
+</svg>
