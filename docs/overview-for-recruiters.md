@@ -4,13 +4,13 @@
 
 第一志望は **Linux サーバー設計・構築**です。主作品 **[サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server)** で、小さな Web アプリの稼働環境、異常を調べる監視、復旧手順をコードと文書にしています。**個人の学習・検証の成果物で、サーバー構築の実務経験とは区別します。**
 
-2026-08-22 の使い捨て Ubuntu での一連の試験は 23/23 PASS。2026-09-04 には本人の Hyper-V VM で Ubuntu / 再利用 AlmaLinux の基礎設定を適用した記録が加わりました。それぞれ実行環境・対象手順が異なり、現在のコード全体や本番運用の合格を意味しません。詳細は[実測したこと](#実測したこと)と[正直な境界](#正直な境界)に記載します。
+**2026-09-11 時点の本人実績**: Hyper-V 上の Ubuntu VM で、9 月 8 日に数値監視の停止・復帰表示、Loki の同一 VM 内の別ボリュームへの復元、アプリ自動再起動を確認しました。9 月 9〜10 日には、演習ファイルの Ansible 変更・入力検証と、ローカル Git の競合解消・中止まで進めています。**AI が手順を案内し、本人が操作・結果画像を提供した記録**です。独力での設計・説明や、継続運用・本番復旧の実績とは区別します。
 
 初めて技術に触れる方は[やさしいガイド](./beginner-guide.md)、本人の説明練習は[30 秒・3 分の説明練習](./portfolio-explanation.md)をご覧ください。
 
-| [主作品 `server`](https://github.com/ns7jp/server) | [Linux サーバー構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package) | [日付・環境付きの実測証跡](https://ns7jp.github.io/evidence-demo.html) |
+| [主作品 `server`](https://github.com/ns7jp/server) | [本人の最新実測](#実測したこと) | [職務経歴書](./resume.md) |
 | --- | --- | --- |
-| 構成、コード、実行方法を確認 | 要件定義から引き渡しまでを工程順に確認 | 23/23 PASS の結果、実行環境、未実測範囲を確認 |
+| 構成、コード、実行方法を確認 | 日付・環境・確認結果・未実施範囲を確認 | これまでの経験、希望条件、AI 支援の範囲を確認 |
 
 [案件概要（1 枚）](https://ns7jp.github.io/project-brief.html) ／ [2 分 15 秒デモ（保存済み画面の証跡リプレイ）](https://ns7jp.github.io/demo.html) ／ [詰まった記録](../LEARNINGS.md)
 
@@ -19,30 +19,42 @@
 | 工程 | 成果物・実行内容 | 状態 |
 | --- | --- | --- |
 | 要件・設計 | 要件定義、基本・詳細設計、パラメータシート、ネットワーク設計 | **実装済み**（文書を作成） |
-| 構築・試験 | Ansible `site.yml`、2 回目の冪等性、network / UFW、監視スタック、backup / restore | **実測済み**（使い捨て Ubuntu 24.04 runner、23/23 PASS） |
-| 監視・復旧 | Grafana / Loki の実データ表示、通信断の切り分け、D-1 の RTO 計測 | **実測済み**（手元 WSL2） |
+| 構築・試験 | Ubuntu / 再利用 AlmaLinux の基礎設定、2 回目の変更 0 件 | **本人 VM で実測済み**（9 月 4 日。全監視構成とは別） |
+| 監視・復旧 | 停止・復帰表示、Loki の別ボリューム復元、D-1 の HTTP 復帰 | **本人 VM で個別に実測済み**（9 月 8 日。全構成を通した受け入れ・長期稼働は未実施） |
 | 変更 | Git SHA を固定した配備と旧版へのロールバック | **実測済み**（PR ブランチの使い捨て runner） |
 | 引き渡し | チェックリストと受け入れ手順 | **実装済み**。独立した対象ホストへの引き渡しは **未実施（NOT RUN）** |
 
-**実装済み**は成果物・コードが存在する状態、**実測済み**は日付・環境・commit SHA を含む結果がある状態、**未実施（NOT RUN）**は実行ログがない状態です。判定の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
+**実装済み**は成果物・コードが存在する状態、**実測済み**は記録で結果を確認できる状態です。日付・環境・実施者・対象版と未採録の情報は各証跡に記載します。**未実施（NOT RUN）**は実行結果がない状態です。判定の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
 
 ## 志望と現況
 
 製造・物流の現場で 15 年以上続けてきた「測る・原因を絞る・手順化する・定着させる」を、Linux サーバーの構築・運用に生かすエンジニア志望です。
 
-**公開版の現況（2026-08 時点）**: 人材派遣会社（アデコ株式会社）を通じ、IT 企業にてトライアル就業中です（2026/07〜、トライアル期間 2 か月。就業先の社名は面談時に開示します）。IT 業務に従事しながら、Linux サーバー構築へのキャリア移行を進めています。
+**公開版の現況（2026-09-11 時点）**: 人材派遣会社（アデコ株式会社）を通じ、IT 企業にてトライアル就業中です（2026/07〜）。**現在のトライアル就業は 2026-09-15 に終了予定**です。就業先の社名は面談時に開示します。Linux サーバー構築へのキャリア移行を進めています。
 
 | 項目 | 内容 |
 | --- | --- |
 | 勤務地 | 東京都内通勤可能圏 |
 | 夜勤・交代制 | 24/365 監視業務のシフト勤務に対応可能 |
-| 勤務開始時期 | トライアル期間満了の 2026/09 以降。相談のうえ 1 か月以内の調整も可能 |
+| 勤務開始時期 | 個別相談（現在のトライアル就業は 2026-09-15 に終了予定。入社可能日は調整のうえ決定） |
 
 個別に調整する応募条件（雇用形態・英語力・運転免許を含む）は、公開版に空欄や仮入力を残さず、[職務経歴書・スキルシート](./resume.md#3-希望条件働き方)または応募書類・面談時に提示します。
 
 第一志望は **Linux サーバー設計・構築**。入口としてインフラ監視・運用にも対応します。IT サポート・社内 SE 補助は応募先に応じた補助トラックです。
 
 ## 実測したこと
+
+### 2026-09-08〜10 の本人 VM での記録
+
+いずれも AI の手順案内を受けて本人が操作し、結果画像を提供した個人学習です。対象は Hyper-V の Ubuntu VM `lab-base01`。9 月 8 日の監視・復元・D-1 は構成を切り替えた別々の演習で、同時稼働の一連の受け入れ試験ではありません。
+
+| 日付・記録 | 確認した結果 | まだ確認していないこと |
+| --- | --- | --- |
+| 9/8 [数値監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md) | 5 サービスの部分構成で、手動停止・再開に伴う Grafana の収集状態 1→0→1 | 全 10 サービス、アラート発火・外部通知、長期稼働 |
+| 9/8 [Loki 復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md) | 同一 VM 内の別ボリュームに復元し、過去の目印付きログ 2 件を再取得 | 別 VM への復元、全データの完全性、RTO / RPO |
+| 9/8 [アプリ自動再起動 D-1](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) | app / nginx 構成で再起動回数 0→1、HTTP 復帰 2 秒、後続確認で healthy | 2 秒は当該 1 回のスクリプト計測。healthy 到達時間・全機能の復旧・本番の保証値ではない |
+| 9/9 [Ansible テンプレート](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-09-lab-base01-template-practice.md)・[入力検証](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-09-lab-base01-validation-practice.md) | 変更予測時の旧本文維持、適用・再実行の変更 0 件、不正値 70000 の拒否と前後 SHA-256 一致 | ホーム内の演習ファイルが対象。サービス起動・リモート構築・全入力の検証 |
+| 9/10 [Git のブランチ・履歴](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-10-lab-base01-git-practice.md)・[競合解消と中止](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-10-lab-base01-git-merge-practice.md) | Fast-forward、同じ行の競合解消、merge --abort 前後の一致、main clean への復帰 | VM 内のローカル演習。VM からの push・Ansible 反映・独力での説明 |
 
 ### 2026-09-04 の基礎設定の実測
 
@@ -53,25 +65,19 @@
 
 ### 2026-08 の記録済み環境・コード版での結果
 
-以下の件数・復旧秒数は当時の記録です。復旧時間は環境と条件に依存するため、本番の保証値として使いません。
+以下は当時のコード版・環境での記録です。本人 VM の上表と合算せず、復旧秒数を本番の保証値として使いません。詳しい試験内容はリンク先に記載します。
 
 | 検証 | 結果 |
 | --- | --- |
-| 使い捨て Ubuntu 24.04 への Full-stack E2E | [Docker 導入済み runner で `site.yml` 適用、2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、local webhook の FIRING / RESOLVED、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認し、試験項目 23 件中 23 件合格](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
-| Git SHA を固定した変更・ロールバック | [候補 `84e1492` → 旧版 `59aa88e` の配備・復帰後に、稼働中の版番号、実行ファイルのハッシュ、app コンテナ再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みを確認](./evidence/2026-08-23-server-monitor-git-rollback-ci.md) |
-| Docker API の権限制御とログ経路 | [read-only proxy の GET 成功、POST 拒否、固有 Nginx log の Alloy 経由 Loki 到達を確認](https://github.com/ns7jp/server/actions/runs/32572409469) |
-| Ansible 4 ロールの適用・2 回目の冪等性・期待状態 | [全ロール PASS、欠陥 2 件を修正](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md) |
-| 監視スタック 9 サービスの起動と実データ表示 | [Grafana / Loki を Linux (WSL2) 上で確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-18-local-observability.md) |
-| app プロセス停止からの自動復旧 | [2026-08-19 の WSL2 上の D-1 復旧演習 PASS、RTO 13 秒](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
-| 二セグメント構成の通信断 | [再現、切り分け、復旧まで PASS](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-19-network-drill.md) |
+| 8/22 Full-stack E2E | [Docker 導入済みの使い捨て Ubuntu runner で `site.yml` 適用、2 回目変更 0 件、監視・network / UFW・backup / restore を含む 23/23 PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) |
+| 8/23 変更・ロールバック | [PR ブランチの使い捨て runner で候補 `84e1492` → 旧版 `59aa88e` の配備・復帰、稼働版とハッシュ等を確認](./evidence/2026-08-23-server-monitor-git-rollback-ci.md) |
+| 8/18〜19 WSL2 上の監視・復旧 | [Grafana / Loki の表示](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-18-local-observability.md)、[D-1 の HTTP 復帰 13 秒](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md) |
 
 設計、パラメータ、構築、試験、変更、引き渡しの成果物は [案件概要](https://ns7jp.github.io/project-brief.html) と [Linux サーバー構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package) に分離しています。このページでは技術名を広く並べるより、実際に実行して結果を残した項目を優先します。
 
 ## 追加の実測演習
 
-2026-08-24 に実行し、証跡を採録しました。判定はスクリプトが期待値と実測値を比較した結果で、証跡ファイルも自動生成されます。手で PASS を書き込む余地を残さない作りです。
-
-**実行環境を正確に書きます。** B-1 は仮想ディスク（loop device）を割り当てた Ubuntu 24.04 ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace での実行で、**いずれも AI 支援セッションの作業環境上のものです。** 独立した物理／VPS ホストや手元 WSL2 での再実行証跡ではありません（証跡ファイルの「実施環境」欄に採録時の `uname` をそのまま残しています）。面接で再実演する項目は、本人が手元の環境で事前に再実行し、所要時間と結果を確認したものから選びます。
+2026-08-24 の以下の結果は、**AI 支援セッションの作業環境での実行**です。B-1 は仮想ディスク（loop device）付き Ubuntu ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace を使用しました。本人の手元で再実行した証拠や、独立した物理／VPS ホストでの実績としては扱いません。
 
 | 演習 | 実演内容 | 所要 | 結果 |
 | --- | --- | --- | --- |
@@ -80,12 +86,7 @@
 | B-3 | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | 10 分 | [7 PASS](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒） |
 | B-4 | 静的ルート、`ip_forward`、VLAN ID 不一致の 3 パターンを切り分ける | 10 分 | [6 PASS / 3 SKIP-ENV](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-4.md) |
 
-Ansible role は Ubuntu に加えて **AlmaLinux / Rocky 9** に対応しています
-（`dnf`、firewalld、SELinux、dnf-automatic、`sshd_config.d` の上書き検査）。
-[Molecule の `el9` シナリオ](https://github.com/ns7jp/server/tree/main/ansible/roles/common/molecule/el9)
-は [2026-08-25 に実行証跡を採録](https://github.com/ns7jp/server/actions/runs/32811100007)しました
-（コンテナ上での検証。CI は `workflow_dispatch` のみで、
-push / PR では走りません）。9 月 4 日の再利用 AlmaLinux VM での基礎設定適用は上記の別証跡です。監視全体の `site.yml` 適用を示すものではありません。
+[8 月 25 日の AlmaLinux / Rocky 9 向け Molecule](https://github.com/ns7jp/server/actions/runs/32811100007) もコンテナでの検証です。9 月 4 日の再利用 AlmaLinux VM への基礎設定適用は上記の別証跡です。
 
 ## 入社後に任せやすいこと
 
@@ -110,13 +111,14 @@ push / PR では走りません）。9 月 4 日の再利用 AlmaLinux VM での
 の 1 か所で区別しています。上の結果は、使い捨て runner、WSL2、AI 支援環境、本人の Hyper-V VM での個別記録です。環境と対象手順を各証跡で確認します。
 
 未実測の主なもの: Slack 実配信、AWS `apply / destroy`、D-2 復旧演習、
-独立した管理端末・引き渡し対象ホスト、組織 DNS、再起動後の永続性、長期稼働、
+独立した引き渡し対象ホストの受け入れ、組織 DNS、ホスト再起動後の永続性、24 / 72 時間の稼働、別の新規 VM への復元、
 AlmaLinux への監視全体の `site.yml` 適用と、専用の新規 VM での最小公開確認。**実行ログが無い項目を実績として書くことはしません。**
 
 **AI 支援の範囲も同じ基準で開示しています。** 文書だけでなく実装コード（Ansible role、
 Terraform module、CI workflow、テスト、ラボ）の生成にも AI を使っています。
 リポジトリ別の実作業コミット内訳という技術評価の詳細は、この1枚サマリではなく
 [職務経歴書・スキルシート §4-b](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)に置いています。
+本人の独力での再構築・説明、第三者による手順確認は未確認です。[説明練習](./portfolio-explanation.md)では、設定理由・正常異常の判断・外れた仮説・戻し方を本人の言葉で確認する対象にしています。
 **その中で、実機を触って外した仮説の一次記録
 [LEARNINGS.md](../LEARNINGS.md) は、2026-08-25 以降、新規エントリを本人のみが書く
 運用にしています**（各記録と [STATUS](../STATUS.md) に示す作成経緯も併せて確認します）。技術的な深さより、ここを
@@ -124,7 +126,7 @@ Terraform module、CI workflow、テスト、ラボ）の生成にも AI を使�
 
 ## 経歴・学習
 
-- 人材派遣会社（アデコ株式会社）を通じ、IT 企業にてトライアル就業中（2026/07〜、Windows / Linux サーバー構築・AWS / Azure 構築の研修。就業先の社名は面談時に開示します）
+- 人材派遣会社（アデコ株式会社）を通じ、IT 企業にてトライアル就業中（2026/07〜、2026-09-15 終了予定。Windows / Linux サーバー構築・AWS / Azure 構築の研修。就業先の社名は面談時に開示します）
 - 製造・物流業務 15 年以上
 - 中部大学 応用生物学部 応用生物化学科 卒業
 - 公共職業訓練「情報処理（Python エンジニア）コース」修了（2025 年 10 月〜2026 年 1 月）

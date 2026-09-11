@@ -7,7 +7,7 @@
 > - **確定情報**（資格・学歴・職業訓練・ポートフォリオ）はそのまま記載しています
 > - 「設計サンプル」と「実績」を混同しない方針は、ポートフォリオ全体（[STATUS.md](../STATUS.md)）と同じです
 
-最終更新: 2026-08-23（第一志望、PR #75 の Full-stack E2E 23/23 PASS、PR #77 の Git ロールバック CI、使い捨て runner の検証境界を反映）
+最終更新: 2026-09-11（トライアル就業の終了予定日、9 月 4〜10 日の本人 VM の実測と未実施範囲を反映）
 
 ---
 
@@ -17,7 +17,7 @@
 
 この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を構築・検証してきました。第一志望は **Linux サーバー設計・構築** です。入口業務としてインフラ監視・運用にも対応し、IT サポート・社内 SE 補助は応募先に応じた補助トラックと位置付けています。**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
 
-**現況**: 人材派遣会社（アデコ株式会社）を通じ、IT 企業にてトライアル就業中です（2026/07〜、トライアル期間 2 か月。就業先の社名は面談時に開示します）。
+**現況（2026-09-11 時点）**: 人材派遣会社（アデコ株式会社）を通じ、IT 企業にてトライアル就業中です（2026/07〜）。**現在のトライアル就業は 2026-09-15 に終了予定**です。就業先の社名は面談時に開示します。入社可能日は応募先と個別に相談します。
 研修では仮想マシン上の Windows Server / Linux サーバーと AWS / Azure の構築演習に取り組みました。これは研修での経験であり、顧客環境の設計・構築を担当した実績とは区別しています。
 職業訓練修了（2026-01）後、サーバー構築へのキャリア移行を目標に学習とポートフォリオ制作を継続しています。**就業しながらインフラ領域の実務経験を積み、サーバー構築・運用のポジションへ移ることを希望しています。**
 
@@ -29,7 +29,7 @@
 
 | 項目 | 内容 |
 | --- | --- |
-| 在籍期間 | 2026/07〜 現在（トライアル就業中） |
+| 在籍期間 | 2026/07〜 現在（2026-09-11 時点でトライアル就業中。現在のトライアル就業は 2026-09-15 終了予定） |
 | 雇用形態 | 派遣社員（トライアル期間2か月） |
 | 就業先 | IT 企業（社名は面談時に開示します） |
 | 業務内容 | WindowsサーバーとLinuxサーバーの構築研修、AWSとAzureの構築研修 |
@@ -82,13 +82,13 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 | --- | --- |
 | 志望領域 | 第一志望: サーバー設計・構築。入口としてインフラ監視・運用にも対応。IT サポート、社内 SE 補助は補助トラック |
 | 夜勤・交代制 | 24/365 監視業務のシフト勤務に対応可能 |
-| 勤務開始時期 | トライアル期間満了の 2026/09 以降 / 相談のうえ 1 か月以内 |
+| 勤務開始時期 | 個別相談（現在のトライアル就業は 2026-09-15 終了予定。入社可能日は調整のうえ決定） |
 | 勤務地 | 東京都内通勤可能圏 |
 | 希望年収 | 応相談 |
 | 雇用形態（客先常駐 / SES の可否） | SES可 |
 | 英語力 | AWS / Cisco / Red Hat の英語ドキュメント・エラーメッセージの読解は学習中 |
 | 普通自動車運転免許 | なし |
-| 現在の就業との関係 | トライアル期間満了（2026/09）に伴い、正社員としてのインフラ職を志望。経緯は[志望の経緯](./career-bridge.md#志望の経緯)を参照 |
+| 現在の就業との関係 | 現在のトライアル就業は 2026-09-15 終了予定。正社員としてのインフラ職を志望。経緯は[志望の経緯](./career-bridge.md#志望の経緯)を参照 |
 | その他 | 年下の先輩からの指導も歓迎します。未経験領域は「手順を覚えて、手順書を改善して返す」ことから貢献します |
 
 ---
@@ -101,6 +101,23 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 - **継続学習** — Linux / Docker / 監視基盤を個人ラボで構築し、実行結果と失敗修正を継続して記録
 
 詳細: [現場経験 ↔ インフラ運用の橋渡し](./career-bridge.md)
+
+### 本人 VM で最近確認したこと（2026-09-04〜10）
+
+個人学習用 Hyper-V VM での記録です。9 月 8〜10 日は **AI が手順・コードを提示し、本人が操作・結果画像を提供**しました。独力での設計・再構築・説明能力を確認した実績とは区別します。
+
+| 対象 | 確認したこと | 残る範囲 |
+| --- | --- | --- |
+| 9/4 基礎設定 | [Ubuntu](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-build.md) / [再利用 AlmaLinux](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md) に `foundation.yml` を適用し、再実行で変更 0 件 | 全監視構成。AlmaLinux の新規構築・最小公開 |
+| 9/8 数値監視 | [5 サービスの部分構成で手動停止・再開に伴う収集状態 1→0→1](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md) | アラート発火・外部通知、全 10 サービス、長期稼働 |
+| 9/8 Loki 復元 | [同一 VM 内の別ボリュームに復元し、過去の目印付きログ 2 件を再取得](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md) | 別 VM への復元、全データの完全性、RTO / RPO |
+| 9/8 D-1 | [app / nginx 構成で自動再起動と HTTP 復帰 2 秒、後続の healthy を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) | 2 秒は当該 1 回のスクリプト計測。healthy 到達・全機能・本番復旧の保証ではない |
+| 9/9 Ansible 入門 | [テンプレートの変更予測・適用・再実行](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-09-lab-base01-template-practice.md)、[不正値 70000 の拒否と本文・SHA-256 維持](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-09-lab-base01-validation-practice.md) | ホーム内の演習ファイルが対象。サービス起動・リモート構築は未実施 |
+| 9/10 Git 入門 | [ブランチ・履歴](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-10-lab-base01-git-practice.md)、[Fast-forward・競合解消・merge --abort・main clean への復帰](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-10-lab-base01-git-merge-practice.md) | VM 内のローカル操作。VM からの push・Ansible 反映は未実施 |
+
+監視・復元・D-1 は構成を切り替えた別々の演習です。同時稼働での一連の受け入れ、ホスト再起動後の永続性、24 / 72 時間の稼働、別の新規 VM への復元、第三者による手順確認は **NOT RUN**。次に確認する課題として残しています。結果の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
+
+### 過去の CI・WSL2・AI 支援環境の記録
 
 主作品では、runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server-monitor/commit/7622a9da974f694ae75e0173135923701be9e5a5)を対象に、Docker 導入済みの使い捨て Ubuntu 24.04 runner へ `site.yml` を一括適用しました。2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を含む [Full-stack E2E 23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)を採録しました。Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働は未実測です。
 
@@ -152,13 +169,14 @@ AI が生成した手順やコードを、本人が実行・理解していな�
 | 分類 | 項目 | レベル |
 | --- | --- | --- |
 | OS | Linux サーバー構築・基本運用（Ubuntu） | ○（個人ラボと研修での構築・確認。実務としての本番運用は未経験） |
- | OS | RHEL 系（AlmaLinux / Rocky 9） | ○（Ansible role を `dnf` / firewalld / SELinux / dnf-automatic 対応にし、[Molecule `el9` シナリオを実行して成功](https://github.com/ns7jp/server-monitor/actions/runs/32811100007)。**実機ホストへの適用は未実施**） |
- | ストレージ | LVM（VG / LV / ファイルシステム / fstab / online 拡張） | ○（[storage role](https://github.com/ns7jp/server-monitor/tree/main/ansible/roles/storage) を [実機（loop device）で実行](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md)。VG/LV/fstab 作成、冪等性、PV 追加による online 拡張（220M→457M、mount 維持）を実測、5 PASS。安全装置の negative test は 7 ケース実装済みで、実行証跡は未採録） |
-| コンテナ | Docker / Docker Compose | ○（WSL2 と使い捨て runner で構築・検証。独立した長期稼働ホストは未実測） |
+| OS | RHEL 系（AlmaLinux / Rocky 9） | ○（コンテナでの Molecule に加え、[9/4 に本人の再利用 AlmaLinux VM へ基礎設定を適用し、変更 0 件・SELinux enforcing 等を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md)。専用の新規 VM・最小公開・全監視構成は未実施） |
+| ストレージ | LVM（VG / LV / ファイルシステム / fstab / online 拡張） | ○（[8/24 の B-1](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md) で作成・冪等性・online 拡張の 5 PASS。**AI 支援環境の Ubuntu ゲストと loop device での結果**で、本人 VM での同演習の再実行は未実施） |
+| コンテナ | Docker / Docker Compose | ○（WSL2・使い捨て runner と本人 Hyper-V VM の部分構成で起動・停止・再作成等を確認。長期稼働は未実測） |
 | Web / Proxy | Nginx（リバースプロキシ。TLS は設定例・自己署名証明書での確認まで） | ○ |
-| 監視 | Prometheus / Grafana / Alertmanager | ○（Linux(WSL2) 上で起動・実データ表示を確認済み。[証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)） |
-| ログ | Loki / Grafana Alloy | ○（LogQL によるログ検索を実機で確認済み） |
-| 構成管理 | Ansible | ○（4 ロールの Molecule に加え、使い捨て Ubuntu 24.04 への `site.yml` 一括適用と 2 回目 `changed=0` を確認。[証跡](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)） |
+| 監視 | Prometheus / Grafana / Alertmanager | ○（[9/8 の本人 VM で数値表示と停止・復帰表示を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)。Alertmanager は起動確認まで。アラート発火・外部通知は同演習で未実施） |
+| ログ | Loki / Grafana Alloy | ○（本人 VM でログ検索と[同一 VM 内の別ボリュームへの Loki 復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md)を確認。別 VM への復元は未実施） |
+| 構成管理 | Ansible | ○（本人 VM への基礎設定適用と、ホーム内のファイル生成・変更予測・入力検証を確認。全監視構成の `site.yml` 一括適用・再実行の記録は使い捨て runner。上記の環境別記録を参照） |
+| 版管理 | Git | △（本人 VM 内でブランチ・履歴・競合解消・中止を実行。AI の案内あり。VM からの push や独力説明は未確認） |
 | IaC | Terraform（AWS） | △（`validate` / `fmt` まで。`apply` は未実施） |
  | ネットワーク | 静的ルーティング / `ip_forward` / 802.1Q VLAN | △（[L2 / L3 ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/routing)として実装。物理スイッチ・ケーブル・ポート VLAN は未着手） |
 | CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（[PR #75 の 5 workflow が success](https://github.com/ns7jp/server-monitor/pull/75)。[PR #77 で Git SHA 指定の変更・ロールバック CI が success](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)。Docker は runner に事前導入済み） |
@@ -197,7 +215,7 @@ AI が生成した手順やコードを、本人が実行・理解していな�
 
 | 作品 | 技術・取り組み | リンク |
 | --- | --- | --- |
-| サーバー監視・運用ラボ（主作品） | Linux / Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform | [案件概要](https://ns7jp.github.io/project-brief.html) ／ [最新の実測証跡](https://ns7jp.github.io/evidence-demo.html) ／ [server-monitor](https://github.com/ns7jp/server-monitor) |
+| サーバー構築・監視ラボ（主作品） | Linux / Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform | [server](https://github.com/ns7jp/server) ／ [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) ／ [案件概要](https://ns7jp.github.io/project-brief.html) |
 | 掲示板アプリ | PHP / MySQL / CSRF 対策 / bcrypt / PDO | [post](https://github.com/ns7jp/post) |
 | SNS アプリ「Pulse」 | PHP / SQLite | [pulse](https://github.com/ns7jp/pulse) |
 | 学習作品集 | Python / HTML / CSS | [works](https://github.com/ns7jp/works) |

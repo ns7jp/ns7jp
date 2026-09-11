@@ -12,27 +12,15 @@
 
 ## 30 秒で選ぶ
 
-まずは目的に合う **1 ページだけ** 開いてください。時間は読む目安で、習得を保証する時間ではありません。
+採用の観点では、次の3つから確認できます。志望と検証範囲をまとめて読む場合は、[採用ご担当者さま向けページ](./docs/overview-for-recruiters.md)をご覧ください。
 
 | 目的 | 最初に開くページ | 分かること |
 | --- | --- | --- |
-| 採用の観点で知る | [採用ご担当者さま向け 1 ページ](./docs/overview-for-recruiters.md) | 志望、成果物、検証範囲 |
-| 仕組みを理解する | [やさしい用語・見方ガイド](./docs/beginner-guide.md) | 役割、通信の流れ、用語の意味 |
-| IT の言葉を覚える | [IT 基礎用語集](./docs/it-glossary.md) | 20 分野・約 500 語の意味、対比、確認方法 |
-| 自分で動かす | [主作品の初心者向け学習ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md) | 小さく起動し、結果を確認する手順 |
-| 面接で説明する | [30 秒・3 分の説明練習](./docs/portfolio-explanation.md) | 例文、問い返し、自分の記録を使った説明 |
-| 初心者から構築を担当できるまで進む | [8段階の育成システム](./docs/server-engineer/README.md) | 演習・32の到達条件・個人台帳・再試験・引き渡し |
-| 小規模案件の先へ進む | [初心者から熟練への橋渡し設計](./docs/server-engineer/advanced/README.md) | 7段階の能力見取り図、12の発展課題、評価と専門分岐 |
-| 案件を受付から終結まで進める | [サーバー案件の運用システム](./docs/server-projects/README.md) | 要件・見積・作業配分・本番承認・検収・保守・変更対応 |
-| 就職し、定着して成長を続ける | [就職・定着・継続成長のシステム](./docs/engineer-career/README.md) | 求人と証拠の対応、週の配分、応募準備、入社後の担当拡張 |
-| 実際の学習記録から次の一手を選ぶ | [自律型成長システム](./docs/autonomous-growth/README.md) | 未達条件、再説明、方法変更、評価待ちを既存の時間枠へつなぐ |
-| 週次の改善を 1 コマンドで回す | [自律型ポートフォリオ改善イノベーションループ](./docs/portfolio-loop/README.md) | 監査・計画・探索の一括実行、作業枠の判定、実測の取り込み、次の一手 |
-| 成果と負荷を確認して行動を続ける | [自律繁栄システム](./docs/autonomous-prosperity/README.md) | 既存のrunに成果比較を接続、週10時間内の振り返り、次の一行動 |
-| 成果・負荷・期限を詳しく見直す | [自律繁栄の詳細運用](./docs/prosperity-review/README.md) | 月次の指標・価値実験・原期限・90日計画と任意の補助評価器 |
-| 反例から小変更を高速で試す | [自律型試行錯誤ループ](./docs/server-innovation/fast-loop.md) | 一コマンドのモデル比較、悪化しない案の選択、保存結果の再利用 |
-| 発火点から改善を準備する | [探索と改善の橋渡し](./docs/server-innovation/bridge.md) | 根拠付きの仮説、既存キューへの合流、実装・検証・戻し方の一式 |
+| 主作品を見る | [サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server) | 構成・コード・構築と復旧の手順 |
+| 本人の最新実測を見る | [主な実測結果](#主な実測結果) | 9月8〜10日のVM操作・画像・確認範囲 |
+| 経歴と応募条件を見る | [職務経歴書・スキルシート](./docs/resume.md) | 現場経験・志望・就業状況 |
 
-PC や Linux の準備から必要な方は、[開始前診断と最初の30分](./docs/learning-plan/00-start-here.md)へ。体系的な学習には [24 週の学習プラン](./docs/learning-plan/README.md)を使います。
+本人の最新実測では、Hyper-V上のUbuntuで数値監視、ログ検索・復元、アプリの自動再起動を別々の演習として確認しました。AIの手順案内による支援を受けて本人が操作した記録です。全構成の受け入れや独力での再構築・説明は別途確認が必要です。
 
 ## 何を作ったか
 
@@ -76,6 +64,21 @@ flowchart LR
 
 以下は **各記録に書かれた時点・環境・コード版での結果**です。現在のコード全体や本番環境の合格を示すものではありません。PASS は、その試験で決めた合格条件を満たした意味です。
 
+### 最近の本人による操作（2026-09-08〜10）
+
+AIが手順を案内し、本人がVMを操作して提供した画像に対応する記録です。以下の件数・結果を合算して、全構成の合格とは扱いません。
+
+| 記録 | 本人が操作して確認したこと | この記録の限界 |
+| --- | --- | --- |
+| [9/8：数値監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md) | 5サービスでPrometheus収集・Grafana表示。手動停止と再開で収集状態1→0→1 | 部分構成。外部通知・長期稼働は未実施 |
+| [9/8：ログ監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-loki-practice.md) | 6サービスでNginxの目印付きログ2件をGrafanaから検索 | 全10サービスの同時検証ではない |
+| [9/8：バックアップ復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md) | Lokiのアーカイブを別名ボリュームへ復元し、過去ログ2件を取得 | 同じVM内の復元。別ホスト・全データの完全性は未確認 |
+| [9/8：アプリ自動復旧](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) | 再起動回数0→1、HTTP復帰の計測2秒、後続のhealthyを確認 | app/nginxの1回の試験。2秒は全機能の復旧時間や本番保証ではない |
+| [9/9：Ansible入力検証](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-09-lab-base01-validation-practice.md) | 不正ポート70000を変更前に拒否し、出力ファイルのSHA-256と本文維持を確認 | ホーム内のファイル生成演習。実ポート待受の試験ではない |
+| [9/10：Gitマージ](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-10-lab-base01-git-merge-practice.md) | マージ・競合解消・中止後の一致を確認し、mainを元の状態へ復帰 | VM内のローカル演習。VMからのpush・Ansible反映は未実施 |
+
+### 基礎設定と自動試験の記録
+
 | 記録 | 確認したこと | 環境と限界 |
 | --- | --- | --- |
 | [2026-08-22：一連の構築・試験 23/23 PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) | 構築、再実行、監視、ローカル通知、復旧、復元 | GitHub Actions の使い捨て Ubuntu。Docker は事前導入済み |
@@ -87,6 +90,8 @@ flowchart LR
 ### まだ実測していないこと
 
 主な未実施範囲は、監視ラボ全体を独立した引き渡し対象ホストへ構築すること、組織 DNS を含む本番相当のネットワーク確認、Slack への実配信、AWS への実適用、ホスト再起動後の永続性・長期稼働です。AlmaLinux は上記の基礎設定までで、監視ラボ全体の `site.yml` 適用は未実施です。
+
+次は小さな構成の再起動後確認、24時間の観測、別VMへの復元、本人以外による手順確認を順に進めます。本人の判断を確認するための[実測一件を使った説明と問い返し](./docs/portfolio-explanation.md#7-最近の本人実測を使って判断を説明する)も用意しています。手順の用意と実施完了は区別します。
 
 ## 失敗から学んだこと
 
@@ -105,6 +110,21 @@ flowchart LR
 
 さらに学ぶ際は [24 週の学習プラン](./docs/learning-plan/README.md)へ進みます。[育成システム](./docs/server-engineer/README.md)で今日の課題と提出物を決め、24週後は条件変更・初見障害・第三者への引き渡しを含む総合演習へ進めます。学習期間は目安です。本人による演習と説明の確認をもって習得を判断します。
 
+### 教材と改善システムの案内
+
+下表は学習や改善のための資料です。教材の作成・自動テストの成功を、本人の習得や案件の実施完了には読み替えません。
+
+| 目的 | 資料 |
+| --- | --- |
+| PC・Linuxの準備 | [開始前診断と最初の30分](./docs/learning-plan/00-start-here.md) |
+| 用語を確かめる | [IT基礎用語集](./docs/it-glossary.md) |
+| 小規模案件の先へ進む | [初心者から熟練への橋渡し設計](./docs/server-engineer/advanced/README.md) |
+| 案件を受付から終結まで進める | [サーバー案件の運用システム](./docs/server-projects/README.md) |
+| 就職・定着と学習配分 | [就職・定着・継続成長](./docs/engineer-career/README.md)・[自律型成長](./docs/autonomous-growth/README.md) |
+| 週次の改善と実測の取り込み | [ポートフォリオ改善ループ](./docs/portfolio-loop/README.md) |
+| 成果・負荷・期限を振り返る | [自律繁栄](./docs/autonomous-prosperity/README.md)・[詳細運用](./docs/prosperity-review/README.md) |
+| 仮説を比較して改善する | [改善実験](./docs/server-innovation/README.md)・[試行錯誤ループ](./docs/server-innovation/fast-loop.md)・[探索と改善の橋渡し](./docs/server-innovation/bridge.md) |
+
 ## 経験・資格
 
 - 製造・物流業務 15 年以上
@@ -119,11 +139,7 @@ flowchart LR
 
 文書の構成・推敲に加え、実装コードの生成・レビューにも AI 支援を利用しています。生成物や自動試験の成功を、本人の習得や実務経験へ読み替えません。本人の作業・判断・説明は個別の記録で確認します。範囲と方針は [STATUS.md](./STATUS.md)と[職務経歴書・スキルシート](./docs/resume.md)に記載しています。
 
-継続改善の仕組みは[詳細設計](./docs/portfolio-automation/design.md)と[週次運用手順](./docs/portfolio-automation/weekly-operation.md)にまとめています。最新GitHub情報の収集、実測課題の検出、重複管理、限定した修正案の生成を実装しています。定期実行は利用者側のタスク設定で管理し、公開や実機操作の許可とは分けています。
-
-構築・復旧・復元の方法を比較して改善する[改善実験システム](./docs/server-innovation/README.md)では、8つの初期仮説に加え、記録と能動的なローカル比較から新しい仮説を補充します。事前登録・全試行と証拠の照合・効果判定を行い、結果を次の探索へ戻します。本人の技能・実機の受け入れ・公開判断は別に記録します。
-
-これらの週次監査・キャリア計画・自律型成長・改善実験を 1 コマンドで順に回すのが[自律型ポートフォリオ改善イノベーションループ](./docs/portfolio-loop/README.md)です。作業枠の判定と除外候補を採否台帳から合成し、実測結果の取り込みと次の一手の提示までを自動化します。合成データのデモとネットワークなしの試験を備え、公開・実機操作・本人の技能判定は行いません。
+改善ツールの実装範囲は[詳細設計](./docs/portfolio-automation/design.md)と[週次運用手順](./docs/portfolio-automation/weekly-operation.md)にまとめています。自動処理の結果と、本人の技能・実機の受け入れ・公開判断は別に記録します。
 
 ## Contact
 
