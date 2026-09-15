@@ -10,6 +10,8 @@
 
 既存VMでの実施例は、[演習案件02：nginx導入・HTTP通信許可・再起動後の本人確認記録](examples/training-linux-nginx-02-learner.md)を参照してください。画像で確認した結果と本人申告、未実施の範囲を分けています。
 
+続く[演習案件03：HTMLの変更・バックアップ復元の本人確認記録](examples/training-linux-page-03-learner.md)では、ファイルのハッシュと実際のHTTP本文を照合しています。復元対象はHTML1個です。
+
 1. 実案件を持ち出さず、架空案件 `demo-a` で [PJ00 受付](stages/00-intake.md)を読む。
 2. [受付票](templates/intake.md)を自分の作業場所へコピーし、目的・依頼者・対象・期限・未確認事項を埋める。分からない値は未確認とする。
 3. [ツール操作](tracker-guide.md)で案件を作成する。初期値は全工程 `NOT RUN`。Node.jsが使えない場合は同じ様式を手で管理できる。
