@@ -12,6 +12,8 @@
 
 続く[演習案件03：HTMLの変更・バックアップ復元の本人確認記録](examples/training-linux-page-03-learner.md)では、ファイルのハッシュと実際のHTTP本文を照合しています。復元対象はHTML1個です。
 
+[演習案件04：アクセスログの本人確認記録](examples/training-linux-access-04-learner.md)では、目印で自分のリクエストを特定し、通常ページの200と存在しないパスの404を照合しています。
+
 1. 実案件を持ち出さず、架空案件 `demo-a` で [PJ00 受付](stages/00-intake.md)を読む。
 2. [受付票](templates/intake.md)を自分の作業場所へコピーし、目的・依頼者・対象・期限・未確認事項を埋める。分からない値は未確認とする。
 3. [ツール操作](tracker-guide.md)で案件を作成する。初期値は全工程 `NOT RUN`。Node.jsが使えない場合は同じ様式を手で管理できる。
