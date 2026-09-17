@@ -47,7 +47,7 @@
 | 要件・設計 | 作る目的、構成、設定値を決める | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package) |
 | 構築・試験 | 自動構築し、通信・認証・監視などを確かめる | 下の[実行記録](#主な実測結果) |
 | 復旧・変更 | 停止からの復旧、バックアップ復元、旧版への戻し方を確かめる | [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) |
-| 性能 | 負荷をかけ、応答時間の分布と限界点を測る | [性能試験](https://github.com/ns7jp/server/blob/main/docs/performance-test.md)（実装済み・未実施） |
+| 性能 | 負荷をかけ、応答時間の分布と限界点を測る | [性能試験](https://github.com/ns7jp/server/blob/main/docs/performance-test.md)（[CI で 1 回実行](https://github.com/ns7jp/server/actions/runs/35197884893)。飽和点と p95 は未確認） |
 | 障害対応 | 手順書どおりに切り分けて直せるかを演習で確かめる | [障害復旧演習](https://github.com/ns7jp/server/blob/main/docs/drills/README.md) |
 | 引き渡し | 他の人が扱える手順とチェックリストを残す | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package)（対象ホストへの正式な引き渡しは未実施） |
 
@@ -130,7 +130,7 @@
 
 ### まだ実測していないこと
 
-主な未実施範囲は、監視ラボ全体を独立した引き渡し対象ホストへ構築すること、組織 DNS を含む本番相当のネットワーク確認、Slack への実配信、AWS への実適用、ホスト再起動後の永続性・長期稼働、負荷試験、D-2 と D-6〜D-9 の障害復旧演習です。AlmaLinux は基礎設定までで、監視ラボ全体の `site.yml` 適用は未実施です。
+主な未実施範囲は、監視ラボ全体を独立した引き渡し対象ホストへ構築すること、組織 DNS を含む本番相当のネットワーク確認、Slack への実配信、AWS への実適用、ホスト再起動後の永続性・長期稼働、D-2 と D-6〜D-9 の障害復旧演習です。負荷試験は [CI で 1 回だけ完走](https://github.com/ns7jp/server/actions/runs/35197884893)しましたが、**飽和点と p95 の値はまだ誰も読んでおらず**、本人の環境での実施も未着手です。AlmaLinux は基礎設定までで、監視ラボ全体の `site.yml` 適用は未実施です。
 
 次は小さな構成の再起動後確認、24時間の観測、別VMへの復元、本人以外による手順確認を順に進めます。本人の判断を確認するための[実測一件を使った説明と問い返し](./docs/portfolio-explanation.md#7-最近の本人実測を使って判断を説明する)も用意しています。手順の用意と実施完了は区別します。
 
