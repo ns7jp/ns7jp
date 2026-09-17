@@ -138,7 +138,7 @@
 
 主な未実施範囲は、監視ラボ全体を独立した引き渡し対象ホストへ構築すること、組織 DNS を含む本番相当のネットワーク確認、Slack への実配信、AWS への実適用、ホスト再起動後の永続性・長期稼働、D-2 と D-6〜D-9 の障害復旧演習です。AlmaLinux は基礎設定までで、監視ラボ全体の `site.yml` 適用は未実施です。
 
-負荷試験は [既存の CI 実行](https://github.com/ns7jp/server/actions/runs/35197884893)を 9 月 17 日に AI 支援で[再分析](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md)しました。旧集計は HTTP エラーを失敗率に含めておらず、並列 4 で 39.15%、並列 8 で 1.96% の HTTP 502 がありました。**CI の成功表示を性能合格とは扱えません。** エラー応答を含む p95 は読めましたが、正常応答だけの p95・処理能力の限界・502 の原因は未確定です。修正後の実環境での負荷再試験と本人環境での実施は未実施です。
+負荷試験は [既存の CI 実行](https://github.com/ns7jp/server/actions/runs/35197884893)を 9 月 17 日に AI 支援で[再分析](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md)しました。旧集計は HTTP エラーを失敗率に含めておらず、並列 4 で 39.15%、並列 8 で 1.96% の HTTP 502 がありました。**当時のCI成功を性能合格とは扱いません。** 集計修正後のCIでは502を正しくFAILとして検出し、[接続再利用の比較と復旧試験](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)へ進めました。実行版・測定値・確認できた範囲は各記録で分けています。本人環境での再現、長期安定性、容量の確定は未実施です。
 
 次は小さな構成の再起動後確認、24時間の観測、別VMへの復元、本人以外による手順確認を順に進めます。本人の判断を確認するための[実測一件を使った説明と問い返し](./docs/portfolio-explanation.md#7-最近の本人実測を使って判断を説明する)も用意しています。手順の用意と実施完了は区別します。
 
