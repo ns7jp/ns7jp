@@ -175,7 +175,7 @@ Windows はタスクスケジューラから個別に定期実行される。3 �
 | Windows の定期実行 | タスクスケジューラ（`schtasks` CLI、または `Register-ScheduledTask`） | 標準搭載で追加インストール不要。`schtasks /query` と `Get-ScheduledTaskInfo` で実行履歴・終了コードを確認でき、構築手順書へコマンドとして落とし込みやすい |
 | 設定形式 | YAML（`PyYAML`） | [Phase 5 W19](./02-curriculum.md#w19-ansible-による構成管理)の Ansible インベントリ・変数ファイルと同じ記法に揃え、コメントを書ける |
 | 監視の終了コード規約（`check.py`） | Nagios / Icinga 系プラグイン規約（`0=OK` `1=WARNING` `2=CRITICAL` `3=UNKNOWN`） | 独自規約を作らず、監視系の実務で広く使われる規約に合わせておくと現場転用が利く |
-| 通知方式（`check.py`） | ローカル JSON ステータスファイル + 任意のローカル webhook（`urllib.request` による POST） | 本演習は個人ラボ内で完結させ、**実際の Slack 配信は行わない**。[README AI の利用について](../../README.md#ai-の利用について)と同じく、実施していないことを実施したと書かない。server 側の実際の Slack 通知経路（[ADR-0007](../adr/0007-slack-notifications.md)）とは別物である |
+| 通知方式（`check.py`） | ローカル JSON ステータスファイル + 任意のローカル webhook（`urllib.request` による POST） | 本演習は個人ラボ内で完結させ、**実際の Slack 配信は行わない**。[README AI の利用について](../../README.md#3-つの前提ai-の利用を含む)と同じく、実施していないことを実施したと書かない。server 側の実際の Slack 通知経路（[ADR-0007](../adr/0007-slack-notifications.md)）とは別物である |
 | 監視対象の HTTP エンドポイント（`check.py`） | 検証のたびに手動起動する `python -m http.server` | [Phase 3](./02-curriculum.md#phase-3-ミドルウェア構築w9-w12)の Nginx 導入前でも演習が独立して回るようにするための代替。常駐サービスとしては登録せず、`check_http()` の判定ロジックを確認する目的に絞る。Phase 3 完了後は実際の Web サーバーへ向け先を差し替える |
 | ツール間のコード共有 | しない（3 本とも自己完結） | [基本設計](#基本設計構成)のとおり。この規模で共有パッケージを作る抽象化コストが実利を上回ると判断した |
 
