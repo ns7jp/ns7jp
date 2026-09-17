@@ -22,6 +22,10 @@
 | 本人の最新実測を見る | [主な実測結果](#主な実測結果) | 9月8〜10日のVM操作・画像・確認範囲 |
 | 経歴と応募条件を見る | [職務経歴書・スキルシート](./docs/resume.md) | 現場経験・志望・就業状況 |
 
+### 副作品で確かめること
+
+主作品の補足として、[design](https://github.com/ns7jp/design) に架空企業のインフラ刷新を題材にした設計書 13 文書、[shell](https://github.com/ns7jp/shell) に Bash / Python / PowerShell・Ansible の演習コードとテスト、[network](https://github.com/ns7jp/network) に架空のネットワーク案件 9 件、[aws](https://github.com/ns7jp/aws) に AWS CLI / Terraform の 6 段階の演習資料があります。設計書やコードの存在と本人の実行結果は分け、[作品ごとの確認範囲](./docs/github-profile-cleanup.md#主作品と副作品)を併記しています。
+
 ## 何を作ったか
 
 「サーバーが止まっているのに誰も気づかない」状態を減らすため、**応答を返すアプリ**と、**異常を見つけて知らせる監視基盤**を組み合わせました。まず「入口・本体・計測・表示・通知」で覚えます。
@@ -47,7 +51,7 @@
 | 要件・設計 | 作る目的、構成、設定値を決める | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package) |
 | 構築・試験 | 自動構築し、通信・認証・監視などを確かめる | 下の[実行記録](#主な実測結果) |
 | 復旧・変更 | 停止からの復旧、バックアップ復元、旧版への戻し方を確かめる | [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) |
-| 性能 | 負荷をかけ、応答時間の分布と限界点を測る | [性能試験](https://github.com/ns7jp/server/blob/main/docs/performance-test.md)（[CI で 1 回実行](https://github.com/ns7jp/server/actions/runs/35197884893)。飽和点と p95 は未確認） |
+| 性能 | 失敗を検出し、変更後の結果と復旧動作を確かめる | [集計修正・接続再利用の比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)。同じ負荷設定の2回のCIで全5段のHTTP・通信失敗0、最終試験で認証・IP変更後復旧を確認。短時間のCI結果で、本人の操作・本番容量の証明ではない |
 | 障害対応 | 手順書どおりに切り分けて直せるかを演習で確かめる | [障害復旧演習](https://github.com/ns7jp/server/blob/main/docs/drills/README.md) |
 | 引き渡し | 他の人が扱える手順とチェックリストを残す | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package)（対象ホストへの正式な引き渡しは未実施） |
 
@@ -79,6 +83,8 @@
 失敗の記録は [LEARNINGS.md](./LEARNINGS.md) にあります。たとえば、UFW（通信を許可・制限する設定ツール）の設定が毎回「変更あり」になった記録から、**初回の成功だけで終えず、もう一度実行して同じ状態になるか確かめる必要性**を学べます。
 
 原因調査は **「事実を見る → 範囲を絞る → 1 つ変える → 再確認する」**。公開済みの記録と、自分が経験した失敗は分けて扱います。
+
+9 月の実習から次に残すのは、[元ログのハッシュ照合を独力で再実施した記録と、本人が書く学び一件](./docs/portfolio-explanation.md#8-次に残す一件と本人の学び)です。今の状態はどちらも記入・実施待ちで、AI が本人の判断や学びを補完して完了にはしません。
 
 ## 学習中の方へ
 
@@ -130,13 +136,15 @@
 
 ### まだ実測していないこと
 
-主な未実施範囲は、監視ラボ全体を独立した引き渡し対象ホストへ構築すること、組織 DNS を含む本番相当のネットワーク確認、Slack への実配信、AWS への実適用、ホスト再起動後の永続性・長期稼働、D-2 と D-6〜D-9 の障害復旧演習です。負荷試験は [CI で 1 回だけ完走](https://github.com/ns7jp/server/actions/runs/35197884893)しましたが、**飽和点と p95 の値はまだ誰も読んでおらず**、本人の環境での実施も未着手です。AlmaLinux は基礎設定までで、監視ラボ全体の `site.yml` 適用は未実施です。
+主な未実施範囲は、監視ラボ全体を独立した引き渡し対象ホストへ構築すること、組織 DNS を含む本番相当のネットワーク確認、Slack への実配信、AWS への実適用、ホスト再起動後の永続性・長期稼働、D-2 と D-6〜D-9 の障害復旧演習です。AlmaLinux は基礎設定までで、監視ラボ全体の `site.yml` 適用は未実施です。
+
+負荷試験は [既存の CI 実行](https://github.com/ns7jp/server/actions/runs/35197884893)を 9 月 17 日に AI 支援で[再分析](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md)しました。旧集計は HTTP エラーを失敗率に含めておらず、並列 4 で 39.15%、並列 8 で 1.96% の HTTP 502 がありました。**当時のCI成功を性能合格とは扱いません。** 集計修正後のCIでは502を正しくFAILとして検出し、[接続再利用の比較と復旧試験](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)へ進めました。実行版・測定値・確認できた範囲は各記録で分けています。本人環境での再現、長期安定性、容量の確定は未実施です。
 
 次は小さな構成の再起動後確認、24時間の観測、別VMへの復元、本人以外による手順確認を順に進めます。本人の判断を確認するための[実測一件を使った説明と問い返し](./docs/portfolio-explanation.md#7-最近の本人実測を使って判断を説明する)も用意しています。手順の用意と実施完了は区別します。
 
 ### AI を使わずに再現した記録について
 
-現在の実測記録には、**AI 支援なしで再現した対照がありません。** そのため「AI なしでどこまでできるか」は、この資料からは読み取れません。対照を作るための手順とテンプレートを[独力再現ガイド](https://github.com/ns7jp/server/blob/main/docs/independent-rerun-guide.md)に用意しています（実施は未着手）。
+現在の実測記録には、**AI 支援なしで再現した対照がありません。** そのため「AI なしでどこまでできるか」は、この資料からは読み取れません。最初の対象は既存の元ログ 5 件のハッシュ照合です。[独力再現ガイド](https://github.com/ns7jp/server/blob/main/docs/independent-rerun-guide.md)の条件で本人が実施し、参照資料・途中の判断・出力を残します（実施は未着手）。
 
 ## Contact
 
