@@ -51,7 +51,7 @@
 | 要件・設計 | 作る目的、構成、設定値を決める | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package) |
 | 構築・試験 | 自動構築し、通信・認証・監視などを確かめる | 下の[実行記録](#主な実測結果) |
 | 復旧・変更 | 停止からの復旧、バックアップ復元、旧版への戻し方を確かめる | [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) |
-| 性能 | 負荷結果を読み、HTTP エラーを含めて合否を評価する | [CI 実測の再分析](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md)。並列 4 / 8 で HTTP 502 を検出し、内部基準 1% を超過。旧 PASS 判定の集計漏れを訂正。処理能力の限界は未確定 |
+| 性能 | 失敗を検出し、変更後の結果と復旧動作を確かめる | [集計修正・接続再利用の比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)。同じ負荷設定の2回のCIで全5段のHTTP・通信失敗0、最終試験で認証・IP変更後復旧を確認。短時間のCI結果で、本人の操作・本番容量の証明ではない |
 | 障害対応 | 手順書どおりに切り分けて直せるかを演習で確かめる | [障害復旧演習](https://github.com/ns7jp/server/blob/main/docs/drills/README.md) |
 | 引き渡し | 他の人が扱える手順とチェックリストを残す | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package)（対象ホストへの正式な引き渡しは未実施） |
 
