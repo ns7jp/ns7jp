@@ -1,9 +1,9 @@
 # 03. AWS + Terraform 化
 
 > 状態更新（2026-05-27）: Terraform modules と dev / prod 環境コードは
-> [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
+> [server](https://github.com/ns7jp/server) に実装済みである。
 > `terraform apply` / `destroy`、復旧試験、Cost Explorer の実費は未収録であり、
-> AWS 稼働実績としてはまだ提示しない。現行の費用・観測境界は server-monitor 側の
+> AWS 稼働実績としてはまだ提示しない。現行の費用・観測境界は server 側の
 > `docs/cost-report.md` と `docs/aws-architecture.md` を正本とする。
 >
 > この設計は AWS の公式ドキュメントやベストプラクティス集を参考に組み立てたものであり、

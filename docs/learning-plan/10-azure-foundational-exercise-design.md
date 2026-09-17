@@ -289,7 +289,7 @@ Azure 固有の「ガバナンス・ネットワーク・コンピュート・Ia
 
 ## 6. 障害演習：検知から復旧まで（AZ-D1）
 
-[09 の Z-1 障害演習](./09-zabbix-monitoring-exercise-design.md#6-障害演習検知から復旧までz-1)・[server-monitor の D-1 復旧演習](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)（RTO 実測）と同じ考え方で、Azure 版の障害注入演習を設計します。目的は「監視・バックアップが設定されている」ことではなく「**検知から復旧までの所要時間を実測できる**」ことです。
+[09 の Z-1 障害演習](./09-zabbix-monitoring-exercise-design.md#6-障害演習検知から復旧までz-1)・[server-monitor の D-1 復旧演習](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)（RTO 実測）と同じ考え方で、Azure 版の障害注入演習を設計します。目的は「監視・バックアップが設定されている」ことではなく「**検知から復旧までの所要時間を実測できる**」ことです。
 
 | 手順 | 内容 | 記録する時刻 |
 | --- | --- | --- |
@@ -412,7 +412,7 @@ Azure 固有の「ガバナンス・ネットワーク・コンピュート・Ia
 | 作業ログ | [03 §3 の作業ログ取得](./03-build-process.md#作業ログの取得)と同じく `script -a` または Azure CLI の `--debug` 出力を記録し、`server-monitor` の `docs/drills/logs/` へ保存する |
 | スクリーンショット | ポータル画面・Cost Management のスクリーンショットは、サブスクリプション ID・テナント ID・パブリック IP・請求額の詳細をマスクしてから保存する |
 | 試験証跡の命名 | [7 章](#7-試験項目書)の試験項目書のエビデンス列は `<試験No>_<対象>_<日付>.<拡張子>` で統一する（[09](./09-zabbix-monitoring-exercise-design.md#10-証跡採録計画)と同じ規則） |
-| 障害演習の実測値 | [6 章](#6-障害演習検知から復旧までaz-d1)の検知時間・復旧時間は、[server-monitor の D-1 演習](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)と同じ形式（`症状 → 検知 → 通知 → 復旧 → 所要時間` の表）で記録する |
+| 障害演習の実測値 | [6 章](#6-障害演習検知から復旧までaz-d1)の検知時間・復旧時間は、[server-monitor の D-1 演習](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)と同じ形式（`症状 → 検知 → 通知 → 復旧 → 所要時間` の表）で記録する |
 | コスト実績 | AZ-1 の予算アラート設定後、実施完了時に Cost Management の実費を記録する（[01 学習環境 §5](./01-environment.md#5-クラウド検証と課金事故の防止)の「金額そのものが学習の証跡になる」と同じ原則） |
 | 削除完了の確認 | 実施最終日に `az group delete --name rg-azlab-core` 実行後、`az group list` に残骸が無いことのスクリーンショットを残す |
 | 反映先 | 実施後、本ドキュメントの各試験項目書・[6 章](#6-障害演習検知から復旧までaz-d1)の実測結果欄を埋めるか、実施記録を指す別ファイルへのリンクをここに追加する |

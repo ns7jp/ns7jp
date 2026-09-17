@@ -1,1 +1,8 @@
 scripts/rehearse-linux-web.py text eol=lf
+
+# 2026-09-17: archive/ 配下は、学習・案件・ポートフォリオ運営を管理するための
+# 旧システム一式（文書と、それを操作する Node.js の CLI）です。
+# インフラの成果物ではないため、GitHub の言語判定から除外します。
+# linguist-documentation を付けたパスは「文書」として扱われ、
+# リポジトリの言語統計に数えられません（コードとしては残り、CI でも動きます）。
+archive/** linguist-documentation

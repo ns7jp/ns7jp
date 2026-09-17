@@ -364,7 +364,7 @@ resource "aws_instance" "web" {
 
 ## 6. 障害演習：検知から復旧まで
 
-[server-monitor の D-1 復旧演習](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)と同じ「検知→通知→復旧」の型を、AWS のマネージドサービス上で再現します。**AWS-2 は実際のハードウェア障害を意図的に起こせないため疑似演習である**ことを明記します（誠実性の原則は [08](./08-ad-exercise-design.md)・[09](./09-zabbix-monitoring-exercise-design.md)と同じ）。
+[server-monitor の D-1 復旧演習](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)と同じ「検知→通知→復旧」の型を、AWS のマネージドサービス上で再現します。**AWS-2 は実際のハードウェア障害を意図的に起こせないため疑似演習である**ことを明記します（誠実性の原則は [08](./08-ad-exercise-design.md)・[09](./09-zabbix-monitoring-exercise-design.md)と同じ）。
 
 ### AWS-1: CPU 使用率アラーム（実際に発火させる）
 
@@ -491,7 +491,7 @@ resource "aws_instance" "web" {
 | 作業ログ | [03 §3 の作業ログ取得](./03-build-process.md#作業ログの取得)と同じく `script -a` で記録する |
 | スクリーンショット | コンソール画面・`plan`/`apply`/`destroy` の実行結果・CloudWatch アラーム画面は、アカウント ID・パブリック IP・メールアドレスをマスクしてから保存する |
 | 試験証跡の命名 | [7 章](#7-試験項目書)の試験項目書のエビデンス列は `<試験No>_<対象>_<日付>.<拡張子>` で統一する |
-| 障害演習の実測値 | [6 章](#6-障害演習検知から復旧まで)の検知時間・復旧時間は、[server-monitor の D-1 演習](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)と同じ形式（`症状 → 検知 → 通知 → 復旧 → 所要時間` の表）で記録する |
+| 障害演習の実測値 | [6 章](#6-障害演習検知から復旧まで)の検知時間・復旧時間は、[server-monitor の D-1 演習](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)と同じ形式（`症状 → 検知 → 通知 → 復旧 → 所要時間` の表）で記録する |
 | 実費 | Cost Explorer のスクリーンショット（account ID はマスク）と金額を [7 章](#7-試験項目書) T-13 に記録する。**0 円だった場合も「0 円だった」という結果を記録する**（[LEARNINGS.md](../../LEARNINGS.md)と同じく、期待どおりの結果も証跡として残す） |
 | マスキング | [証跡採録チェックリストのマスキング鉄則](../evidence-capture-checklist.md#マスキングと記録の鉄則)に従い、AWS account ID・パブリック IP・秘密値をすべてマスクする |
 | 反映先 | 実施後、本ドキュメントの[7 章](#7-試験項目書)・[6 章](#6-障害演習検知から復旧まで)の実測結果欄を埋めるか、実施記録を指す別ファイルへのリンクをここに追加する |

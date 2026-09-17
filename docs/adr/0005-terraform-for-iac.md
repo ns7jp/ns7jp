@@ -22,7 +22,7 @@ v2.0 で server-monitor を AWS へ移行するにあたり、インフラ構築
 
 **HashiCorp Terraform** を採用する（[03 設計書](../server-monitor-improvements/03-terraform-aws.md)）。
 
-State は S3 に置く（**2026-07 追記：ロック方式を見直し、§6 参照**）。モジュールは `network / compute / alb / monitoring / backup` の 5 つに分ける（**2026-08-25 訂正：当初 `iam` を独立モジュールとする想定だったが、実装では IAM リソースを `compute` モジュール内に置いた。実装は [`terraform/modules/`](https://github.com/ns7jp/server-monitor/tree/main/terraform/modules) が正本**）。
+State は S3 に置く（**2026-07 追記：ロック方式を見直し、§6 参照**）。モジュールは `network / compute / alb / monitoring / backup` の 5 つに分ける（**2026-08-25 訂正：当初 `iam` を独立モジュールとする想定だったが、実装では IAM リソースを `compute` モジュール内に置いた。実装は [`terraform/modules/`](https://github.com/ns7jp/server/tree/main/terraform/modules) が正本**）。
 
 ---
 
@@ -69,7 +69,7 @@ State は S3 に置く（**2026-07 追記：ロック方式を見直し、§6 �
 ## 7. 2026-07 追記（見直し）
 
 - **State ロック**: Terraform 1.11 で S3 backend 自体のロック機能（`use_lockfile`）が使えるようになったため、別途 DynamoDB テーブルを用意する方式から切り替えた（実装は [03 §5.3](../server-monitor-improvements/03-terraform-aws.md)）
-- **セキュリティスキャン**: `tfsec` がメンテナンスモードになったため、後継の Trivy への切り替えを検討中（server-monitor 側では現状 tfsec がまだ動いている）
+- **セキュリティスキャン**: `tfsec` がメンテナンスモードになったため、後継の Trivy への切り替えを検討中（server 側では現状 tfsec がまだ動いている）
 
 ---
 

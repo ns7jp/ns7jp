@@ -2,7 +2,7 @@
 
 **このページを一言でいうと**: 未経験からサーバー構築エンジニアを目指す人が、24 週で「何を・どの順番で・どこまでできるようにするか」を決めた**学習の計画表**です（実績の記録ではありません）。
 
-**実際に進めるための入口**: [8段階・32条件の育成システム](../server-engineer/README.md)で、毎回の課題、本人の証跡、評価、補習、24週後の総合演習まで管理できます。本ページの既存教材・キットを実施内容として使います。全員の必修はLinuxの構築・試験・復旧で、クラウドやWindowsは追加コースです。
+**実際に進めるための入口**: [8段階・32条件の育成システム](../../archive/docs/server-engineer/README.md)で、毎回の課題、本人の証跡、評価、補習、24週後の総合演習まで管理できます。本ページの既存教材・キットを実施内容として使います。全員の必修はLinuxの構築・試験・復旧で、クラウドやWindowsは追加コースです。
 
 > **本ドキュメントの位置付け**
 >
@@ -25,7 +25,7 @@
 | [公開サイトの8段階](https://ns7jp.github.io/learning-path.html#route) | 全体を見渡したいとき | 学習テーマの順序を見る |
 | [主作品のLevel別手順](https://github.com/ns7jp/server/blob/main/docs/learning-path.md) | `server` を動かすとき | その作品の前提・コマンド・期待値を確認する |
 | この24週プラン | 継続する時間を決めるとき | Linux基礎なども含め、週ごとの範囲を選ぶ |
-| [育成システムのSE段階](../server-engineer/README.md) | 結果を振り返るとき | 実施記録を評価条件と照合し、次の課題や復習を決める |
+| [育成システムのSE段階](../../archive/docs/server-engineer/README.md) | 結果を振り返るとき | 実施記録を評価条件と照合し、次の課題や復習を決める |
 
 番号は共通の到達度ではありません。例えば、主作品の初回実習を終えても、OS設定・監視・復旧の全項目を終えたことにはなりません。一件の自分の記録を関連する課題から参照し、未確認の条件だけを追加で確かめます。
 
@@ -124,7 +124,7 @@ G3 の「L1 から L7」は OSI 参照モデルの階層を指します。用語
 
 ### 本人の到達状況（自己採点）
 
-以下は記載日の**過去の自己採点**であり、新しい学習者の合格や各複合目標の全条件達成を示すものではありません。○は当時の「根拠を出せる」という凡例です。現在の個別実測は [STATUS.md](../../STATUS.md)、新しい到達判定は[本人専用の台帳](../server-engineer/tracker-guide.md)で確認します。実測した復旧時間と目標値のRTO／RPOも、新しい記録では別欄へ記入します。
+以下は記載日の**過去の自己採点**であり、新しい学習者の合格や各複合目標の全条件達成を示すものではありません。○は当時の「根拠を出せる」という凡例です。現在の個別実測は [STATUS.md](../../STATUS.md)、新しい到達判定は[本人専用の台帳](../../archive/docs/server-engineer/tracker-guide.md)で確認します。実測した復旧時間と目標値のRTO／RPOも、新しい記録では別欄へ記入します。
 
 このプランは他の人にも使える形で書いていますが、**本人がどこまで到達しているか**
 を書かないと、計画だけが立派な文書になります。現時点の自己採点を残します。
@@ -149,11 +149,11 @@ G3 の「L1 から L7」は OSI 参照モデルの階層を指します。用語
 
 | # | ゴール | 状況 | 根拠 / 残っていること |
 | --- | --- | --- | --- |
-| G1 | 空の VM から Web / AP / DB の 3 層構成を単独で構築 | △ | [3 層ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier)を[実コンテナで実行](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md)（nginx / gunicorn / PostgreSQL、層を分離、9 PASS）。**コンテナ上の構成であり、空の VM に OS を入れて組んだ実績ではない**。この差分を埋める演習は [05 Phase 1 演習設計](./05-phase1-exercise-design.md)に設計済み（未実施） |
-| G2 | パラメータシート・構築手順書・試験項目書として文書化 | ○ | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)。試験項目書の原本は引き渡し対象ホスト未定のため `NOT RUN`。記入済みの見本は演習の証跡が担当 |
-| G3 | 「つながらない」を L1 から L7 まで順番に切り分け | △ | [L2 / L3 ラボ](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md)で静的ルート・`ip_forward`を実機実行（6 PASS）。VLAN ID 不一致は kernel が `CONFIG_VLAN_8021Q` を無効化していたため未検証。**物理スイッチ・ケーブル・ポート VLAN は未着手（L1 が残っている）** |
-| G4 | Ansible / Terraform でコード化し、再実行できる | ○ | `site.yml` の一括適用と 2 回目 `changed=0` を[実測済み](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)。**Terraform は `validate` まで。`apply` は未実施** |
-| G5 | 監視・バックアップを設定し、壊して復旧する演習を実測 | ○ | D-1 復旧演習 RTO 13 秒 / 1 秒を実測。DB の復元は [B-3 として実行済み](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md)（7 PASS、RTO 0.149 秒）。**B-1〜B-4 は全て実機実行済み** |
+| G1 | 空の VM から Web / AP / DB の 3 層構成を単独で構築 | △ | [3 層ラボ](https://github.com/ns7jp/server/tree/main/labs/three-tier)を[実コンテナで実行](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-2.md)（nginx / gunicorn / PostgreSQL、層を分離、9 PASS）。**コンテナ上の構成であり、空の VM に OS を入れて組んだ実績ではない**。この差分を埋める演習は [05 Phase 1 演習設計](./05-phase1-exercise-design.md)に設計済み（未実施） |
+| G2 | パラメータシート・構築手順書・試験項目書として文書化 | ○ | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package)。試験項目書の原本は引き渡し対象ホスト未定のため `NOT RUN`。記入済みの見本は演習の証跡が担当 |
+| G3 | 「つながらない」を L1 から L7 まで順番に切り分け | △ | [L2 / L3 ラボ](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-4.md)で静的ルート・`ip_forward`を実機実行（6 PASS）。VLAN ID 不一致は kernel が `CONFIG_VLAN_8021Q` を無効化していたため未検証。**物理スイッチ・ケーブル・ポート VLAN は未着手（L1 が残っている）** |
+| G4 | Ansible / Terraform でコード化し、再実行できる | ○ | `site.yml` の一括適用と 2 回目 `changed=0` を[実測済み](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-22-full-stack-e2e.md)。**Terraform は `validate` まで。`apply` は未実施** |
+| G5 | 監視・バックアップを設定し、壊して復旧する演習を実測 | ○ | D-1 復旧演習 RTO 13 秒 / 1 秒を実測。DB の復元は [B-3 として実行済み](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-3.md)（7 PASS、RTO 0.149 秒）。**B-1〜B-4 は全て実機実行済み** |
 | G6 | 面接で自分の言葉で説明できる | △ | [つまずきログ](../../LEARNINGS.md)に症状 → 原因 → 対処 → 学びを記録。**AI 生成コードのうち、自分で説明できない深さのものを減らす作業が継続中** |
 
 凡例: ○ = 根拠を出せる / △ = 一部のみ / × = 未着手
@@ -456,7 +456,7 @@ gantt
 | --- | --- |
 | 手を動かした一次記録 | [LEARNINGS.md](../../LEARNINGS.md) |
 | 実機の画面・ログ・実測値 | [証跡採録チェックリスト](../evidence-capture-checklist.md)の該当項目 |
-| 構築ドキュメント一式 | [03 構築工程の実務ドキュメント](./03-build-process.md)のテンプレートを使い、server-monitor 側へ配置 |
+| 構築ドキュメント一式 | [03 構築工程の実務ドキュメント](./03-build-process.md)のテンプレートを使い、server 側へ配置 |
 | 学習の進捗 | GitHub Issue（月 1 回更新） |
 
 ### 本人の現在地（2026-08 時点の自己申告）
@@ -467,11 +467,11 @@ gantt
 | Phase | 状況 | 根拠 | 残っている差分 |
 | --- | --- | --- | --- |
 | 1 Linux 基礎 | おおむね通過 | server-monitor をローカル Linux + Docker で構築済み | LPIC-1 101 で体系の穴を埋める |
-| 2 ネットワーク | 障害ラボと使い捨て runner 内の境界検証は実測済み | [二セグメント障害ラボ](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-network-drill.md)に加え、[PR #75 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で network / UFW、loopback bind、別 Docker namespace からの直接遮断と SSH tunnel を PASS | 独立した管理端末・引き渡し対象ホスト・組織 DNS で同じ試験を採録する |
+| 2 ネットワーク | 障害ラボと使い捨て runner 内の境界検証は実測済み | [二セグメント障害ラボ](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-19-network-drill.md)に加え、[PR #75 Full-stack E2E](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で network / UFW、loopback bind、別 Docker namespace からの直接遮断と SSH tunnel を PASS | 独立した管理端末・引き渡し対象ホスト・組織 DNS で同じ試験を採録する |
 | 3 ミドルウェア | Web / AP は通過 | Nginx / Gunicorn / TLS を実装済み | DB は[今後の興味リスト](../roadmap/README.md)の段階。リストア試験が未実施 |
-| 4 構築工程 | 成果物作成済み・使い捨て runner の一気通貫試験は完了 | [構築案件パック](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package)を作成。2026-08-19 の[試験結果票](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)（11/21 PASS）は履歴として保持し、[PR #75 Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)は disposable Ubuntu 24.04 上で 23/23 PASS | Docker 未導入の独立した引き渡し対象ホストで構築・受入・再起動後試験を採録する |
-| 5 自動化・IaC | Ansible の runner 実測済み・Terraform 適用待ち | [4 ロールの full Molecule](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)に加え、[PR #75 E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で `site.yml` 一括適用と 2 回目 `changed=0` を PASS。Terraform コードあり | 独立対象ホストへの適用と AWS `plan / apply / destroy` を採録する |
-| 6 クラウド・監視 | ローカル監視・runner 内 D-1 / restore 実測済み | D-1 は[2026-08-19 の RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)を履歴として保持。[PR #75 E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)では RTO 1 秒、local webhook の FIRING / RESOLVED、3 volumes の backup / restore を PASS | Slack 実配信、D-2、AWS 適用、再起動後・長期稼働ホストを採録する |
+| 4 構築工程 | 成果物作成済み・使い捨て runner の一気通貫試験は完了 | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package)を作成。2026-08-19 の[試験結果票](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-19-build-validation.md)（11/21 PASS）は履歴として保持し、[PR #75 Full-stack E2E](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)は disposable Ubuntu 24.04 上で 23/23 PASS | Docker 未導入の独立した引き渡し対象ホストで構築・受入・再起動後試験を採録する |
+| 5 自動化・IaC | Ansible の runner 実測済み・Terraform 適用待ち | [4 ロールの full Molecule](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md)に加え、[PR #75 E2E](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で `site.yml` 一括適用と 2 回目 `changed=0` を PASS。Terraform コードあり | 独立対象ホストへの適用と AWS `plan / apply / destroy` を採録する |
+| 6 クラウド・監視 | ローカル監視・runner 内 D-1 / restore 実測済み | D-1 は[2026-08-19 の RTO 13 秒](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)を履歴として保持。[PR #75 E2E](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)では RTO 1 秒、local webhook の FIRING / RESOLVED、3 volumes の backup / restore を PASS | Slack 実配信、D-2、AWS 適用、再起動後・長期稼働ホストを採録する |
 
 > **この表の読み方**: 2026-08-22 の完了範囲は使い捨て GitHub-hosted runner 内に限ります。
 > Slack 実配信、AWS、D-2、独立した管理端末・引き渡し対象ホストでの試験を完了扱いにはしません。

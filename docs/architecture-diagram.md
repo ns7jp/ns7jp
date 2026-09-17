@@ -47,7 +47,7 @@ blackbox-exporter は対象サービスと同じホスト内にあるため、�
 
 実装済みなのはコードのみで、実際に `terraform apply` した実績・実費は未収録。
 詳細な構成図とセキュリティ設定は
-[server-monitor 側のAWS設計](https://github.com/ns7jp/server/blob/main/docs/aws-architecture.md)
+[server 側のAWS設計](https://github.com/ns7jp/server/blob/main/docs/aws-architecture.md)
 を正本とする。
 
 複数 EC2 をまたぐ metrics / logs の一元化や、対象ホスト外からの外形監視は

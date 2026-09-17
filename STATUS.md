@@ -1,10 +1,10 @@
 # ポートフォリオ進捗 STATUS
 
-2026-09-10：[自律繁栄の詳細運用](./docs/prosperity-review/README.md)を追加。既存の自律繁栄システムを入口に、成果指標・価値実験・原期限保持・月次と90日の見直しを詳細化した。任意の補助評価器は既存の負荷確認を読み、休止を上書きしない。今回の実装・検証・未実施は[検証記録](./docs/prosperity-review/validation.md)を参照。
+2026-09-10：[自律繁栄の詳細運用](./archive/docs/prosperity-review/README.md)を追加。既存の自律繁栄システムを入口に、成果指標・価値実験・原期限保持・月次と90日の見直しを詳細化した。任意の補助評価器は既存の負荷確認を読み、休止を上書きしない。今回の実装・検証・未実施は[検証記録](./archive/docs/prosperity-review/validation.md)を参照。
 
 本リポジトリ（プロフィール）と関連リポジトリ全体の進捗を一元管理します。
 
-最終更新：2026-09-09（既存の週次監査・キャリア計画・自律型成長・改善実験の探索を 1 コマンドで順に回す[自律型ポートフォリオ改善イノベーションループ](./docs/portfolio-loop/README.md)を新規作成した。5 つの CLI・4 つの保存先・手書きの作業枠 JSON を 10 手順で操作していた運用を `run` 1 回に置き換え、作業枠の判定と除外候補を採否台帳から合成し、実測結果の取り込みと次の一手の提示までを自動化する。合成データのデモとネットワークなしの試験 30 件を備え、公開・実機操作・本人の技能判定は行わない。詳細は下記「1. 本リポジトリ」の該当エントリを参照。以下は 2026-09-09（追補3：09 Zabbix 演習設計のレビュー修正）時点の更新内容。
+最終更新：2026-09-09（既存の週次監査・キャリア計画・自律型成長・改善実験の探索を 1 コマンドで順に回す[自律型ポートフォリオ改善イノベーションループ](./archive/docs/portfolio-loop/README.md)を新規作成した。5 つの CLI・4 つの保存先・手書きの作業枠 JSON を 10 手順で操作していた運用を `run` 1 回に置き換え、作業枠の判定と除外候補を採否台帳から合成し、実測結果の取り込みと次の一手の提示までを自動化する。合成データのデモとネットワークなしの試験 30 件を備え、公開・実機操作・本人の技能判定は行わない。詳細は下記「1. 本リポジトリ」の該当エントリを参照。以下は 2026-09-09（追補3：09 Zabbix 演習設計のレビュー修正）時点の更新内容。
 
 2026-09-09（追補3：[09 Zabbix 監視基盤構築演習設計](./docs/learning-plan/09-zabbix-monitoring-exercise-design.md)は、10・11・12・13が受けた内部一貫性レビューを一度も受けていなかった差分を埋めるためレビューした。Z-1 のリポジトリ登録 URL に、実在しない `/release/` パスセグメントが混入していた誤りを、Web 検索で複数の一次情報源（Zabbix 公式リポジトリのディレクトリ構造、独立した 3 件のインストール手順記事）を突き合わせて確認し、`https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/...`（`/release/` なし）へ訂正した。試験項目書の異常系件数（7 件/全14件・50%）は表の実際の行数と一致しており誤りは無かった。設計のみ・未実施という実施ステータス自体は変わらない。詳細は下記「1. 本リポジトリ」の該当エントリを参照。）
 
@@ -19,7 +19,7 @@
 (4) [職務経歴書・スキルシート §3](./docs/resume.md#3-希望条件働き方)に、雇用形態（客先常駐 / SES の可否）・英語力・普通自動車運転免許の記入欄を追加。個人の事実であり本人記入が必要なため、既存の「志望の経緯」と同じ記入待ちの形式にした。
 (5) [採用ご担当者さま向け 1 ページ版](./docs/overview-for-recruiters.md)を、忙しい採用担当者が数分で読める構成に調整。冒頭の実績直後に入っていた否定文を「正直な境界」章への一言リンクへ差し替え、AI 支援コミット内訳の具体的な数字は職務経歴書側の詳細節に集約し、勤務地を一覧表に追加。
 (6) 下記「コードでは埋められない、残っている穴」に 6 番目を追加。
-これらは server-monitor 側の実行や実機演習では埋まらない項目のため、新規の改善設計・演習設計は追加していない（[新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)を維持）。)
+これらは server 側の実行や実機演習では埋まらない項目のため、新規の改善設計・演習設計は追加していない（[新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)を維持）。)
 
 2026-08-28（[STATUS.md の「コードでは埋められない、残っている穴」1 番目](#コードでは埋められない残っている穴)（恒久ホストが 1 台も無い）に対応する最初の一歩として、独立した VPS 1 台への OS 初期構築、実ドメイン・Let's Encrypt TLS 化、再起動試験、24 / 72 時間後の継続稼働確認までを具体化した [13 恒久ホスト構築演習設計](./docs/learning-plan/13-persistent-host-exercise-design.md)を新規作成。[証跡採録チェックリストの現在の残タスク](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)順位 1・2 にはこれまで具体設計が無く、その差分を埋める。設計のみ・未実施）
 
@@ -65,8 +65,8 @@ server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を 
    | 対象 | 正本 |
    | --- | --- |
    | 資格・職歴・希望条件 | [`docs/resume.md`](./docs/resume.md) |
-   | 実測値（23/23・RTO・SHA・run ID・PR 番号） | [server-monitor 検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
-   | 実行して見つかった欠陥の件数 | [server-monitor 欠陥台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/defects-found.md) |
+   | 実測値（23/23・RTO・SHA・run ID・PR 番号） | [server 検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) |
+   | 実行して見つかった欠陥の件数 | [server 欠陥台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/defects-found.md) |
    | 採録の優先順位 | [`docs/evidence-capture-checklist.md`](./docs/evidence-capture-checklist.md) の「現在の残タスク」表 |
    | AI 支援の範囲 | [`README.md` の AI の利用について](./README.md#ai-の利用について) |
 
@@ -121,19 +121,19 @@ server-monitor の滞留 Dependabot PR を検証・処理。#96/#95/#94/#18 を 
 
 ### 2026-09-09 の更新内容（自律型ポートフォリオ改善イノベーションループ：週次運用を 1 コマンドに統合）
 
-2026-09-07 から 09 にかけて追加した[週次監査](./docs/portfolio-automation/weekly-operation.md)・[キャリア計画](./docs/engineer-career/README.md)・[自律型成長](./docs/autonomous-growth/README.md)・[改善実験と探索](./docs/server-innovation/README.md)は、
+2026-09-07 から 09 にかけて追加した[週次監査](./archive/docs/portfolio-automation/weekly-operation.md)・[キャリア計画](./archive/docs/engineer-career/README.md)・[自律型成長](./archive/docs/autonomous-growth/README.md)・[改善実験と探索](./archive/docs/server-innovation/README.md)は、
 それぞれ独立した CLI と保存先を持ち、月曜の運用は 5 つの CLI を固定順で 10 手順操作し、作業枠の `context.json`（使用中か、除外 ID、確認時刻）を毎週手書きする必要があった。
 手書きの context は 24 時間で失効し、既知でない ID を書くと探索が停止するため、**速く・手軽に回せない**ことが運用上の詰まりになっていた。この差分を埋めるために新規作成した。
 
 | 項目 | 内容 |
 | --- | --- |
-| 新規作成 | [自律型ポートフォリオ改善イノベーションループ](./docs/portfolio-loop/README.md)（[詳細設計](./docs/portfolio-loop/design.md)、[CLI と入力仕様](./docs/portfolio-loop/tool-guide.md)、[月曜の運用](./docs/portfolio-loop/operation.md)、[検証記録](./docs/portfolio-loop/validation.md)）と実装 `tools/portfolio-loop/`（`loop.mjs`、`fixture.mjs`、試験 2 本） |
+| 新規作成 | [自律型ポートフォリオ改善イノベーションループ](./archive/docs/portfolio-loop/README.md)（[詳細設計](./archive/docs/portfolio-loop/design.md)、[CLI と入力仕様](./archive/docs/portfolio-loop/tool-guide.md)、[月曜の運用](./archive/docs/portfolio-loop/operation.md)、[検証記録](./archive/docs/portfolio-loop/validation.md)）と実装 `tools/portfolio-loop/`（`loop.mjs`、`fixture.mjs`、試験 2 本） |
 | 何をするか | `run` 1 コマンドで、点検 → 監査（既存 `cycle.mjs`）→ キャリア計画（`career.mjs`）→ 自律型成長（`growth.mjs`）→ inbox の実測結果の取り込み（`innovation.mjs` evaluate と `discovery.mjs` feedback）→ 作業枠の合成 → 探索（`discovery.mjs` cycle）→ 1 つの記録と次の一手のカード、を順に実行する。既存ツールはすべてエクスポート関数として呼び、ロジックを複製しない |
 | 手軽さ | 作業枠は監査結果・pending・採否台帳・inbox から機械的に合成し、手書きを不要にした。実験票の 4 か所の `NOT SET` と環境条件のハッシュは `register` が埋める。採否は `done`、却下は `dismiss`。エラーは元のメッセージを保ったまま `[LOCKED]` `[NOT_INITIALIZED]` `[CORRUPT_STATE]` 等に分類し日本語の対処を添える |
 | 速さ | 子プロセスなし。`--offline` で保存済みスナップショットを既存の replay 機能で再生。合成スナップショットのフィクスチャと `demo` により、ネットワークなし・一時ルートで全工程を流せる。同じ入力での再実行は通知なし・追加候補なし・下書きの再生成なし |
 | 自律の範囲 | ループが決めるのは、収集の鮮度に応じた探索の停止、根拠付きの作業枠判定、本人判断からの除外候補、取り込みの順序と判定の記録、次の一手の優先順、通知の要否。候補の自動採用・却下、計画の省略、古いスナップショットの自動再利用、ロックの自動除去、状態の自動修復、`profile.json` や学習枠の自動更新は行わない |
-| 既存の運用との関係 | [週次運用手順](./docs/portfolio-automation/weekly-operation.md)と[改善実験の週次処理](./docs/server-innovation/operation.md)から本ループへの導線を追加した。各系統の状態ファイル、ロック、通知の意味は変えていない。取り込みを探索の前に置く順序だけは、同じ実行で判定と追試候補を出すために変更し、設計に理由を記した |
-| 試験と CI | `node --test tools/portfolio-loop/tests/*.test.mjs`（30 件）を `docs-check` に追加。ライブラリ呼び出しの試験は `fetch` を例外化し、CLI の試験は `--offline` と `PORTFOLIO_LOOP_NO_NETWORK=1` で収集を禁止し、一時ルートだけに書く。ロックの残存・壊れた pending / 台帳・合成結果と合成スナップショットの拒否・同一入力の無変化・終了コード 0/3/2 を確認する。5 観点の独立レビューと反証で残った 34 件（重複含む）を修正し、[検証記録](./docs/portfolio-loop/validation.md)に列挙した |
+| 既存の運用との関係 | [週次運用手順](./archive/docs/portfolio-automation/weekly-operation.md)と[改善実験の週次処理](./archive/docs/server-innovation/operation.md)から本ループへの導線を追加した。各系統の状態ファイル、ロック、通知の意味は変えていない。取り込みを探索の前に置く順序だけは、同じ実行で判定と追試候補を出すために変更し、設計に理由を記した |
+| 試験と CI | `node --test tools/portfolio-loop/tests/*.test.mjs`（30 件）を `docs-check` に追加。ライブラリ呼び出しの試験は `fetch` を例外化し、CLI の試験は `--offline` と `PORTFOLIO_LOOP_NO_NETWORK=1` で収集を禁止し、一時ルートだけに書く。ロックの残存・壊れた pending / 台帳・合成結果と合成スナップショットの拒否・同一入力の無変化・終了コード 0/3/2 を確認する。5 観点の独立レビューと反証で残った 34 件（重複含む）を修正し、[検証記録](./archive/docs/portfolio-loop/validation.md)に列挙した |
 | 状態 | **ローカルの試験と合成データのデモのみ。** 本ループを GitHub Actions や定期タスクで実際に週次実行したこと、本ループ経由での GitHub 収集、実測結果の取り込み、VM・AWS・Slack の操作はいずれも未実施（NOT RUN）。終了コード 0 は処理完了であり、課題 0 件・実機合格・公開可能の意味ではない |
 | 運用ルールとの関係 | 本件は既存 4 系統の運用統合であり、[新規設計を増やさない運用ルール](./docs/evidence-capture-checklist.md#新規設計を増やさない運用ルール)の対象（server-monitor の改善設計）ではない。`LEARNINGS.md` は変更していない |
 | 整合性チェック | markdownlint、Mermaid 構文検証（新規 3 図）、リポジトリ内リンク／アンカーの解決チェック、既存の全試験（監査・改善実験・育成・案件）を実行して確認 |
@@ -557,7 +557,7 @@ Windows（新規ラボホスト LAB-WINOPS1）の両方を対象にした演習�
 | AI 開示の修正 | 「文書の整形」だけでなく**実装コードの生成にも使っている**ことを明記。`git log` の `Author: Claude` と整合させた | 3 リポジトリ |
 | 免責の圧縮 | 1 ページ版・target-roles で 4 重複していた未実測リストを、証跡台帳へのリンク 1 か所に集約 | ns7jp |
 | 自己採点 | 学習プランの G1〜G6 に本人の到達状況（○ / △）と、残る 3 つの穴を明記 | ns7jp |
-| 重複の解消 | ポートフォリオサイトに残っていた Promtail 版監視スタックをアーカイブ扱いに（server-monitor 側は Alloy へ移行済みで、記述が矛盾していた） | ns7jp.github.io |
+| 重複の解消 | ポートフォリオサイトに残っていた Promtail 版監視スタックをアーカイブ扱いに（server 側は Alloy へ移行済みで、記述が矛盾していた） | ns7jp.github.io |
 
 #### 2026-08-24 の更新：B-1〜B-4 をすべて実機で実行し、証跡を採録した
 
@@ -568,10 +568,10 @@ device-mapper が無い環境では qemu で Ubuntu 24.04 を起動し、コン�
 
 | 演習 | 結果 | 証跡 |
 | --- | --- | --- |
-| B-1 ディスク設計・LVM 拡張 | 5 PASS / 0 FAIL | [`2026-08-24-B-1.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md) |
-| B-2 3 層構成の障害切り分け | 9 PASS / 0 FAIL | [`2026-08-24-B-2.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-2.md) |
-| B-3 DB バックアップ・復元 | 7 PASS / 0 FAIL（RTO 0.149 秒 / RPO 2.344 秒） | [`2026-08-24-B-3.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md) |
-| B-4 L2 / L3 切り分け | 6 PASS / 0 FAIL / 3 SKIP-ENV（VLAN 部は kernel 都合で未検証） | [`2026-08-24-B-4.md`](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-4.md) |
+| B-1 ディスク設計・LVM 拡張 | 5 PASS / 0 FAIL | [`2026-08-24-B-1.md`](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-1.md) |
+| B-2 3 層構成の障害切り分け | 9 PASS / 0 FAIL | [`2026-08-24-B-2.md`](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-2.md) |
+| B-3 DB バックアップ・復元 | 7 PASS / 0 FAIL（RTO 0.149 秒 / RPO 2.344 秒） | [`2026-08-24-B-3.md`](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-3.md) |
+| B-4 L2 / L3 切り分け | 6 PASS / 0 FAIL / 3 SKIP-ENV（VLAN 部は kernel 都合で未検証） | [`2026-08-24-B-4.md`](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-4.md) |
 
 **実行して初めて見つかった実バグは通算 29 件（2026-08-25 に台帳を起こして数え直した。
 それ以前は「19 件・うち 11 件」と書いていたが、根拠にたどり着けなかったため実数へ改めた。
@@ -579,7 +579,7 @@ device-mapper が無い環境では qemu で Ubuntu 24.04 を起動し、コン�
 静的検査（shellcheck / ansible-lint / molecule / 構文検査）で捕まえられたものは 0 件、
 うち 6 件は「壊れているのに PASS」する偽 PASS だった。**
 1 件ずつの症状・発見方法・修正 PR は
-[欠陥台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/defects-found.md)にまとめている。
+[欠陥台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/defects-found.md)にまとめている。
 特に重かったもの:
 
 - 3 層ラボの層分離チェックが `set -e` に巻き込まれ、**遮断できているときにだけ**
@@ -590,7 +590,7 @@ device-mapper が無い環境では qemu で Ubuntu 24.04 を起動し、コン�
 - B-4 の routing ラボは Docker の network 設計と衝突し、**一度も起動できて
   いなかった**（router 用の `.1` が bridge の既定アドレスと衝突）
 
-いずれも [server-monitor #83〜#90](https://github.com/ns7jp/server-monitor/pulls?q=is%3Apr+is%3Amerged) で修正済み。
+いずれも [server-monitor #83〜#90](https://github.com/ns7jp/server/pulls?q=is%3Apr+is%3Amerged) で修正済み。
 
 このセッションで新しく実測を増やせる範囲はここまで。残るのは次の
 「コードでは埋められない、残っている穴」のみ。
@@ -613,13 +613,13 @@ device-mapper が無い環境では qemu で Ubuntu 24.04 を起動し、コン�
 
 | 観点 | 対応 |
 | --- | --- |
-| 追加実測 | [server-monitor PR #77 / run 32611251044](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)でcandidate `84e1492`を配備・検証後、前版`59aa88e`へrollbackしてPASS |
+| 追加実測 | [server-monitor PR #77 / run 32611251044](https://github.com/ns7jp/server/actions/runs/32611251044)でcandidate `84e1492`を配備・検証後、前版`59aa88e`へrollbackしてPASS |
 | 合格条件 | revision marker、runtime manifest、app container再作成、stale file除去、loopback bind、Loki取り込みまで再確認 |
 | 実行範囲 | GitHub-hostedの使い捨てUbuntu runner、`/opt/server-monitor`、immutable Git SHA |
 | 未実測境界 | PR #77のmain反映、永続hostのrollback・再起動・24 / 72時間、Slack実配信、AWS apply / destroy / restore、D-2、Windows / AD・winget公開再現ラボは`NOT RUN` |
 | 関連文書 | README、採用担当者向け1ページ版、職務経歴書、証跡索引、採録チェックリストを同期 |
 
-2026-08-22のFull-stack baselineは[PR #75の23/23 PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で、実測対象`7622a9d`、証跡文書更新`cf9419b`、main merge`4a292026`を区別して保持します。最新の追加runtime実測はPR #77のrollback CIですが、PR branch上の結果でありmain統合済みとは扱いません。
+2026-08-22のFull-stack baselineは[PR #75の23/23 PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で、実測対象`7622a9d`、証跡文書更新`cf9419b`、main merge`4a292026`を区別して保持します。最新の追加runtime実測はPR #77のrollback CIですが、PR branch上の結果でありmain統合済みとは扱いません。
 
 ### 2026-08-22 の更新内容（hardened Full-stack E2E・3 リポジトリ同期）
 
@@ -631,10 +631,10 @@ device-mapper が無い環境では qemu で Ubuntu 24.04 を起動し、コン�
 | 実測範囲 | runtime commit `7622a9d`を Docker 導入済み runner で検証。`site.yml` 2 回目 `changed=0`、core 10 services + CI sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes restore を23/23 PASS |
 | 未実測境界 | Slack 実配信、AWS、D-2、Docker 未導入の引き渡し対象ホストと別の独立管理端末、組織 DNS、ホスト再起動後の永続性、24時間・72時間の継続稼働。runner 内の結果をこれらへ読み替えない |
 | 関連文書 | README、採用担当者向け1ページ版、職務経歴書、証跡採録チェックリスト、ビジュアルショーケースを同期 |
-| 3 リポジトリの公開状態 | [server-monitor PR #75](https://github.com/ns7jp/server-monitor/pull/75)（main `4a292026`）、[site PR #25](https://github.com/ns7jp/ns7jp.github.io/pull/25)（main `5ab3367b`）、[profile PR #46](https://github.com/ns7jp/ns7jp/pull/46)（main `c360f84a`）をマージ済み |
+| 3 リポジトリの公開状態 | [server-monitor PR #75](https://github.com/ns7jp/server/pull/75)（main `4a292026`）、[site PR #25](https://github.com/ns7jp/ns7jp.github.io/pull/25)（main `5ab3367b`）、[profile PR #46](https://github.com/ns7jp/ns7jp/pull/46)（main `c360f84a`）をマージ済み |
 | profile docs CI | PR #46 head `20ec405`の [docs-check run 32571600184](https://github.com/ns7jp/ns7jp/actions/runs/32571600184) が SUCCESS。後続変更は改めて検証する |
 
-[2026-08-19 の 11/21 PASS](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-build-validation.md)と[D-1 RTO 13 秒](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)は当時の履歴として保持します。この節の次に完了したruntime実測は、上記2026-08-23節のPR #77 rollback CIとして別管理します。
+[2026-08-19 の 11/21 PASS](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-19-build-validation.md)と[D-1 RTO 13 秒](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)は当時の履歴として保持します。この節の次に完了したruntime実測は、上記2026-08-23節のPR #77 rollback CIとして別管理します。
 
 ### 2026-08-19 の更新内容（追補2：説明できない深さの内容そのものを圧縮）
 
@@ -722,7 +722,7 @@ device-mapper が無い環境では qemu で Ubuntu 24.04 を起動し、コン�
 
 > **今回の範囲を広げて解釈しない。** 変更したのは言葉遣い・専門用語の密度であり、実装内容・実測証跡・スキル水準の自己申告は変えていません。
 > 文書の分量や設計そのものの範囲は、同日の下記の整理で対応済みです。
-> 本ラウンドは ns7jp/ns7jp のみを対象としました（server-monitor 側は別リポジトリのため本セッションでは対象外。必要であれば別セッションで同様の観点の確認を行います）。
+> 本ラウンドは ns7jp/ns7jp のみを対象としました（server 側は別リポジトリのため本セッションでは対象外。必要であれば別セッションで同様の観点の確認を行います）。
 
 ### 2026-08-19 の更新内容（ポートフォリオの難易度・スコープを引き下げる整理）
 
@@ -743,7 +743,7 @@ ns7jp/ns7jp と server-monitor の両リポジトリで、内容の難易度・�
 
 ### 対象と処置の内訳
 
-**server-monitor 側**（別リポジトリ・[PR](https://github.com/ns7jp/server-monitor/pulls) 参照）
+**server 側**（別リポジトリ・[PR](https://github.com/ns7jp/server/pulls) 参照）
 
 - README.md: SLO / エラーバジェット・クラウド配備セクションの専門用語を削減、文書一覧を「まず読む文書」と「発展的な設計・将来構想」に分割
 - `docs/roadmap/` を新設し、実装のない 4 本（外部 probe 設計、SLO 月次レビュー、D-2 復旧演習、スナップショット復元ランブック）を移動
@@ -766,8 +766,8 @@ ns7jp/ns7jp と server-monitor の両リポジトリで、内容の難易度・�
 ### 2026-08-17 の更新内容（追補：Molecule フル実行の完走と初の Linux 実測証跡）
 
 **Ansible ロール 4 本の `molecule test` が全て成功し、リポジトリで初めて Linux 上の実測証跡を採録しました**
-（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) ／
-[実行 URL](https://github.com/ns7jp/server-monitor/actions/runs/32031882695)、0 円・2 分 42 秒）。
+（[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md) ／
+[実行 URL](https://github.com/ns7jp/server/actions/runs/32031882695)、0 円・2 分 42 秒）。
 
 | Role | create | converge | idempotence | verify | 所要 |
 | --- | --- | --- | --- | --- | --- |
@@ -908,9 +908,9 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 | IT サポート設計サンプル（FAQ / TS / Account / Service Desk Metrics） | ✅ 完了（設計サンプルとして明示） |
 | 業務改善レポート | ✅ 完了（実数と再構成想定値を区別） |
 | アーキテクチャ図（実装済み構成 / 検証境界） | ✅ 完了 |
-| server-monitor 改善設計 01-05 | ✅ server-monitor 側へ実装状態を同期（証跡待ちを明示） |
+| server-monitor 改善設計 01-05 | ✅ server 側へ実装状態を同期（証跡待ちを明示） |
 | server-monitor 改善設計 06 以降 | ✅ 設計サンプルとして整備（うち 4 本は 2026-07 にロードマップへ縮退） |
-| 証跡採録テンプレート | ✅ AWS / Molecule / D-1 / D-2 用を server-monitor 側へ追加 |
+| 証跡採録テンプレート | ✅ AWS / Molecule / D-1 / D-2 用を server 側へ追加 |
 | ADR（アーキテクチャ決定記録）8 本 | ✅ 完了（主要技術選定の根拠。0005 / 0008 は 2026-07 に見直し追記） |
 | 現場経験 ↔ インフラ運用 橋渡しページ | ✅ 完了 |
 | ビジュアルショーケース | ✅ 実機キャプチャ枠とテキストモックアップを分離 |
@@ -919,7 +919,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 | docs CI（markdownlint / Mermaid 構文 / リンク） | ✅ 完了（2026-07 にリンクチェックを強化。PR #46 head `20ec405`の [run 32571600184](https://github.com/ns7jp/ns7jp/actions/runs/32571600184)でも SUCCESS、main merge `c360f84a`） |
 | デモ動画台本 | ✅ 整備済み。2026-08-22 に歴史的証跡リプレイを公開（実操作の連続録画は未公開） |
 | 志望トラックと証跡の対応 | ✅ 完了（Linux サーバー構築・運用を第一志望として明示） |
-| 変更管理の実物化 | ✅ server-monitor 側に PR テンプレート / 変更管理ミニ運用を追加 |
+| 変更管理の実物化 | ✅ server 側に PR テンプレート / 変更管理ミニ運用を追加 |
 
 ### 未対応 / 次のアクション（証跡採録フェーズ）
 
@@ -929,12 +929,12 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 
 #### 完了（2026-08-17〜19）
 
-- [x] ~~**`ansible-integration.yml` を GitHub Actions で実行**~~ → **2026-08-17 完了**。4 ロール完走し[実測証跡を採録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)（チェックリスト優先 1）
+- [x] ~~**`ansible-integration.yml` を GitHub Actions で実行**~~ → **2026-08-17 完了**。4 ロール完走し[実測証跡を採録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md)（チェックリスト優先 1）
 - [x] ~~**LEARNINGS.md に「学び」を追記**~~ → **完了**。UFW の冪等性欠陥・自分の診断が誤りだった件・`docker kill` が `unless-stopped` を無効化していた件・直したコードが反映されていなかった件の計 4 エントリすべて記入済み（[#22](https://github.com/ns7jp/ns7jp/pull/22)、[#31](https://github.com/ns7jp/ns7jp/pull/31)）
-- [x] ~~**server-monitor の Dependabot PR を処理**~~ → **2026-08-19 完了**。滞留していた PR 18 件が処理されずに全件 close されていた実態を確認して STATUS.md を訂正し、安全な更新は [PR #59](https://github.com/ns7jp/server-monitor/pull/59)（マージ済み）として作り直し、AWS provider のメジャー更新は見送りを決定して理由を明記した
-- [x] ~~**Linux + Docker で全 stack を起動し、スクショ 3 点を採録**~~（優先 3〜5） → **2026-08-18 完了**。[Grafana / Loki の実測証跡](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md)を採録
-- [x] ~~**`server-monitor/docs/screenshot.png` を Linux 版に差し替え**~~ → **2026-08-19 完了**
-- [x] ~~**D-1 復旧演習の実測**~~（優先 7） → **2026-08-19 完了**。[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)（PASS、RTO 13 秒）。実施に伴い nginx の起動時クラッシュループと secrets の `chmod` 不整合という実機の欠陥 2 件を発見・修正済み（[PR #61](https://github.com/ns7jp/server-monitor/pull/61)）
+- [x] ~~**server-monitor の Dependabot PR を処理**~~ → **2026-08-19 完了**。滞留していた PR 18 件が処理されずに全件 close されていた実態を確認して STATUS.md を訂正し、安全な更新は [PR #59](https://github.com/ns7jp/server/pull/59)（マージ済み）として作り直し、AWS provider のメジャー更新は見送りを決定して理由を明記した
+- [x] ~~**Linux + Docker で全 stack を起動し、スクショ 3 点を採録**~~（優先 3〜5） → **2026-08-18 完了**。[Grafana / Loki の実測証跡](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-18-local-observability.md)を採録
+- [x] ~~**`server/docs/screenshot.png` を Linux 版に差し替え**~~ → **2026-08-19 完了**
+- [x] ~~**D-1 復旧演習の実測**~~（優先 7） → **2026-08-19 完了**。[記録](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)（PASS、RTO 13 秒）。実施に伴い nginx の起動時クラッシュループと secrets の `chmod` 不整合という実機の欠陥 2 件を発見・修正済み（[PR #61](https://github.com/ns7jp/server/pull/61)）
 - [x] ~~**既存 CI の成功ログを証跡台帳へ記録**~~（優先 2） → **2026-08-19 完了**。あわせて「Backup verify 累計 400 回超」という誤った記載を、実際に数えた 102 回へ訂正した
 - [x] ~~**試験仕様書の `NOT RUN` を実施できた分だけ更新**~~ → **2026-08-19 完了**。21 項目中 10 項目を `PASS` に更新し、残りは `NOT RUN` のまま明示
 
@@ -947,7 +947,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 #### 今月（1 晩〜半日・0 円）
 
 - [x] ~~**LEARNINGS.md にトライアル就業中のつまずきを追記**~~ → **2026-08-22 完了**。研修中の AD ドメイン参加時に、クライアント DNS が DC を向いていなかった問題を、機密情報を含めず症状 → 原因 → 対処 → 学びで記録
-- [x] ~~**ネットワーク切り分けの一次メモ**（[優先 6](./docs/evidence-capture-checklist.md)）~~ → **2026-08-21 実質完了**。`ss` / `docker port` / `docker inspect` で切り分け、`frontend` ネットワークの `internal: true` がホストへのポート公開を無効化する不具合を発見・原因特定した（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）。当初想定していたホスト公開ポート経由ではなく、`docker compose exec` 経由・コンテナ IP を直接指定する方法で、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてを `internal: true` の制約を受けずに確認できた。なお、このタスク行の見出しは従来「二セグメント障害ラボの実行ログ」となっていたが、それは別タスク（[labs/network-troubleshooting](https://github.com/ns7jp/server-monitor/tree/main/labs/network-troubleshooting)、2026-08-19 に別途採録済み）を指しており、優先6の内容と一致していなかったため見出しも訂正した
+- [x] ~~**ネットワーク切り分けの一次メモ**（[優先 6](./docs/evidence-capture-checklist.md)）~~ → **2026-08-21 実質完了**。`ss` / `docker port` / `docker inspect` で切り分け、`frontend` ネットワークの `internal: true` がホストへのポート公開を無効化する不具合を発見・原因特定した（[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）。当初想定していたホスト公開ポート経由ではなく、`docker compose exec` 経由・コンテナ IP を直接指定する方法で、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてを `internal: true` の制約を受けずに確認できた。なお、このタスク行の見出しは従来「二セグメント障害ラボの実行ログ」となっていたが、それは別タスク（[labs/network-troubleshooting](https://github.com/ns7jp/server/tree/main/labs/network-troubleshooting)、2026-08-19 に別途採録済み）を指しており、優先6の内容と一致していなかったため見出しも訂正した
 - [ ] **Alertmanager → Slack の実通知配信**（[現行順位 3](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)、Slack Webhook が必要）
 
 #### 継続
@@ -965,7 +965,7 @@ chrony の失敗を「コンテナは時計を共有するため NTP を動か�
 
 ---
 
-## 2. ns7jp/server-monitor（別リポジトリ・別セッション作業）
+## 2. ns7jp/server（別リポジトリ・別セッション作業）
 
 server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanager に
 加え、ログ集約、構成管理、SLO、復旧手順、AWS IaC のコードが実装されている。
@@ -974,13 +974,13 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 > **実測証跡の現状（2026-08-22 更新）**
 >
 > **PR #75 の runtime 最終 commit `7622a9d`を使い捨て Ubuntu 24.04 runner で Full-stack E2E 23/23 PASS**
-> （[記録](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)）。
+> （[記録](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)）。
 > `site.yml` の一括適用と 2 回目 `changed=0`、計 11 containers、Docker API proxy の GET 成功・
 > POST 拒否・固有 Nginx log の Loki 到達、runner 内の network / UFW、3 volumes の backup / restore、
 > D-1 自動復旧（RTO 1 秒）、Alertmanager から local webhook への FIRING / RESOLVED 配送まで、同一 run で確認した。
 >
-> これは [2026-08-17 の Molecule 4 ロール完走](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)と、
-> [2026-08-19 のローカル D-1（RTO 13 秒）](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)とは別の実測記録であり、いずれも履歴として保持する。
+> これは [2026-08-17 の Molecule 4 ロール完走](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md)と、
+> [2026-08-19 のローカル D-1（RTO 13 秒）](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)とは別の実測記録であり、いずれも履歴として保持する。
 >
 > **この証跡の範囲を広げて解釈しない。** local webhook は Slack 実配信ではなく、
 > runner 内の network / UFW 検証は独立した管理端末、引き渡し対象ホスト、組織 DNS での検証を代替しない。
@@ -992,9 +992,9 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 | --- | --- | --- | --- |
 | v1.0 | 基本構成（Linux + Docker + Prometheus + Grafana + Nginx + Alertmanager） | ✅ 実装済み。PR #75 E2E で core 10 services + 検証用 sink（計 11 containers）の稼働を確認 | — |
 | v1.1 | Loki + Grafana Alloy ログ集約 | ✅ 構成実装済み。Promtail EOL に伴い移行し、Docker API は GET / HEAD 限定 proxy 経由に制限。E2E で固有 Nginx log の Loki 到達を確認 | [01](./docs/server-monitor-improvements/01-loki-log-aggregation.md) |
-| v1.2 | Ansible 構成管理 | ✅ roles / playbook 実装済み。**full `molecule test` 4 ロール完走を [2026-08-17 に採録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)**。さらに [PR #75 の Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で `site.yml` 一括適用・2 回目 `changed=0` を含む 23/23 PASS | [02](./docs/server-monitor-improvements/02-ansible-automation.md) |
+| v1.2 | Ansible 構成管理 | ✅ roles / playbook 実装済み。**full `molecule test` 4 ロール完走を [2026-08-17 に採録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md)**。さらに [PR #75 の Full-stack E2E](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)で `site.yml` 一括適用・2 回目 `changed=0` を含む 23/23 PASS | [02](./docs/server-monitor-improvements/02-ansible-automation.md) |
 | v1.3 | SLO / バーンレートアラート | ✅ rules / dashboard 実装済み。2026-08-22 E2E で local webhook の FIRING / RESOLVED を実測。Slack 実配信は未採録 | [04](./docs/server-monitor-improvements/04-slo-design.md) |
-| v1.3 | バックアップ・復旧演習 | ✅ 手順・自動化実装済み。**ローカル D-1 を 2026-08-19 に採録**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)、RTO 13 秒で PASS）。[PR #75 E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)でも D-1 RTO 1 秒と 3 volumes の backup / restore を PASS。D-2 は未収録 | [05](./docs/server-monitor-improvements/05-backup-recovery-drill.md) |
+| v1.3 | バックアップ・復旧演習 | ✅ 手順・自動化実装済み。**ローカル D-1 を 2026-08-19 に採録**（[記録](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)、RTO 13 秒で PASS）。[PR #75 E2E](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)でも D-1 RTO 1 秒と 3 volumes の backup / restore を PASS。D-2 は未収録 | [05](./docs/server-monitor-improvements/05-backup-recovery-drill.md) |
 | v2.0 | AWS + Terraform 化 | ✅ IaC 実装済み。`apply` / Cost Explorer 証跡は未収録 | [03](./docs/server-monitor-improvements/03-terraform-aws.md) |
 
 ### 設計済み / 順次実装
@@ -1002,7 +1002,7 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 | # | テーマ | 状態 | 設計書 |
 | --- | --- | --- | --- |
 | v3.0 | Kubernetes / EKS 発展計画 | ⬜ 学習ロードマップ段階（就業後の資格計画と連動） | [今後の興味リスト](./docs/roadmap/README.md) |
-| v1.2 | 変更管理プロセス | ✅ PR / Issue テンプレートとミニ運用を server-monitor 側へ追加 | [11](./docs/server-monitor-improvements/11-change-management.md) |
+| v1.2 | 変更管理プロセス | ✅ PR / Issue テンプレートとミニ運用を server 側へ追加 | [11](./docs/server-monitor-improvements/11-change-management.md) |
 
 ### 中長期ロードマップへ縮退（2026-07-03、2026-08-19 追加）
 
@@ -1062,7 +1062,7 @@ server-monitor には Linux / Docker / Prometheus / Grafana / Nginx / Alertmanag
 >
 > | 対象 | 判断 | 内容 |
 > | --- | --- | --- |
-> | `actions/checkout`・`actions/setup-python`・`aws-actions/configure-aws-credentials`・`hashicorp/setup-terraform`（元 #48 の一部） | 採用 | [PR #59](https://github.com/ns7jp/server-monitor/pull/59) として作り直し、その後マージ済み |
+> | `actions/checkout`・`actions/setup-python`・`aws-actions/configure-aws-credentials`・`hashicorp/setup-terraform`（元 #48 の一部） | 採用 | [PR #59](https://github.com/ns7jp/server/pull/59) として作り直し、その後マージ済み |
 > | `prometheus-client`（元 #42） | 採用 | 同上。ローカルで実インストールし既存テスト 14 件が通ることを確認済み |
 > | `pytest` 8→9（元 #31、メジャー更新） | 採用 | 同上。破壊的変更の報告なし、ローカルで実インストール・テスト実行して確認済み |
 > | `aquasecurity/trivy-action` 0.35.0→v0.36.0（元 #48 の一部） | 採用（SHA 固定） | `git clone` してコミット系譜を確認し、v0.36.0 が `GHSA-69fq-xp46-6x23` の安全なコミットの直系の子孫であることを検証してから取り込んだ。可変タグではなくコミット SHA で固定 |
@@ -1098,7 +1098,7 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 | `dependabot.yml` に全 Terraform ディレクトリを登録し、`groups` で 1 PR にまとめる | ✅ 本 PR で修正（今後の provider 更新は整合した 1 PR で届く） |
 | 既存の PR #44 / #45 を close し、修正後の設定で作り直す | ✅ **完了**。Dependabot が #47（terraform-providers group、8 ディレクトリ統合）として再作成し、**Terraform check が success** |
 | AWS provider 5.x → 6.x のメジャー更新を実施 | ⬜ **見送りを決定（2026-08-19）**。破壊的変更の有無をアップグレードガイドで確認するまで自動更新に任せない方針を継続 |
-| Actions / pip 系を処理 | ✅ **2026-08-19: [PR #59](https://github.com/ns7jp/server-monitor/pull/59) をマージ済み**。更新後のCI成功を確認 |
+| Actions / pip 系を処理 | ✅ **2026-08-19: [PR #59](https://github.com/ns7jp/server/pull/59) をマージ済み**。更新後のCI成功を確認 |
 
 > **面接での価値**: この provider 6.x 移行は、`terraform init` の失敗ログから制約の重複宣言を特定した実例です。**LEARNINGS.md に書く題材として、現時点で最も質が高いもの**です（症状・原因・対処・学びの 4 点が既に揃っている）。
 >
@@ -1114,7 +1114,7 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 > | #96 | pyyaml（dev） | venv install 0 エラー、pytest 142 passed | ✅ merge |
 > | #95 | ansible-core 2.19.4→2.21.3 | 実 PyPI パッケージであることを確認（Python 3.12+ 必須と判明）、pytest 142 passed | ✅ merge（controller 用の Python バージョン要件が上がる点を PR にコメント） |
 > | #94 | botocore 1.40.0→1.43.78 | pytest 142 passed | ✅ merge |
-> | #93 | boto3 1.40.0→1.43.78 | **単独では `ResolutionImpossible`**（`boto3==1.43.78` は `botocore>=1.43.78,<1.44.0` を要求） | ❌ 直接 merge 不可。`ansible/controller-requirements.txt` が 3 行しかなく、3 本の PR がそれぞれ 1 行ずつ書き換えるため、2 本を先に merge した時点で 3-way merge がコンテキスト不足で衝突（`405 merge conflicts`）。手動で同内容を適用し直した [PR #102](https://github.com/ns7jp/server-monitor/pull/102) に置き換えて #93 は close |
+> | #93 | boto3 1.40.0→1.43.78 | **単独では `ResolutionImpossible`**（`boto3==1.43.78` は `botocore>=1.43.78,<1.44.0` を要求） | ❌ 直接 merge 不可。`ansible/controller-requirements.txt` が 3 行しかなく、3 本の PR がそれぞれ 1 行ずつ書き換えるため、2 本を先に merge した時点で 3-way merge がコンテキスト不足で衝突（`405 merge conflicts`）。手動で同内容を適用し直した [PR #102](https://github.com/ns7jp/server/pull/102) に置き換えて #93 は close |
 > | #18 | Flask 3.0→3.1.3 | venv install 0 エラー、pytest 11 passed | ✅ merge |
 > | #17 | Docker base image python 3.12-slim→3.14-slim | **検証未完了**。この作業環境のネットワークポリシーが Docker Hub の image blob（`production.cloudfront.docker.com`）と deadsnakes PPA の両方を遮断しており、`docker build` も実 Python 3.14 の取得もできなかった。加えて、この PR 自体が 2026-05-28 時点の古いブランチで、後から追加された `labs/three-tier/ap/Dockerfile`（同じく `python:3.12-slim`）を含んでいない — merge しても 2 つの Dockerfile が別々の Python メジャーバージョンのまま残る | ⏸ 保留。理由を PR にコメント。CI（Docker Hub へ到達できる環境）での実 build・実行、または再作成による対象漏れの解消が必要 |
 >
@@ -1131,15 +1131,15 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 **GitHub Actions で採録済み**
 
 1. ~~full `molecule test` の実行ログ（優先 1）~~ → ✅ **2026-08-17 採録済み**
-2. ~~既存 CI の成功ログを証跡台帳へ記録（優先 2）~~ → ✅ **2026-08-19 採録済み**（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md)）
-3. ~~新規構築から冪等性・network / UFW・Docker API proxy・障害復旧・backup / restoreまでの Full-stack E2E~~ → ✅ **2026-08-22 に23/23 PASS**（[PR #75 記録](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)）
+2. ~~既存 CI の成功ログを証跡台帳へ記録（優先 2）~~ → ✅ **2026-08-19 採録済み**（[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-19-ci-baseline.md)）
+3. ~~新規構築から冪等性・network / UFW・Docker API proxy・障害復旧・backup / restoreまでの Full-stack E2E~~ → ✅ **2026-08-22 に23/23 PASS**（[PR #75 記録](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)）
 
 **次に採録するもの**
 
 1. Docker 未導入の独立した対象ホストと別管理端末を使った新規構築、network / UFW、待受、SSH tunnel、受け入れ・引き渡し確認
 2. 同じ対象ホストの再起動後の永続性と、24時間後・72時間後の継続稼働
 3. Alertmanager → Slack の実通知配信（local webhook の FIRING / RESOLVED は2026-08-22に採録済みだが、Slack Webhook は別途必要）
-4. ~~ネットワーク切り分けの一次メモ（優先 6）~~ → ✅ **2026-08-21 実質完了**。ポート公開の不具合を発見・原因特定し、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてをコンテナ IP 直接指定・`docker compose exec` 経由で確認できた（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）
+4. ~~ネットワーク切り分けの一次メモ（優先 6）~~ → ✅ **2026-08-21 実質完了**。ポート公開の不具合を発見・原因特定し、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてをコンテナ IP 直接指定・`docker compose exec` 経由で確認できた（[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）
 
 **追加環境が必要なもの**
 
@@ -1155,7 +1155,7 @@ hashicorp/aws: no available releases match the given constraints ~> 5.50, ~> 6.5
 
 | リポジトリ / サイト | 位置付け | 状態 |
 | --- | --- | --- |
-| [server-monitor](https://github.com/ns7jp/server-monitor) | 主作品（Linux サーバー構築・運用） | [PR #75](https://github.com/ns7jp/server-monitor/pull/75)まで main へマージ済み。§2 のとおり |
+| [server](https://github.com/ns7jp/server) | 主作品（Linux サーバー構築・運用） | [PR #75](https://github.com/ns7jp/server/pull/75)まで main へマージ済み。§2 のとおり |
 | [post](https://github.com/ns7jp/post) | 学習作品（PHP / MySQL、CSRF / bcrypt / PDO） | 完成・公開中。DB 運用は[今後の興味リスト](./docs/roadmap/README.md)の題材 |
 | [pulse](https://github.com/ns7jp/pulse) | 学習作品（PHP / SQLite） | 完成・公開中 |
 | [works](https://github.com/ns7jp/works) | 学習作品集（Python / HTML / CSS） | 公開中（学習過程の記録） |

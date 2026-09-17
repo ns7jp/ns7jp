@@ -1,7 +1,7 @@
 # 04. SLO / SLI / エラーバジェット設計
 
 > 状態更新（2026-05-27）: recording rules、burn-rate alerts、Grafana dashboard、
-> runbooks は [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
+> runbooks は [server](https://github.com/ns7jp/server) に実装済みである。
 > 現行 blackbox-exporter は対象と同一ホスト内のラボ観測点であり、AWS の利用者視点 SLO
 > を主張するには外部 synthetic probe の追加と証跡が必要である。
 >

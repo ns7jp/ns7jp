@@ -1,7 +1,7 @@
 # 補助トラックの実測証跡
 
 主作品であるLinuxサーバー構築の証跡は
-[`ns7jp/server-monitor`](https://github.com/ns7jp/server-monitor/tree/main/docs/evidence) で管理します。
+[`ns7jp/server`](https://github.com/ns7jp/server/tree/main/docs/evidence) で管理します。
 このディレクトリは、Windows / Active Directory などプロフィール固有の補助証跡を、
 研修先・顧客・個人の情報を持ち出さずに再現して保存する場所です。
 主作品側の実測をプロフィール文書から参照する場合は、一次証跡を複製せず、実行対象と
@@ -11,7 +11,7 @@
 
 | 検証 | 記録先 | 状態 |
 | --- | --- | --- |
-| server-monitor の Git SHA 指定変更・ロールバック CI | [2026-08-23 索引メモ](2026-08-23-server-monitor-git-rollback-ci.md) | `PASS`（使い捨て runner） |
+| server-monitor の Git SHA 指定変更・ロールバック CI | [2026-08-23 索引メモ](./2026-08-23-server-monitor-git-rollback-ci.md) | `PASS`（使い捨て runner） |
 
 ## 記録予定
 
@@ -21,7 +21,7 @@
 
 ## テンプレート
 
-- [Windows / AD 公開再現ラボ](templates/windows-ad-lab.md)
+- [Windows / AD 公開再現ラボ](./templates/windows-ad-lab.md)
 
 テンプレートや計画の存在を実行実績として扱いません。公開前にドメイン名、ユーザー名、
 IP、ライセンス情報、研修先情報、個人情報をマスクし、実際のコマンドと出力を確認します。

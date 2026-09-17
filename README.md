@@ -101,7 +101,7 @@ AIが手順を案内し、本人がVMを操作して提供した画像に対応�
 3. [説明練習](./docs/portfolio-explanation.md)の記録欄に、自分の実施範囲・結果・未実施を記入する。
 4. 手順を閉じて「目的 → 構成 → 自分の操作 → 確認結果 → 次の課題」を説明する。詰まった箇所だけ読み直す。
 
-さらに学ぶ際は [24 週の学習プラン](./docs/learning-plan/README.md)へ進みます。[育成システム](./docs/server-engineer/README.md)で今日の課題と提出物を決め、24週後は条件変更・初見障害・第三者への引き渡しを含む総合演習へ進めます。学習期間は目安です。本人による演習と説明の確認をもって習得を判断します。
+さらに学ぶ際は [24 週の学習プラン](./docs/learning-plan/README.md)へ進みます。[育成システム](./archive/docs/server-engineer/README.md)で今日の課題と提出物を決め、24週後は条件変更・初見障害・第三者への引き渡しを含む総合演習へ進めます。学習期間は目安です。本人による演習と説明の確認をもって習得を判断します。
 
 ### 教材と改善システムの案内
 
@@ -111,12 +111,12 @@ AIが手順を案内し、本人がVMを操作して提供した画像に対応�
 | --- | --- |
 | PC・Linuxの準備 | [開始前診断と最初の30分](./docs/learning-plan/00-start-here.md) |
 | 用語を確かめる | [IT基礎用語集](./docs/it-glossary.md) |
-| 小規模案件の先へ進む | [初心者から熟練への橋渡し設計](./docs/server-engineer/advanced/README.md) |
-| 案件を受付から終結まで進める | [サーバー案件の運用システム](./docs/server-projects/README.md) |
-| 就職・定着と学習配分 | [就職・定着・継続成長](./docs/engineer-career/README.md)・[自律型成長](./docs/autonomous-growth/README.md) |
-| 週次の改善と実測の取り込み | [ポートフォリオ改善ループ](./docs/portfolio-loop/README.md) |
-| 成果・負荷・期限を振り返る | [自律繁栄](./docs/autonomous-prosperity/README.md)・[詳細運用](./docs/prosperity-review/README.md) |
-| 仮説を比較して改善する | [改善実験](./docs/server-innovation/README.md)・[試行錯誤ループ](./docs/server-innovation/fast-loop.md)・[探索と改善の橋渡し](./docs/server-innovation/bridge.md) |
+| 小規模案件の先へ進む | [初心者から熟練への橋渡し設計](./archive/docs/server-engineer/advanced/README.md) |
+| 案件を受付から終結まで進める | [サーバー案件の運用システム](./archive/docs/server-projects/README.md) |
+| 就職・定着と学習配分 | [就職・定着・継続成長](./archive/docs/engineer-career/README.md)・[自律型成長](./archive/docs/autonomous-growth/README.md) |
+| 週次の改善と実測の取り込み | [ポートフォリオ改善ループ](./archive/docs/portfolio-loop/README.md) |
+| 成果・負荷・期限を振り返る | [自律繁栄](./archive/docs/autonomous-prosperity/README.md)・[詳細運用](./archive/docs/prosperity-review/README.md) |
+| 仮説を比較して改善する | [改善実験](./archive/docs/server-innovation/README.md)・[試行錯誤ループ](./archive/docs/server-innovation/fast-loop.md)・[探索と改善の橋渡し](./archive/docs/server-innovation/bridge.md) |
 
 ## 経験・資格
 
@@ -132,7 +132,7 @@ AIが手順を案内し、本人がVMを操作して提供した画像に対応�
 
 文書の構成・推敲に加え、実装コードの生成・レビューにも AI 支援を利用しています。生成物や自動試験の成功を、本人の習得や実務経験へ読み替えません。本人の作業・判断・説明は個別の記録で確認します。範囲と方針は [STATUS.md](./STATUS.md)と[職務経歴書・スキルシート](./docs/resume.md)に記載しています。
 
-改善ツールの実装範囲は[詳細設計](./docs/portfolio-automation/design.md)と[週次運用手順](./docs/portfolio-automation/weekly-operation.md)にまとめています。自動処理の結果と、本人の技能・実機の受け入れ・公開判断は別に記録します。
+改善ツールの実装範囲は[詳細設計](./archive/docs/portfolio-automation/design.md)と[週次運用手順](./archive/docs/portfolio-automation/weekly-operation.md)にまとめています。自動処理の結果と、本人の技能・実機の受け入れ・公開判断は別に記録します。
 
 ## Contact
 

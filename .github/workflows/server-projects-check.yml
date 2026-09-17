@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: '22'
       - name: Validate project workflow
-        run: node scripts/server-projects.mjs check
+        run: node archive/scripts/server-projects.mjs check
       - name: Test project state, tasks, evidence and reviews
-        run: node --test tests/server-projects.test.mjs
+        run: node --test archive/tests/server-projects.test.mjs
       - name: Check project and learning navigation
-        run: node scripts/check-engineer-links.mjs
+        run: node archive/scripts/check-engineer-links.mjs

@@ -262,9 +262,9 @@ Zabbix 固有の「収集した値をどう異常判定し、どう通知する�
 
 | # | 学習項目 | ハンズオン | 到達確認 | つまずきやすい点 |
 | --- | --- | --- | --- | --- |
-| M4-1 | 基本のアクション | 条件「Trigger severity >= Warning」、操作「Send message to Admin」のアクションを 1 つ作成する | M3-1 のトリガーを手動で発火させ、Reports → Action log に記録が残ることを確認する | Media type（送信経路）に SMTP 等の実配信先が未設定だと送信キューに溜まり続けるだけでエラーに気付きにくい。[server-monitor の Alertmanager → Slack 実配信](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)と同じく、まず Action log での記録確認を優先し、実配信は環境が整ってから追加する |
+| M4-1 | 基本のアクション | 条件「Trigger severity >= Warning」、操作「Send message to Admin」のアクションを 1 つ作成する | M3-1 のトリガーを手動で発火させ、Reports → Action log に記録が残ることを確認する | Media type（送信経路）に SMTP 等の実配信先が未設定だと送信キューに溜まり続けるだけでエラーに気付きにくい。[server-monitor の Alertmanager → Slack 実配信](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)と同じく、まず Action log での記録確認を優先し、実配信は環境が整ってから追加する |
 | M4-2 | エスカレーション設計 | Step 1（0 分後、Admin へ通知）→ Step 2（5 分後、別の通知先へ拡大）の 2 段階を設定する | Step duration の経過が Reports → Action log で確認できる | Default operation step duration の最小値は 60 秒。テスト時に短くしすぎるとエスカレーション前に自己復旧してしまい、意味のある検証にならない |
-| M4-3 | 復旧通知（Recovery operations） | 「解決しました」の通知を Recovery operations に設定する | 障害を直すと解決通知が Action log に記録される（[server-monitor の D-1 演習](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)の FIRING / RESOLVED と対応する概念） | 復旧操作は発火時の Operations とは別欄で設定するため、見落として「発火だけ通知され解決が来ない」状態になりがち |
+| M4-3 | 復旧通知（Recovery operations） | 「解決しました」の通知を Recovery operations に設定する | 障害を直すと解決通知が Action log に記録される（[server-monitor の D-1 演習](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)の FIRING / RESOLVED と対応する概念） | 復旧操作は発火時の Operations とは別欄で設定するため、見落として「発火だけ通知され解決が来ない」状態になりがち |
 
 ### 5.5 Level 5: Low-Level Discovery
 
@@ -277,7 +277,7 @@ Zabbix 固有の「収集した値をどう異常判定し、どう通知する�
 
 ## 6. 障害演習：検知から復旧まで（Z-1）
 
-[server-monitor の D-1 復旧演習](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)（RTO 実測）と同じ考え方で、Zabbix 版の障害注入演習を設計します。目的は「監視が設定されている」ことではなく「**検知から復旧までの所要時間を実測できる**」ことです。
+[server-monitor の D-1 復旧演習](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)（RTO 実測）と同じ考え方で、Zabbix 版の障害注入演習を設計します。目的は「監視が設定されている」ことではなく「**検知から復旧までの所要時間を実測できる**」ことです。
 
 **RTO（Recovery Time Objective、目標復旧時間）とは**: 「障害が起きてから復旧するまでに、どれくらいの時間までなら許されるか」という目標値のことです。本演習で記録するのは目標値そのものではなく、実際にかかった時間（注入 → 検知 → 通知 → 復旧 → 解決）です。実際に何分かかるのかを測っておかないと、目標値として何分を置くのが現実的かを判断できません。そのため下の表で各時刻を記録します。
 
@@ -386,7 +386,7 @@ Zabbix 固有の「収集した値をどう異常判定し、どう通知する�
 | 作業ログ | [03 §3 の作業ログ取得](./03-build-process.md#作業ログの取得)と同じく `script -a` で記録し、`server-monitor` の `docs/drills/logs/` へ保存する |
 | スクリーンショット | Problems 画面・Latest data・ダッシュボードのスクリーンショットは、実 IP・ホスト名・パスワードをマスクしてから保存する |
 | 試験証跡の命名 | [7 章](#7-試験項目書)の試験項目書のエビデンス列は `<試験No>_<対象>_<日付>.<拡張子>` で統一する |
-| 障害演習の実測値 | [6 章](#6-障害演習検知から復旧までz-1)の検知時間・復旧時間は、[server-monitor の D-1 演習](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md)と同じ形式（`症状 → 検知 → 通知 → 復旧 → 所要時間` の表）で記録する |
+| 障害演習の実測値 | [6 章](#6-障害演習検知から復旧までz-1)の検知時間・復旧時間は、[server-monitor の D-1 演習](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md)と同じ形式（`症状 → 検知 → 通知 → 復旧 → 所要時間` の表）で記録する |
 | ハウスキーピングと DB サイズ | T-14 実施時に `\l+` 等で DB サイズを記録し、履歴保持期間の妥当性を検討した記録を残す |
 | 反映先 | 実施後、本ドキュメントの各試験項目書・[6 章](#6-障害演習検知から復旧までz-1)の実測結果欄を埋めるか、実施記録を指す別ファイルへのリンクをここに追加する |
 

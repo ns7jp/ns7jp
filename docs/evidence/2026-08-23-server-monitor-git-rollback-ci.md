@@ -5,8 +5,8 @@
 **PASS** — 2026-08-23 の GitHub Actions で、候補 SHA の配備から指定した旧 SHA への
 ロールバックと、復帰後の稼働確認まで完了した。
 
-- 対象: [`ns7jp/server-monitor` PR #77](https://github.com/ns7jp/server-monitor/pull/77)
-- Actions: [Full-stack Ansible E2E run 32611251044](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)
+- 対象: [`ns7jp/server` PR #77](https://github.com/ns7jp/server/pull/77)
+- Actions: [Full-stack Ansible E2E run 32611251044](https://github.com/ns7jp/server/actions/runs/32611251044)
 - job: `ephemeral-ubuntu` — success（6 分 36 秒）
 - job 実行: 2026-08-23 01:50:06〜01:56:42 UTC
 - ロールバック要約生成: 2026-08-23 01:56:36 UTC

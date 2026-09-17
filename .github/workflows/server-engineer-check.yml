@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: '22'
       - name: Validate curriculum
-        run: node scripts/server-engineer.mjs check
+        run: node archive/scripts/server-engineer.mjs check
       - name: Test evidence and review gates
-        run: node --test tests/server-engineer.test.mjs
+        run: node --test archive/tests/server-engineer.test.mjs
       - name: Check learning navigation
-        run: node scripts/check-engineer-links.mjs
+        run: node archive/scripts/check-engineer-links.mjs

@@ -31,7 +31,7 @@
    「必要な環境」順でLinux不要項目を先に進めたが、その項目は採録済みになった。
    2026-08-22以降は第一志望に直結する独立Ubuntu対象ホストの構築・再起動・引き渡しを先に採録し、
    旧優先番号とグループ分けは完了履歴としてだけ参照する。
-2. Linux サーバーの採録物は **server-monitor 側の [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)** に集約する。Windows / AD・winget のプロフィール固有証跡は、本リポジトリの[補助トラック証跡台帳](./evidence/README.md)に保存する。
+2. Linux サーバーの採録物は **server 側の [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)** に集約する。Windows / AD・winget のプロフィール固有証跡は、本リポジトリの[補助トラック証跡台帳](./evidence/README.md)に保存する。
 3. **実物が貯まるまで、改善設計 06–17 に新規テーマを追加しない**（[新規設計を増やさない運用ルール](#新規設計を増やさない運用ルール)）。
 4. 「設計サンプル」と「実測証跡」を**絶対に混同しない**（既存の honesty 方針を踏襲）。
 5. 証跡を追加する変更は、保存先リポジトリの PR テンプレートに沿って、変更理由・確認結果・ロールバック・証跡リンクを残す。
@@ -44,35 +44,35 @@
 
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
-| ✅ 1 | ~~**full `molecule test` の実行ログ**（converge → verify → idempotence、4 ロール分）~~ **2026-08-17 採録完了** → [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) | **ブラウザのみ**（GitHub Actions） | 0 円・実績 2 分 42 秒 | [02 Ansible 構成管理](./server-monitor-improvements/02-ansible-automation.md) |
-| ✅ 2 | ~~**既存 CI の成功ログを証跡台帳へ記録**（Python check / Terraform check / Security scan / Backup verify）~~ **2026-08-19 採録完了** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md) | **ブラウザのみ** | 0 円・30 分 | [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) |
+| ✅ 1 | ~~**full `molecule test` の実行ログ**（converge → verify → idempotence、4 ロール分）~~ **2026-08-17 採録完了** → [実行記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md) | **ブラウザのみ**（GitHub Actions） | 0 円・実績 2 分 42 秒 | [02 Ansible 構成管理](./server-monitor-improvements/02-ansible-automation.md) |
+| ✅ 2 | ~~**既存 CI の成功ログを証跡台帳へ記録**（Python check / Terraform check / Security scan / Backup verify）~~ **2026-08-19 採録完了** → [記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-19-ci-baseline.md) | **ブラウザのみ** | 0 円・30 分 | [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) |
 
 > **優先 1 は 2026-08-17 に採録完了しました。** 4 ロール（common / docker / nginx / monitoring）すべてが
 > create → converge → idempotence → verify を通過しています（0 円・2 分 42 秒）。
 > 到達までに 6 回失敗しており、その過程で**静的検査では検出できないロールの欠陥を 2 件**発見・修正しました
 > （`tzdata` の依存漏れ、UFW の `allow` と `limit` が同一ポートを奪い合う不具合）。
-> 経緯は [実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md) に残しています。
+> 経緯は [実行記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md) に残しています。
 >
 > **優先 2 は 2026-08-19 に採録完了しました。** `Backup verify` は毎日 04:00 UTC に自動実行されており、
 > GitHub Actions API で実際に数えたところ累計 **102 回**の実行履歴があった（従来「400回超」と記載していたが誤りだったため訂正）。
 > `python-check` / `terraform-check` / `security-scan` の直近成功ログとあわせて
-> [server-monitor 側の記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md)に採録した。
+> [server 側の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-19-ci-baseline.md)に採録した。
 >
-> **2026-08-22 に PR #75 の Full-stack E2E も採録しました。** runtime 最終 commit `7622a9d`を Docker 導入済みの disposable Ubuntu 24.04 runner で検証し、`site.yml` の一括適用と 2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認して[23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)でした。Slack 実配信、AWS、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、再起動後、長期稼働の証跡へは読み替えません。
+> **2026-08-22 に PR #75 の Full-stack E2E も採録しました。** runtime 最終 commit `7622a9d`を Docker 導入済みの disposable Ubuntu 24.04 runner で検証し、`site.yml` の一括適用と 2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を確認して[23/23 ID PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)でした。Slack 実配信、AWS、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、再起動後、長期稼働の証跡へは読み替えません。
 >
-> **2026-08-23 に PR #77 の Git モード変更・ロールバック CI も採録しました。** [run 32611251044](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)で候補 SHA `84e1492` を `/opt/server-monitor` へ配備し、旧 SHA `59aa88e` へ復帰した後、revision marker、runtime manifest、app container 再生成、不要ファイル除去、loopback bind、Loki 取り込みを確認して PASS しました。これは使い捨て runner と PR ブランチの結果であり、main 反映、永続ホスト、再起動・24 / 72 時間、Slack、AWS、D-2 の証跡へは読み替えません。詳細は[プロフィール側の索引メモ](./evidence/2026-08-23-server-monitor-git-rollback-ci.md)に残しています。
+> **2026-08-23 に PR #77 の Git モード変更・ロールバック CI も採録しました。** [run 32611251044](https://github.com/ns7jp/server/actions/runs/32611251044)で候補 SHA `84e1492` を `/opt/server-monitor` へ配備し、旧 SHA `59aa88e` へ復帰した後、revision marker、runtime manifest、app container 再生成、不要ファイル除去、loopback bind、Loki 取り込みを確認して PASS しました。これは使い捨て runner と PR ブランチの結果であり、main 反映、永続ホスト、再起動・24 / 72 時間、Slack、AWS、D-2 の証跡へは読み替えません。詳細は[プロフィール側の索引メモ](./evidence/2026-08-23-server-monitor-git-rollback-ci.md)に残しています。
 
 ### グループ B — Linux + Docker が必要（WSL2 で可）
 
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
-| ✅ 3 | ~~`docker compose up` 後の **Grafana 実画面**（CPU/メモリ/HTTP/アラート状態）~~ **2026-08-18 採録完了** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-18-local-observability.md) | ローカル Linux + Docker | 0 円 | [アーキテクチャ図](./architecture-diagram.md) |
-| 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [今後の興味リスト](roadmap/README.md) |
+| ✅ 3 | ~~`docker compose up` 後の **Grafana 実画面**（CPU/メモリ/HTTP/アラート状態）~~ **2026-08-18 採録完了** → [記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-18-local-observability.md) | ローカル Linux + Docker | 0 円 | [アーキテクチャ図](./architecture-diagram.md) |
+| 4 | Alertmanager → **Slack に実際に発火した通知** のスクショ | 同上 + Slack Webhook | 0 円 | [今後の興味リスト](./roadmap/README.md) |
 | ✅ 5 | ~~Loki + Grafana Alloy の **ログ検索実画面**（クエリ + 結果）~~ **2026-08-18 採録完了**（上記記録に含む） | 同上 | 0 円 | [01 ログ集約](./server-monitor-improvements/01-loki-log-aggregation.md) |
-| ✅ 6 | ~~**ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる）~~ **2026-08-21 実質完了** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)（`ss` / `docker port` / `docker inspect` で切り分け、`internal: true` ネットワークがホストへのポート公開を無効化する不具合を発見・原因特定。当初想定していたホスト公開ポート経由ではなく、コンテナ IP を直接指定する方法・`docker compose exec` 経由で、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてを観察できた） | 同上 | 0 円 | [今後の興味リスト](roadmap/README.md) / [橋渡し](./career-bridge.md) |
-| ✅ 7 | ~~**D-1 復旧演習の実測**（検知 → 復旧の各ステップを実時間で計測）~~ **2026-08-19 採録完了（PASS、RTO 13秒）** → [記録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-19-D-1.md) | 同上 | 0 円 | [05 バックアップ・復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
+| ✅ 6 | ~~**ネットワーク切り分けの一次メモ**（dig / traceroute / ss / tcpdump で既存ラボの経路と名前解決を実際に調べる）~~ **2026-08-21 実質完了** → [記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-21-network-firstlook.md)（`ss` / `docker port` / `docker inspect` で切り分け、`internal: true` ネットワークがホストへのポート公開を無効化する不具合を発見・原因特定。当初想定していたホスト公開ポート経由ではなく、コンテナ IP を直接指定する方法・`docker compose exec` 経由で、名前解決・経路（traceroute）・実際のパケット（tcpdump）のすべてを観察できた） | 同上 | 0 円 | [今後の興味リスト](./roadmap/README.md) / [橋渡し](./career-bridge.md) |
+| ✅ 7 | ~~**D-1 復旧演習の実測**（検知 → 復旧の各ステップを実時間で計測）~~ **2026-08-19 採録完了（PASS、RTO 13秒）** → [記録](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-19-D-1.md) | 同上 | 0 円 | [05 バックアップ・復旧演習](./server-monitor-improvements/05-backup-recovery-drill.md) |
 
-> **優先 3 は 2026-08-18 に採録完了しました。** あわせて `server-monitor/docs/screenshot.png` も
+> **優先 3 は 2026-08-18 に採録完了しました。** あわせて `server/docs/screenshot.png` も
 > Windows 11 端末の画面から Linux（WSL2）上の実画面へ差し替え済みです。
 > **優先 6 は 2026-08-21 に実質完了しました**（当初想定していたホスト公開ポート経由ではなく、コンテナ IP を直接指定する方法で名前解決・経路・実際のパケットのすべてを確認できた。その過程で見つかったポート公開の不具合も切り分け・原因特定した）。
 > **残るグループ B は優先 4（Alertmanager → Slack 通知）**です。
@@ -96,7 +96,7 @@
 
 1. ~~**CI 証跡（優先 1〜2）** — ブラウザのみ~~ → 優先 1・2 ともに ✅ 採録済み
 2. ~~**スクショ 3 点（優先 3〜5）**~~ → 優先 3・5 は ✅ 採録済み（2026-08-18）。残るは優先 4（Alertmanager → Slack）
-3. ~~**演習・実測（優先 6〜7）**~~ → 優先 7（D-1）は ✅ 採録済み（2026-08-19、PASS）。優先 6 も ✅ 2026-08-21 に実質完了（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）
+3. ~~**演習・実測（優先 6〜7）**~~ → 優先 7（D-1）は ✅ 採録済み（2026-08-19、PASS）。優先 6 も ✅ 2026-08-21 に実質完了（[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-21-network-firstlook.md)）
 4. ~~**証跡リプレイ**~~ → ✅ 2026-08-22 公開済み。編集済み動画だけを実測根拠にせず、元証跡へリンク
 5. **実操作の連続録画** — 必須成果物ではなく追加候補。E2E artifact 内の terminal cast は全工程の連続動画ではないため、常設公開できた場合だけ別実績として追加
 
@@ -113,7 +113,7 @@
 | 再現性 | 実行コマンド、対象 commit、環境、実行日時が残っている |
 | 結果 | 成功 / 失敗、所要時間、主要ログまたはスクリーンショットがある |
 | 安全性 | 秘密値、公開 IP、AWS account ID、個人名、webhook URL がマスク済み |
-| 導線 | Linux は `server-monitor/docs/evidence/README.md` または `docs/drills/logs/`、Windows は本リポジトリの `docs/evidence/README.md` から辿れる |
+| 導線 | Linux は `server/docs/evidence/README.md` または `docs/drills/logs/`、Windows は本リポジトリの `docs/evidence/README.md` から辿れる |
 | 変更の記録 | PR 本文に確認結果、影響範囲、ロールバック、証跡リンクがある |
 
 ---
@@ -122,40 +122,40 @@
 
 ### 1. full molecule test（GitHub Actions・Linux 環境不要）✅ 採録済み
 
-> 2026-08-17 に採録完了（[実行記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-17-molecule.md)）。
+> 2026-08-17 に採録完了（[実行記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-17-molecule.md)）。
 > 以下は**再実行するときの手順**として残します。ロールを変更したら再実行し、冪等性が保たれているか確認してください。
 
-1. `ns7jp/server-monitor` の **Actions** タブを開く。
+1. `ns7jp/server` の **Actions** タブを開く。
 2. 左の一覧から **Ansible integration evidence** を選ぶ。
 3. 右上の **Run workflow** → branch は `main` → **Run workflow** を押す。
 4. `common` / `docker` / `nginx` / `monitoring` の 4 ジョブが並列で走る（10〜15 分）。
 5. 各ジョブのログから **converge / verify / idempotence** の成否が分かる末尾を控える。
-6. `server-monitor/docs/evidence/YYYY-MM-DD-molecule.md` に、実行 URL・commit SHA・結果を記録する（テンプレートは [molecule.md](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/templates/molecule.md)）。
+6. `server/docs/evidence/YYYY-MM-DD-molecule.md` に、実行 URL・commit SHA・結果を記録する（テンプレートは [molecule.md](https://github.com/ns7jp/server/blob/main/docs/evidence/templates/molecule.md)）。
 
 > **失敗しても採録します。** 「初回は idempotence で failed が出た。原因は〇〇。修正して再実行し changed=0 になった」という記録は、
 > 成功ログだけの記録より価値があります（[LEARNINGS.md](../LEARNINGS.md) のエントリにもなります）。
-> 詳しい手順は [Molecule を GitHub Actions で実行する](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/molecule-via-github-actions.md) を参照してください。
+> 詳しい手順は [Molecule を GitHub Actions で実行する](https://github.com/ns7jp/server/blob/main/docs/evidence/molecule-via-github-actions.md) を参照してください。
 
 ### 2. 既存 CI の成功ログを証跡台帳へ記録（Linux 環境不要）✅ 採録済み
 
-> 2026-08-19 に採録完了（[記録](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/2026-08-19-ci-baseline.md)）。
+> 2026-08-19 に採録完了（[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-08-19-ci-baseline.md)）。
 > `Backup verify` は毎日自動実行されており、GitHub Actions API で実際に数えたところ累計 **102 回**
 > の実行履歴があった（本ファイルに以前あった「400回超」という記載は誤りだったため訂正した）。
 > 以下は**再実行するときの手順**として残す。
 
 1. Actions タブで `Python check` / `Terraform check` / `Security scan` / `Backup verify` の**成功した最新実行**を開く。
 2. それぞれの実行 URL、実行日時、対象 commit SHA、検証内容を控える。
-3. `server-monitor/docs/evidence/YYYY-MM-DD-ci-baseline.md` にまとめる。
+3. `server/docs/evidence/YYYY-MM-DD-ci-baseline.md` にまとめる。
 4. 台帳（`docs/evidence/README.md`）の該当行に、この記録へのリンクを張る。
 
 > **これは新しく何かを実行する作業ではなく、すでに存在する結果を拾う作業です。**
-> ここで対象にしている従来の baseline CI は、構文・設定の整合・依存の脆弱性を確認するもので、起動・疎通・復旧時間は含みません。起動から復旧までを扱う [Full-stack E2E](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)とは区別して台帳へ記録します。
+> ここで対象にしている従来の baseline CI は、構文・設定の整合・依存の脆弱性を確認するもので、起動・疎通・復旧時間は含みません。起動から復旧までを扱う [Full-stack E2E](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)とは区別して台帳へ記録します。
 
 ### 3. Grafana 実画面
 
 1. ローカルで `docker compose up -d` を実行する。
 2. Grafana にログインし、主要ダッシュボード（host / HTTP / SLO）を開く。
-3. 解像度 1920×1080 でスクショを撮り、`server-monitor/docs/evidence/` に保存する。
+3. 解像度 1920×1080 でスクショを撮り、`server/docs/evidence/` に保存する。
 4. ファイル名に**対象 commit の短縮ハッシュと撮影日**を含める（例: `grafana-host_2a1b3c4_20260530.png`）。
 5. [ビジュアルショーケース](./showcase/README.md) の ASCII モックアップを、この実画像に差し替える。
 
@@ -182,7 +182,7 @@
 
 1. [ショーケース §6](./showcase/README.md) の計測表テンプレを使う。
 2. 演習を**実際に 1 回実施**し、`目標` 列の隣の `実測` 列を**実時間**で埋める。
-3. 演習ログ（コマンド履歴 + 時刻）を `server-monitor/docs/drills/logs/` に保存する。
+3. 演習ログ（コマンド履歴 + 時刻）を `server/docs/drills/logs/` に保存する。
 4. この実測値を元に、ショーケースの「？分」を実数へ差し替える。
 
 ### 8a. Windows / AD 公開用再現ラボ（部分実施）
@@ -226,7 +226,7 @@
 | --- | --- |
 | マスク対象 | 秘密値 / 公開 IP / AWS account ID / 個人名 / webhook URL / 実在 domain / SID / machine GUID / MAC address |
 | 必須メタ情報 | 対象 commit の短縮ハッシュ・実行日時（JST）・実行環境 |
-| 保存先 | Linux は `server-monitor/docs/evidence/`、Windows 補助証跡は本リポジトリの `docs/evidence/`、raw は両リポジトリの外 |
+| 保存先 | Linux は `server/docs/evidence/`、Windows 補助証跡は本リポジトリの `docs/evidence/`、raw は両リポジトリの外 |
 | 公開導線 | 実物採録後、ショーケースの ASCII モックアップから実画像へリンクするか、実画像へ置換 |
 
 ---
@@ -264,6 +264,6 @@
 - [学習の一次記録（つまずきログ）](../LEARNINGS.md)
 - [改善設計の実装対応表](./server-monitor-improvements/README.md)
 - [Windows 補助トラック証跡台帳](./evidence/README.md)
-- [server-monitor 検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)
-- [server-monitor ローカル証跡採録ガイド](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/local-evidence-quickstart.md)
-- [server-monitor 変更管理ミニ運用](https://github.com/ns7jp/server-monitor/blob/main/docs/change-management.md)
+- [server 検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)
+- [server-monitor ローカル証跡採録ガイド](https://github.com/ns7jp/server/blob/main/docs/evidence/local-evidence-quickstart.md)
+- [server-monitor 変更管理ミニ運用](https://github.com/ns7jp/server/blob/main/docs/change-management.md)
