@@ -1,7 +1,7 @@
 # 01. Loki + Grafana Alloy によるログ集約
 
 > 状態更新（2026-05-27）: この設計は
-> [server-monitor](https://github.com/ns7jp/server-monitor) に実装済みである。
+> [server](https://github.com/ns7jp/server) に実装済みである。
 > 当初検討した Promtail は 2026 年 3 月 2 日に EOL となったため、現在の収集エージェントは
 > Grafana Alloy である。実行ログの証跡は server-monitor の証跡台帳へ追加する。
 
@@ -42,7 +42,7 @@ label にしている。
 
 ## 実装参照
 
-| 内容 | server-monitor 側の正本 |
+| 内容 | server 側の正本 |
 | --- | --- |
 | 収集設定 | `deploy/alloy/config.alloy` |
 | サービス構成 | `compose.yaml` の `alloy` / `loki` |
@@ -60,7 +60,7 @@ label にしている。
 | 再起動後の継続収集 | Alloy restart 前後の timestamp を含む結果 |
 
 実行前の構成コードだけで「収集を確認済み」とは表現せず、
-[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md) に
+[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) に
 結果が追加された後に実績へ更新する。
 
 ## 参考

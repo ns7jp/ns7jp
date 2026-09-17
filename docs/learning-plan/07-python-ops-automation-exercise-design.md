@@ -92,7 +92,7 @@ Linux / Windows で呼び出し方が変わらない標準・準標準ライブ�
 | systemd timer（Linux）・タスクスケジューラ（Windows）への定期実行登録と、実行履歴からの成否確認 | **本演習の対象** |
 | ホストローカルの正常性チェックと、ローカル JSON ステータス出力・任意のローカル webhook 通知 | **本演習の対象** |
 | Ansible によるコード化・冪等適用 | **対象外**。[Phase 5 W19](./02-curriculum.md#w19-ansible-による構成管理)で別途扱う |
-| Grafana / Prometheus 等による可視化・時系列保存 | **対象外**。[server-monitor](https://github.com/ns7jp/server-monitor)側の役割（[ADR 0001](../adr/0001-monitoring-stack.md)） |
+| Grafana / Prometheus 等による可視化・時系列保存 | **対象外**。[server](https://github.com/ns7jp/server)側の役割（[ADR 0001](../adr/0001-monitoring-stack.md)） |
 | Active Directory へのドメイン昇格・参加 | **対象外**。[Windows / AD 公開再現ラボ](../evidence/templates/windows-ad-lab.md)が別途扱う。本演習の Windows ホストは standalone のまま操作する |
 | 複数ホストをまたぐ集中監視・リモート一括実行（SSH / WinRM 経由） | **対象外**。本演習は「そのホスト自身の上で動く」ローカル自動化に限定する（[W18](./02-curriculum.md#w18-シェルスクリプトによる定型化)と同じスコープの取り方） |
 | Web / AP / DB 3 層構成そのものの構築 | **対象外**。[Phase 3](./02-curriculum.md#phase-3-ミドルウェア構築w9-w12)で別途構築する。`check.py` の HTTP チェックは、Phase 3 完了前でも演習が独立して回るよう、**手動起動する簡易 HTTP サーバーで代替する**（[3 章](#3-パラメータシート)・[4 章](#4-構築手順書)で明記） |
@@ -175,7 +175,7 @@ Windows はタスクスケジューラから個別に定期実行される。3 �
 | Windows の定期実行 | タスクスケジューラ（`schtasks` CLI、または `Register-ScheduledTask`） | 標準搭載で追加インストール不要。`schtasks /query` と `Get-ScheduledTaskInfo` で実行履歴・終了コードを確認でき、構築手順書へコマンドとして落とし込みやすい |
 | 設定形式 | YAML（`PyYAML`） | [Phase 5 W19](./02-curriculum.md#w19-ansible-による構成管理)の Ansible インベントリ・変数ファイルと同じ記法に揃え、コメントを書ける |
 | 監視の終了コード規約（`check.py`） | Nagios / Icinga 系プラグイン規約（`0=OK` `1=WARNING` `2=CRITICAL` `3=UNKNOWN`） | 独自規約を作らず、監視系の実務で広く使われる規約に合わせておくと現場転用が利く |
-| 通知方式（`check.py`） | ローカル JSON ステータスファイル + 任意のローカル webhook（`urllib.request` による POST） | 本演習は個人ラボ内で完結させ、**実際の Slack 配信は行わない**。[README AI の利用について](../../README.md#ai-の利用について)と同じく、実施していないことを実施したと書かない。server-monitor 側の実際の Slack 通知経路（[ADR-0007](../adr/0007-slack-notifications.md)）とは別物である |
+| 通知方式（`check.py`） | ローカル JSON ステータスファイル + 任意のローカル webhook（`urllib.request` による POST） | 本演習は個人ラボ内で完結させ、**実際の Slack 配信は行わない**。[README AI の利用について](../../README.md#3-つの前提ai-の利用を含む)と同じく、実施していないことを実施したと書かない。server 側の実際の Slack 通知経路（[ADR-0007](../adr/0007-slack-notifications.md)）とは別物である |
 | 監視対象の HTTP エンドポイント（`check.py`） | 検証のたびに手動起動する `python -m http.server` | [Phase 3](./02-curriculum.md#phase-3-ミドルウェア構築w9-w12)の Nginx 導入前でも演習が独立して回るようにするための代替。常駐サービスとしては登録せず、`check_http()` の判定ロジックを確認する目的に絞る。Phase 3 完了後は実際の Web サーバーへ向け先を差し替える |
 | ツール間のコード共有 | しない（3 本とも自己完結） | [基本設計](#基本設計構成)のとおり。この規模で共有パッケージを作る抽象化コストが実利を上回ると判断した |
 
@@ -1501,7 +1501,7 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
 - **ステータスファイル・設定ファイルの配置先の慣習が異なる**: Linux は `/var/lib/<service>/`、Windows は `C:\ProgramData\<vendor>\<service>\` に置くのが一般的。両者ともサービス実行アカウントに書き込み権限が必要（Linux は `chown`、Windows は ACL）。
 - **実行アカウントの権限モデルが異なる**: Linux は `svc-monitor` のような無ログインシェルの専用ユーザーで `systemd` の `User=` を使い最小権限で動かせる。Windows の `schtasks /ru SYSTEM` は最も広い権限を持つため、実際の運用では専用のグループマネージド サービス アカウント（gMSA）や制限付きユーザーへの置き換えを検討する（本演習では簡略化のため SYSTEM を使用）。
 - **TLS 証明書チェックは「有効な証明書が期限に近づいている」ことの検知が主目的**: `ssl.create_default_context()` は既定で証明書チェーンと有効期限を検証するため、**既に期限切れの証明書は `getpeercert()` に到達する前に `SSLCertVerificationError` として接続段階で弾かれる**。したがって `remaining_days` がマイナスになるケースを想定した分岐は基本的に発生せず、期限切れは「証明書検証に失敗」という別経路の CRITICAL として現れる。
-- **`post_webhook` はローカルの受信エンドポイントへの POST であり、server-monitor 側の実際の Slack 通知経路（[ADR-0007](../adr/0007-slack-notifications.md) の Alertmanager 経由 Incoming Webhook）とは別物**。本モジュールの通知設計は「通知ペイロードの組み立てと送信失敗時の扱い」を練習する目的のローカル演習であり、実際の Slack チャンネルへは配信しない。
+- **`post_webhook` はローカルの受信エンドポイントへの POST であり、server 側の実際の Slack 通知経路（[ADR-0007](../adr/0007-slack-notifications.md) の Alertmanager 経由 Incoming Webhook）とは別物**。本モジュールの通知設計は「通知ペイロードの組み立てと送信失敗時の扱い」を練習する目的のローカル演習であり、実際の Slack チャンネルへは配信しない。
 - **`check.py` にファイルロックがない**: systemd/schtasks は通常 1 インスタンスずつ実行される前提で 5 分間隔を設定しているが、手動実行や周期の設定ミスで前回の実行が終わる前に次が起動すると、`write_status_json` の書き込みが競合し得る（[5.4 章 TCK-14](#54-checkpylinux--windows-共通)）。多重実行を厳密に防ぐ場合は、`status_file` と同じディレクトリにロックファイルを置く等の対策が別途必要。
 - **`check_log_errors` の「直近」判定はファイルの更新時刻（mtime）のみで行っている**: ファイルが `log_window_minutes` 以内に更新されていれば「直近あり」とみなし、そのうえで一致件数はファイル全体を対象に数える（行ごとのタイムスタンプ解析はしていない）。ログがローテーションされず古い一致行が残ったまま追記され続ける運用では、`value` が本来の「直近の件数」より多く出ることがある点に注意する（[5.4 章 TCK-06](#54-checkpylinux--windows-共通)は新規ログファイルを前提とすることでこの制約を回避している）。
 - **`aggregate()` の優先順位は実装依存の設計判断**: Nagios/Icinga のプラグイン仕様は個々のチェックの終了コード（0〜3）を定義するのみで、複数チェックを1つに集約する際の優先順位までは規定していない。本設計では CRITICAL > WARNING > UNKNOWN > OK の順に「悪い」とみなしているが、これは呼び出し側（systemd/監視基盤）の要件に応じて変更しうる前提の値であることを明記しておく。
@@ -1686,7 +1686,7 @@ L-9 / W-6 の周期（5 分）はしきい値と同様に環境ごとに調整�
 | ファイル名 | `<日付>_<対象ホスト>_<ツール名>.log`（例: `20260901_lab-base01_routine-build.log`、`20260901_LAB-WINOPS1_backup-build.log`） |
 | 試験証跡の命名 | [5 章 試験項目書](#5-試験項目書)のエビデンス列は [03 §4 のエビデンスの要件](./03-build-process.md#エビデンスの要件)に従い `<試験No>_<対象>_<日付>.<拡張子>` で統一する（例: `TRL-01_lab-base01_20260901.log`、`TCK-05_LAB-WINOPS1_20260901.log`） |
 | マスク | 保存前にパスワード・鍵の中身・実 IP（ラボ内 IP は学習目的のため公開可）・Windows ホスト側の個人パスを確認する（[Windows / AD 公開再現ラボ §3](../evidence/templates/windows-ad-lab.md#3-公開前の安全条件)と同じ基準） |
-| 保管先・索引 | Linux 側は [検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)から辿れるようにする。Windows 側は本リポジトリの `docs/evidence/` にテンプレートを新設して索引する。着手時に[証跡採録チェックリスト](../evidence-capture-checklist.md)の該当箇所へ採録予定として追記する |
+| 保管先・索引 | Linux 側は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)から辿れるようにする。Windows 側は本リポジトリの `docs/evidence/` にテンプレートを新設して索引する。着手時に[証跡採録チェックリスト](../evidence-capture-checklist.md)の該当箇所へ採録予定として追記する |
 | 反映先 | 実施後、本ドキュメントの[試験項目書](#5-試験項目書)の実測結果欄を埋めるか、実施記録を指す別ファイルへのリンクをここに追加する |
 
 ---

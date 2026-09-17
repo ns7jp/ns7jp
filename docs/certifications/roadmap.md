@@ -123,7 +123,7 @@ LPIC-1（101 / 102）は FE と並行して学習中ですが、**受験日は�
 | 前提 | LPIC-1 101 は CBT で随時受験可能。`ansible/roles/common` と `storage` role で日常的に触れているパッケージ管理・ファイルシステム・systemd・シェルは、問題演習中心で通せる範囲です |
 | 学習方法 | 公式教材 + Ping-t + 自作ラボ環境（Ubuntu / RHEL クローン）での実機演習 |
 | 進捗の公開 | [#5 (101)](https://github.com/ns7jp/ns7jp/issues/5) / [#6 (102)](https://github.com/ns7jp/ns7jp/issues/6) に**月 1 回**、学習章・模試スコアを記録（進まなかった月もその旨を記録。§0 ルール 2 と同じ頻度に統一） |
-| ポートフォリオ連動 | server-monitor リポジトリの構築・運用がそのまま学習教材になる |
+| ポートフォリオ連動 | server リポジトリの構築・運用がそのまま学習教材になる |
 
 ### AWS Certified Cloud Practitioner (CLF-C02) / Azure Fundamentals (AZ-900) — 低コストの前哨資格
 

@@ -98,7 +98,7 @@ Web・AP・DB の 3 つの役を別々のサーバーに分ける構成を 3 層
 | Ansible によるコード化 | **対象外**。Phase 5 で、本演習の手順を role へ落とし込む |
 
 「似た演習をすでに実行しているのに、なぜ空の VM でやり直すのか」を補足する。3 層ラボ相当のコンテナ構成・自動化演習
-（[server-monitor](https://github.com/ns7jp/server-monitor) 側の B-1〜B-4。LVM の拡張・3 層構成の障害切り分け・
+（[server](https://github.com/ns7jp/server) 側の B-1〜B-4。LVM の拡張・3 層構成の障害切り分け・
 DB のバックアップと復元・ネットワーク経路の切り分けの 4 演習）は既に実装済みで、2026-08-24 に実行・採録している。
 ただし実行環境は、B-1 が qemu ゲスト（qemu という仮想化ソフトで動かした仮想マシン。Ubuntu 24.04）、
 B-2 / B-3 が Docker コンテナ（OS を丸ごと動かさず、アプリだけを隔離して動かす軽い箱）、
@@ -162,7 +162,7 @@ flowchart LR
 | --- | --- | --- |
 | OS | Ubuntu Server 24.04 LTS | [01 学習環境 §3](./01-environment.md#3-ラボ構成3-台構成)の標準環境。情報量が多く、詰まったときに解決しやすい |
 | パーティション | インストーラ既定の LVM（`ubuntu-vg`） | 追加ディスクでの手動 LVM 構成は [02 W4](./02-curriculum.md#w4-ディスクファイルシステムシェルスクリプト)で別途行うため、ここでは既定値を使い争点を増やさない |
-| 時刻同期 | `systemd-timesyncd`（Ubuntu Server 既定） | この時点では Ansible 未導入。server-monitor 側の `common` role が導入する `chrony` とは別物であり、[混同しないよう明記](../../STATUS.md)する |
+| 時刻同期 | `systemd-timesyncd`（Ubuntu Server 既定） | この時点では Ansible 未導入。server 側の `common` role が導入する `chrony` とは別物であり、[混同しないよう明記](../../STATUS.md)する |
 | ネットワーク設定方法 | netplan（ドロップインファイルを新規追加） | Ubuntu Server 既定の構成方式。cloud-init が生成する既定ファイルとの関係を[構築手順書 3-5](#3-5-固定-ip-の設定)で扱う |
 | SSH 強化の設定場所 | `/etc/ssh/sshd_config.d/` 配下に新規ファイル | 本体の `sshd_config` を直接編集せず、専用ディレクトリに自分用のファイルを 1 枚足す（ドロップイン方式。表の下の解説を参照）。ファイル名を `00-` で始めるのは、sshd では**先に読まれたファイルの値が勝つ**ため（[付録 B](#付録-b-設計の事前検証コマンド構文と設定挙動の確認)で実測済み）。server-monitor の `common` role が `sshd_config.d` の上書きを検査している方針（[STATUS.md](../../STATUS.md)）と揃える |
 
@@ -626,7 +626,7 @@ network:
 | ファイル名 | `<日付>_<対象ホスト>_<作業名>.log`（例: `20260901_lab-base01_initial-build.log`） |
 | 試験証跡の命名 | [5 章 試験項目書](#5-試験項目書)のエビデンス列は [03 §4 のエビデンスの要件](./03-build-process.md#エビデンスの要件)に従い `<試験No>_<対象>_<日付>.<拡張子>` で統一する（例: `T-01_lab-base01_20260901.log`、`T-11_lab-base01_20260901.png`） |
 | マスク | 保存前にパスワード・鍵の中身・実 IP（ラボ内 IP は学習目的のため公開可）を確認する |
-| 保管先 | [証跡採録チェックリスト 原則 2](../evidence-capture-checklist.md#このチェックリストの原則)（Linux の採録物は server-monitor 側へ集約）に従い、作業ログは server-monitor の `docs/drills/logs/` へ保存し、[検証証跡台帳](https://github.com/ns7jp/server-monitor/blob/main/docs/evidence/README.md)から辿れるようにする。本リポジトリ側には一次証跡を複製せず、索引メモとリンクのみを置く（[2026-08-23 の PR #77 索引メモ](../evidence/2026-08-23-server-monitor-git-rollback-ci.md)と同じ扱い）。着手時に[証跡採録チェックリスト](../evidence-capture-checklist.md)の該当箇所へ採録予定として追記する |
+| 保管先 | [証跡採録チェックリスト 原則 2](../evidence-capture-checklist.md#このチェックリストの原則)（Linux の採録物は server 側へ集約）に従い、作業ログは server-monitor の `docs/drills/logs/` へ保存し、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)から辿れるようにする。本リポジトリ側には一次証跡を複製せず、索引メモとリンクのみを置く（[2026-08-23 の PR #77 索引メモ](../evidence/2026-08-23-server-monitor-git-rollback-ci.md)と同じ扱い）。着手時に[証跡採録チェックリスト](../evidence-capture-checklist.md)の該当箇所へ採録予定として追記する |
 | 反映先 | 実施後、本ドキュメントの[試験項目書](#5-試験項目書)の実測結果欄を埋めるか、実施記録を指す別ファイルへのリンクをここに追加する |
 
 ---

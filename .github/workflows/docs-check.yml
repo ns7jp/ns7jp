@@ -16,15 +16,15 @@ jobs:
       - name: Run markdownlint
         run: npx -y markdownlint-cli2 "**/*.md" "#node_modules"
       - name: Test portfolio audit prototype
-        run: node --test tools/portfolio-audit/tests/audit.test.mjs
+        run: node --test archive/tools/portfolio-audit/tests/audit.test.mjs
       - name: Test server innovation decisions
-        run: node --test tools/server-innovation/tests/*.test.mjs
+        run: node --test archive/tools/server-innovation/tests/*.test.mjs
       - name: Test portfolio loop orchestrator
-        run: node --test tools/portfolio-loop/tests/*.test.mjs
+        run: node --test archive/tools/portfolio-loop/tests/*.test.mjs
       - name: Test autonomous prosperity integration
-        run: node --test tools/autonomous-prosperity/tests/*.test.mjs
+        run: node --test archive/tools/autonomous-prosperity/tests/*.test.mjs
       - name: Test detailed prosperity review
-        run: node --test tools/prosperity/tests/*.test.mjs
+        run: node --test archive/tools/prosperity/tests/*.test.mjs
 
   mermaid-parse:
     runs-on: ubuntu-latest

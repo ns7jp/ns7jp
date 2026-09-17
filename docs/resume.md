@@ -119,9 +119,9 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 ### 過去の CI・WSL2・AI 支援環境の記録
 
-主作品では、runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server-monitor/commit/7622a9da974f694ae75e0173135923701be9e5a5)を対象に、Docker 導入済みの使い捨て Ubuntu 24.04 runner へ `site.yml` を一括適用しました。2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を含む [Full-stack E2E 23/23 ID PASS](https://github.com/ns7jp/server-monitor/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)を採録しました。Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働は未実測です。
+主作品では、runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server/commit/7622a9da974f694ae75e0173135923701be9e5a5)を対象に、Docker 導入済みの使い捨て Ubuntu 24.04 runner へ `site.yml` を一括適用しました。2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を含む [Full-stack E2E 23/23 ID PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)を採録しました。Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働は未実測です。
 
-2026-08-23 の [PR #77 CI](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)では、候補 SHA `84e1492` の配備後、旧版 `59aa88e` へ戻し、稼働中の版番号と実行ファイルのハッシュ、app コンテナの再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで再確認して PASS しました。これは PR ブランチ上の使い捨て Ubuntu runner での実演であり、main 反映や永続ホストでの本番変更実績ではありません。Slack 実配信、AWS `apply / destroy`、D-2、再起動・24 / 72 時間監視、Windows / AD・winget 公開再現ラボも `NOT RUN` のままです。
+2026-08-23 の [PR #77 CI](https://github.com/ns7jp/server/actions/runs/32611251044)では、候補 SHA `84e1492` の配備後、旧版 `59aa88e` へ戻し、稼働中の版番号と実行ファイルのハッシュ、app コンテナの再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで再確認して PASS しました。これは PR ブランチ上の使い捨て Ubuntu runner での実演であり、main 反映や永続ホストでの本番変更実績ではありません。Slack 実配信、AWS `apply / destroy`、D-2、再起動・24 / 72 時間監視、Windows / AD・winget 公開再現ラボも `NOT RUN` のままです。
 
 ---
 
@@ -162,7 +162,7 @@ AI が生成した手順やコードを、本人が実行・理解していな�
 | 言語 | PHP | ○（認定初級 取得） |
 | Web | HTML / CSS / JavaScript | ○ |
 | データベース | SQL（SQLite / MySQL） | ○ |
- | データベース | PostgreSQL（3 層構成での接続、`pg_dump` / `pg_restore`） | △（[3 層ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/three-tier)として実装。`pg_dump` / `pg_restore` の復元演習を[実行し 7 PASS を採録](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒。Docker コンテナ上）。実 VM 上の 3 層構築は未実施） |
+ | データベース | PostgreSQL（3 層構成での接続、`pg_dump` / `pg_restore`） | △（[3 層ラボ](https://github.com/ns7jp/server/tree/main/labs/three-tier)として実装。`pg_dump` / `pg_restore` の復元演習を[実行し 7 PASS を採録](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒。Docker コンテナ上）。実 VM 上の 3 層構築は未実施） |
 
 ### インフラ / 運用
 
@@ -170,7 +170,7 @@ AI が生成した手順やコードを、本人が実行・理解していな�
 | --- | --- | --- |
 | OS | Linux サーバー構築・基本運用（Ubuntu） | ○（個人ラボと研修での構築・確認。実務としての本番運用は未経験） |
 | OS | RHEL 系（AlmaLinux / Rocky 9） | ○（コンテナでの Molecule に加え、[9/4 に本人の再利用 AlmaLinux VM へ基礎設定を適用し、変更 0 件・SELinux enforcing 等を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md)。専用の新規 VM・最小公開・全監視構成は未実施） |
-| ストレージ | LVM（VG / LV / ファイルシステム / fstab / online 拡張） | ○（[8/24 の B-1](https://github.com/ns7jp/server-monitor/blob/main/docs/drills/logs/2026-08-24-B-1.md) で作成・冪等性・online 拡張の 5 PASS。**AI 支援環境の Ubuntu ゲストと loop device での結果**で、本人 VM での同演習の再実行は未実施） |
+| ストレージ | LVM（VG / LV / ファイルシステム / fstab / online 拡張） | ○（[8/24 の B-1](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-1.md) で作成・冪等性・online 拡張の 5 PASS。**AI 支援環境の Ubuntu ゲストと loop device での結果**で、本人 VM での同演習の再実行は未実施） |
 | コンテナ | Docker / Docker Compose | ○（WSL2・使い捨て runner と本人 Hyper-V VM の部分構成で起動・停止・再作成等を確認。長期稼働は未実測） |
 | Web / Proxy | Nginx（リバースプロキシ。TLS は設定例・自己署名証明書での確認まで） | ○ |
 | 監視 | Prometheus / Grafana / Alertmanager | ○（[9/8 の本人 VM で数値表示と停止・復帰表示を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)。Alertmanager は起動確認まで。アラート発火・外部通知は同演習で未実施） |
@@ -178,8 +178,8 @@ AI が生成した手順やコードを、本人が実行・理解していな�
 | 構成管理 | Ansible | ○（本人 VM への基礎設定適用と、ホーム内のファイル生成・変更予測・入力検証を確認。全監視構成の `site.yml` 一括適用・再実行の記録は使い捨て runner。上記の環境別記録を参照） |
 | 版管理 | Git | △（本人 VM 内でブランチ・履歴・競合解消・中止を実行。AI の案内あり。VM からの push や独力説明は未確認） |
 | IaC | Terraform（AWS） | △（`validate` / `fmt` まで。`apply` は未実施） |
- | ネットワーク | 静的ルーティング / `ip_forward` / 802.1Q VLAN | △（[L2 / L3 ラボ](https://github.com/ns7jp/server-monitor/tree/main/labs/routing)として実装。物理スイッチ・ケーブル・ポート VLAN は未着手） |
-| CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（[PR #75 の 5 workflow が success](https://github.com/ns7jp/server-monitor/pull/75)。[PR #77 で Git SHA 指定の変更・ロールバック CI が success](https://github.com/ns7jp/server-monitor/actions/runs/32611251044)。Docker は runner に事前導入済み） |
+ | ネットワーク | 静的ルーティング / `ip_forward` / 802.1Q VLAN | △（[L2 / L3 ラボ](https://github.com/ns7jp/server/tree/main/labs/routing)として実装。物理スイッチ・ケーブル・ポート VLAN は未着手） |
+| CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（[PR #75 の 5 workflow が success](https://github.com/ns7jp/server/pull/75)。[PR #77 で Git SHA 指定の変更・ロールバック CI が success](https://github.com/ns7jp/server/actions/runs/32611251044)。Docker は runner に事前導入済み） |
 
 実装範囲と検証境界は [アーキテクチャ図](./architecture-diagram.md) を参照してください。
 

@@ -536,7 +536,7 @@ flowchart TB
 | [05 Phase 1 演習設計](./05-phase1-exercise-design.md) | ローカルの使い捨て VM（`lab-base01`）への OS 初期構築 | 本演習の OS 初期構築部分（[4.2](#42-初期ログインホスト名タイムゾーンntp)〜[4.5](#45-ssh-公開鍵の登録と鍵ログイン確認)）は 05 と同じ項目・同じユーザー名（`opsadmin`）で揃えている。05 はラボセグメント限定、本演習は実インターネット公開という点が異なる |
 | [11 AWS基礎構築演習設計](./11-aws-foundational-exercise-design.md) | AWS 上に VPC・EC2 を構築し、1 セッションで `apply` から `destroy` まで完了させる | [2 章の比較表](#11awsとの違い)のとおり目的が異なる別演習。どちらか一方で代替しない |
 | [09 Zabbix 監視基盤構築演習設計](./09-zabbix-monitoring-exercise-design.md) | 監視スタック本体の構築 | 本演習は監視スタックを導入しない（heartbeat のみ）。`lab-persist01` に監視スタックを載せる演習は将来の課題として扱う |
-| [証跡採録チェックリスト](../evidence-capture-checklist.md)順位 1（`site.yml` 適用） | server-monitor の Ansible role 一式を対象ホストへ適用する | **本演習が作る `lab-persist01` は、この適用先になり得る候補の 1 つ**だが、適用作業そのものは対象外。Docker 導入・`site.yml` 適用は server-monitor 側の [build-package](https://github.com/ns7jp/server-monitor/tree/main/docs/build-package) が担う |
+| [証跡採録チェックリスト](../evidence-capture-checklist.md)順位 1（`site.yml` 適用） | server-monitor の Ansible role 一式を対象ホストへ適用する | **本演習が作る `lab-persist01` は、この適用先になり得る候補の 1 つ**だが、適用作業そのものは対象外。Docker 導入・`site.yml` 適用は server 側の [build-package](https://github.com/ns7jp/server/tree/main/docs/build-package) が担う |
 | 証跡採録チェックリスト順位 2（再起動・継続稼働） | 対象ホストの再起動・24 / 72 時間後の正常性確認 | 本演習の[4.11](#411-再起動試験)・[5 章](#5-試験項目書) T-15〜T-17 は、再起動後のサービス自動復帰と heartbeat による 24 / 72 時間後の到達性確認の詳細設計に当たる。ただし監視スタック本体の復帰確認とバックアップの復元試験は[スコープ](#スコープ)のとおり対象外であり、この項目を完全に満たすものではない |
 | 証跡採録チェックリスト順位 3（Slack 実配信） | Alertmanager から Slack への実配信 | 対象外。Slack Webhook の取得・Alertmanager 設定は本演習のホストの有無に依存しない独立した作業 |
 | [ADR-0006](../adr/0006-self-host-monitoring.md) | 監視スタックを自前運用する方針（EC2 上を想定） | 本演習は監視スタックの本番配置場所を決めるものではない。`lab-persist01` を将来の配置先にするかどうかは、本演習の証跡が貯まった後の別判断とする |

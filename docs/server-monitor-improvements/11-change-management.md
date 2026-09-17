@@ -2,8 +2,8 @@
 
 > **反映状況**
 >
-> server-monitor 側には、この設計書のうち PR テンプレート、Change request Issue、
-> Evidence capture Issue、[変更管理ミニ運用](https://github.com/ns7jp/server-monitor/blob/main/docs/change-management.md)
+> server 側には、この設計書のうち PR テンプレート、Change request Issue、
+> Evidence capture Issue、[変更管理ミニ運用](https://github.com/ns7jp/server/blob/main/docs/change-management.md)
 > という**もっと軽い版**だけを実際に実装しています。以下の内容の大半（CAB、変更窓・凍結期間、
 > 自動変更ログ、ITIL 対応表など）は書籍・公式ドキュメントを読んで設計した学習用のサンプルであり、
 > 実際に運用したことはありません。
@@ -28,7 +28,7 @@ server-monitor には「障害対応の手順」（[今後の興味リスト](..
   影響範囲・検証・ロールバック方法を書いてから着手する
 - 秘密値やセキュリティに関わる緊急の修正 → 先に直し、事後に Issue へ時系列を残す
 
-実装の詳細は [server-monitor 側の変更管理ミニ運用](https://github.com/ns7jp/server-monitor/blob/main/docs/change-management.md)
+実装の詳細は [server 側の変更管理ミニ運用](https://github.com/ns7jp/server/blob/main/docs/change-management.md)
 を参照。
 
 ## 3. ここから先は設計サンプル（未実装）
