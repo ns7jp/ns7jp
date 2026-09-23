@@ -12,7 +12,7 @@
 
 主作品は **[サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server)** です。小さな Web アプリを動かす環境と、その状態を調べる監視の仕組みを、コードと手順書にしています。
 
-> 個人の学習記録で、実務経験ではありません。9 月の記録は、AI の支援（手順の案内など）を受けながら私が操作し、結果を画面で確かめたものです。前提と未実施の範囲は[この資料の読み方](#この資料の読み方)にまとめました。
+> 個人の学習記録です。9 月の VM の記録は、AI の支援（手順の案内など）を受けながら私が操作したものです。前提と未実施の範囲は[この資料の読み方](#この資料の読み方)にまとめました。
 
 ## 30 秒で選ぶ
 
@@ -28,7 +28,7 @@
 
 ## 主な実測結果
 
-2026 年 9 月に、手元の Hyper-V 上の仮想マシンで行った記録です。AI の支援（手順の案内など）を受けながら私が操作し、結果を画面で確認しました。各記録には、日時・環境・判定と、確認できていない範囲を書いています。
+Windows Server / AD と Linux の表は、2026 年 9 月に手元の Hyper-V 上の仮想マシンで行った記録です。AI の支援（手順の案内など）を受けながら私が操作し、結果を画面で確認しました。CI の表は、GitHub Actions の使い捨て環境で自動実行した記録です。各記録には、日時・環境・判定と、確認できていない範囲を書いています。
 
 ### Windows Server / Active Directory（2026-09-01〜08）
 
@@ -37,8 +37,8 @@
 | [9/1〜2：AD の構築・試験](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md) | Windows Server 2022 評価版の VM 1 台で AD DS（ドメインの認証基盤）を構築し、試験仕様書のフェーズ 1 必須 31 項目がすべて PASS。手順書・設計書の誤りを実機で見つけて直しました |
 | [9/2：System State 復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md) | バックアップ後に作った目印の OU が、復元で消えることを確認。復元処理 15 分 29 秒、復旧全体は約 40 分（うち約 18 分は起動設定の解除漏れによるやり直し） |
 | [9/3：2 台目の DC と複製](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-03-ad-second-dc-replication.md) | 複製の失敗 0/5、複製の遅延 17.8 秒を実測。GPO（グループポリシー）が配られない原因を、前日の復元で消えていたファイルと突き止めて修復 |
-| [9/3〜4：DC の停止と役割の奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) | [1 台を止めても](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-03-ad-dc-outage-drill.md) DNS・LDAP・Kerberos が続くことと、復帰後の収束 18 分 31 秒を確認。次に 1 台を失った想定で FSMO 役割を奪取し、`ntdsutil` で古い DC の情報を削除 |
-| [9/7〜8：WSUS の構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md) | ドメインに参加させた更新配信サーバーを構築。必須 28 項目中 26 が PASS、1 件が FAIL、1 件が期待結果に届かず、判定は FAIL。翌日、[残った 2 件の原因](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)を特定して手順書を直しました |
+| [9/3〜4：DC の停止と役割の奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) | [1 台を止めても](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-03-ad-dc-outage-drill.md) DNS・LDAP・Kerberos が続くことと、復帰後の収束 18 分 31 秒を確認。次に 1 台を失った想定で FSMO 役割（特定の DC だけが担う管理役割）を奪取し、`ntdsutil` で古い DC の情報を削除 |
+| [9/7〜8：WSUS の構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md) | ドメインに参加させた更新配信サーバーを構築。必須 28 項目中 26 が PASS、1 件が FAIL、1 件が期待結果に届かず、判定は FAIL。翌日、[残った 2 件の原因](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)を特定して手順書を直しました（修正後の通し再試験は未実施） |
 
 作業結果と障害 15 件の対処は、[作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)にまとめています。設計書・手順書・試験仕様書は [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad)にあります。
 
@@ -58,11 +58,11 @@ Ansible と Git の小さな練習（9/9〜15）の記録は、[検証証跡台�
 | 記録 | 確認したこと |
 | --- | --- |
 | [8/22：一連の構築・試験](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) | GitHub Actions の使い捨て Ubuntu で、構築・再実行・監視・ローカル通知・復旧・復元の 23 項目が PASS |
-| [9/17：性能試験の見直し](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md) | 以前の集計が HTTP 502 を失敗に数えていなかったことを見つけ、集計を修正。[修正後の比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)では、同じ負荷設定の 2 回の CI で並列 1〜16 の失敗が 0 件（AI 支援による分析・改善） |
+| [9/17：性能試験の見直し](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md) | 以前の集計が HTTP 502 を失敗に数えていなかったこと（並列 4 で 39.15%）を見つけ、集計を修正。そのうえで Nginx と app の接続再利用を加えた[比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)では、同じ負荷設定の 2 回の CI で並列 1〜16 の HTTP・通信失敗が 0 件（AI 支援による分析・改善。使い捨て環境での短時間の測定） |
 
 ## 何を作ったか
 
-「サーバーが止まっているのに誰も気づかない」状態を減らすため、**応答を返すアプリ**と、**異常を見つけて知らせる監視基盤**を組み合わせました。まず「入口・本体・計測・表示・通知」で覚えます。
+「サーバーが止まっているのに誰も気づかない」状態を減らすため、**応答を返すアプリ**と、**異常を見つけて知らせる監視基盤**を組み合わせました。全体は「入口・本体・計測・表示・通知」の 5 つの役割に分かれます。
 
 [![利用者からNginx・アプリへの要求、Prometheusからアプリへの数値取得、GrafanaからPrometheus・Lokiへの問い合わせ、AlloyからLokiへのログ送信、PrometheusからAlertmanagerへの警告の流れ](./docs/images/architecture-overview.svg)](./docs/images/architecture-overview.svg)
 
@@ -86,7 +86,7 @@ Ansible と Git の小さな練習（9/9〜15）の記録は、[検証証跡台�
 | 構築・試験 | 手順書どおりに構築し、試験仕様書で判定する | [主な実測結果](#主な実測結果) |
 | 復旧・変更 | 停止からの復旧、バックアップからの復元、旧版への戻し | [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) |
 | 障害対応 | 手順書どおりに切り分けて直せるかを演習で確かめる | [障害復旧演習](https://github.com/ns7jp/server/blob/main/docs/drills/README.md) |
-| 引き渡し | 作業結果報告書とチェックリスト | [AD の作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md) |
+| 引き渡し | 作業結果報告書とチェックリスト（引き渡し先は自分。ラボ検証の完了まで） | [AD の作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md) |
 
 ## 失敗から学んだこと
 
@@ -94,12 +94,12 @@ Ansible と Git の小さな練習（9/9〜15）の記録は、[検証証跡台�
 
 原因調査は **「事実を見る → 範囲を絞る → 1 つ変える → 再確認する」** の順で進めます。9 月の AD の記録にも、最初の仮説が外れた例を残しています。「強制停止でレジストリが巻き戻った」と考えた設定の変化は、実際には GPO による上書きでした。
 
-次に取り組むのは、[AI を使わずに元ログ 5 件のハッシュ照合をやり直すことと、9 月の失敗から学びを 1 件、自分の言葉で書くこと](./docs/portfolio-explanation.md#8-次に残す一件と自分の学び)です。どちらもまだ終わっていません。
+9 月の失敗からも、学びを 1 件、自分の言葉で書き足す予定です（[次に残す一件](./docs/portfolio-explanation.md#8-次に残す一件と自分の学び)）。
 
 ## 経験・資格
 
 - 製造・物流業務 15 年以上
-- IT 企業でのトライアル就業（2026/07〜09/15、人材派遣。Windows / Linux サーバーと AWS / Azure の構築研修）
+- IT 企業でのトライアル就業（2026/07〜09/15 に終了、人材派遣。Windows / Linux サーバーと AWS / Azure の構築研修）。現在は求職中で、すぐに勤務を開始できます
 - Python 3 エンジニア認定基礎・実践
 - PHP 8 技術者認定初級
 - IT パスポート

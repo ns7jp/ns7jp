@@ -5,7 +5,7 @@
 > 応募時に提出する職務経歴書・スキルシートのベースです。
 >
 > - **確定情報**（資格・学歴・職業訓練・ポートフォリオ）はそのまま記載しています
-> - 「設計サンプル」と「実績」を混同しない方針は、ポートフォリオ全体（[STATUS.md](../STATUS.md)）と同じです
+> - 「設計サンプル」と「実績」は、ポートフォリオ全体で区別して書いています
 
 文書更新: 2026-09-23（就業状況もこの日時点の内容です）。
 
@@ -15,7 +15,7 @@
 
 製造・物流の現場で 15 年以上、在庫管理・ピッキング工程を担当してきました。作業時間ログの計測からボトルネックを特定し、動線改善・標準化によって **1 日あたり約 1 時間の作業短縮** を実現しています。
 
-この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を構築・検証してきました。2026 年 9 月には、手元の Hyper-V 上の仮想マシンで Windows Server 2022 の Active Directory と Ubuntu Server を構築し、試験と復旧まで確かめました。AI の手順案内を受けながら私が操作した記録で、詳細は [§4](#4-活かせる経験知識スキル) にあります。第一志望は **Linux サーバー設計・構築** です。入口業務としてインフラ監視・運用にも対応し、IT サポート・社内 SE 補助は応募先に応じた補助トラックと位置付けています。**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
+この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を構築・検証してきました。2026 年 9 月には、手元の Hyper-V 上の仮想マシンで Windows Server 2022 の Active Directory と Ubuntu Server を構築し、試験と復旧まで確かめました。AI の手順案内を受けながら私が操作した記録で、詳細は [§4](#4-活かせる経験知識スキル) にあります。第一志望は **Linux サーバー設計・構築** です。入口業務としてのインフラ監視・運用や、応募先によっては IT サポート・社内 SE 補助にも対応します。**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
 
 **就業状況（2026-09-23 時点）**: 人材派遣会社（アデコ株式会社）を通じた IT 企業でのトライアル就業（2026/07〜）は、2026-09-15 に終了しました。**現在は求職中で、すぐに勤務を開始できます。** 就業先の社名は面談時に開示します。
 研修では仮想マシン上の Windows Server / Linux サーバーと AWS / Azure の構築演習に取り組みました。これは研修での経験で、顧客環境の設計・構築を担当した実績とは区別しています。
@@ -51,12 +51,9 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 | 在籍期間 | 勤務先 | 雇用形態 | 業務内容 |
 | --- | --- | --- | --- |
-| 15 年以上〜2025/09（在籍社数・各社の年月は応募時提出の職務経歴書で開示） | 製造・物流の複数社（社数が多いため本書では個社別に記載しない） | 派遣社員・契約社員など、社ごとに異なる | 在庫管理、ピッキング、入出庫、現場の業務改善 |
+| 15 年以上（在籍社数・各社の年月は応募時提出の職務経歴書で開示） | 製造・物流の複数社 | 派遣社員・契約社員など、社ごとに異なる | 在庫管理、ピッキング、入出庫、現場の業務改善 |
 
-> **記入時の注意**: このリポジトリは公開資料のため、個社ごとの在籍年月・社名までは載せません。
-> 日本の中途採用の一次スクリーニングは在籍年月・社数・空白期間を時系列で追うところから
-> 始まるため、その詳細（各社の在籍年月・社数・雇用形態）は応募時に別途提出する
-> 職務経歴書（PDF）に記載します。年月は離職票または源泉徴収票で確定させてください。
+> 公開資料のため、各社の社名と在籍年月は載せていません。社数・在籍年月・雇用形態は、応募時に提出する職務経歴書（PDF）に記載します。
 
 | 項目 | 内容 |
 | --- | --- |
@@ -81,7 +78,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 | 項目 | 内容 |
 | --- | --- |
-| 志望領域 | 第一志望: サーバー設計・構築。入口としてインフラ監視・運用にも対応。IT サポート、社内 SE 補助は補助トラック |
+| 志望領域 | 第一志望: サーバー設計・構築。入口としてインフラ監視・運用にも対応。応募先によっては IT サポート・社内 SE 補助も可 |
 | 夜勤・交代制 | 24/365 監視業務のシフト勤務に対応可能 |
 | 勤務開始時期 | すぐに開始できます |
 | 勤務地 | 東京都内通勤可能圏 |
@@ -89,7 +86,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 | 雇用形態（客先常駐 / SES の可否） | SES可 |
 | 英語力 | AWS / Cisco / Red Hat の英語ドキュメント・エラーメッセージの読解は学習中 |
 | 普通自動車運転免許 | なし |
-| 現在の就業との関係 | トライアル就業は 2026-09-15 に終了し、現在は求職中です。正社員としてのインフラ職を志望。経緯は[志望の経緯](./career-bridge.md#志望の経緯)を参照 |
+| 志望の経緯 | 正社員としてのインフラ職を志望しています。経緯は[志望の経緯](./career-bridge.md#志望の経緯)をご覧ください |
 | その他 | 年下の先輩からの指導も歓迎します。未経験領域は「手順を覚えて、手順書を改善して返す」ことから貢献します |
 
 ---
@@ -117,27 +114,27 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 障害・課題 15 件の対処は[作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)に、設計書・手順書・試験仕様書は [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad)と [WSUS 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-wsus)にあります。組織の DNS、実クライアント PC を含むドメイン環境、中央 Prometheus からの収集（BLOCKED）、24 / 72 時間の連続稼働、サイト間複製、電源断からの復旧、WSUS の通し再試験は、まだ確認していません。
 
-### Linux の VM で最近確認したこと（2026-09-04〜10）
+### Linux の VM で最近確認したこと（2026-09-04〜08）
 
-手元の Hyper-V 上の VM での記録です。いずれも AI が手順・コードを案内し、私が操作して結果の画像を残しました。独力での設計・再構築・説明能力を確かめた記録とは区別しています。
+手元の Hyper-V 上の VM での記録です。いずれも AI が手順・コードを案内し、私が操作して結果を画面で確認しました（9/7 以降の記録は画像も収録しています）。独力での設計・再構築・説明能力を確かめた記録とは区別しています。
 
-| 対象 | 確認したこと | 残る範囲 |
-| --- | --- | --- |
-| 9/4 基礎設定 | [Ubuntu](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-build.md) / [再利用 AlmaLinux](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md) に `foundation.yml` を適用し、再実行で変更 0 件 | 全監視構成。AlmaLinux の新規構築・最小公開 |
-| 9/7〜8 初期構築 | [Ubuntu Server 24.04.4 LTS を手作業で構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)：固定 IP、SSH 鍵認証（パスワード方式は拒否）、sudo、UFW、時刻同期、自動更新。設定不備を起こし、拒否表示とログの照合で復旧。教材 21 項目は PASS 14 / PASS-ADAPTED 4 / PARTIAL 2 / NOT RUN 1 | 自力での再構築、長期稼働 |
-| 9/8 数値監視 | [5 サービスの部分構成で手動停止・再開に伴う収集状態 1→0→1](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md) | アラート発火・外部通知、全 10 サービス、長期稼働 |
-| 9/8 Loki 復元 | [同一 VM 内の別ボリュームに復元し、過去の目印付きログ 2 件を再取得](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md) | 別 VM への復元、全データの完全性、RTO / RPO |
-| 9/8 D-1 | [app / nginx 構成で自動再起動と HTTP 復帰 2 秒、後続の healthy を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) | 2 秒は 1 回のスクリプト計測（healthy 判定までの時間とは別）。外部通知・別ホストでの復旧 |
-| 9/9 Ansible 入門 | [テンプレートの変更予測・適用・再実行](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-09-lab-base01-template-practice.md)、[不正値 70000 の拒否と本文・SHA-256 維持](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-09-lab-base01-validation-practice.md) | ホーム内の演習ファイルが対象。サービス起動・リモート構築は未実施 |
-| 9/10 Git 入門 | [ブランチ・履歴](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-10-lab-base01-git-practice.md)、[Fast-forward・競合解消・merge --abort・main clean への復帰](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-10-lab-base01-git-merge-practice.md) | VM 内のローカル操作。VM からの push・Ansible 反映は未実施 |
+| 対象 | 確認したこと |
+| --- | --- |
+| 9/4 基礎設定 | [Ubuntu](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-build.md) / [再利用 AlmaLinux](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md) に `foundation.yml`（OS の共通設定と Docker）を適用し、再実行で変更 0 件 |
+| 9/7〜8 初期構築 | [Ubuntu Server 24.04.4 LTS を手作業で構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)：固定 IP、SSH 鍵認証（パスワード方式は拒否）、sudo、UFW、時刻同期、自動更新。わざと起こした設定不備を、拒否表示とログの照合で復旧。教材 21 項目は PASS 14 / 環境に合わせて変更し PASS 4 / 一部確認 2 / 未実施 1 |
+| 9/8 数値監視 | [5 サービスの部分構成で、手動の停止・再開に合わせて収集状態が 1→0→1](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md) |
+| 9/8 Loki 復元 | [同一 VM 内の別ボリュームに復元し、過去の目印付きログ 2 件を再取得](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md) |
+| 9/8 アプリ自動再起動（D-1） | [app / nginx 構成で自動再起動と HTTP 復帰 2 秒（1 回の計測）、その後 healthy を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) |
 
-監視・復元・D-1 は、構成を切り替えた別々の演習です。同時稼働での一連の受け入れ、ホスト再起動後の永続性、24 / 72 時間の稼働、別の新規 VM への復元、第三者による手順確認は **NOT RUN** で、次の課題として残しています。結果の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
+9/9〜15 の Ansible と Git の小さな練習は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)に並べています。
+
+監視・復元・D-1 は、構成を切り替えた別々の演習です。監視全体の同時稼働とアラートの外部通知、AlmaLinux の新規構築と最小公開、ホスト再起動後の確認、24 / 72 時間の稼働、別の新規 VM への復元、自力での再構築、第三者による手順確認は **NOT RUN** で、次の課題として残しています。結果の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
 
 ### 過去の CI・WSL2・AI 支援環境の記録
 
-主作品では、runtime 最終 commit [`7622a9d`](https://github.com/ns7jp/server/commit/7622a9da974f694ae75e0173135923701be9e5a5)を対象に、Docker 導入済みの使い捨て Ubuntu 24.04 runner へ `site.yml` を一括適用しました。2 回目 `changed=0`、core 10 services + CI webhook sink（計 11 containers）、Docker API proxy の GET 成功・POST 拒否・Loki log 到達、local webhook、network / UFW、D-1 RTO 1 秒、3 volumes の backup / restore を含む [Full-stack E2E 23/23 ID PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)を採録しました。Slack 実配信、AWS `apply / destroy`、D-2、独立した管理端末・引き渡し対象ホスト、組織 DNS、ホスト再起動後の永続性、長期稼働は未実測です。
+2026-08-22 には、主作品の監視ラボ一式（`site.yml`、対象 commit [`7622a9d`](https://github.com/ns7jp/server/commit/7622a9da974f694ae75e0173135923701be9e5a5)）を、GitHub Actions の使い捨て Ubuntu 24.04（Docker 導入済み）へ一括で適用しました。2 回目の実行で変更 0 件、11 コンテナ（監視ラボの 10 サービスと CI 用の通知受け口）の起動、ローカル通知、network / UFW、アプリ自動復旧（D-1）の RTO 1 秒、3 つのボリュームのバックアップと復元を含む [23 項目がすべて PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)しました。
 
-2026-08-23 の [PR #77 CI](https://github.com/ns7jp/server/actions/runs/32611251044)では、候補 SHA `84e1492` の配備後、旧版 `59aa88e` へ戻し、稼働中の版番号と実行ファイルのハッシュ、app コンテナの再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで再確認して PASS しました。これは PR ブランチ上の使い捨て Ubuntu runner での実演で、main への反映や永続ホストでの変更ではありません。Slack 実配信、AWS `apply / destroy`、D-2、再起動・24 / 72 時間監視、Windows / AD・winget の公開再現ラボ（9 月に手元の Hyper-V で行った AD 構築とは別）も `NOT RUN` のままです。
+2026-08-23 の [PR #77 CI](https://github.com/ns7jp/server/actions/runs/32611251044)では、候補 SHA `84e1492` の配備後、旧版 `59aa88e` へ戻し、稼働中の版番号と実行ファイルのハッシュ、app コンテナの再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで再確認して PASS しました。これは PR ブランチ上の使い捨て Ubuntu runner での実演で、main への反映や永続ホストでの変更ではありません。Slack への実際の通知、AWS の `apply / destroy`、D-2、独立した管理端末・引き渡し先ホスト、組織 DNS、ホスト再起動後の確認、24 / 72 時間の稼働、Windows / AD・winget の公開再現ラボ（9 月に手元の Hyper-V で行った AD 構築とは別）は、まだ `NOT RUN` です。
 
 ---
 
@@ -263,6 +260,4 @@ AI が生成した手順やコードを、私が実行・理解していない�
 - [プロフィール / ポートフォリオ README](../README.md)
 - [採用ご担当者さまへ（1 枚サマリ）](./overview-for-recruiters.md)
 - [志望トラックと証跡](./target-roles.md)
-- [証跡採録チェックリスト](./evidence-capture-checklist.md)
 - [現場経験 ↔ インフラ運用の橋渡し](./career-bridge.md)
-- [ポートフォリオ進捗 STATUS](../STATUS.md)

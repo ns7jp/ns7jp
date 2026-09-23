@@ -6,7 +6,7 @@
 
 2026 年 9 月には、手元の Hyper-V（Windows の仮想化機能）上の仮想マシン（VM）で、次のことを行いました。
 
-- **Windows Server 2022 で AD を構築**し、試験仕様書の必須 31 項目がすべて PASS しました。ドメインコントローラー（DC）を 2 台にして複製を確かめ、バックアップからの復元と、1 台を失った想定での役割の奪取（FSMO seize）まで行いました。
+- **Windows Server 2022 で AD を構築**し、試験仕様書の必須 31 項目がすべて PASS しました。ドメインコントローラー（DC）を 2 台にして複製を確かめ、バックアップからの復元と、1 台を失った想定での FSMO 役割（特定の DC だけが担う管理役割）の奪取まで行いました。
 - ドメインに参加させた **WSUS（更新配信サーバー）** を構築しました。判定は FAIL でしたが、残った 2 件の原因を翌日に特定し、手順書を直しました。
 - **Ubuntu Server を初期構築**し（固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新）、わざと起こした設定不備から復旧しました。同じ VM で、監視の停止・復帰の表示、ログの復元、アプリの自動再起動も確かめました。
 
@@ -26,11 +26,11 @@
 | 構築・試験（Windows Server / AD） | AD の構築と必須 31 項目、2 台目の DC と複製、WSUS の構築（判定 FAIL）と原因特定 | **手元の VM で実測済み**（9/1〜8） |
 | 復旧（Windows Server / AD） | System State からの復元、DC 1 台の停止と復帰、FSMO 役割の奪取 | **手元の VM で実測済み**（9/2〜4） |
 | 構築・試験（Linux） | Ubuntu の初期構築、Ubuntu / 再利用 AlmaLinux への Ansible 基礎設定（2 回目の変更 0 件） | **手元の VM で実測済み**（9/4、9/7〜8） |
-| 監視・復旧（Linux） | 停止・復帰の表示、Loki の別ボリュームへの復元、D-1 の HTTP 復帰 | **手元の VM で個別に実測済み**（9/8） |
+| 監視・復旧（Linux） | 停止・復帰の表示、Loki の別ボリュームへの復元、アプリ自動再起動（演習 D-1）での HTTP 復帰 | **手元の VM で個別に実測済み**（9/8） |
 | 変更 | Git SHA を固定した配備と旧版へのロールバック | **実測済み**（CI の使い捨て環境、8/23） |
-| 性能 | 段階負荷の実行と、HTTP エラーを含めた結果評価 | [旧集計の漏れ](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md)を見つけて修正。[接続再利用を加えた比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)では、2 回の CI で失敗 0 件（9/17） |
+| 性能 | 段階負荷の実行と、HTTP エラーを含めた結果評価 | [旧集計の漏れ](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md)を見つけて修正。[接続再利用を加えた比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)では、2 回の CI で失敗 0 件（9/17。AI による分析・改善で、CI の使い捨て環境での短時間の測定） |
 | 障害対応 | 手順書 5 本に対応する障害注入演習（プロセス停止・ディスク逼迫・メモリ圧迫・遅延・通知経路断） | **実装済み**。D-1 のみ実測済み |
-| 引き渡し | 作業結果報告書、チェックリスト、受け入れ手順 | **実装済み**（[AD の作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)） |
+| 引き渡し | 作業結果報告書、チェックリスト、受け入れ手順 | **実装済み**（[AD の作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)。引き渡し先は自分で、ラボ検証の完了まで） |
 
 **実装済み**は成果物・コードがある状態、**実測済み**は結果の記録がある状態、**未実施（NOT RUN）**は実行結果がない状態です。判定の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
 
@@ -48,7 +48,7 @@
 
 雇用形態・英語力・運転免許などの条件は、[職務経歴書・スキルシート](./resume.md#3-希望条件働き方)または応募書類・面談時にお伝えします。
 
-第一志望は **Linux サーバー設計・構築**です。**Windows Server / AD の構築・運用**と、入口としてのインフラ監視・運用にも対応します。IT サポート・社内 SE 補助は、応募先に応じた補助トラックです。
+**Windows Server / AD の構築・運用**と、入口としてのインフラ監視・運用にも対応します。応募先によっては、IT サポート・社内 SE 補助も担当できます。
 
 ## 実測したこと
 
@@ -91,7 +91,7 @@ Ansible（サーバー設定の自動化ツール）で、手元の VM 2 台に 
 | 9/4 [Ubuntu / Hyper-V](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-build.md) | `foundation.yml`（OS の共通設定と Docker）を適用し、再実行で変更 0 件（監視ラボ全体の `site.yml` とは別） |
 | 9/4 [AlmaLinux / Hyper-V](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md) | 再利用の VM へ同じ基礎設定を適用し、SELinux 設定の欠陥を修正。再実行で変更 0 件 |
 
-### 2026-08 の記録済み環境・コード版での結果
+### 2026 年 8 月の CI・WSL2 での記録
 
 以下は当時のコード版・環境での記録で、上の 9 月の記録とは合算しません。
 
@@ -105,7 +105,7 @@ Linux 側の設計、パラメータ、構築、試験、変更、引き渡し�
 
 ## 追加の実測演習
 
-2026-08-24 の次の演習は、**AI 支援セッションの作業環境（私の VM ではありません）**で実行したものです。B-1 は仮想ディスク（loop device）付き Ubuntu ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace を使いました。
+2026-08-24 の次の演習は、**AI 支援セッションが自身の作業環境（私の VM ではありません）で実行したもの**です。B-1 は仮想ディスク（loop device）付き Ubuntu ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace を使いました。
 
 | 演習 | 実演内容 | 所要 | 結果 |
 | --- | --- | --- | --- |
@@ -150,7 +150,7 @@ Linux 側の設計、パラメータ、構築、試験、変更、引き渡し�
 
 AI は文書だけでなく、実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成にも使っています。範囲の詳細は[職務経歴書・スキルシート §4-b](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)に書きました。
 
-実機で外した仮説は、2026-08-25 から [LEARNINGS.md](../LEARNINGS.md) に私だけが書く運用にしています。技術的な深さより、この記録のほうが私の現在地を正確に伝えると考えています。ただし、**この記録は 2026-08 のエントリで止まっています。** 9 月は演習記録が大きく増えましたが、学びを書くのが追いついていません。題材は [STATUS §0-b の記入待ちリスト](../STATUS.md#0-b-learningsmd-記入待ちリスト本人が書く)にそろえてあり、そこから自分の言葉で書き足していきます。
+実機で外した仮説は、2026-08-25 から [LEARNINGS.md](../LEARNINGS.md) に私だけが書いています。技術的な深さより、この記録のほうが私の現在地を正確に伝えると考えています。ただし、**記録は 2026-08 のエントリで止まっていて、9 月分はまだ書けていません。**
 
 ## 経歴・学習
 
@@ -166,7 +166,6 @@ AI は文書だけでなく、実装コード（Ansible role、Terraform module�
 - [職務経歴書・スキルシート](./resume.md)
 - [詰まった記録（実機で外した仮説の一次記録）](../LEARNINGS.md)
 - [志望トラックと証跡](./target-roles.md)
-- [証跡採録チェックリスト](./evidence-capture-checklist.md)
 - [現場経験とインフラの橋渡し](./career-bridge.md)
 - [プロフィール README](../README.md)
 - [ポートフォリオサイト](https://ns7jp.github.io/)
