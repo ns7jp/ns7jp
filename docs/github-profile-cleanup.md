@@ -16,10 +16,10 @@
 | --- | --- | --- |
 | [design](https://github.com/ns7jp/design) | 架空の 60 名規模企業・9 台のサーバーを題材にした、インフラ刷新の設計書 13 文書 | 実顧客案件での設計担当、構築・受け入れの実施 |
 | [shell](https://github.com/ns7jp/shell) | Bash / Python / PowerShell、Nginx / IIS、Ansible、セキュリティ設定・変更・バックアップを扱うコードとテスト | 各対象 OS での実機構築。IIS の実機構築は未実施 |
-| [network](https://github.com/ns7jp/network) | 架空のネットワーク案件 9 件の演習資料 | 本人の実施ログは未掲載。資料の存在は機器設定・障害対応の実績を意味しない |
+| [network](https://github.com/ns7jp/network) | 架空のネットワーク案件 9 件の演習資料 | 私の実施ログは未掲載。資料の存在は機器設定・障害対応の実績を意味しない |
 | [aws](https://github.com/ns7jp/aws) | AWS CLI / Terraform を使う 6 段階の演習資料・コード | 実 AWS 環境での構築・疎通・監視・削除。静的検査とクラウド実行は別 |
 
-確認先は各リポジトリの README とその参照先です。版や結果は各作品の記録に従います。設計書・コード・テストの存在を、本人が独力で実行できる証拠として扱いません。
+確認先は各リポジトリの README とその参照先です。版や結果は各作品の記録に従います。設計書・コード・テストの存在を、私が独力で実行できる証拠としては扱いません。
 
 ## About 欄の説明文
 
@@ -50,4 +50,4 @@ git check-attr linguist-documentation -- archive/tools/portfolio-loop/loop.mjs
 
 対象ファイルの存在と `linguist-documentation: set` を確認します。この結果はローカル属性の確認であり、GitHub の Languages 表示が更新された証拠ではありません。
 
-プロフィール README では、主作品へのリンク、本人の実行記録、未実施範囲、連絡先を確認します。入口で表示する技術名や作品数を増やす前に、[本人が次に残す一件](./portfolio-explanation.md#8-次に残す一件と本人の学び)を進めます。
+プロフィール README では、主作品へのリンク、私の実行記録、未実施範囲、連絡先を確認します。入口で表示する技術名や作品数を増やす前に、[次に残す一件](./portfolio-explanation.md#8-次に残す一件と自分の学び)を進めます。
