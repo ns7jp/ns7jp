@@ -132,9 +132,9 @@ LPIC-1（101 / 102）は FE と並行して学習中ですが、**受験日は�
 | 目的 | AWS SAA（2027 年後半）・Azure 実機演習より前に、「クラウド未経験ではない」ことを短期間・低コストで示す |
 | 受験予定 | 2026 Q4 目安。FE・LPIC-1 101 の学習が一段落してから、週末学習で 2 週間程度ずつ充てる |
 | 受験料目安（AWS） | AWS 認定はレベルによって受験料が異なり、Associate（本ロードマップでは SAA が該当）は USD 150 程度と案内されることが多い。Foundational の CLF-C02 はこれより低めに設定される傾向があるが、正確な金額は変動するため受験前に AWS 公式サイトで確認する |
-| なぜ 2 つとも取るか | 現在の派遣先研修が AWS / Azure の両方をカバーしており、[career-bridge.md の AWS → Azure 対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)もすでにあるため、AWS だけに絞る根拠が無い |
+| なぜ 2 つとも取るか | トライアル就業（2026-09-15 に終了）の研修が AWS / Azure の両方をカバーしていたうえ、[career-bridge.md の AWS → Azure 対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)もすでにあるため、AWS だけに絞る根拠が無い |
 | 学習方法 | AWS Skill Builder（CLF-C02）、Microsoft Learn（AZ-900）の無料教材のみ。追加費用は受験料のみ |
-| ポートフォリオ連動 | 対応表の裏付けとして使う。実機演習は [11 AWS基礎構築演習設計](../learning-plan/11-aws-foundational-exercise-design.md) / [10 Azure構築演習設計](../learning-plan/10-azure-foundational-exercise-design.md)（いずれも設計のみ・未実施）が別途担当する |
+| ポートフォリオ連動 | 対応表の裏付けとして使う。実機演習は [11 AWS基礎構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/11-aws-foundational-exercise-design.md) / [10 Azure構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/10-azure-foundational-exercise-design.md)（いずれも設計のみ・未実施）が別途担当する |
 
 ---
 
@@ -159,7 +159,7 @@ LPIC-1（101 / 102）は FE と並行して学習中ですが、**受験日は�
 | 受験予定 | 2027 年後半 |
 | 受験料目安 | USD 150 程度が目安（為替レートにより日本円換算額は変動する）。あくまで目安であり、受験前に AWS 公式サイトで最新の受験料を確認する |
 | 学習方法 | AWS Skill Builder + 公式模擬試験 + AWS 無料利用枠での実機演習 |
-| ポートフォリオ連動 | server-monitor を AWS 上に Terraform で再構築（[計画](../server-monitor-improvements/03-terraform-aws.md)）。まずは [11 AWS基礎構築演習設計](../learning-plan/11-aws-foundational-exercise-design.md)で VPC・EC2 1 台の最小構成の `apply`/`destroy` を経験してから着手する（設計のみ・未実施） |
+| ポートフォリオ連動 | server-monitor を AWS 上に Terraform で再構築（[計画](../server-monitor-improvements/03-terraform-aws.md)）。まずは [11 AWS基礎構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/11-aws-foundational-exercise-design.md)で VPC・EC2 1 台の最小構成の `apply`/`destroy` を経験してから着手する（設計のみ・未実施） |
 
 ---
 
@@ -209,7 +209,7 @@ FE・CCNA 以降は、着手時に同じ形式で Issue を作成します。
 
 ## 関連ドキュメント
 
-- [サーバー構築エンジニア学習プラン](../learning-plan/README.md)（資格が担当しない「手を動かす側」の 24 週カリキュラム）
+- [サーバー構築エンジニア学習プラン](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/README.md)（資格が担当しない「手を動かす側」の 24 週カリキュラム）
 - [サーバー監視ラボ：改善設計の実装対応表](../server-monitor-improvements/README.md)
 - [アーキテクチャ図（実装済み構成 / 検証境界）](../architecture-diagram.md)
 - [証跡採録チェックリスト](../evidence-capture-checklist.md)

@@ -13,13 +13,13 @@
 
 | 順位 | 次に採録するもの | 完了条件 |
 | --- | --- | --- |
-| 1 | Docker 未導入の独立した Ubuntu 対象ホスト + 別の管理端末 | Docker 導入を含む `site.yml` 初回適用、2 回目 `changed=0`、network / UFW、受け入れ試験、引き渡し資料を同じ commit で採録。独立ホストそのものの構築手順は [13 恒久ホスト構築演習設計](./learning-plan/13-persistent-host-exercise-design.md)（設計のみ・未実施）を土台にできる |
-| 2 | 対象ホストの再起動・継続稼働 | 再起動直後の自動起動・監視復帰・バックアップに加え、24時間後と72時間後の正常性を時刻付きで採録。[13 恒久ホスト構築演習設計](./learning-plan/13-persistent-host-exercise-design.md)の 4.11 章・5 章 T-15〜T-17（設計のみ・未実施）は、このうち再起動後のサービス自動復帰と heartbeat による 24 / 72 時間後の到達性確認までを扱う。監視スタック本体の復帰確認とバックアップの復元試験は 13 のスコープ外であり、`site.yml` 適用（順位 1）後の別演習として別途採録する |
+| 1 | Docker 未導入の独立した Ubuntu 対象ホスト + 別の管理端末 | Docker 導入を含む `site.yml` 初回適用、2 回目 `changed=0`、network / UFW、受け入れ試験、引き渡し資料を同じ commit で採録。独立ホストそのものの構築手順は [13 恒久ホスト構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/13-persistent-host-exercise-design.md)（設計のみ・未実施）を土台にできる |
+| 2 | 対象ホストの再起動・継続稼働 | 再起動直後の自動起動・監視復帰・バックアップに加え、24時間後と72時間後の正常性を時刻付きで採録。[13 恒久ホスト構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/13-persistent-host-exercise-design.md)の 4.11 章・5 章 T-15〜T-17（設計のみ・未実施）は、このうち再起動後のサービス自動復帰と heartbeat による 24 / 72 時間後の到達性確認までを扱う。監視スタック本体の復帰確認とバックアップの復元試験は 13 のスコープ外であり、`site.yml` 適用（順位 1）後の別演習として別途採録する |
 | 3 | Alertmanager → Slack 実配信 | FIRING / RESOLVED の両方を秘密値を伏せて採録 |
 | 4a | Windows / AD の公開可能な再現ログ | 隔離ラボでユーザー作成、棚卸し、DNS 障害から domain 参加復旧までを再実施 |
 | 4b | Windows / winget 端末セットアップ | 使い捨て test VM で導入、2 回目実行、rollback、package ごとの exit code を採録 |
 | 5 | D-2 ホスト障害復旧 | 別ホストへの復旧、RTO / RPO、失敗箇所を採録 |
-| 6 | 承認済み AWS 短時間検証 | `plan / apply / destroy`、疎通、実費を採録。手順は [11 AWS基礎構築演習設計](./learning-plan/11-aws-foundational-exercise-design.md)（設計のみ・未実施） |
+| 6 | 承認済み AWS 短時間検証 | `plan / apply / destroy`、疎通、実費を採録。手順は [11 AWS基礎構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/11-aws-foundational-exercise-design.md)（設計のみ・未実施） |
 
 この表の項目はすべて**未実測または部分実施**です。予定を実績欄へは移しません。
 
@@ -82,7 +82,7 @@
 | 優先 | 採録する証跡 | 必要環境 | 想定コスト | 紐づく設計書 |
 | --- | --- | --- | --- | --- |
 | △ 8a | **Windows / AD 公開用再現ラボ**（評価版 AD DS でユーザー作成〜棚卸し、DNS 障害復旧） | 自宅 PC + Hyper-V / VirtualBox（評価版） | 0 円 | [Windows / AD 公開再現ラボ](./evidence/templates/windows-ad-lab.md) |
-| 9 | `terraform apply` → `destroy` と **Cost Explorer の実費** | 承認済み AWS アカウント | 数十〜数百円 | [03 AWS + Terraform](./server-monitor-improvements/03-terraform-aws.md)（大規模な本番想定設計）／ [11 AWS基礎構築演習設計](./learning-plan/11-aws-foundational-exercise-design.md)（VPC・EC2 1 台の最小構成。まずこちらを先に回し切る） |
+| 9 | `terraform apply` → `destroy` と **Cost Explorer の実費** | 承認済み AWS アカウント | 数十〜数百円 | [03 AWS + Terraform](./server-monitor-improvements/03-terraform-aws.md)（大規模な本番想定設計）／ [11 AWS基礎構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/11-aws-foundational-exercise-design.md)（VPC・EC2 1 台の最小構成。まずこちらを先に回し切る） |
 
 > 優先 8a は**部分実施**です。トライアル就業先の研修で AD DS を構築し、クライアントの DNS 設定が原因だったドメイン参加障害を切り分けた経験は [LEARNINGS.md](../LEARNINGS.md) に記録しました。ただし、研修先の情報を含まない PowerShell のユーザー作成・棚卸し・domain 参加復旧ログは未採録です。公開実績にする場合は、隔離した自宅ラボ等で再現して機密情報を含まない一次出力を残します。
 > 旧優先 9 の AWS 検証は、現在は冒頭表の順位 6 です。独立対象ホスト、再起動・72時間継続、
@@ -207,7 +207,7 @@
 
 ### 9. AWS apply / destroy と実費
 
-> 具体的な手順（パラメータシート・構築手順書・試験項目書・課金ストップ基準）は [11 AWS基礎構築演習設計](./learning-plan/11-aws-foundational-exercise-design.md)にまとめている（設計のみ・未実施）。以下は概要のみ。
+> 具体的な手順（パラメータシート・構築手順書・試験項目書・課金ストップ基準）は [11 AWS基礎構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/11-aws-foundational-exercise-design.md)にまとめている（設計のみ・未実施）。以下は概要のみ。
 
 1. `terraform apply` の**前に**予算アラート（AWS Budgets 等）を設定する。しきい値超過時の**通知のみ**であり、課金を自動的に止める機能ではない点に注意する。
 2. **短時間で破棄する前提**で `terraform plan` → `apply` を実行する。
@@ -258,7 +258,7 @@
 - [STATUS.md（全体進捗）](../STATUS.md)
 - [採用ご担当者さま向け 1 ページ版](./overview-for-recruiters.md)
 - [志望トラックと証跡](./target-roles.md)
-- [サーバー構築エンジニア学習プラン](./learning-plan/README.md)（Phase 2 の成果物が優先 6、Phase 6 の成果物が優先 7・9 に対応）
+- [サーバー構築エンジニア学習プラン](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/README.md)（Phase 2 の成果物が優先 6、Phase 6 の成果物が優先 7・9 に対応）
 - [ビジュアルショーケース（差し替え対象）](./showcase/README.md)
 - [デモ動画台本](./demo-script.md)
 - [学習の一次記録（つまずきログ）](../LEARNINGS.md)
