@@ -1,6 +1,6 @@
 # 主作品を自分の言葉で説明する練習
 
-このページは、[やさしい用語・見方ガイド](./beginner-guide.md)で読んだ仕組みを、声に出して説明し、自分の操作記録につなげる練習帳です。教材は [server](https://github.com/ns7jp/server) です。既存の実装や証跡を読んだことと、自分で構築・復旧したことを分けて話します。
+このページは、[やさしい用語・見方ガイド](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md)で読んだ仕組みを、声に出して説明し、自分の操作記録につなげる練習帳です。教材は [server](https://github.com/ns7jp/server) です。既存の実装や証跡を読んだことと、自分で構築・復旧したことを分けて話します。
 
 最初は1章の30秒説明だけを練習します。自分の実習結果ができたら3章へ記録し、その結果を使って説明を更新します。監視まで学んでから、2章の3分説明と5章の8問へ進みます。
 
@@ -12,7 +12,7 @@
 
 【自分の学習段階】には、「構成を読んで説明する段階」「自分の VM で起動を試している段階」など、現在の事実を入れます。読む前から「構築しました」「復旧できました」に置き換えません。
 
-練習は、文章を一度読む → 閉じて話す → 録音を聞く、の順です。30 秒を超えても、最初は意味を保つことを優先します。言いにくい用語は[入門ガイド](./beginner-guide.md)に戻って、自分の短い言葉に直します。
+練習は、文章を一度読む → 閉じて話す → 録音を聞く、の順です。30 秒を超えても、最初は意味を保つことを優先します。言いにくい用語は[入門ガイド](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md)に戻って、自分の短い言葉に直します。
 
 ### 最小構成を試したら、自分の結果で話す
 
@@ -72,7 +72,7 @@
 
 ## 3. 自分の操作記録を一つ作る
 
-最初の課題は、主作品の[初心者向け学習ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md)から、今の段階に合う操作を一つ選ぶことです。前提確認から始め、app と Nginx の最小構成を動かします。環境がない場合は、先に[開始前診断](./learning-plan/00-start-here.md)へ進みます。下記は記入用であり、実行結果ではありません。
+最初の課題は、主作品の[初心者向け学習ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md)から、今の段階に合う操作を一つ選ぶことです。前提確認から始め、app と Nginx の最小構成を動かします。環境がない場合は、先に[開始前診断](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/00-start-here.md)へ進みます。下記は記入用であり、実行結果ではありません。
 
 ```text
 題名: 【何を確認したか】
@@ -135,14 +135,14 @@
 
 | 問題 | 解答の要点 | 戻り先 |
 | --- | --- | --- |
-| 1 | ブラウザーは要求するクライアント、Web サーバーは要求に応答する側。固定した機器の種類だけを表す言葉ではない | [入門ガイド 1](./beginner-guide.md#1-この作品は何を作っているのか) |
-| 2 | Nginx は入口で中継、Gunicorn は Flask アプリを動かし、Flask アプリが応答を作る | [入門ガイド 3](./beginner-guide.md#3-通信と監視を三つの経路で覚える) |
-| 3 | Prometheus が定期取得する。取得先の設定は `scrape_configs` にある | [入門ガイド 3](./beginner-guide.md#3-通信と監視を三つの経路で覚える) |
-| 4 | 数値は Prometheus、ログは Loki に問い合わせる。Grafana 自体がこの収集の正本ではない | [入門ガイド 3](./beginner-guide.md#3-通信と監視を三つの経路で覚える) |
-| 5 | Prometheus がルールで判定し、Alertmanager が通知を整理・配送する。受信先で届いたことも確認する | [入門ガイド 3](./beginner-guide.md#3-通信と監視を三つの経路で覚える) |
-| 6 | 言えない。コンテナの稼働に加え、期待した経路から応答・内容などを確認する | [入門ガイド 4](./beginner-guide.md#4-コマンドを目的から選ぶ) |
-| 7 | 言えない。記録の日時・環境・版の結果であり、自分で再現したと言うには自分の操作記録が必要 | [入門ガイド 6](./beginner-guide.md#6-作品の証跡と自分の習得を分ける) |
-| 8 | 対象・時刻・症状・直前の変更・状態・ログを保存する。戻し方を決めて一つ変更し、同じ試験で期待値と再比較する | [入門ガイド 5](./beginner-guide.md#5-構築と障害対応を一巡する) |
+| 1 | ブラウザーは要求するクライアント、Web サーバーは要求に応答する側。固定した機器の種類だけを表す言葉ではない | [入門ガイド 1](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md#1-この作品は何を作っているのか) |
+| 2 | Nginx は入口で中継、Gunicorn は Flask アプリを動かし、Flask アプリが応答を作る | [入門ガイド 3](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md#3-通信と監視を三つの経路で覚える) |
+| 3 | Prometheus が定期取得する。取得先の設定は `scrape_configs` にある | [入門ガイド 3](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md#3-通信と監視を三つの経路で覚える) |
+| 4 | 数値は Prometheus、ログは Loki に問い合わせる。Grafana 自体がこの収集の正本ではない | [入門ガイド 3](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md#3-通信と監視を三つの経路で覚える) |
+| 5 | Prometheus がルールで判定し、Alertmanager が通知を整理・配送する。受信先で届いたことも確認する | [入門ガイド 3](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md#3-通信と監視を三つの経路で覚える) |
+| 6 | 言えない。コンテナの稼働に加え、期待した経路から応答・内容などを確認する | [入門ガイド 4](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md#4-コマンドを目的から選ぶ) |
+| 7 | 言えない。記録の日時・環境・版の結果であり、自分で再現したと言うには自分の操作記録が必要 | [入門ガイド 6](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md#6-作品の証跡と自分の習得を分ける) |
+| 8 | 対象・時刻・症状・直前の変更・状態・ログを保存する。戻し方を決めて一つ変更し、同じ試験で期待値と再比較する | [入門ガイド 5](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md#5-構築と障害対応を一巡する) |
 
 ## 6. 説明と操作を別々に確かめる
 
@@ -157,7 +157,7 @@
 
 後日の確認でも、秘密値・停止・削除などの操作は指定手順と中止条件を読み直します。コマンドの暗記や危険な操作を記憶だけで行うことを、独力の条件にしません。学習の状態は各行で別々に記録し、一回の起動成功だけで全段階を完了にしません。
 
-これは学習を進めるための自己確認です。読了だけで実機の構築・復旧や、採用での評価が保証されるものではありません。教材が初心者に再現できるかを確認した場合は、別途[第三者再現テスト記録](./learning-plan/beginner-usability-test.md)へ残します。
+これは学習を進めるための自己確認です。読了だけで実機の構築・復旧や、採用での評価が保証されるものではありません。教材が初心者に再現できるかを確認した場合は、別途[第三者再現テスト記録](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/beginner-usability-test.md)へ残します。
 
 次は[主作品の初心者向け学習ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md)で操作を一つ進め、記録を使って 30 秒と 3 分の説明を更新します。最小構成を確認できたら、[一本道ラーニングパス](https://github.com/ns7jp/server/blob/main/docs/learning-path.md)で監視・自動化・復旧へ範囲を広げます。
 
@@ -235,4 +235,4 @@
 
 自分で書いた原文を証跡と照合してから、私が `LEARNINGS.md` に一件追記します。思い出せない仮説を後付けしません。自分の原文がない間は記入待ちのままです。AI が行った性能試験の再分析は技術的な改善記録であり、私の独力再現や学びの代わりにはしません。
 
-[やさしい用語・見方ガイドに戻る](./beginner-guide.md) · [プロフィールに戻る](../README.md)
+[やさしい用語・見方ガイドに戻る](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md) · [プロフィールに戻る](../README.md)

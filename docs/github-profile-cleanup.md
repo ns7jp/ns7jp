@@ -42,12 +42,6 @@
 
 ## 言語判定と入口の確認
 
-プロフィールの `.gitattributes` には `archive/** linguist-documentation` があります。ローカルの属性確認と GitHub の表示確認を分けます。
-
-```text
-git check-attr linguist-documentation -- archive/tools/portfolio-loop/loop.mjs
-```
-
-対象ファイルの存在と `linguist-documentation: set` を確認します。この結果はローカル属性の確認であり、GitHub の Languages 表示が更新された証拠ではありません。
+2026-09-23 に、`archive/` の運営ツール一式（Node.js の CLI を含む）を非公開のリポジトリへ、初心者向けの教材を [ns7jp/learning](https://github.com/ns7jp/learning) へ移しました。プロフィールリポジトリには Markdown の文書・構成図と CI 用の小さなスクリプトだけが残るため、言語判定のための `.gitattributes` は削除しています。GitHub の Languages 表示が実際に変わったかは、画面で確認してから[表示設定の記録](./github-profile-settings.md)に残します。
 
 プロフィール README では、主作品へのリンク、私の実行記録、未実施範囲、連絡先を確認します。入口で表示する技術名や作品数を増やす前に、[次に残す一件](./portfolio-explanation.md#8-次に残す一件と自分の学び)を進めます。

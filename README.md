@@ -140,7 +140,7 @@ Ansible と Git の小さな練習（9/9〜15）の記録は、[検証証跡台�
 
 **AI を使わずに再現した記録は、まだありません。** 最初の一件として、元ログ 5 件のハッシュ照合を[独力再現ガイド](https://github.com/ns7jp/server/blob/main/docs/independent-rerun-guide.md)の条件でやり直します。
 
-初心者向けの教材（やさしいガイド・学習プラン・用語集）は[やさしいガイド](./docs/beginner-guide.md)から、ポートフォリオ運営の仕組みは [archive/](./archive/README.md) から辿れます。どちらも採用の判断には不要です。
+初心者向けの教材（やさしいガイド・24 週の学習プラン・用語集・コマンド集）は [ns7jp/learning](https://github.com/ns7jp/learning) に分けました。ポートフォリオ運営のための仕組みは、非公開のリポジトリへ移しています。どちらも採用の判断には不要です。
 
 ## Contact
 

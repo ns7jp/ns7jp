@@ -357,7 +357,7 @@ domain が `ad.example.test` です。
 
 > ここで作る単一 OU・単一グループ・単一ユーザーを、目的別の OU 階層・AGDLP グループ戦略・GPO・
 > パスワードポリシー（既定 + 細分化）・FSMO 確認・システム状態バックアップ／権威復元まで発展させる
-> 設計は [08 AD構築演習設計](../../learning-plan/08-ad-exercise-design.md) にまとめています。
+> 設計は [08 AD構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/08-ad-exercise-design.md) にまとめています。
 > 本テンプレートの §7〜§9 が作った状態を、そのまま同書の前提条件として使います。
 
 ```powershell

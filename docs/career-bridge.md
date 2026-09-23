@@ -100,7 +100,7 @@ flowchart LR
 
 「しきい値を決めて・検知して・通知して・手順書で対応する」という運用の骨格は共通なので、**ツール指定のある現場でも短期間でキャッチアップできる** 前提で学習しています（面接で「うちは Zabbix だが」と問われた際も、この対応表で説明します）。
 
-Zabbix 側については、上記の対応表を実機で検証する演習設計を[09 Zabbix 監視基盤構築演習設計](./learning-plan/09-zabbix-monitoring-exercise-design.md)にまとめています（設計のみ・未実施）。JP1 系は自宅ラボでの再現が難しいため、対応表による概念の橋渡しに留めています。
+Zabbix 側については、上記の対応表を実機で検証する演習設計を[09 Zabbix 監視基盤構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/09-zabbix-monitoring-exercise-design.md)にまとめています（設計のみ・未実施）。JP1 系は自宅ラボでの再現が難しいため、対応表による概念の橋渡しに留めています。
 
 ### 2.7 クラウド基盤の転用可能性（AWS → Azure）
 
@@ -120,7 +120,7 @@ Zabbix 側については、上記の対応表を実機で検証する演習設�
 
 「アカウント境界を切り、ネットワークと IAM を設計し、同じ IaC ツールでコード化し、監視とバックアップを組み込む」という骨格は共通です。違うのはクラウドごとの provider・リソースモデル（Azure はテナント → サブスクリプション → リソースグループという入れ子構造を持つ）であり、**IaC ツール（Terraform）を固定したまま対象クラウドだけ増やせる**ことを、面接で「うちは Azure だが」と問われた際の説明材料にしています。
 
-Azure 側については、上記の対応表を実機で検証する演習設計を[10 Azure構築演習設計](./learning-plan/10-azure-foundational-exercise-design.md)にまとめています（設計のみ・未実施）。
+Azure 側については、上記の対応表を実機で検証する演習設計を[10 Azure構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/10-azure-foundational-exercise-design.md)にまとめています（設計のみ・未実施）。
 
 ### 2.8 現物スキルの転用（物流現場 → データセンター現地作業・デスクワーク適応）
 
@@ -194,7 +194,7 @@ Azure 側については、上記の対応表を実機で検証する演習設�
 [LEARNINGS.md](../LEARNINGS.md) に記録した 2 件の経験が大きく影響しています。1 件目は、自作の
 監視基盤（server-monitor）で Ansible の UFW 設定が `allow` と `limit` という矛盾する 2 つのルールを
 同じ port に適用し続け、実行のたびに設定が書き換わって冪等性（同じ操作を何度実行しても結果が
-変わらない性質。詳しくは[やさしい用語・見方ガイド](./beginner-guide.md)を参照）が壊れていた事象
+変わらない性質。詳しくは[やさしい用語・見方ガイド](https://github.com/ns7jp/learning/blob/main/docs/beginner-guide.md)を参照）が壊れていた事象
 です。ログを読み込み、
 `ufw` モジュール自体ではなくロール側の設計に原因があると切り分けて修正しました。2 件目は、2026 年 8 月の
 研修で遭遇した AD ドメイン参加時の DNS 設定不備で、Hyper-V のネットワークが NAT 設定のままクライアント
