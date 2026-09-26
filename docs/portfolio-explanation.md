@@ -175,7 +175,7 @@
 | [9/8：数値監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md) | 5サービスの部分構成。手動停止・再開に伴う収集状態1→0→1 | 何の数値が0になったのか。0だけで原因を断定できるか。次にどの状態・ログを調べるか |
 | [9/8：Loki復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md) | 同じVM内の別名ボリュームから過去ログ2件を検索 | なぜ元ボリュームへ上書きしなかったか。VMのディスクを失っても戻せるか。全データの復元成功と言えるか |
 | [9/8：アプリ自動復旧](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) | 再起動回数0→1、HTTP復帰計測2秒、後続のhealthy確認 | なぜHTTP応答とhealthyを別に確認したか。2秒に含まれる範囲はどこまでか |
-| [9/9：Ansible入力検証](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-09-lab-base01-validation-practice.md) | 不正値70000を拒否し、出力ファイルの前後ハッシュ一致を確認 | なぜエラーで止まることが期待結果か。設定ファイル生成と実ポート待受の違いは何か |
+| [9/9：Ansible入力検証](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-09-lab-base01-validation-practice.md) | 不正値70000を拒否し、出力ファイルの前後ハッシュ一致を確認 | なぜエラーで止まることが期待結果か。設定ファイル生成と実ポート待受の違いは何か |
 
 ### 説明する順番
 
@@ -209,7 +209,7 @@
 
 ## 8. 次に残す一件と自分の学び
 
-2026-09-17 時点の次の作業は、**元ログ 5 件のハッシュ照合を私が再実施すること**に絞ります。[9 月 15 日の元の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-15-lab-base01-original-log-check.md)は、AI が手順を提示し、私が操作して 5 件すべて OK・終了 0 を確認した記録です。AI 支援なしの再現結果はまだありません。
+2026-09-17 時点の次の作業は、**元ログ 5 件のハッシュ照合を私が再実施すること**に絞ります。[9 月 15 日の元の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-original-log-check.md)は、AI が手順を提示し、私が操作して 5 件すべて OK・終了 0 を確認した記録です。AI 支援なしの再現結果はまだありません。
 
 1. [独力再現ガイド](https://github.com/ns7jp/server/blob/main/docs/independent-rerun-guide.md)と[記録テンプレート](https://github.com/ns7jp/server/blob/main/docs/evidence/templates/independent-rerun.md)を開き、使う資料・対象・予想する結果を実施前に書く。
 2. 元ログと照合用一覧が存在する専用の学習環境で行う。対象がない、場所が分からない場合はそこで止まり、前提不足を記録する。完了に合わせてログを作り直さない。
