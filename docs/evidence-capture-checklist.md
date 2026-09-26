@@ -11,8 +11,17 @@
 
 過去に付けた優先番号は完了履歴として下に残し、今後は次の順で採録します。
 
+2026-09-26 のレビューを受け、「AI を使わずに自分でできること」の証拠と、書いたまま動かしていないコードの解消を先頭に置きました。順位 0・0b・0c は本人にしかできない作業です。
+
 | 順位 | 次に採録するもの | 完了条件 |
 | --- | --- | --- |
+| 0 | **AI を使わない独力再現（1 件目）** | 題材は Ubuntu の初期構築（固定 IP・SSH 鍵認証・UFW・時刻同期）→ 設定不備を 1 つ起こして復旧、または [独力再現ガイド](https://github.com/ns7jp/server/blob/main/docs/independent-rerun-guide.md)の元ログ 5 件のハッシュ照合。作業中は AI を使わず、15〜30 分の画面録画か `asciinema rec` の記録を残す。調べた資料（man・公式ドキュメント）は URL を列挙し、詰まった箇所と所要時間を自分の言葉で書く |
+| 0b | **`LEARNINGS.md` の 9 月分 3 件** | [STATUS.md の記入待ちリスト](../STATUS.md#0-b-learningsmd-記入待ちリスト本人が書く)の #11・#10・#12 の「学び」欄を本人が書き、`LEARNINGS.md` へ移す。あわせて AI 代筆だった 2026-08 の AD ドメイン参加エントリを、参加に使ったコマンドと正確なエラー文を含めて書き直す（Hyper-V の仮想スイッチは外部・内部・プライベートの 3 種で、「ホストオンリー」は VirtualBox / VMware の用語） |
+| 0c | **面接でのライブ操作の練習** | [デモ台本の「面接でのライブ操作」](./demo-script.md#面接でのライブ操作5-分ai-なし)を AI なしで 3 回通し、所要時間と詰まった箇所を記録する |
+| 0d | **AWS の短時間 `apply / destroy`（1 回）** | 下の順位 6 を前倒しする。無料枠の範囲で最小構成を `plan → apply → 疎通 → destroy` し、実費（請求画面）を採録。実行しない Terraform コードは、削るか「未実行」と明記したディレクトリへ分ける |
+| 0e | **常時起動の VPS 1 台** | 下の順位 1〜3 をまとめて進める手段。月額 1,000 円前後の VPS で、再起動後の復帰、24 時間後の正常性、Slack への FIRING / RESOLVED、TLS を採録 |
+| 0f | **ネットワーク機器の設定（シミュレーター）** | Cisco Packet Tracer などで VLAN・トランク・静的ルート・ACL を設定し、`show running-config`・`show vlan brief`・`ping` の結果を採録。CCNA の学習と兼ねる |
+| 0g | **第三者の目** | 次のうち 1 つ：勉強会での LT（5 分）、OSS への小さな PR（文書の誤り修正でよい）、知人に Linux 構築案件パックの手順書どおり構築してもらい、詰まった箇所を記録 |
 | 1 | Docker 未導入の独立した Ubuntu 対象ホスト + 別の管理端末 | Docker 導入を含む `site.yml` 初回適用、2 回目 `changed=0`、network / UFW、受け入れ試験、引き渡し資料を同じ commit で採録。独立ホストそのものの構築手順は [13 恒久ホスト構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/13-persistent-host-exercise-design.md)（設計のみ・未実施）を土台にできる |
 | 2 | 対象ホストの再起動・継続稼働 | 再起動直後の自動起動・監視復帰・バックアップに加え、24時間後と72時間後の正常性を時刻付きで採録。[13 恒久ホスト構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/13-persistent-host-exercise-design.md)の 4.11 章・5 章 T-15〜T-17（設計のみ・未実施）は、このうち再起動後のサービス自動復帰と heartbeat による 24 / 72 時間後の到達性確認までを扱う。監視スタック本体の復帰確認とバックアップの復元試験は 13 のスコープ外であり、`site.yml` 適用（順位 1）後の別演習として別途採録する |
 | 3 | Alertmanager → Slack 実配信 | FIRING / RESOLVED の両方を秘密値を伏せて採録 |
