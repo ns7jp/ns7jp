@@ -81,7 +81,7 @@
 - 製造・物流業務 15 年以上
 - IT 企業でのトライアル就業（2026/07〜09/15 に終了、人材派遣。Windows / Linux サーバーと AWS / Azure の構築研修）。現在は求職中で、すぐに勤務を開始できます
 - Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級、IT パスポート
-- LPIC-1 101 を次に受験予定、基本情報技術者を学習中（[資格取得ロードマップ](./docs/certifications/roadmap.md)）
+- LinuC-1 101 を次に受験予定、基本情報技術者を学習中（[資格取得ロードマップ](./docs/certifications/roadmap.md)）
 
 詳しい職歴とスキルは [職務経歴書・スキルシート](./docs/resume.md)、現場改善の経験は [業務改善レポート](./docs/business-improvement/picking-improvement.md)にまとめています。
 
