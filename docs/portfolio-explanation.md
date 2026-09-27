@@ -219,6 +219,8 @@
 
 ### 9 月の失敗から、一件だけ自分で書く
 
+> **2026-09-27**：下の Nginx 停止の件を含む 3 件を、[LEARNINGS.md](../LEARNINGS.md) に書きました。次に書くときも、同じ質問を使います。
+
 書く題材は [STATUS の記入待ちリスト](../STATUS.md#0-b-learningsmd-記入待ちリスト本人が書く)から選びます。最初の候補は、[9 月 8 日の Nginx 停止時の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-compose-practice.md)です。app が healthy のまま、利用者側では接続できなくなった事実があります。**以下は質問です。私の回答や学びを代わりに書いたものではありません。**
 
 ```text
