@@ -2,6 +2,12 @@
 
 このファイルは、公開リポジトリから参照される「更新の運用ルール」「LEARNINGS.md 記入待ちリスト」と、2026-08-24 時点の「コードでは埋められない、残っている穴」だけを残した短い版です。2026-09-23 までの詳しい変更記録は、ポートフォリオ運営のための非公開リポジトリへ移しました。
 
+## 2026-09-27 更新：LEARNINGS.md に 9 月分 3 件を追加
+
+`LEARNINGS.md` に 9 月分の 3 件（#10〜#12）を書きました（`LEARNINGS.md` は私だけが編集しています）。これに合わせて、記入待ちリストから 3 件を外し、[採用担当向けページ](docs/overview-for-recruiters.md)・[説明の練習](docs/portfolio-explanation.md)・[採録計画](docs/evidence-capture-checklist.md)の記述を更新しました。AI が代筆した 2026-08 の 3 件（docker kill の 2 件と Hyper-V AD）の書き直しは、まだ残っています。
+
+---
+
 ## 2026-09-26 更新：主張を 3 本に絞り、本人にしかできない作業を採録計画の先頭へ
 
 外部レビューで「技術の幅や量ではなく、本人の力が外から見えにくい」と指摘を受け、次を変更しました。
@@ -94,16 +100,13 @@
 
 ### 9 月分（2026-09 の証跡 60 件から抽出。事実のみ・「学び」は空欄）
 
-2026-08 以降、`LEARNINGS.md` に新規エントリはありません。同じ期間に 9 月の演習記録（証跡）は 60 件増えました。
+2026-09-27 に、#10〜#12 の 3 件を `LEARNINGS.md` へ書き、この表から外しました。残りは #13〜#21 です。9 月の演習記録（証跡）は 60 件あります。
 事実（症状・確認できた数値・証跡へのリンク）はこちらで揃えてありますので、本人は各行の「学び」欄に 2〜3 行書くだけで済みます。
 60 件のうち **30 件は題材が 0 件**でした。想定どおりに成功し、外した仮説が無かった演習です。残る 30 件から取れた題材 64 件を、同じ原因・同じ構造のものへ統合し、面接で一般化して話せるものを優先して 12 件へ絞りました（全件は載せていません）。
 番号は既存の 1〜9 に続けて 10 から始めています。
 
 | # | 症状（事実） | 学び |
 | --- | --- | --- |
-| 10 | Nginx（入口のWebサーバー）を計画停止した状態で、app コンテナは healthy を維持したまま `curl` が接続エラー（終了 7）と HTTP 000 を返した。000 は HTTP ステータスではなく、応答を取得できなかったことを示す表示だった。Nginx を手動で再開すると `/healthz` は 200 へ復帰した。利用者の経路は 127.0.0.1:8080 の Nginx を経て app へ届く構成で、app の 5000/tcp はコンテナ側のポートでホストへは公開されていない。「なぜ app が healthy でもアクセスできないか」への回答はその場では出せなかった（2026-09-08、[証跡 compose](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-compose-practice.md)） | |
-| 11 | 合否表示・集計・終了コードが実態と違った例が 3 件。(a) 障害演習 D-1 のスクリプトは `recover_seconds 2`・`verdict PASS`・終了コード 0 を出したが、その計測直後のコンテナは health `starting`（起動直後で健全判定が未確定）で、healthy と HTTP 200 は後続の確認で得た。復帰判定が `curl -f` の成功だけに依存し、healthcheck 状態と再起動回数を条件に含めていない。(b) `block` 内で意図的に失敗させた回は、タスク出力に FAILED が出た後に rescue（失敗時の後始末）が走り、最終集計は ok3/changed3/failed0/rescued1・終了コード 0 だった。(c) ログ欠落の検査では、ファイルを開けない場合（No such file or directory / FAILED open or read）も、内容のハッシュが合わない場合も、終了コードはどちらも 1 だった（2026-09-08 [証跡 d1](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md)、2026-09-14 [証跡 block](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-14-lab-base01-block-practice.md)、2026-09-15 [証跡 missing-log](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-missing-log-practice.md)） | |
-| 12 | 予測だけの実行（`--check`、いわゆる dry-run）と通常実行が、手元でも記録でも区別できていなかった例が 3 件。(a) 適用後の確認として `--check --diff` を案内したが、画像に写っている最後の実行は `ansible-playbook -i localhost, first.yml --diff` で、予測ではなく通常実行だった。結果が changed 0/failed 0・終了 0 で本文が維持されたため、書き換えは起きなかった。(b) 保存済みログ 5 段階では、preview（`--check --diff`）も apply（`--diff`）も changed 1・ANSIBLE_EXIT 0 で、集計行だけでは見分けられなかった。(c) 生成済み `app.conf` が 9999、指定値が 8091 の状態での `--check --diff` は changed1・終了 0 と「9999 削除・8091 追加」を表示したが、実ファイルの本文は staging/9999 のままだった（2026-09-09 [証跡 check-diff](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-09-lab-base01-check-diff-practice.md)、2026-09-15 [証跡 cycle-review](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-cycle-review-practice.md)、2026-09-14 [証跡 drift](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-14-lab-base01-drift-practice.md)） | |
 | 13 | 検査は実行できて問題も出なかったが、守りたい対象が検査の範囲に入っていなかった例が 2 件。(a) 作成直後の `README.md` は未追跡（`?? README.md`）で、その時点の `git diff --check`（空白の混入検査）は README を対象に含んでいなかった。`git diff --check` は作業ツリーの追跡済み変更だけを見る。(b) 5 つの変更ログを tar.gz にまとめて別フォルダーへ展開し、`sha256sum -c` で 5 件すべて OK・終了 0 を得たが、照合に使った `SHA256SUMS.txt` は `cp` 後の作業コピー側（`/home/opsadmin/ansible-change-archive/payload`）で生成したもので、元ログとアーカイブ内容の個別ハッシュ比較は行っていない（2026-09-15 [証跡 checker-readme](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-checker-readme-practice.md)、2026-09-15 [証跡 log-archive](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-log-archive-practice.md)） | |
 | 14 | 作業自体は成功していたのに、画面の採り方が原因で証拠として採用できず、再実施または主張範囲の縮小になった例が 4 件。(a) ポート下限 1 の試験は成功していたが、E02 上部で見出しが切れていたため確定証拠に採用せず、入力・`--check`・結果が 1 画面に収まる形で E06 に再採録した。(b) tar 展開後の復元先の `du` 約 1.0M と終了 0 は同じ画像に写っていたが、直前の展開コマンド行が画面外だったため、判定を「PASS（限定）」とした。(c) アーカイブ展開直後の「5 件すべて OK」は実行結果の画像が提供されず、試験の基準状態を未採録として扱った。(d) `-e` なしの初回実行はコマンド入力行が画面外で、`-e` なしの直接確認を再実行の E03 に限定した（2026-09-14 [証跡 boundary](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-14-lab-base01-boundary-practice.md)、2026-09-08 [証跡 restore](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md)、2026-09-15 [証跡 missing-log](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-missing-log-practice.md)、2026-09-15 [証跡 default-8085](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-default-8085-practice.md)） | |
 | 15 | 秘密値（パスワード等）を隠す・消す仕組みが、想定より狭い範囲にしか効かなかった例が 2 件。(a) `no_log: true`（実行ログに値を出さない指定）を付けた assert タスクの実行出力に値は出なかったが、Playbook を作成する入力が写った E03 にはダミー値 `practice-only-not-a-real-secret` が表示されていた。`no_log` が隠すのは当該タスクの実行結果だけで、作成時の入力や他の画面表示には及ばない。(b) Grafana 用の秘密値を SSH 経由で Windows のクリップボードへ渡した後、後片付けとして案内した `Set-Clipboard -Value ""` がこの環境では ArgumentNullException となり、非秘密の文字列 `cleared` で置き換える手順へ切り替えたが、置き換えの成功とクリップボード履歴の削除は未採録で、完了とは断言していない（2026-09-14 [証跡 vault](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-14-lab-base01-vault-practice.md)、2026-09-08 [証跡 monitoring](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)） | |
@@ -113,12 +116,6 @@
 | 19 | 中断手順の `Stop-Service BITS -Force` が、依存サービスの `WsusService` も黙って一緒に停止させた。同期の実行中にこれが起き、同期はデータベース上 `Running` のまま固まった（`GetSynchronizationStatus()` は `Running` なのに `GetSynchronizationProgress()` は `Phase=NotProcessing`・`0/0`）。状態を返す API が 2 つあり、片方だけを見ると実行中に見えた。手順書に依存関係を注記し、固まった同期は `WsusService` 開始後に `StopSynchronization()` で解除する手順を追記した（2026-09-08、[証跡 wsus](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)） | |
 | 20 | 前日に書いた原因推定が、件数の突き合わせで否定された。2026-09-07 の実測は「同期済み 557 件のうち 555 件を承認」で、`UpdateScope` で数えた設計どおりの絞り込みの対象は 87 件（分類のみ 473 件、製品のみ 105 件）。555 件は 557 件から拒否済み 2 件を引いた「絞り込みが一切効いていない場合の件数」と一致した。実機に残っていたルールは `Enabled = False`・`Classifications (0)`・`Categories (0)`・`TargetGroups (1) = Pilot` で、`ApplyRule()` は絞り込みを正しく守っており、真因は分類 0 件・製品 0 件を WSUS が「絞り込みなし＝全分類・全製品」と解釈したことだった。次に有力とした「WSUS コンソール（GUI）の自動承認ダイアログでの書き戻し」も、同日の報告書が全作業を Hyper-V PowerShell Direct（GUI を操作できないテキストコンソール）で行ったと記録していることと矛盾するため、実機の追試ではなく自分たちの記録同士の突合で取り下げた（2026-09-08、[証跡 wsus](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)） | |
 | 21 | 「再現しなかった」「結果が出なかった」の原因が、対象の挙動ではなく試験の側にあった例が 2 件。(a) 絞り込みが空になった操作は再現できず、`.Enabled` のみ変更＋`Save()`（読み戻しで cls=2/cat=1/grp=1 を保持）、`ApplyRule()` 自身、週次クリーンアップタスク（`LastRunTime = 1999/11/30`、`NextRunTime = 2026/09/13` で一度も実行されていない）は否定したが、同期は「否定しきれていない」とした。否定の根拠に使った同期が差分ゼロ・45 秒の同期で、当日の 64 分・557 件の初回全同期とは条件が違ったため。(b) 承認の継承を確かめる検証 5 は 2 回失敗した。1 回目は拒否解除に `Approve(NotApproved, Pilot)` を使ったため `Pilot` に明示的な「未承認」レコードが残って継承を打ち消し、2 回目は対象に ARM64 向け更新を選んでしまい x64 機には元々適用対象外だった。3 回目で `Servers` のみへ承認しても `Pilot` 直下のクライアントへ提示されること（`search OK: 1 offered`、KB5120242）を確認した（2026-09-08、[証跡 wsus](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)） | |
-
-> **どれから書くべきか（推奨 3 件）**
->
-> 1. **#11（合否表示・集計・終了コードが実態と違った）** — 別々の 3 演習で同じ構造が出ているため、偶然ではないと示せます。「合格条件を実際の復旧状態より緩く作ると、サマリーだけを信じた側は復旧していない状態を PASS として受け取る」という形にすれば、監視・CI・受け入れ試験の設計の話として、そのまま実務の場面に置き換えて話せます。
-> 2. **#10（監視は緑なのに利用者からは応答が無い）** — ヘルスチェックの定番の落とし穴で、面接官が自分の現場の例をすぐ思い浮かべられる題材です。その場では理由を答えられなかったところまで含めて書けば、「何を確認すれば切り分けられたか」を後から言語化した記録になります。
-> 3. **#12（予測のつもりが通常実行だった）** — 本番の変更作業の事故とまったく同じ構造で、しかも被害が出なかったのは結果がたまたま changed 0 だったからにすぎません。証跡のレビューで自分の手順の食い違いを見つけた、という発見の経緯まで話せる点も強みになります。
 
 ### 実施待ち
 
