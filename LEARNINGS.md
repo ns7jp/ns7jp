@@ -6,7 +6,7 @@
 > 未経験からの信頼性は、整った設計書よりも「何が壊れて、どう直したか」という**生の学習過程**で証明されます。
 > 各エントリは自分の言葉で、事実だけを短く書きます（盛らない・推測は推測と明記する）。
 
-最終更新: 2026-08-26
+最終更新: 2026-09-27
 
 ---
 
@@ -102,18 +102,46 @@
 - **学び**: AD ドメイン参加は「ドメインコントローラが動いていること」だけでなく「クライアントがその DC を DNS として見ていること」が前提条件だと分かった。Linux での `dig` による DNS 切り分けと同じ考え方が、Windows 側でも通用した。
 - **関連**: [職務経歴書](./docs/resume.md)（同じ記録の要約）
 
+### 2026-09 合格の表示・集計・終了コードが、実際の状態と違っていた
+
+- **環境**: 手元の Hyper-V 上の Ubuntu Server 24.04 VM（lab-base01）
+- **症状**: 別々の 3 つの演習で、画面の「合格」や集計が実際の状態と食い違った。
+  (a) D-1（アプリ自動再起動）のスクリプトは `recover_seconds 2`・`verdict PASS`・終了コード 0 を出したが、その直後のコンテナは health が `starting`（まだ健全と判定されていない）だった。healthy と HTTP 200 は、後の確認で初めて得た。
+  (b) Ansible の `block` 内でわざと失敗させた回は、FAILED が表示された後に rescue が走り、最終集計は failed=0・rescued=1・終了コード 0 だった。
+  (c) ログ欠落の検査では、「ファイルを開けない」場合も「ハッシュが合わない」場合も、終了コードはどちらも 1 だった。
+- **原因**: D-1 の合格判定が `curl -f` の成功だけに依存し、healthcheck の状態を条件に入れていなかった。
+- **対処**: 未対応
+- **学び**: 合格判定を一つの方法だけに依存していたので、誤った判断をしてしまった。今後は、複数の方法で確かな確認をとるようにしたい。
+- **証跡**: [d1](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) ／ [block](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-14-lab-base01-block-practice.md) ／ [missing-log](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-missing-log-practice.md)
+
+### 2026-09 アプリは healthy なのに、利用者からは応答が無かった
+
+- **環境**: 同上（app と nginx の 2 コンテナ構成）
+- **症状**: nginx を計画停止すると、app コンテナは healthy のままなのに、`curl` は接続エラー（終了コード 7）と HTTP 000 を返した。000 は HTTP ステータスではなく「応答を取れなかった」という意味。nginx を再開すると `/healthz` は 200 に戻った。その場では「なぜ app が healthy でもアクセスできないのか」に答えられなかった。
+- **原因**: 利用者の経路は 127.0.0.1:8080 の nginx → app。app の 5000/tcp はホストに公開されていなかったので、接続エラー（終了コード 7）と HTTP 000 を返した。
+- **対処**: nginx を手動でホスト公開して復帰を確認した。
+- **学び**: nginx がホスト公開されていると思い込んでしまったため、エラー原因を特定できなかった。最初の前提が間違っていたので、その後の判断も誤ってしまった。
+- **証跡**: [compose](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-compose-practice.md)
+
+### 2026-09 予測（--check）だけのつもりが、通常の実行と区別できていなかった
+
+- **環境**: 同上（Ansible）
+- **症状**:
+  (a) 適用後の確認として `--check --diff` を案内されていたが、画像に写っていた最後の実行は `--diff` だけの通常実行だった。結果が changed=0 だったので、書き換えは起きなかった。
+  (b) 保存したログ 5 段階では、予測（`--check --diff`）も適用（`--diff`）も changed=1・終了コード 0 で、集計行だけでは見分けられなかった。
+  (c) 生成済みの `app.conf` が 9999、指定値が 8091 の状態で `--check --diff` を実行すると changed=1 と差分が表示されたが、実ファイルは 9999 のままだった。
+- **原因**: 適用後の確認として `--check --diff` を案内されていたが、間違って `--diff` だけの通常実行をしてしまった。
+- **対処**: 未対応
+- **学び**: 結果が changed=0 だった場合、間違った実行が見逃されてしまうことが分かった。もう少しログの詳細を確認して対処すべきだった。
+- **証跡**: [check-diff](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-09-lab-base01-check-diff-practice.md) ／ [cycle-review](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-cycle-review-practice.md) ／ [drift](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-14-lab-base01-drift-practice.md)
+
 ---
 
 ## このログの編集ルール（2026-08-25）
 
-**このファイルは本人のみが編集します**（[STATUS §0 ルール 7](./STATUS.md)）。
-設計書は AI 支援で量産できますが、「自分が詰まった経験」は本人にしか書けません。
+**このファイルは私のみが編集します**（[STATUS §0 ルール 7](./STATUS.md)）。
+設計書は AI 支援で量産できますが、「自分が詰まった経験」は私にしか書けません。
 ポートフォリオ全体の中で、最も埋めやすく、最も差がつく空白です。
-
-2026-08-25 のこのルール制定より前の履歴には、AI が「学び」欄を代筆したコミットが
-含まれます（docker kill の 2 件は 2026-08-19、Hyper-V AD の 1 件は 2026-08-20。
-`git log -- LEARNINGS.md` で確認できます）。**履歴は消さずに残したうえで、
-本人の記述へ置き換えます。**
 
 書く題材の候補と、未記入のものは [STATUS.md](./STATUS.md) の
 「LEARNINGS.md 記入待ちリスト」に置いています。このファイルには、
