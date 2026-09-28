@@ -12,9 +12,9 @@
 
 | # | 題材 | 何を示すか | 記録 |
 | --- | --- | --- | --- |
-| 1 | **AD の冗長化と復旧** | Windows Server 2022 で AD を構築し必須 31 項目 PASS。DC を 2 台にして複製を確認し、System State 復元と、1 台を失った想定での FSMO 役割の奪取まで実施 | [構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)・[復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)・[FSMO 奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) |
+| 1 | **AD の 2 台構成と復旧** | Windows Server 2022 で AD を構築し必須 31 項目 PASS。DC を 2 台にして複製を確認し、System State 復元と、1 台を失った想定での FSMO 役割の奪取まで実施 | [構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)・[復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)・[FSMO 奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) |
 | 2 | **Ubuntu の構築と監視** | 固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新を手作業で設定し、わざと起こした設定不備から復旧。Prometheus / Grafana でアプリの手動停止・再開に伴う収集状態の 1→0→1 を確認し、Loki で Nginx の目印付きログを検索 | [初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)・[監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)・[ログ検索](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-loki-practice.md) |
-| 3 | **原因の切り分け** | WSUS の試験が FAIL。承認件数の突き合わせで前日の仮説を否定し、「分類・製品 0 件＝絞り込みなし」という真因を特定して手順書を修正 | [原因特定](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md) |
+| 3 | **原因の切り分け** | WSUS の試験が FAIL。承認件数の突き合わせで前日の仮説を否定し、「分類・製品 0 件＝絞り込みなし」という最有力の原因を突き止め、手順書を修正（0 件になった操作の再現はできていない） | [原因特定](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md) |
 
 主作品は **[サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server)** です。上の 3 本以外の練習記録は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)に日付順で並べています。
 
@@ -103,7 +103,7 @@
 
 1. **実務経験ではありません。** 個人の学習・検証で作ったものと、その実行記録です。
 2. **結果は、その記録に書いた時点・環境・コード版のものです。** 個別の記録を合算して「全構成の合格」とは扱いません。
-3. **AI 支援を使っています。** 文書と実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成・レビューに使いました。9 月の VM の記録は、AI が手順を案内し、私が操作して結果を画面で確かめたものです。範囲は [職務経歴書 §4-b](./docs/resume.md#4-b-ポートフォリオにおける-ai-支援の範囲) に書いています。
+3. **AI 支援（Claude と Codex）を使っています。** 文書と実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成・レビューに使いました。9 月の VM の記録は、AI が手順を案内し、私が操作して結果を画面で確かめたものです。範囲は [職務経歴書 §4-b](./docs/resume.md#4-b-ポートフォリオにおける-ai-支援の範囲) に書いています。
 
 ### まだ実測していないこと
 

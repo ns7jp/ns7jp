@@ -13,11 +13,21 @@
 | --- | --- | --- |
 | server-monitor の Git SHA 指定変更・ロールバック CI | [2026-08-23 索引メモ](./2026-08-23-server-monitor-git-rollback-ci.md) | `PASS`（使い捨て runner） |
 
+2026-09 の Windows Server / AD / WSUS の記録は、主作品の [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md#主要な記録) にあります（AI の手順案内を受けて私が VM を操作した記録）。
+
+| 検証 | 記録先 | 状態 |
+| --- | --- | --- |
+| AD の構築・試験（必須 31 項目） | [2026-09-01](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md) | `PASS` |
+| System State 復元 | [2026-09-02](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md) | `PASS`（SYSVOL の欠損を翌日に訂正） |
+| 2 台目の DC と複製 | [2026-09-03](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-03-ad-second-dc-replication.md) | `PASS` |
+| FSMO 役割の奪取 | [2026-09-04](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) | `PASS`（最終状態は DC 1 台） |
+| WSUS の構築・試験 | [2026-09-07](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md) | `FAIL`（原因調査は [2026-09-08](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)） |
+
 ## 記録予定
 
 | 検証 | 記録先 | 状態 |
 | --- | --- | --- |
-| Windows Server 評価版 / AD DS 公開再現ラボ | `YYYY-MM-DD-windows-ad-lab.md` | `NOT RUN` |
+| Windows Server 評価版 / AD DS 公開再現ラボ（上の 9 月の記録とは別に、このテンプレートで行う再現） | `YYYY-MM-DD-windows-ad-lab.md` | `NOT RUN` |
 
 ## テンプレート
 
