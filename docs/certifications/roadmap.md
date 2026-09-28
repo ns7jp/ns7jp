@@ -42,7 +42,7 @@ LPIC-1 に関する以前の見直し記録は、履歴としてそのまま残�
 | 変更 | 理由 |
 | --- | --- |
 | **AWS Certified Cloud Practitioner (CLF-C02) を短期目標に追加**（受験目安 2026 Q4、FE・LPIC-1 101 と並行） | AWS SAA は 2027 年後半までの長期目標で、それまで「クラウド未経験ではない」ことを示す資格が一つも無かった。CLF-C02 は受験料・学習期間とも SAA / CCNA よりはるかに小さく、[計画を絞る方針](#2026-07-03-見直し)と矛盾しない |
-| **Azure Fundamentals (AZ-900) を短期目標に追加**（受験目安 CLF-C02 と同時期） | 派遣先の研修（2026-09-15 に終了）で Azure の構築演習に実際に取り組んだ経験があり、[career-bridge.md の AWS → Azure 対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)もすでに用意している。この実体験を裏付ける資格が計画に一つも無かった |
+| **Azure Fundamentals (AZ-900) を短期目標に追加**（受験目安 CLF-C02 と同時期） | [career-bridge.md の AWS → Azure 対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)をすでに用意しているのに、Azure の学習を裏付ける資格が計画に一つも無かった |
 | **情報セキュリティマネジメント試験（SG）を「検討中」へ追加** | 登録セキスペ（応用情報の先の長期目標）とは別に、FE と同水準でエントリー向け・IT サポート/社内 SE 補助トラックに相性のよい資格が候補に無かった |
 
 ### 2026-08-20 見直し（LPIC-1 と FE の優先順位を実態に合わせる）
@@ -154,7 +154,7 @@ LinuC-1 101 は 2026-09-26 の見直しで最優先にし、2026-09-27 に LPIC-
 | 目的 | AWS SAA（2027 年後半）・Azure 実機演習より前に、「クラウド未経験ではない」ことを短期間・低コストで示す |
 | 受験予定 | 2026 Q4 目安。LinuC-1 101・FE の学習が一段落してから、週末学習で 2 週間程度ずつ充てる |
 | 受験料目安（AWS） | AWS 認定はレベルによって受験料が異なり、Associate（本ロードマップでは SAA が該当）は USD 150 程度と案内されることが多い。Foundational の CLF-C02 はこれより低めに設定される傾向があるが、正確な金額は変動するため受験前に AWS 公式サイトで確認する |
-| なぜ 2 つとも取るか | トライアル就業（2026-09-15 に終了）の研修が AWS / Azure の両方をカバーしていたうえ、[career-bridge.md の AWS → Azure 対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)もすでにあるため、AWS だけに絞る根拠が無い |
+| なぜ 2 つとも取るか | 国内 SIer・大手企業の社内基盤では Azure の採用例も多く、[career-bridge.md の AWS → Azure 対応表](../career-bridge.md#27-クラウド基盤の転用可能性aws--azure)もすでにあるため、AWS だけに絞る根拠が無い |
 | 学習方法 | AWS Skill Builder（CLF-C02）、Microsoft Learn（AZ-900）の無料教材のみ。追加費用は受験料のみ |
 | ポートフォリオ連動 | 対応表の裏付けとして使う。実機演習は [11 AWS基礎構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/11-aws-foundational-exercise-design.md) / [10 Azure構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/10-azure-foundational-exercise-design.md)（いずれも設計のみ・未実施）が別途担当する |
 

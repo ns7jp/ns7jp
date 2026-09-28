@@ -22,7 +22,7 @@
 
 | 期間 | 区分 | 内容 | OS | ミドルウェア・ツール | 構築 | 単体試験 | 障害・復旧の演習 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026/07〜09/15 | 研修 | Windows / Linux サーバー構築、AWS / Azure 構築の研修 | Windows Server 2022、Linux | Active Directory、Hyper-V、AWS、Azure | ○ | — | — |
+| 2026/07〜09/15 | 研修 | Windows Server・Linux サーバーの構築、利用者アカウントと権限の管理 | Windows Server 2022、Linux | Active Directory、Hyper-V、DHCP、SSH、Apache、Zabbix、Ansible、Docker | ○ | — | — |
 | 2026/09/01〜08 | 個人学習 | AD の構築・試験、System State 復元、2 台目の DC と複製、FSMO 役割の奪取、WSUS の構築 | Windows Server 2022 | AD DS、DNS、GPO、WSUS、Windows Server バックアップ、PowerShell | ○ | ○ | ○ |
 | 2026/09/04〜15 | 個人学習 | Ubuntu Server の初期構築（固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新）、LVM のオンライン拡張、Docker での監視構成、Ansible・Git の練習 | Ubuntu 24.04、AlmaLinux 9 | OpenSSH、UFW、systemd-timesyncd・chrony（Ansible で適用）、LVM、Docker Compose、Nginx、Prometheus、Grafana、Loki、Ansible、Git | ○ | ○ | ○ |
 | 2025/10〜2026/01 | 職業訓練 | 情報処理（Python エンジニア）コース | — | Python、Flask、PHP、MySQL、HTML / CSS / JavaScript | — | — | — |
@@ -33,4 +33,4 @@
 
 ## 前職
 
-製造・物流の現場で 15 年以上（在庫管理、ピッキング、入出庫、現場の業務改善）。作業時間の計測をもとに、1 日約 1 時間の作業短縮を提案・定着させました（[業務改善レポート](./business-improvement/picking-improvement.md)）。
+製造・物流を中心に約 15 年（在庫管理、ピッキング、入出庫、現場の業務改善）。作業時間の計測をもとに、1 日約 1 時間の作業短縮を提案・定着させました（[業務改善レポート](./business-improvement/picking-improvement.md)）。
