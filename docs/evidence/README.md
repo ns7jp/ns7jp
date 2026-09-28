@@ -13,7 +13,7 @@
 | --- | --- | --- |
 | server-monitor の Git SHA 指定変更・ロールバック CI | [2026-08-23 索引メモ](./2026-08-23-server-monitor-git-rollback-ci.md) | `PASS`（使い捨て runner） |
 
-2026-09 の Windows Server / AD / WSUS の記録は、主作品の [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md#主要な記録) にあります（AI の手順案内を受けて私が VM を操作した記録）。
+2026-09-01〜08 の Windows Server / AD / WSUS の記録は、主作品の [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md#主要な記録) にあります（AI の手順案内を受けて私が VM を操作した記録）。
 
 | 検証 | 記録先 | 状態 |
 | --- | --- | --- |
@@ -22,6 +22,16 @@
 | 2 台目の DC と複製 | [2026-09-03](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-03-ad-second-dc-replication.md) | `PASS` |
 | FSMO 役割の奪取 | [2026-09-04](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) | `PASS`（最終状態は DC 1 台） |
 | WSUS の構築・試験 | [2026-09-07](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md) | `FAIL`（原因調査は [2026-09-08](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)） |
+
+## AI が実行した新ラボの記録
+
+旧環境とは別の Hyper-V ラボで、承認を受けて Codex が操作した記録です。本人操作・独力再現・人間の第三者確認の実績には数えません。
+
+| 検証 | 記録先 | 状態 |
+| --- | --- | --- |
+| 2026-09-27〜28 の Ubuntu・AD・WSUS・復元先 VM | [新ラボの公開結果票](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md) | Ubuntu 10 サービス・再起動後 33 項目 PASS。24 時間試験は欠測・時刻差があり、到達前に本人の指示で終了（未合格・`STOPPED_BY_USER`）。AD・WSUS は部分実施、別 VM への復元は `NOT RUN` |
+
+詳細と公開用集計は server 側を正本とし、未加工ログや機器識別子は複製しません。過去の AD・WSUS の結果を、新環境の結果で上書きしません。
 
 ## 記録予定
 

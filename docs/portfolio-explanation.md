@@ -57,6 +57,8 @@
 
 ### 自分の担当・理解を問われたときの空欄台本
 
+9/27〜28 の[新ラボの公開結果票](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)は、承認を受けて Codex が操作した記録です。Ubuntu の再起動後確認は成功していますが、24 時間試験は欠測・時刻差を記録し、到達前に本人の指示で終了したため未合格です。この結果を読む際も、以下の「自分で行った操作」欄へ転記しません。
+
 ```text
 目的: 私は【学びたいこと】を確かめるために取り組んでいます。
 読んだ範囲: 【文書・設定ファイル】を読み、【役割・理由】を説明できます。
@@ -210,6 +212,8 @@
 ## 8. 次に残す一件と自分の学び
 
 2026-09-17 時点の次の作業は、**元ログ 5 件のハッシュ照合を私が再実施すること**に絞ります。[9 月 15 日の元の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/practice/2026-09-15-lab-base01-original-log-check.md)は、AI が手順を提示し、私が操作して 5 件すべて OK・終了 0 を確認した記録です。AI 支援なしの再現結果はまだありません。
+
+**2026-09-28 追補**：旧環境が残っていないため、元ログを使う再試験は `BLOCKED` です。現在の最初の一件は[採録計画の順位 0](./evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)にある、新しい VM での Ubuntu 初期構築の独力再現です。Codex による新ラボの構築を、その本人実績へ置き換えません。以下の元ログ照合手順は、対象が現存する場合だけ使います。
 
 1. [独力再現ガイド](https://github.com/ns7jp/server/blob/main/docs/independent-rerun-guide.md)と[記録テンプレート](https://github.com/ns7jp/server/blob/main/docs/evidence/templates/independent-rerun.md)を開き、使う資料・対象・予想する結果を実施前に書く。
 2. 元ログと照合用一覧が存在する専用の学習環境で行う。対象がない、場所が分からない場合はそこで止まり、前提不足を記録する。完了に合わせてログを作り直さない。
