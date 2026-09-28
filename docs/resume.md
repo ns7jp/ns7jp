@@ -6,8 +6,10 @@
 >
 > - **確定情報**（資格・学歴・職業訓練・ポートフォリオ）はそのまま記載しています
 > - 「設計サンプル」と「実績」は、ポートフォリオ全体で区別して書いています
+>
+> 案件との照合用の 1 枚版は[スキルシート（SES 形式・要約）](./skill-sheet.md)にあります。
 
-文書更新: 2026-09-23（就業状況もこの日時点の内容です）。
+文書更新: 2026-09-28（就業状況もこの日時点の内容です）。
 
 ---
 
@@ -140,14 +142,48 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 ## 4-b. ポートフォリオにおける AI 支援の範囲
 
-文書の構成・整形・調査に加えて、**実装コード（Ansible role、Terraform module、
-CI workflow、テスト、ラボの雛形）の生成にも AI を使っています**。
-**範囲は主作品に限らず、本書を含む 3 リポジトリすべてです。** マージを除く実作業
-コミットのうち、Claude を著者または共同著者に含むものは次のとおりです
-（2026-08-25 時点、`git log --no-merges` で再現できます）。
+このポートフォリオは、**AI（Anthropic の Claude と OpenAI の Codex）の支援を大きく受けて作っています。** 文書の構成・執筆・調査に加えて、実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ、スクリプト）の生成にも使いました。範囲は主作品に限らず、プロフィール・サイト・副作品（design / shell / network / aws）・教材（learning）を含む**公開中のすべての作品**です。
 
-| リポジトリ | Claude 関与 | 実作業コミット総数 |
+### 作業の流れ
+
+1. AI が手順・コード・設計書の案を作る
+2. 私が手元の VM などで実行し、画面やログを AI に渡す
+3. AI が結果を整理して証跡の文書にし、私が内容を確認して採否を決める
+
+9 月の VM の記録（Windows Server / AD / WSUS と Linux）も、この流れで作りました。AI が手順を案内し、私が操作して結果を画面で確かめたものです。**AI を使わずに再現した記録は、まだありません。**
+
+### AI が関わったコミットの数
+
+マージを除くコミットのうち、作者名または本文（Co-Authored-By など）に Claude か Codex が入っているものの数です（2026-09-28 時点、`git log --no-merges` で数えました）。AI の印が無いコミットにも、AI が生成した内容を私が貼り付けたものが含まれるため、実際の関与はこの数より多くなります。
+
+| リポジトリ | AI の印があるコミット | コミット総数 |
 | --- | --- | --- |
+| ns7jp/ns7jp（プロフィール・本書） | 131（Claude 116、Codex 15） | 209 |
+| ns7jp/server（主作品） | 284（Claude 219、Codex 84） | 354 |
+| ns7jp/ns7jp.github.io（サイト） | 52 | 170 |
+| ns7jp/shell | 22 | 28 |
+| ns7jp/aws | 25 | 30 |
+| ns7jp/network | 5 | 7 |
+| ns7jp/design | 1 | 3 |
+| ns7jp/learning | 1 | 2 |
+
+Claude と Codex の両方が入っているコミットがあるため、内訳の合計は総数と一致しません。副作品（design / shell / network / aws）は、コードと文書の大部分を AI が生成しており、私が実行して確かめた記録はほとんどありません。各リポジトリの README に、その範囲を書いています。
+
+### ポートフォリオ運営の自動化ツール
+
+2026-09-09〜23 の間、ポートフォリオの点検と次の作業の計画づくりに、AI が作った自動化ツールを使っていました。応募に不要なため、9/23 に非公開のリポジトリへ移しました。採否の判断と実機の操作は私が行っています。
+
+### 私が担うこと
+
+- AI が生成した手順やコードを、私が実行・理解していない状態で実績にはしません。
+- 技術選定の最終判断と、面接での説明は私が担当します。
+- 自分で説明できない深さのコードは、面接前に読み直すか、削って単純化します。
+
+### LEARNINGS.md について
+
+[LEARNINGS.md](../LEARNINGS.md)（実機で外した仮説の記録）は、2026-08-25 以降、私だけが編集しています。それ以前のエントリのうち 4 件（Promtail から Alloy への移行、docker kill の 2 件、Hyper-V での AD ドメイン参加）は、AI が本文や「学び」を代筆したものです。履歴を消さずに残したうえで、自分の記述へ置き換えます。
+
+--- | --- | --- |
 | ns7jp/ns7jp（プロフィール・本書） | 42 | 71 |
 | ns7jp/server（主作品） | 49 | 95 |
 | ns7jp/ns7jp.github.io（サイト） | 19 | 77 |
@@ -186,7 +222,7 @@ AI が生成した手順やコードを、私が実行・理解していない�
 | OS | Linux サーバー構築・基本運用（Ubuntu） | ○（[9/7〜8 に Ubuntu Server を手作業で初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)。ほかに個人ラボと研修での構築・確認） |
 | OS | Windows Server 2022（AD DS / DNS / WSUS / Windows Server バックアップ） | ○（9/1〜8 に手元の Hyper-V VM で [AD の構築・試験](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)（必須 31 項目 PASS）、System State 復元、2 台目 DC と FSMO 奪取、[WSUS の構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md)（判定 FAIL、原因特定済み）。AI の手順案内あり、実クライアントを含むドメイン環境・長期運用は未経験） |
 | OS | RHEL 系（AlmaLinux / Rocky 9） | ○（コンテナでの Molecule に加え、[9/4 に手元の再利用 AlmaLinux VM へ基礎設定を適用し、変更 0 件・SELinux enforcing 等を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md)。専用の新規 VM・最小公開・全監視構成は未実施） |
-| ストレージ | LVM（VG / LV / ファイルシステム / fstab / online 拡張） | ○（[8/24 の B-1](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-1.md) で作成・冪等性・online 拡張の 5 PASS。**AI 支援環境の Ubuntu ゲストと loop device での結果**で、自分の VM での同演習の再実行は未実施） |
+| ストレージ | LVM（VG / LV / ファイルシステム / online 拡張） | ○（9/8 に手元の VM で、VG の未割り当て領域を使い `lvextend -l +100%FREE -r` で `/` をオンライン拡張（[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-compose-practice.md)）。PV の追加・fstab の編集・縮小は未実施。VG / LV の作成と PV 追加を含む [8/24 の B-1](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-1.md) は AI 支援環境での実行で、私の実績には数えません） |
 | コンテナ | Docker / Docker Compose | ○（WSL2・使い捨て runner と手元の Hyper-V VM の部分構成で起動・停止・再作成等を確認。長期稼働は未実測） |
 | Web / Proxy | Nginx（リバースプロキシ。TLS は設定例・自己署名証明書での確認まで） | ○ |
 | 監視 | Prometheus / Grafana / Alertmanager | ○（[9/8 に手元の VM で数値表示と停止・復帰表示を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)。Alertmanager は起動確認まで。アラート発火・外部通知は同演習で未実施） |
@@ -232,8 +268,6 @@ AI が生成した手順やコードを、私が実行・理解していない�
 | 作品 | 技術・取り組み | リンク |
 | --- | --- | --- |
 | サーバー構築・監視ラボ（主作品） | Linux / Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform | [server](https://github.com/ns7jp/server) ／ [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) ／ [案件概要](https://ns7jp.github.io/project-brief.html) |
-| 掲示板アプリ | PHP / MySQL / CSRF 対策 / bcrypt / PDO | [post](https://github.com/ns7jp/post) |
-| SNS アプリ「Pulse」 | PHP / SQLite | [pulse](https://github.com/ns7jp/pulse) |
 | 学習作品集 | Python / HTML / CSS | [works](https://github.com/ns7jp/works) |
 
 ---
