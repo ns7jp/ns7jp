@@ -268,7 +268,7 @@ Claude と Codex の両方が入っているコミットがあるため、内訳
 | 作品 | 技術・取り組み | リンク |
 | --- | --- | --- |
 | サーバー構築・監視ラボ（主作品） | Linux / Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform | [server](https://github.com/ns7jp/server) ／ [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) ／ [案件概要](https://ns7jp.github.io/project-brief.html) |
-| 職業訓練の作品集 | 職業訓練（2025/10〜2026/01）で制作した 6 作品の索引。Python（Flask / Flet / tkinter）/ PHP / SQLite / MySQL / HTML / CSS / JavaScript。コードは 2 作品が works に、4 作品が別のリポジトリにあります | [works](https://github.com/ns7jp/works) |
+| 職業訓練の作品集 | 職業訓練（2025/10〜2026/01）で制作した 6 作品の索引。Python（Flask / Flet / tkinter）/ PHP / SQLite / MySQL / HTML / CSS / JavaScript。コードは 2 作品が works の main に、3 作品（Pulse・掲示板・企業サイト）が works の同名ブランチに、サーバー監視ダッシュボードが別のリポジトリにあります | [works](https://github.com/ns7jp/works) |
 
 ---
 
