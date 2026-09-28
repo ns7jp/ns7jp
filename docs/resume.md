@@ -19,7 +19,7 @@
 
 この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を構築・検証してきました。2026 年 9 月には、手元の Hyper-V 上の仮想マシンで Windows Server 2022 の Active Directory と Ubuntu Server を構築し、試験と復旧まで確かめました。AI の手順案内を受けながら私が操作した記録で、詳細は [§4](#4-活かせる経験知識スキル) にあります。第一志望は **Linux サーバー設計・構築** です。入口業務としてのインフラ監視・運用や、応募先によっては IT サポート・社内 SE 補助にも対応します。**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
 
-**就業状況（2026-09-23 時点）**: 人材派遣会社（アデコ株式会社）を通じた IT 企業でのトライアル就業（2026/07〜）は、2026-09-15 に終了しました。**現在は求職中で、すぐに勤務を開始できます。** 就業先の社名は面談時に開示します。
+**就業状況（2026-09-28 時点）**: 人材派遣会社（アデコ株式会社）を通じた IT 企業でのトライアル就業（2026/07〜）は、2026-09-15 に終了しました。**現在は求職中で、すぐに勤務を開始できます。** 就業先の社名は面談時に開示します。
 研修では仮想マシン上の Windows Server / Linux サーバーと AWS / Azure の構築演習に取り組みました。これは研修での経験で、顧客環境の設計・構築を担当した実績とは区別しています。
 職業訓練修了（2026-01）後、サーバー構築へのキャリア移行を目標に学習とポートフォリオ制作を続けています。**入社後はインフラ領域の実務経験を積み、サーバー構築・運用を担えるエンジニアになることを目指しています。**
 
@@ -38,6 +38,8 @@
 | 使用環境 | Windows 11、Active Directory、AWS、Azure |
 
 #### 取り組み事例: AD ドメイン参加時の名前解決障害（2026-08）
+
+> この事例の記述は AI が代筆したものです（[§4-b](#4-b-ポートフォリオにおける-ai-支援の範囲)参照）。私の記憶に基づく書き直しは、まだ終えていません。
 
 Hyper-V で Windows Server 評価版の AD DS を構築した際、クライアント VM からドメインに参加できない事象に遭遇しました。
 
@@ -80,7 +82,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 | 項目 | 内容 |
 | --- | --- |
-| 志望領域 | 第一志望: サーバー設計・構築。入口としてインフラ監視・運用にも対応。応募先によっては IT サポート・社内 SE 補助も可 |
+| 志望領域 | 第一志望: Linux サーバー設計・構築。Windows Server / Active Directory（AD）の構築にも対応。入口としてインフラ監視・運用にも対応。応募先によっては IT サポート・社内 SE 補助も可 |
 | 夜勤・交代制 | 24/365 監視業務のシフト勤務に対応可能 |
 | 勤務開始時期 | すぐに開始できます |
 | 勤務地 | 東京都内通勤可能圏 |
@@ -142,7 +144,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 ## 4-b. ポートフォリオにおける AI 支援の範囲
 
-このポートフォリオは、**AI（Anthropic の Claude と OpenAI の Codex）の支援を大きく受けて作っています。** 文書の構成・執筆・調査に加えて、実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ、スクリプト）の生成にも使いました。範囲は主作品に限らず、プロフィール・サイト・副作品（design / shell / network / aws）・教材（learning）を含む**公開中のすべての作品**です。
+このポートフォリオは、**AI（Anthropic の Claude と OpenAI の Codex）の支援を大きく受けて作っています。** 文書の構成・執筆・調査に加えて、実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ、スクリプト）の生成にも使いました。範囲は主作品に限らず、プロフィール・サイト・副作品（design / shell / network / aws）・教材（learning）・職業訓練の作品集（works）を含む**公開中のすべての作品**です。
 
 ### 作業の流れ
 
@@ -158,14 +160,15 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 | リポジトリ | AI の印があるコミット | コミット総数 |
 | --- | --- | --- |
-| ns7jp/ns7jp（プロフィール・本書） | 131（Claude 116、Codex 15） | 209 |
-| ns7jp/server（主作品） | 284（Claude 219、Codex 84） | 354 |
-| ns7jp/ns7jp.github.io（サイト） | 52 | 170 |
-| ns7jp/shell | 22 | 28 |
-| ns7jp/aws | 25 | 30 |
-| ns7jp/network | 5 | 7 |
-| ns7jp/design | 1 | 3 |
-| ns7jp/learning | 1 | 2 |
+| ns7jp/ns7jp（プロフィール・本書） | 133（Claude 118、Codex 16） | 211 |
+| ns7jp/server（主作品） | 285（Claude 220、Codex 84） | 355 |
+| ns7jp/ns7jp.github.io（サイト） | 53 | 171 |
+| ns7jp/shell | 23 | 29 |
+| ns7jp/aws | 26 | 31 |
+| ns7jp/network | 6 | 8 |
+| ns7jp/design | 2 | 4 |
+| ns7jp/learning | 2 | 3 |
+| ns7jp/works（職業訓練の作品集） | 6 | 66 |
 
 Claude と Codex の両方が入っているコミットがあるため、内訳の合計は総数と一致しません。副作品（design / shell / network / aws）は、コードと文書の大部分を AI が生成しており、私が実行して確かめた記録はほとんどありません。各リポジトリの README に、その範囲を書いています。
 
@@ -181,28 +184,25 @@ Claude と Codex の両方が入っているコミットがあるため、内訳
 
 ### LEARNINGS.md について
 
-[LEARNINGS.md](../LEARNINGS.md)（実機で外した仮説の記録）は、2026-08-25 以降、私だけが編集しています。それ以前のエントリのうち 4 件（Promtail から Alloy への移行、docker kill の 2 件、Hyper-V での AD ドメイン参加）は、AI が本文や「学び」を代筆したものです。履歴を消さずに残したうえで、自分の記述へ置き換えます。
+[LEARNINGS.md](../LEARNINGS.md)（実機で外した仮説の記録）は、2026-08-25 以降の新しいエントリを私だけが書いています（見出しや注記の整理、リンクの張り替えで AI が編集したコミットはあります。2026-08-26 の `e7901f4`・`ea284ed` と、2026-09-17 の #125 です）。2026-09-27 に追加した 9 月分の 3 件は、私が書きました。
 
---- | --- | --- |
-| ns7jp/ns7jp（プロフィール・本書） | 42 | 71 |
-| ns7jp/server（主作品） | 49 | 95 |
-| ns7jp/ns7jp.github.io（サイト） | 19 | 77 |
+それより前の 6 件は、AI が次のように関わっています（`git log -- LEARNINGS.md` で確認できます）。
 
-9 月の VM の記録（Windows Server / AD / WSUS と Linux）は、AI が手順を案内し、私が操作して結果を画面で確かめたものです。
-AI が生成した手順やコードを、私が実行・理解していない状態で実績にはしません。
-技術選定の最終判断と面接での説明は私が担当します。
-自分で説明できない深さのコードは、面接前に読み直すか、削って単純化する方針です。
+| エントリ | 症状〜対処の本文 | 学び |
+| --- | --- | --- |
+| Promtail から Alloy への移行（2026-03） | AI が代筆 | AI が代筆 |
+| docker kill の 2 件（2026-08） | AI が代筆 | AI が代筆 |
+| Hyper-V での AD ドメイン参加（2026-08） | AI が代筆 | AI が代筆 |
+| UFW の allow と limit の競合（2026-08） | AI の下書き | 私 |
+| コンテナの chrony が動かなかった件（systemd の誤診、2026-08） | AI の下書き | 私 |
 
-**例外として、[LEARNINGS.md](../LEARNINGS.md)（実機で外した仮説の一次記録）は
-2026-08-25 以降、私だけが編集します。** それ以前は AI が「学び」欄を代筆した
-コミットが含まれており、これは方針に反していたため、履歴を消さずに残したうえで
-自分の記述へ置き換えます。
+代筆の 4 件は、履歴を消さずに残したうえで、自分の記述へ置き換えます。
 
 ---
 
 ## 5. テクニカルスキル
 
-> レベルの目安: ◎ 自作物で反復利用・検証している / ○ 構築・設定経験あり / △ 学習中・基礎。長期運用や本番環境での実務経験を示す記号ではありません。
+> レベルの目安: ◎ 自作物で反復利用・検証している / ○ 構築・設定経験あり / △ 学習中・基礎 / — 自分の環境での実行記録なし（学習のみ）。長期運用や本番環境での実務経験を示す記号ではありません。
 
 ### プログラミング / スクリプト
 
@@ -213,7 +213,7 @@ AI が生成した手順やコードを、私が実行・理解していない�
 | スクリプト | PowerShell | △（AD / WSUS の構築・確認で使用、AI の案内あり） |
 | Web | HTML / CSS / JavaScript | ○ |
 | データベース | SQL（SQLite / MySQL） | ○ |
-| データベース | PostgreSQL（3 層構成での接続、`pg_dump` / `pg_restore`） | △（[3 層ラボ](https://github.com/ns7jp/server/tree/main/labs/three-tier)として実装。`pg_dump` / `pg_restore` の復元演習を[実行し 7 PASS を採録](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒。Docker コンテナ上）。実 VM 上の 3 層構築は未実施） |
+| データベース | PostgreSQL（3 層構成での接続、`pg_dump` / `pg_restore`） | —（学習のみ。[3 層ラボ](https://github.com/ns7jp/server/tree/main/labs/three-tier)のコードは AI が生成したもので、復元演習の [8/24 の B-3](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-3.md) は AI 支援環境での実行のため、私の実績には数えません。自分の VM での実行は未実施） |
 
 ### インフラ / 運用
 
@@ -268,7 +268,7 @@ AI が生成した手順やコードを、私が実行・理解していない�
 | 作品 | 技術・取り組み | リンク |
 | --- | --- | --- |
 | サーバー構築・監視ラボ（主作品） | Linux / Docker / Nginx / Prometheus / Grafana / Loki / Alloy / Ansible / Terraform | [server](https://github.com/ns7jp/server) ／ [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) ／ [案件概要](https://ns7jp.github.io/project-brief.html) |
-| 学習作品集 | Python / HTML / CSS | [works](https://github.com/ns7jp/works) |
+| 職業訓練の作品集 | 職業訓練（2025/10〜2026/01）で制作した 6 作品の索引。Python（Flask / Flet / tkinter）/ PHP / SQLite / MySQL / HTML / CSS / JavaScript。コードは 2 作品が works の main に、3 作品（Pulse・掲示板・企業サイト）が works の同名ブランチに、サーバー監視ダッシュボードが別のリポジトリにあります | [works](https://github.com/ns7jp/works) |
 
 ---
 
