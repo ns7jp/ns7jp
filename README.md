@@ -13,7 +13,7 @@
 | # | 題材 | 何を示すか | 記録 |
 | --- | --- | --- | --- |
 | 1 | **AD の冗長化と復旧** | Windows Server 2022 で AD を構築し必須 31 項目 PASS。DC を 2 台にして複製を確認し、System State 復元と、1 台を失った想定での FSMO 役割の奪取まで実施 | [構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)・[復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)・[FSMO 奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) |
-| 2 | **Ubuntu の構築と監視** | 固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新を手作業で設定し、わざと起こした設定不備から復旧。Prometheus / Grafana / Loki で停止と復帰を確認 | [初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)・[監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md) |
+| 2 | **Ubuntu の構築と監視** | 固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新を手作業で設定し、わざと起こした設定不備から復旧。Prometheus / Grafana でアプリの手動停止・再開に伴う収集状態の 1→0→1 を確認し、Loki で Nginx の目印付きログを検索 | [初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)・[監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)・[ログ検索](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-loki-practice.md) |
 | 3 | **原因の切り分け** | WSUS の試験が FAIL。承認件数の突き合わせで前日の仮説を否定し、「分類・製品 0 件＝絞り込みなし」という真因を特定して手順書を修正 | [原因特定](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md) |
 
 主作品は **[サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server)** です。上の 3 本以外の練習記録は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)に日付順で並べています。
