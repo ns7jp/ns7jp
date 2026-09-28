@@ -12,6 +12,14 @@
 
 > 個人の学習記録で、AI の支援（手順の案内など）を受けながら私が操作しました。前提と未実施の範囲は[正直な境界](#正直な境界)にまとめています。
 
+| 応募条件 | 内容 |
+| --- | --- |
+| 勤務開始 | すぐに開始できます（求職中） |
+| 勤務地 | 東京都内通勤可能圏 |
+| 雇用形態 | 正社員志望。SES も可 |
+| シフト | 24/365 監視業務のシフト勤務（夜勤を含む）に対応可能 |
+| 希望年収 | 応相談 |
+
 | [主作品 `server`](https://github.com/ns7jp/server) | [最新の実測](#実測したこと) | [職務経歴書](./resume.md) |
 | --- | --- | --- |
 | 構成、コード、実行方法を確認 | 9 月に手元の VM で構築・試験・復旧した内容を確認 | これまでの経験、希望条件、AI 支援の範囲を確認 |
@@ -40,13 +48,7 @@
 
 **就業状況**: 人材派遣会社（アデコ株式会社）を通じた IT 企業でのトライアル就業（2026/07〜、Windows / Linux サーバー構築と AWS / Azure 構築の研修）は、2026-09-15 に終了しました。現在は求職中で、すぐに勤務を開始できます。就業先の社名は面談時に開示します。
 
-| 項目 | 内容 |
-| --- | --- |
-| 勤務地 | 東京都内通勤可能圏 |
-| 夜勤・交代制 | 24/365 監視業務のシフト勤務に対応可能 |
-| 勤務開始時期 | すぐに勤務を開始できます |
-
-雇用形態・英語力・運転免許などの条件は、[職務経歴書・スキルシート](./resume.md#3-希望条件働き方)または応募書類・面談時にお伝えします。
+応募条件は冒頭の表のとおりです。英語力・運転免許などは[職務経歴書・スキルシート](./resume.md#3-希望条件働き方)にあります。
 
 **Windows Server / AD の構築・運用**と、入口としてのインフラ監視・運用にも対応します。応募先によっては、IT サポート・社内 SE 補助も担当できます。
 
@@ -65,7 +67,7 @@ Windows Server 2022 評価版の VM で、AI の手順案内を受けながら�
 | 9/3 [DC 1 台の計画停止](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-03-ad-dc-outage-drill.md) | 停止中も残りの DC で DNS・LDAP・Kerberos・新規オブジェクト作成が継続。復帰後のサービス復旧 4 分 51 秒、完全な収束 18 分 31 秒（強制再同期が必要） |
 | 9/4 [FSMO 役割の奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) | 正常停止した DC を復旧不能と想定し、残りの DC で役割を奪取。`ntdsutil` で古い DC の情報を削除し、単一 DC で DNS・LDAP・Kerberos が正常 |
 | 9/7 [WSUS の構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md) | ドメインに参加させた更新配信サーバーを構築。必須 28 項目中 26 PASS・1 FAIL・1 期待結果未達で、判定は FAIL。GPO の適用と[ネットワーク実機検証](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-network-host-validation-wsus.md) 9 項目は PASS |
-| 9/8 [WSUS の原因特定](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md) | 残った 2 件の原因を実機で特定し、手順書を修正。FAIL の真因は、承認ルールの分類・製品が 0 件で保存され、「絞り込みなし」と解釈されたこと（通しの再試験は未実施） |
+| 9/8 [WSUS の原因調査](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md) | 残った 2 件の原因を実機で調べ、手順書を修正。FAIL の最有力の原因は、承認ルールの分類・製品が 0 件で保存され、「絞り込みなし」と解釈されたこと（0 件になった操作は再現できておらず、通しの再試験も未実施） |
 
 設計書・手順書・試験仕様書は [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad)と [WSUS 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-wsus)にあります。
 
@@ -103,9 +105,9 @@ Ansible（サーバー設定の自動化ツール）で、手元の VM 2 台に 
 
 Linux 側の設計、パラメータ、構築、試験、変更、引き渡しの成果物は、[案件概要](https://ns7jp.github.io/project-brief.html)と [Linux サーバー構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package)にあります。
 
-## 追加の実測演習
+## AI による参考実行（私の実績には数えません）
 
-2026-08-24 の次の演習は、**AI 支援セッションが自身の作業環境（私の VM ではありません）で実行したもの**です。B-1 は仮想ディスク（loop device）付き Ubuntu ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace を使いました。
+2026-08-24 の次の演習は、**AI 支援セッションが自身の作業環境（私の VM ではありません）で実行したもの**です。手順とスクリプトが動くことの参考として載せており、私の操作経験やスキル評価の根拠には数えません。B-1 は仮想ディスク（loop device）付き Ubuntu ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace を使いました。
 
 | 演習 | 実演内容 | 所要 | 結果 |
 | --- | --- | --- | --- |
@@ -146,7 +148,7 @@ Linux 側の設計、パラメータ、構築、試験、変更、引き渡し�
 
 性能試験では、旧集計が HTTP 502（並列 4 で 39.15%、並列 8 で 1.96%）を失敗率から除いていたことを、9/17 に AI 支援で見つけました。修正前の数値は、性能の根拠には使いません。分析と原資料は[結果票](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md)にあります。
 
-**AI を使わずに再現した記録は、まだ 1 件もありません。** そのため「AI なしでどこまでできるか」は、今の資料からは読み取れません。最初の一件として、[元ログ 5 件のハッシュ照合と、自分の学びを一件書くこと](./portfolio-explanation.md#8-次に残す一件と自分の学び)に取り組みます。条件とテンプレートは[独力再現ガイド](https://github.com/ns7jp/server/blob/main/docs/independent-rerun-guide.md)に用意しました。
+**AI を使わずに再現した記録は、まだ 1 件もありません。** そのため「AI なしでどこまでできるか」は、今の資料からは読み取れません。最初の一件は、新しい VM で Ubuntu Server の初期構築（固定 IP・SSH 鍵認証・UFW・時刻同期、`sshd -t` での誤設定の検出と復旧）を、手順書と man だけで行い、画面を録画して記録します。条件は[独力再現ガイド](https://github.com/ns7jp/server/blob/main/docs/independent-rerun-guide.md)と[採録計画](./evidence-capture-checklist.md)にあります。
 
 AI は文書だけでなく、実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成にも使っています。範囲の詳細は[職務経歴書・スキルシート §4-b](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)に書きました。
 
