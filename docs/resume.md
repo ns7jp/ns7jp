@@ -255,10 +255,9 @@ Claude と Codex の両方が入っているコミットがあるため、内訳
 
 | 時期 | 資格 | 学習ログ |
 | --- | --- | --- |
-| 2026 Q4 前半（受験日は本人が確定。現在の最優先） | LinuC-1 101 | [#5](https://github.com/ns7jp/ns7jp/issues/5) |
-| 2026 Q4（12 月までに受験） | 基本情報技術者試験（FE） | 着手時に作成 |
-| 101 合格後（FE 受験後） | LinuC-1 102 | [#6](https://github.com/ns7jp/ns7jp/issues/6) |
-| 2026 Q4（FE・LinuC-1 と並行） | AWS CLF-C02 ／ Azure AZ-900 | 着手時に作成 |
+| 2026 Q4（12 月までに受験。現在の最優先） | 基本情報技術者試験（FE） | 着手時に作成 |
+| 2026 Q4（FE と並行） | AWS CLF-C02 ／ Azure AZ-900 | 着手時に作成 |
+| 保留中（FE 受験後に再開を判断） | LinuC-1 101 / 102 | [#5](https://github.com/ns7jp/ns7jp/issues/5) / [#6](https://github.com/ns7jp/ns7jp/issues/6) |
 | 2027 | CCNA → AWS SAA | 着手時に作成 |
 
 詳細（就業後に検討する資格を含む）: [資格取得ロードマップ](./certifications/roadmap.md)
