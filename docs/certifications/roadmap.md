@@ -141,6 +141,7 @@ gantt
 | 制度の変わり目 | 現行試験制度は 2026 年度で終了し 2027 年度から新制度へ移行予定。2027 年 1 月頃から約 1 か月の CBT 休止も予定されているため、現行制度のうちに受験する |
 | 学習方法 | 過去問道場 + 参考書。**科目 B（アルゴリズム）は職業訓練の Python 学習がそのまま活きる** |
 | ポートフォリオ連動 | セキュリティ・ネットワーク分野は server-monitor の設計と対応付けて学習 |
+| 進捗の公開 | [#139](https://github.com/ns7jp/ns7jp/issues/139) に**月 1 回**、学習範囲・模試スコアを記録（進まなかった月もその旨を記録。§0 ルール 2 と同じ頻度） |
 
 ### AWS Certified Cloud Practitioner (CLF-C02) / Azure Fundamentals (AZ-900) — 低コストの前哨資格
 
@@ -233,11 +234,12 @@ gantt
 
 ### 公開中の学習ログ Issue
 
+- [#139 基本情報技術者試験（FE）](https://github.com/ns7jp/ns7jp/issues/139)（現在の最優先。2026 年 12 月までに受験）
 - [#5 LinuC-1 101](https://github.com/ns7jp/ns7jp/issues/5)（保留中。FE 受験後に再開を判断）
 - [#6 LinuC-1 102](https://github.com/ns7jp/ns7jp/issues/6)（保留中。101 の再開後）
 - [#7 ITIL 4 Foundation](https://github.com/ns7jp/ns7jp/issues/7)（就業後に検討へ変更。用語学習の記録に利用）
 
-FE・CCNA 以降は、着手時に同じ形式で Issue を作成します。
+CCNA 以降は、着手時に同じ形式で Issue を作成します。
 
 ---
 
