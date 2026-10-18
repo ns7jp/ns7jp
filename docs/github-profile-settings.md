@@ -15,6 +15,8 @@
 | ピン留め | [作品の役割に合わせた配置案](./github-profile-cleanup.md#ピン留めで見せる順番)を作成 | 現在の表示・変更適用は未確認 |
 | 言語判定 | `.gitattributes` の `archive/** linguist-documentation` を維持 | `archive/tools/portfolio-loop/loop.mjs` で属性 `set` を確認。GitHub の表示は未確認 |
 
+> **2026-10-18 追記**：2026-09-23 に `archive/` の運営ツールを非公開のリポジトリへ移し、言語判定用の `.gitattributes` も削除しました（[作品案内](./github-profile-cleanup.md#言語判定と入口の確認)）。上の表の「言語判定」の行は 2026-09-17 時点の内容で、`archive/tools/portfolio-loop/loop.mjs` は今のリポジトリにはありません。GitHub の Languages 表示は未確認です。
+
 ### 今回の設定適用記録
 
 | 項目 | 状態 | 再確認 |
