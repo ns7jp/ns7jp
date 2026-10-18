@@ -232,7 +232,7 @@ Claude と Codex の両方が入っているコミットがあるため、内訳
 | 構成管理 | Ansible | ○（手元の VM への基礎設定適用と、ホーム内のファイル生成・変更予測・入力検証を確認。全監視構成の `site.yml` 一括適用・再実行の記録は使い捨て runner。上記の環境別記録を参照） |
 | 版管理 | Git | △（手元の VM 内でブランチ・履歴・競合解消・中止を実行。AI の案内あり。VM からの push と独力での説明は未実施） |
 | IaC | Terraform（AWS） | △（`validate` / `fmt` まで。`apply` は未実施） |
-| ネットワーク | 静的ルーティング / `ip_forward` / 802.1Q VLAN | △（[L2 / L3 ラボ](https://github.com/ns7jp/server/tree/main/labs/routing)として実装。物理スイッチ・ケーブル・ポート VLAN は未着手） |
+| ネットワーク | 静的ルーティング / `ip_forward` / 802.1Q VLAN | △（[L2 / L3 ラボ](https://github.com/ns7jp/server/tree/main/labs/routing)として実装。[8/24 の B-4](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-4.md) は AI 支援環境での実行で、私の実績には数えません。VLAN の 3 項目は、その環境の kernel が VLAN に対応しておらず未検証です。物理スイッチ・ケーブル・ポート VLAN は未着手） |
 | CI / セキュリティ | GitHub Actions / Trivy / pip-audit | ○（[PR #75 の 5 workflow が success](https://github.com/ns7jp/server/pull/75)。[PR #77 で Git SHA 指定の変更・ロールバック CI が success](https://github.com/ns7jp/server/actions/runs/32611251044)。Docker は runner に事前導入済み） |
 
 実装範囲と検証境界は [アーキテクチャ図](./architecture-diagram.md) を参照してください。
