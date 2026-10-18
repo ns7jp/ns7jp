@@ -72,7 +72,7 @@
 | 通知 | Alertmanager | 警告を整理し、通知先へ送る |
 | 構築・起動 | Ansible / Docker Compose | OS の設定をそろえる / 複数のコンテナを起動する |
 
-詳細は[構成図](./docs/architecture-diagram.md)にあります。副作品（[design](https://github.com/ns7jp/design)・[shell](https://github.com/ns7jp/shell)・[network](https://github.com/ns7jp/network)・[aws](https://github.com/ns7jp/aws)）の確認範囲は[作品案内](./docs/github-profile-cleanup.md#主作品と副作品)に書いています。
+詳細は[構成図](./docs/architecture-diagram.md)にあります。
 
 ## 失敗から学んだこと
 
@@ -114,7 +114,7 @@
 - AWS への実際の構築（`apply / destroy`）、別の VM への復元
 - 組織の DNS やクライアント PC を含むドメイン環境、第三者による手順の確認
 
-初心者向けの教材は [ns7jp/learning](https://github.com/ns7jp/learning) に分けています（採用の判断には不要です）。
+ほかの学習用リポジトリ（design・shell・network・aws と、教材の learning）は、2026-10-18 に更新を止めた参考資料です。採用の判断には不要です。確認範囲は[作品案内](./docs/github-profile-cleanup.md#主作品と副作品)に書いています。
 
 ## Contact
 
