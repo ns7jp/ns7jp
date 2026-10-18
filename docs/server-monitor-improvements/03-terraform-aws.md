@@ -11,6 +11,8 @@
 > - `environments/prod` は、一度も `apply` しないまま 2026-09-27 に削除しました。現在の環境は dev と D-2 用の staging だけです。
 > - State のロックは、実装では DynamoDB を使っています。`use_lockfile`（S3 ネイティブロック）への切り替えは予定で、未実施です。切り替えには Terraform 1.10 以上が必要で、CI（1.9.8）とバージョン制約を同時に上げる必要があります。
 >
+> **2026-10-18 追記**：上の 2 点のほかに、[7. セキュリティ設計](#7-セキュリティ設計)の「監査・検知」も実装と食い違っています。CloudTrail と GuardDuty は monitoring モジュールにありますが、dev・staging のどちらでも作らない設定（`enable_cloudtrail = false`、`enable_guardduty = false`）です。AWS Config は Terraform のコードにありません。
+>
 > この設計は AWS の公式ドキュメントやベストプラクティス集を参考に組み立てたものであり、
 > 実務での AWS 運用経験に基づくものではない。設定値の妥当性やトレードオフを面接で
 > 深く問われた場合、体系立てて説明できるレベルには達していない。
@@ -149,7 +151,7 @@ terraform {
 | アクセス制御 | EC2 はプライベートのみ（ALB のみパブリック）、SSH 鍵 + IAM SSM Session Manager 推奨、IMDSv2 強制 |
 | 暗号化 | EBS 全ボリューム暗号化、S3 バケット暗号化 + Public Access Block 全有効 |
 | IAM / Secrets | インスタンスプロファイルでロールを分離、機密情報は Secrets Manager + KMS（Terraform では `sensitive`） |
-| 監査・検知 | CloudTrail（全リージョン）/ Config / GuardDuty を有効化 |
+| 監査・検知 | CloudTrail（全リージョン）/ Config / GuardDuty を有効化（設計時点の内容。今の実装では作らない設定で、Config はコードに無い。冒頭の 2026-10-18 追記を参照） |
 
 ---
 
