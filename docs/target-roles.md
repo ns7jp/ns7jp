@@ -25,7 +25,7 @@
 | --- | --- | --- |
 | サーバー構築 | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package) | Ansible の check / apply / 2 回目の冪等性、試験結果 |
 | インフラ運用・監視 | [server](https://github.com/ns7jp/server) | Grafana → alert → logs → recovery |
-| ネットワークを含む運用 | [L2 / L3 切り分けラボ](https://github.com/ns7jp/server/tree/main/labs/routing) | 静的ルート、`ip_forward`、VLAN ID 不一致の切り分け |
+| ネットワークを含む運用 | [L2 / L3 切り分けラボ](https://github.com/ns7jp/server/tree/main/labs/routing)（AI 支援環境での実行。VLAN の 3 項目は未検証） | 別のセグメントから ping は通るが、SSH（22 番）は UFW で拒否されることと、そのログの読み方（[9/7〜8 の T-13](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)） |
 | RHEL 系が主な現場 | [AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server/tree/main/ansible/roles/common) | `dnf` / firewalld / SELinux の差分と、[Molecule `el9` シナリオの実行証跡](https://github.com/ns7jp/server/actions/runs/32811100007) |
 | Windows Server / AD が中心の現場 | [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad) と [作業結果・引き渡し報告（SM-AD-001）](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md) | System State 復元の流れと、GPO による設定の上書きを切り分けた説明 |
 | IT サポート・社内 SE | [AD の構築・試験の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)と[ドメイン参加時の名前解決障害の対処](./resume.md#取り組み事例-ad-ドメイン参加時の名前解決障害2026-08) | トライアル就業の研修で遭遇したドメイン参加の失敗（DNS の向き先の誤り）を例にした、確認順と記録方法 |

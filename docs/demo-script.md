@@ -4,7 +4,7 @@
 >
 > 2026-08-22 時点で、[2 分 15 秒の実測証跡リプレイ](https://ns7jp.github.io/demo.html)を公開しています。これは実操作の連続録画ではなく、2026-08-18・19 に保存した実測スクリーンショットと D-1 復旧ログを時系列で再構成した映像です。
 
-最終更新: 2026-09-26（面接でのライブ操作の台本を追加）
+最終更新: 2026-10-18（ライブ操作の対象 VM を、今ある `ubuntu-practice01` に変更）
 
 ## いま確認できるもの
 
@@ -69,7 +69,7 @@ Slack 通知は実配信の証跡がまだないため、動画の必須条件�
 
 ## 面接でのライブ操作（5 分・AI なし）
 
-保存済みのリプレイではなく、面接の画面共有で**その場で操作して見せる**ための台本です。事前に `lab-base01`（Ubuntu VM）で app と nginx の最小構成を起動しておきます。状態は **NOT RUN**（通し練習の記録なし）です。練習の記録は[採録計画の順位 0c](./evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)に残します。
+保存済みのリプレイではなく、面接の画面共有で**その場で操作して見せる**ための台本です。事前に `ubuntu-practice01`（Ubuntu VM）で app と nginx の最小構成を起動しておきます。この VM は [2026-10-01 の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-10-01-ubuntu-practice01-nginx-manual-recovery.md)と同じく、作業場所が `~/server-nginx-practice`、Compose 名が `nginx-practice` なので、表の `docker compose` には毎回 `-p nginx-practice` を付けます。9 月の記録に使った `lab-base01` は残っていません。状態は **NOT RUN**（通し練習の記録なし）です。練習の記録は[採録計画の順位 0c](./evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)に残します。
 
 | 時間 | 操作 | 口頭で伝えること |
 | --- | --- | --- |
