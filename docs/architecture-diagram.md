@@ -41,9 +41,10 @@ blackbox-exporter は対象サービスと同じホスト内にあるため、�
 
 ## AWS Terraform 構成（コード実装済み、適用証跡は未収録）
 
-ローカルラボと同じ構成を、AWS 上で ALB + 2 台の EC2 として動かす Terraform コードを
-用意している。CloudWatch によるアラーム通知、AWS Backup によるスナップショット、
-基本的な監査ログの有効化などをあわせてコード化した。
+ローカルラボと同じ構成を、AWS 上で ALB + EC2 1 台として動かす Terraform コード（dev と、D-2 用の staging）を
+用意している。CloudWatch によるアラーム通知、AWS Backup によるスナップショットなどをあわせてコード化した。
+API の操作を記録する CloudTrail（監査ログ）と、不審な挙動を検知する GuardDuty は、どちらの環境でも作らない設定にしている。
+EC2 2 台の本番想定（prod）は、一度も apply しないまま 2026-09-27 に削除した。
 
 実装済みなのはコードのみで、実際に `terraform apply` した実績・実費は未収録。
 詳細な構成図とセキュリティ設定は

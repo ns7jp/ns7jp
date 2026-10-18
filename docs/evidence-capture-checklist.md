@@ -2,10 +2,10 @@
 
 > **本ドキュメントの位置付け**
 >
-> 本ポートフォリオは、使い捨て Ubuntu 24.04 上の Full-stack E2E まで実測済みです。一方で、**独立した引き渡し対象ホストや外部サービスを使う証跡は不足**しています（[STATUS.md](../STATUS.md) でも次の伸びしろと明記）。
+> 本ポートフォリオには、使い捨て Ubuntu 24.04 上の Full-stack E2E（CI の結果）と、手元の Hyper-V の VM で私が操作した個別の記録（2026-09〜10。AI の手順案内あり）があります。一方で、**独立した引き渡し対象ホストや外部サービスを使う証跡は不足**しています（[STATUS.md](../STATUS.md) でも次の伸びしろと明記）。
 > このチェックリストは、**新規の設計を増やすのをやめ、既存の設計を「実物」に変換する**ための実行計画です。設計書ではなく作業手順として使います。
 
-最終更新: 2026-09-28（新ラボの AI 実行記録と残作業を反映。本人の独力再現・第三者確認は追加していません）。8 月の CI 等の完了履歴は下の「これまでの証跡採録履歴」、9/1〜15 の本人操作による AD・WSUS・Linux の実測は [server の検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)で確認します。
+最終更新: 2026-10-18（冒頭の位置付け、順位 0b、優先 8a の注記を今の状態に合わせました。2026-09-28 に新ラボの AI 実行記録と残作業を反映。本人の独力再現・第三者確認は追加していません）。8 月の CI 等の完了履歴は下の「これまでの証跡採録履歴」、9/1〜15 の本人操作による AD・WSUS・Linux の実測は [server の検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)で確認します。
 
 **9/27〜28 の部分実施**：[新ラボの公開結果票](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)に、Codex による Ubuntu 10 サービス稼働・再起動後 33 項目 PASS を採録しました。観測の +0 / +1 / +6 時間点は PASS ですが、欠測・時刻差があり、24 時間到達前に本人の指示で終了したため、24 時間試験は未合格です。観測は停止済みで、この計画の更新によって再開しません。
 
@@ -20,7 +20,7 @@
 | 順位 | 次に採録するもの | 完了条件 |
 | --- | --- | --- |
 | 0 | **AI を使わない独力再現（1 件目）** | **既定は、新しい VM での Ubuntu Server の初期構築**（固定 IP・SSH 鍵認証・UFW・時刻同期、`sshd -t` での誤設定の検出と復旧）を、手順書と man だけで行うこと。構築の力を示すため、ローカルの pytest 実行などは補助の記録とし、1 件目には数えない。以下はその他の候補：[独力再現ガイド](https://github.com/ns7jp/server/blob/main/docs/independent-rerun-guide.md)の元ログ 5 件のハッシュ照合は、元ログ・照合用一覧が現存する場合に選ぶ。旧環境がなければ同ガイドのローカル静的・単体検証を候補にし、現在の環境・SHA・実行範囲を新しい記録として残す。過去の元ログを作り直さない。既存テンプレートへ実施前の条件、開始・終了時刻、全出力、参照資料、詰まった点と判断理由を本人が記録する。手順書・man・公式資料は参照可。途中で AI に相談した場合も支援区分を正しく書く。録画は任意。この一件から構築・復旧全体の独力習得へは広げない |
-| 0b | **`LEARNINGS.md` の 9 月分 3 件**（2026-09-27 に 3 件を記入済み。2026-08 以前のうち、AI が本文・学びとも代筆した 4 件（Promtail、docker kill の 2 件、Hyper-V での AD ドメイン参加）の書き直しは未完了。UFW の allow と limit の競合、コンテナの chrony（systemd の誤診）の 2 件は、症状〜対処の本文が AI の下書きで、学びは本人の記述） | [STATUS.md の記入待ちリスト](../STATUS.md#0-b-learningsmd-記入待ちリスト本人が書く)の #11・#10・#12 の「学び」欄を本人が書き、`LEARNINGS.md` へ移す。あわせて AI 代筆だった 2026-08 の AD ドメイン参加エントリを、参加に使ったコマンドと正確なエラー文を含めて書き直す（Hyper-V の仮想スイッチは外部・内部・プライベートの 3 種で、「ホストオンリー」は VirtualBox / VMware の用語） |
+| 0b | **`LEARNINGS.md` の残りの記入**（9 月分 3 件（#10〜#12）は 2026-09-27 に記入済み。9 月分の記入待ちは #13〜#21 の 9 件が残っています。2026-08 以前のうち、AI が本文・学びとも代筆した 4 件（Promtail、docker kill の 2 件、Hyper-V での AD ドメイン参加）の書き直しは未完了。UFW の allow と limit の競合、コンテナの chrony（systemd の誤診）の 2 件は、症状〜対処の本文が AI の下書きで、学びは本人の記述） | [STATUS.md の記入待ちリスト](../STATUS.md#0-b-learningsmd-記入待ちリスト本人が書く)の #13〜#21 の「学び」欄を本人が書き、書いたものから `LEARNINGS.md` へ移す。あわせて AI 代筆だった 2026-08 の AD ドメイン参加エントリを、参加に使ったコマンドと正確なエラー文を含めて書き直す（Hyper-V の仮想スイッチは外部・内部・プライベートの 3 種で、「ホストオンリー」は VirtualBox / VMware の用語） |
 | 0c | **面接でのライブ操作の練習** | [デモ台本の「面接でのライブ操作」](./demo-script.md#面接でのライブ操作5-分ai-なし)を AI なしで 3 回通し、所要時間と詰まった箇所を記録する |
 | 0d | **AWS の小規模構成を 1 回完了する（クラウド応募向け）** | アカウント・リージョン・費用上限・終了時刻を決め、[既存 EC2 1 台キットの採録手順](https://github.com/ns7jp/aws/blob/main/evidence/level02/README.md)で構築→HTTP 確認→状態観測→削除→残存リソース・実費確認を行う。無料枠適用は前提にしない。請求が未反映なら費用確認は保留。AWS CLI での構築は Terraform の `apply / destroy` 実績と区別し、Terraform を選ぶ場合は順位 6 の既存手順へ進む |
 | 0e | **既存 Ubuntu VM で再起動・24 時間点検・別 VM 復元** | [小構成の続編](https://github.com/ns7jp/server/blob/main/docs/partial-lab-continuation.md)と[結果票](https://github.com/ns7jp/server/blob/main/docs/evidence/templates/partial-lab-continuation-record.md)を使う。接続先・復旧コンソール・資源・保管済みバックアップを確認し、再起動前後、+0/+1/+6/+24h、別の新規 VM への復元を実測する。4 時点の間欠点検を連続監視や稼働率 100% に読み替えない。外部通知は順位 3 の別確認。新規 VPS 契約はこの演習の必須条件にしない |
@@ -100,7 +100,7 @@
 | △ 8a | **Windows / AD 公開用再現ラボ**（評価版 AD DS でユーザー作成〜棚卸し、DNS 障害復旧） | 自宅 PC + Hyper-V / VirtualBox（評価版） | 0 円 | [Windows / AD 公開再現ラボ](./evidence/templates/windows-ad-lab.md) |
 | 9 | `terraform apply` → `destroy` と **Cost Explorer の実費** | 承認済み AWS アカウント | 数十〜数百円 | [03 AWS + Terraform](./server-monitor-improvements/03-terraform-aws.md)（大規模な本番想定設計）／ [11 AWS基礎構築演習設計](https://github.com/ns7jp/learning/blob/main/docs/learning-plan/11-aws-foundational-exercise-design.md)（VPC・EC2 1 台の最小構成。まずこちらを先に回し切る） |
 
-> 優先 8a は**部分実施**です。トライアル就業先の研修で AD DS を構築し、クライアントの DNS 設定が原因だったドメイン参加障害を切り分けた経験は [LEARNINGS.md](../LEARNINGS.md) に記録しました。ただし、研修先の情報を含まない PowerShell のユーザー作成・棚卸し・domain 参加復旧ログは未採録です。公開実績にする場合は、隔離した自宅ラボ等で再現して機密情報を含まない一次出力を残します。
+> 優先 8a は**部分実施**です。トライアル就業先の研修で AD DS を構築し、クライアントの DNS 設定が原因だったドメイン参加障害を切り分けた経験は [LEARNINGS.md](../LEARNINGS.md) にあります（この記述は AI が代筆したもので、私の書き直しはまだです）。ただし、研修先の情報を含まない PowerShell のユーザー作成・棚卸し・domain 参加復旧ログは未採録です。公開実績にする場合は、隔離した自宅ラボ等で再現して機密情報を含まない一次出力を残します。
 > 旧優先 9 の AWS 検証は、現在は冒頭表の順位 6 です。独立対象ホスト、再起動・72時間継続、
 > Slack、Windows / AD、winget、D-2 の順に採録した後、承認済みアカウントで 1 日に
 > plan → apply → destroy まで実施します。数百円の実費と「即 destroy した」記録自体が、

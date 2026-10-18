@@ -9,7 +9,7 @@
 >
 > 案件との照合用の 1 枚版は[スキルシート（SES 形式・要約）](./skill-sheet.md)にあります。
 
-文書更新: 2026-09-28（就業状況もこの日時点の内容です）。
+文書更新: 2026-10-18（就業状況は 2026-09-28 時点の内容です）。
 
 ---
 
@@ -17,7 +17,7 @@
 
 製造・物流を中心に約 15 年、在庫管理・ピッキング工程を担当してきました。作業時間ログの計測からボトルネックを特定し、動線改善・標準化によって **1 日あたり約 1 時間の作業短縮** を実現しています。
 
-この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を構築・検証してきました。2026 年 9 月には、手元の Hyper-V 上の仮想マシンで Windows Server 2022 の Active Directory と Ubuntu Server を構築し、試験と復旧まで確かめました。AI の手順案内を受けながら私が操作した記録で、詳細は [§4](#4-活かせる経験知識スキル) にあります。第一志望は **Linux サーバー設計・構築** です。入口業務としてのインフラ監視・運用や、応募先によっては IT サポート・社内 SE 補助にも対応します。**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
+この「計測 → 仮説 → 実施 → 検証 → 標準化」の改善サイクルを IT の世界で再現するため、公共職業訓練と自主学習を経て、Linux サーバー監視基盤を構築・検証してきました。2026 年 9 月には、手元の Hyper-V 上の仮想マシンで Windows Server 2022 の Active Directory と Ubuntu Server を構築し、試験と復旧まで確かめました。AI の手順案内を受けながら私が操作した記録で、詳細は [§4](#4-活かせる経験知識スキル) にあります。第一志望は **インフラエンジニア**（中心は Linux サーバー設計・構築）です。入口業務としてのインフラ監視・運用や、応募先によっては IT サポート・社内 SE 補助にも対応します。**現場目線の業務改善力** と **手を動かした技術検証** の両面から貢献することを目指しています。
 
 **就業状況（2026-09-28 時点）**: 人材派遣会社（アデコ株式会社）を通じた IT 企業でのトライアル就業（2026/07〜）は、2026-09-15 に終了しました。**現在は求職中で、すぐに勤務を開始できます。** 就業先の社名は面談時に開示します。
 研修では仮想マシン上に Windows Server / Linux サーバーを構築し、利用者アカウントと権限の管理に取り組みました。これは研修での経験で、顧客環境の設計・構築を担当した実績とは区別しています。
@@ -118,9 +118,9 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 障害・課題 15 件の対処は[作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)に、設計書・手順書・試験仕様書は [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad)と [WSUS 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-wsus)にあります。組織の DNS、実クライアント PC を含むドメイン環境、中央 Prometheus からの収集（BLOCKED）、24 / 72 時間の連続稼働、サイト間複製、電源断からの復旧、WSUS の通し再試験は、まだ確認していません。
 
-### Linux の VM で最近確認したこと（2026-09-04〜08）
+### Linux の VM で確認したこと（2026-09-04〜10-01）
 
-手元の Hyper-V 上の VM での記録です。いずれも AI が手順・コードを案内し、私が操作して結果を画面で確認しました（9/7 以降の記録は画像も収録しています）。独力での設計・再構築・説明能力を確かめた記録とは区別しています。
+手元の Hyper-V 上の VM での記録です。いずれも AI が手順・コードを案内し、私が操作して結果を画面で確認しました（9/7〜15 の記録は画像も収録しています。9/30・10/1 の記録の画像はリポジトリに収録していません）。独力での設計・再構築・説明能力を確かめた記録とは区別しています。
 
 | 対象 | 確認したこと |
 | --- | --- |
@@ -129,16 +129,18 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 | 9/8 数値監視 | [5 サービスの部分構成で、手動の停止・再開に合わせて収集状態が 1→0→1](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md) |
 | 9/8 Loki 復元 | [同一 VM 内の別ボリュームに復元し、過去の目印付きログ 2 件を再取得](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md) |
 | 9/8 アプリ自動再起動（D-1） | [app / nginx 構成で自動再起動と HTTP 復帰 2 秒（1 回の計測）、その後 healthy を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) |
+| 9/30 新しい VM と SSH 鍵認証 | [新しい Ubuntu VM（`ubuntu-practice01`）を用意](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-30-ubuntu-practice01-ssh-key-auth.md)し、公開鍵認証が失敗したときに、登録した鍵の各行の先頭に余分な文字（BOM）と行末の CR があることを確認。修正後の接続成功は私の報告だけで、成功画面は未採録 |
+| 10/1 Docker 最小構成 | [同じ VM に Docker を入れ](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-10-01-ubuntu-practice01-nginx-manual-recovery.md)、app と nginx で healthz 200・未認証 401・認証あり 200、nginx を止めている間の接続失敗と手動再開後の 200 を確認 |
 
 9/9〜15 の Ansible と Git の小さな練習は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)に並べています。
 
-監視・復元・D-1 は、構成を切り替えた別々の演習です。監視全体の同時稼働とアラートの外部通知、AlmaLinux の新規構築と最小公開、ホスト再起動後の確認、24 / 72 時間の稼働、別の新規 VM への復元、自力での再構築、第三者による手順確認は、**本人による実測は NOT RUN** で、次の課題として残しています。Codex による新ラボ実行は下の §4-b に分けて記載します。結果の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
+監視・復元・D-1 は、構成を切り替えた別々の演習です。監視全体の同時稼働とアラートの外部通知、AlmaLinux の新規構築と最小公開、アプリや監視を載せたホストの再起動後の確認（OS だけの再起動後の復帰は 9/7〜8 の初期構築で確認）、24 / 72 時間の稼働、別の新規 VM への復元、自力での再構築、第三者による手順確認は、**本人による実測は NOT RUN** で、次の課題として残しています。Codex による新ラボ実行は下の §4-b に分けて記載します。結果の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
 
 ### 過去の CI・WSL2・AI 支援環境の記録
 
 2026-08-22 には、主作品の監視ラボ一式（`site.yml`、対象 commit [`7622a9d`](https://github.com/ns7jp/server/commit/7622a9da974f694ae75e0173135923701be9e5a5)）を、GitHub Actions の使い捨て Ubuntu 24.04（Docker 導入済み）へ一括で適用しました。2 回目の実行で変更 0 件、11 コンテナ（監視ラボの 10 サービスと CI 用の通知受け口）の起動、ローカル通知、network / UFW、アプリ自動復旧（D-1）の RTO 1 秒、3 つのボリュームのバックアップと復元を含む [23 項目がすべて PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)しました。
 
-2026-08-23 の [PR #77 CI](https://github.com/ns7jp/server/actions/runs/32611251044)では、候補 SHA `84e1492` の配備後、旧版 `59aa88e` へ戻し、稼働中の版番号と実行ファイルのハッシュ、app コンテナの再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで再確認して PASS しました。これは PR ブランチ上の使い捨て Ubuntu runner での実演で、main への反映や永続ホストでの変更ではありません。Slack への実際の通知、AWS の `apply / destroy`、D-2、独立した管理端末・引き渡し先ホスト、組織 DNS、本人操作によるホスト再起動後の確認、24 / 72 時間の稼働、Windows / AD・winget の公開再現ラボ（9 月に手元の Hyper-V で行った AD 構築とは別）は、まだ `NOT RUN` です。
+2026-08-23 の [PR #77 CI](https://github.com/ns7jp/server/actions/runs/32611251044)では、候補 SHA `84e1492` の配備後、旧版 `59aa88e` へ戻し、稼働中の版番号と実行ファイルのハッシュ、app コンテナの再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで再確認して PASS しました。これは PR ブランチ上の使い捨て Ubuntu runner での実演で、main への反映や永続ホストでの変更ではありません。Slack への実際の通知、AWS の `apply / destroy`、D-2、独立した管理端末・引き渡し先ホスト、組織 DNS、本人操作による、アプリや監視を載せたホストの再起動後の確認、24 / 72 時間の稼働、Windows / AD・winget の公開再現ラボ（9 月に手元の Hyper-V で行った AD 構築とは別）は、まだ `NOT RUN` です。
 
 ---
 

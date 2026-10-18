@@ -17,18 +17,20 @@
 | 3 | IT サポート・社内 SE 補助 | 問い合わせ、キッティング、棚卸し | [AD の構築・試験の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)（必須 31 項目 PASS）、[作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)（障害・課題 15 件の対処）、[ドメイン参加時の名前解決障害の対処](./resume.md#取り組み事例-ad-ドメイン参加時の名前解決障害2026-08)（トライアル就業の研修） | 実クライアント PC でのログオン・GPO 適用の切り分け記録 |
 | 3b | コールセンター型ヘルプデスク | 電話・チャットでの一次受付、切り分け、エスカレーション記録 | 現場での「困りごとを数値化し上長へ報告」した経験（[業務改善レポート](./business-improvement/picking-improvement.md)） | 想定問答・エスカレーション記録の練習（**未着手**） |
 | 発展 | Cloud / IaC | Terraform の修正・レビュー、構築補助 | AWS Terraform modules、AWS / cost / backup 設計 | `plan / apply / destroy`、費用、復元 |
-| 発展 | アプリ基盤 / DB | 3 層構成の構築補助、復元試験 | [Web / AP / DB 3 層ラボ](https://github.com/ns7jp/server/tree/main/labs/three-tier)、`pg_dump` / `pg_restore` 演習 | 実 VM 上での 3 層構築、DB 復元の実行証跡 |
+| 発展 | アプリ基盤 / DB | 3 層構成の構築補助、復元試験 | [Web / AP / DB 3 層ラボ](https://github.com/ns7jp/server/tree/main/labs/three-tier)、`pg_dump` / `pg_restore` 演習（AI 支援環境での実行） | 実 VM 上での 3 層構築、DB 復元の実行証跡 |
 
 ## 応募先別の最短導線
 
 | 応募先 | 最初に見せるもの | 面接で実演するもの |
 | --- | --- | --- |
 | サーバー構築 | [構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package) | Ansible の check / apply / 2 回目の冪等性、試験結果 |
-| インフラ運用・監視 | [server](https://github.com/ns7jp/server) | Grafana → alert → logs → recovery |
+| インフラ運用・監視 | [server](https://github.com/ns7jp/server) | Grafana → alert → logs → recovery（アラートの発火と通知の記録は CI の local webhook のものだけで、私の環境での記録はまだありません） |
 | ネットワークを含む運用 | [L2 / L3 切り分けラボ](https://github.com/ns7jp/server/tree/main/labs/routing)（AI 支援環境での実行。VLAN の 3 項目は未検証） | 別のセグメントから ping は通るが、SSH（22 番）は UFW で拒否されることと、そのログの読み方（[9/7〜8 の T-13](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)） |
 | RHEL 系が主な現場 | [AlmaLinux / Rocky 9 対応 role](https://github.com/ns7jp/server/tree/main/ansible/roles/common) | `dnf` / firewalld / SELinux の差分と、[Molecule `el9` シナリオの実行証跡](https://github.com/ns7jp/server/actions/runs/32811100007) |
 | Windows Server / AD が中心の現場 | [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad) と [作業結果・引き渡し報告（SM-AD-001）](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md) | System State 復元の流れと、GPO による設定の上書きを切り分けた説明 |
 | IT サポート・社内 SE | [AD の構築・試験の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)と[ドメイン参加時の名前解決障害の対処](./resume.md#取り組み事例-ad-ドメイン参加時の名前解決障害2026-08) | トライアル就業の研修で遭遇したドメイン参加の失敗（DNS の向き先の誤り）を例にした、確認順と記録方法 |
+
+9 月の記録に使った VM（`ans-01`・`lab-base01` など）は、もう残っていません。今ある `ubuntu-practice01` で記録があるのは app と nginx の最小構成までで、Ansible・監視・UFW を入れた記録はまだありません。そのため、その場で操作して見せられるのは[ライブ操作の台本](./demo-script.md#面接でのライブ操作5-分ai-なし)（nginx の停止と再開。通し練習はまだで `NOT RUN`）だけです。表のほかの行は、今は記録（画面・ログ）を示しての説明になります。
 
 ## 現時点の境界
 
