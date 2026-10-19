@@ -6,6 +6,12 @@
 
 > 個人の学習記録です（実務経験ではありません）。AI 支援の範囲と未実施の範囲は[この資料の読み方](#この資料の読み方)にまとめています。
 
+| 目的 | 開くページ |
+| --- | --- |
+| 志望と検証範囲を 1 ページで読む | [採用ご担当者さま向けページ](./docs/overview-for-recruiters.md) |
+| 経歴と応募条件を見る | [職務経歴書・スキルシート](./docs/resume.md) |
+| 詰まった記録を見る | [LEARNINGS.md](./LEARNINGS.md) |
+
 ## まず見ていただきたい 3 本
 
 2026 年 9 月に、手元の Hyper-V（Windows の仮想化機能）上の仮想マシン（VM）で行った記録から、特に説明したいものを 3 本に絞りました。
@@ -17,14 +23,6 @@
 | 3 | **原因の切り分け** | WSUS の試験が FAIL。承認件数の突き合わせで前日の仮説を否定し、「分類・製品 0 件＝絞り込みなし」という最有力の原因を突き止め、手順書を修正（0 件になった操作の再現はできていない） | [原因特定](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md) |
 
 主作品は **[サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server)** です。上の 3 本以外の練習記録は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)に日付順で並べています。
-
-**追加記録（9/27〜28）**：[新しい Hyper-V ラボの構築・観測結果](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)を公開しています。これは承認を受けて **Codex が実行した記録**です。Ubuntu の 10 サービス稼働と再起動後 33 項目の成功を確認しました。24 時間試験は欠測・時刻差を記録し、到達前に本人の指示で終了したため **未合格**です。上の本人操作の記録や、独力再現の実績には加えません。
-
-| 目的 | 開くページ |
-| --- | --- |
-| 志望と検証範囲を 1 ページで読む | [採用ご担当者さま向けページ](./docs/overview-for-recruiters.md) |
-| 経歴と応募条件を見る | [職務経歴書・スキルシート](./docs/resume.md) |
-| 詰まった記録を見る | [LEARNINGS.md](./LEARNINGS.md) |
 
 ## 主な実測結果
 
@@ -55,6 +53,10 @@
 | --- | --- |
 | [8/22：一連の構築・試験](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) | GitHub Actions の使い捨て Ubuntu で、構築・再実行・監視・通知・復旧・復元の 23 項目が PASS |
 | [9/17：性能試験の見直し](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md) | 以前の集計が HTTP 502 を失敗に数えていなかったことを見つけて修正。[接続再利用を加えた比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)では 2 回の CI で失敗 0 件 |
+
+### 追加記録：新しい Hyper-V ラボ（2026-09-27〜28）
+
+[新しい Hyper-V ラボの構築・観測結果](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)を公開しています。これは承認を受けて **Codex が実行した記録**です。Ubuntu の 10 サービス稼働と再起動後 33 項目の成功を確認しました。24 時間試験は欠測・時刻差を記録し、到達前に本人の指示で終了したため **未合格**です。上の本人操作の記録や、独力再現の実績には加えません。
 
 ## 何を作ったか
 
