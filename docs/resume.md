@@ -156,7 +156,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 9/1〜15 の VM の記録（Windows Server / AD / WSUS と Linux）も、この流れで作りました。AI が手順を案内し、私が操作して結果を画面で確かめたものです。**AI を使わずに再現した記録は、まだありません。**
 
-9/27〜28 の[新ラボの記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)は、承認を受けて Codex が手元の Hyper-V 上で構築・検証を実行したものです。Ubuntu の 10 サービス稼働・再起動後 33 項目 PASS は、この実行者の範囲に限ります。24 時間試験は欠測・時刻差があり、到達前に本人の指示で終了したため未合格です。私の操作経験やスキル評価には加えていません。
+9/27〜28 の[新ラボの記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)は、承認を受けて Codex が手元の Hyper-V 上で構築・検証を実行したものです。Ubuntu の 10 サービス稼働・再起動後 33 項目 PASS は、この実行者の範囲に限ります。24 時間試験は欠測・時刻差があり、到達前に本人の指示で終了したため未合格です。AD・WSUS は部分実施、別 VM への復元は未実施です。私の操作経験やスキル評価には加えていません。
 
 ### AI が関わったコミットの数
 
