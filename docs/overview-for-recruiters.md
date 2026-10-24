@@ -105,21 +105,6 @@ Ansible（サーバー設定の自動化ツール）で、手元の VM 2 台に 
 
 Linux 側の設計、パラメータ、構築、試験、変更、引き渡しの成果物は、[案件概要](https://ns7jp.github.io/project-brief.html)と [Linux サーバー構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package)にあります。
 
-## AI による参考実行（私の実績には数えません）
-
-2026-09-27〜28 には、旧環境とは別の手元の Hyper-V ラボで、承認を受けて **Codex が構築・検証を実行**しました。[新ラボの公開結果票](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)では Ubuntu 10 サービス稼働・再起動後 33 項目 PASS を記録しています。24 時間試験は欠測・時刻差があり、到達前に本人の指示で終了したため未合格です。AD・WSUS は部分実施、別 VM への復元は未実施で、私の操作経験・独力再現の実績には加えません。
-
-2026-08-24 の次の演習は、**AI 支援セッションが自身の作業環境（私の VM ではありません）で実行したもの**です。手順とスクリプトが動くことの参考として載せており、私の操作経験やスキル評価の根拠には数えません。B-1 は仮想ディスク（loop device）付き Ubuntu ゲスト、B-2 / B-3 は Docker コンテナ、B-4 は network namespace を使いました。
-
-| 演習 | 実演内容 | 所要 | 結果 |
-| --- | --- | --- | --- |
-| B-1 | LVM で VG / LV を作り、容量を使い切らせ、PV を足して online 拡張する | 10 分 | [5 PASS](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-1.md) |
-| B-2 | Web / AP / DB の 3 層構成で、どの層が原因かを層別 health から絞り込む | 10 分 | [9 PASS](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-2.md) |
-| B-3 | `pg_dump` / `pg_restore` で復元し、RTO / RPO と内容ハッシュを突き合わせる | 10 分 | [7 PASS](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-3.md)（RTO 0.149 秒） |
-| B-4 | 静的ルート、`ip_forward`、VLAN ID 不一致の 3 パターンを切り分ける | 10 分 | [6 PASS / 3 SKIP-ENV](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-4.md) |
-
-[8 月 25 日の AlmaLinux / Rocky 9 向け Molecule](https://github.com/ns7jp/server/actions/runs/32811100007) もコンテナでの検証で、9/4 の AlmaLinux VM の記録とは別です。
-
 ## 入社後に任せやすいこと
 
 | 領域 | 最初に貢献できること |
@@ -140,9 +125,14 @@ Linux 側の設計、パラメータ、構築、試験、変更、引き渡し�
 
 このページの前提と、まだ確認していないことを、この節にまとめます。
 
-サーバー構築・運用の実務経験はまだありません（トライアル就業では研修を受けました）。このページの結果は、CI の使い捨て環境、WSL2、AI 支援セッションの作業環境、手元の Hyper-V VM での個別の記録です。記録した時点・環境での結果で、本番環境での保証値ではありません。**コードや設計書があること**と**実際に動かして結果を残したこと**は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)で区別しています。実行ログが無い項目は、実績として書きません。
+サーバー構築・運用の実務経験はまだありません（トライアル就業では研修を受けました）。このページの結果は、CI の使い捨て環境、WSL2、手元の Hyper-V VM での個別の記録です。記録した時点・環境での結果で、本番環境での保証値ではありません。**コードや設計書があること**と**実際に動かして結果を残したこと**は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)で区別しています。実行ログが無い項目は、実績として書きません。
 
-本人による実測がまだない主なものは次のとおりです。上の Codex による再起動確認は、本人操作の実績とは分けています。
+AI が実行した次の記録は、私の実績に数えないため、このページの結果には含めていません。
+
+- 2026-09-27〜28 の[新ラボの記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)：承認を受けて Codex が構築・検証しました。再起動後の確認を含みますが、24 時間試験は未合格です（扱いは[職務経歴書 §4-b](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)）。
+- 2026-08-24 の演習 B-1〜B-4：AI 支援セッションが自身の作業環境（私の VM ではありません）で実行しました（結果は[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)）。
+
+本人による実測がまだない主なものは次のとおりです。
 
 - **Linux**: 監視ラボ全体を独立した引き渡し先ホストへ構築すること、監視ラボを載せたホストの再起動後の確認（OS だけの再起動後の確認は 9/7〜8 に実施）、別の新規 VM への復元、専用の新規 AlmaLinux VM での監視全体の `site.yml` 適用と最小公開の確認
 - **Windows Server / AD**（検証は DC 2 台と WSUS サーバーまで）: 組織の DNS や実際のクライアント PC を含むドメイン環境、中央 Prometheus からの収集（BLOCKED）、サイト間複製、電源断からの復旧、WSUS の通しの再試験
@@ -154,7 +144,7 @@ Linux 側の設計、パラメータ、構築、試験、変更、引き渡し�
 
 AI は文書だけでなく、実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成にも使っています。範囲の詳細は[職務経歴書・スキルシート §4-b](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)に書きました。
 
-実機で外した仮説は、[LEARNINGS.md](../LEARNINGS.md) に記録しています。2026-08-25 以降の新しいエントリは私だけが書いています（見出しや注記の整理、リンクの張り替えで AI が編集したコミットはあります）。それより前の 6 件のうち、Promtail、docker kill の 2 件、Hyper-V での AD ドメイン参加の 4 件は AI が本文・学びとも代筆したもので、UFW の allow と limit の競合、コンテナの chrony（systemd の誤診）の 2 件は、症状〜対処の本文が AI の下書き、学びが私の記述です（[職務経歴書 §4-b](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)）。技術的な深さより、この記録のほうが私の現在地を正確に伝えると考えています。2026-09-27 に、9 月の演習から 3 件（合格表示が確認範囲と違った件、app が healthy でも入口の停止でアクセスできなかった件、`changed` の数字だけでは予測と適用を区別できなかった件）を追加しました。
+実機で外した仮説は、[LEARNINGS.md](../LEARNINGS.md) に記録しています。技術的な深さより、この記録のほうが私の現在地を正確に伝えると考えています。2026-09-27 に、9 月の演習から 3 件（合格表示が確認範囲と違った件、app が healthy でも入口の停止でアクセスできなかった件、`changed` の数字だけでは予測と適用を区別できなかった件）を追加しました。2026-08-25 以降の新しいエントリは私だけが書いています（見出しや注記の整理、リンクの張り替えで AI が編集したコミットはあります）。それより前の 6 件のうち 4 件は AI が本文・学びとも代筆したもので、2 件は症状〜対処の本文が AI の下書き、学びが私の記述です（どのエントリかは[職務経歴書 §4-b](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)にあります）。
 
 ## 経歴・学習
 

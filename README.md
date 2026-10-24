@@ -54,10 +54,6 @@
 | [8/22：一連の構築・試験](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) | GitHub Actions の使い捨て Ubuntu で、構築・再実行・監視・通知・復旧・復元の 23 項目が PASS |
 | [9/17：性能試験の見直し](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md) | 以前の集計が HTTP 502 を失敗に数えていなかったことを見つけて修正。[接続再利用を加えた比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)では 2 回の CI で失敗 0 件 |
 
-### 追加記録：新しい Hyper-V ラボ（2026-09-27〜28）
-
-[新しい Hyper-V ラボの構築・観測結果](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)を公開しています。これは承認を受けて **Codex が実行した記録**です。Ubuntu の 10 サービス稼働と再起動後 33 項目の成功を確認しました。24 時間試験は欠測・時刻差を記録し、到達前に本人の指示で終了したため **未合格**です。上の本人操作の記録や、独力再現の実績には加えません。
-
 ## 何を作ったか
 
 「サーバーが止まっているのに誰も気づかない」状態を減らすため、**応答を返すアプリ**と、**異常を見つけて知らせる監視基盤**を組み合わせました。
@@ -107,7 +103,7 @@
 
 1. **実務経験ではありません。** 個人の学習・検証で作ったものと、その実行記録です。
 2. **結果は、その記録に書いた時点・環境・コード版のものです。** 個別の記録を合算して「全構成の合格」とは扱いません。
-3. **AI 支援（Claude と Codex）を使っています。** 文書と実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成・レビューに使いました。9/1〜15 の VM の記録は、AI が手順を案内し、私が操作して結果を画面で確かめたものです。9/27〜28 の新ラボは Codex が操作しており、実行者を分けて記載しています。範囲は [職務経歴書 §4-b](./docs/resume.md#4-b-ポートフォリオにおける-ai-支援の範囲) に書いています。
+3. **AI 支援（Claude と Codex）を使っています。** 文書と実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成・レビューに使いました。9/1〜15 の VM の記録は、AI が手順を案内し、私が操作して結果を画面で確かめたものです。9/27〜28 の[新ラボの記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)は Codex が操作したもので、私の操作経験や独力再現の実績には加えていません。範囲は [職務経歴書 §4-b](./docs/resume.md#4-b-ポートフォリオにおける-ai-支援の範囲) に書いています。
 
 ### まだ実測していないこと
 
