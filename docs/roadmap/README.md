@@ -30,4 +30,3 @@
 
 - [server-monitor 改善設計の実装対応表](../server-monitor-improvements/README.md)
 - [ADR 一覧](../adr/README.md)
-- [実装状況一覧（STATUS）](../../STATUS.md)

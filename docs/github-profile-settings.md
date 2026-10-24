@@ -98,4 +98,3 @@ Topics は2026-08-23に適用・再確認済みです。
 
 - [GitHub プロフィール整理 作業指示書](./github-profile-cleanup.md)
 - [プロフィール README](../README.md)
-- [ポートフォリオ進捗 STATUS](../STATUS.md)

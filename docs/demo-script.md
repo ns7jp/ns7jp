@@ -65,7 +65,7 @@ Slack 通知は実配信の証跡がまだないため、動画の必須条件�
 1. [プロフィール README](../README.md) のリンクを公開動画へ変更
 2. [採用担当者向け 1 ページ版](./overview-for-recruiters.md) の状態を「公開済み」へ変更
 3. [ビジュアルショーケース](./showcase/README.md) にサムネイルと実行証跡を掲載
-4. [STATUS](../STATUS.md) に公開日、対象 commit、収録環境を記録
+4. 非公開の運営記録（STATUS.md）に公開日、対象 commit、収録環境を記録
 
 ## 面接でのライブ操作（5 分・AI なし）
 
