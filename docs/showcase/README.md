@@ -184,4 +184,3 @@ Grafana に SLO ダッシュボードを実装済み（可用性達成率、エ�
 - [デモ動画台本](../demo-script.md)
 - [アーキテクチャ図（現状 / 将来構想）](../architecture-diagram.md)
 - [サーバー監視ラボ 改善計画](../server-monitor-improvements/README.md)
-- [ポートフォリオ進捗 STATUS](../../STATUS.md)
