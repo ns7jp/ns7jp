@@ -103,7 +103,7 @@
 
 1. **実務経験ではありません。** 個人の学習・検証で作ったものと、その実行記録です。
 2. **結果は、その記録に書いた時点・環境・コード版のものです。** 個別の記録を合算して「全構成の合格」とは扱いません。
-3. **AI 支援（Claude と Codex）を使っています。** 文書と実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成・レビューに使いました。9/1〜15 の VM の記録は、AI が手順を案内し、私が操作して結果を画面で確かめたものです。9/27〜28 の[新ラボの記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)は Codex が操作したもので、私の操作経験や独力再現の実績には加えていません。範囲は [職務経歴書 §4-b](./docs/resume.md#4-b-ポートフォリオにおける-ai-支援の範囲) に書いています。
+3. **AI 支援（Claude と Codex）を使っています。** 文書と実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成・レビューに使いました。9/1〜15 の VM の記録は、AI が手順を案内し、私が操作して結果を画面で確かめたものです。9/27〜28 の[新しい Hyper-V ラボの記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)は Codex が操作したもので、私の操作経験や独力再現の実績には加えていません。範囲は [職務経歴書 §4-b](./docs/resume.md#4-b-ポートフォリオにおける-ai-支援の範囲) に書いています。
 
 ### まだ実測していないこと
 
