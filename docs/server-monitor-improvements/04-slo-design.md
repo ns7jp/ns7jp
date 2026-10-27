@@ -130,5 +130,4 @@ groups:
 ## 11. 参考
 
 - [Google SRE Book — Chapter 4: Service Level Objectives](https://sre.google/sre-book/service-level-objectives/)
-- [Google SRE Workbook — Alerting on SLOs](https://sre.google/workbook/alerting-on-slos/)
-- [Prometheus: Multi-Window Multi-Burn-Rate Alerts](https://promlabs.com/blog/2024/04/08/multi-window-multi-burn-rate-alerts/)
+- [Google SRE Workbook — Alerting on SLOs §6: Multiwindow, Multi-Burn-Rate Alerts](https://sre.google/workbook/alerting-on-slos/#6-multiwindow-multi-burn-rate-alerts)

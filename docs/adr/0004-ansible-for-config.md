@@ -65,5 +65,5 @@ flowchart LR
 ## 5. 参考
 
 - [Ansible Documentation](https://docs.ansible.com/)
-- [Ansible Best Practices（2024 改訂版）](https://docs.ansible.com/ansible/latest/tips_tricks/index.html)
+- [Ansible tips and tricks（公式）](https://docs.ansible.com/projects/ansible/latest/tips_tricks/index.html)
 - [Geerling, "Ansible for DevOps"](https://www.ansiblefordevops.com/)

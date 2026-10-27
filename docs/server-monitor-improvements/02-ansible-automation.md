@@ -274,5 +274,5 @@ PR → lint / Molecule が CI で通る → セルフレビューして merge、
 ## 9. 参考
 
 - [Ansible Documentation](https://docs.ansible.com/)
-- [Molecule Documentation](https://ansible.readthedocs.io/projects/molecule/)
-- [Ansible Best Practices](https://docs.ansible.com/ansible/latest/tips_tricks/ansible_tips_tricks.html)
+- [Molecule Documentation](https://docs.ansible.com/projects/molecule/)
+- [Ansible General tips（公式）](https://docs.ansible.com/projects/ansible/latest/tips_tricks/ansible_tips_tricks.html)

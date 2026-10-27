@@ -44,4 +44,4 @@
 
 - [Grafana Cloud Pricing](https://grafana.com/products/cloud/pricing/)
 - [Datadog Pricing](https://www.datadoghq.com/pricing/)
-- [「自前監視 vs SaaS 監視」議論まとめ（Cindy Sridharan）](https://copyconstruct.medium.com/monitoring-in-the-time-of-cloud-native-c87c7a5bfa3e)
+- [Cindy Sridharan, "Monitoring in the time of Cloud Native"](https://copyconstruct.medium.com/monitoring-in-the-time-of-cloud-native-c87c7a5bfa3e)
