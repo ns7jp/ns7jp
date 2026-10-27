@@ -69,5 +69,5 @@ Prometheus と同じラベル思想で全文インデックスを持たないた
 ## 6. 参考
 
 - [Grafana Loki Architecture](https://grafana.com/docs/loki/latest/get-started/architecture/)
-- [Loki vs Elasticsearch (Grafana 公式比較)](https://grafana.com/blog/2020/12/08/loki-vs-elasticsearch-which-tool-to-choose-for-log-analytics/)
-- [Grafana Tempo / Loki / Mimir 統合パターン](https://grafana.com/docs/grafana-cloud/observability/)
+- [Grafana Cloud と Elasticsearch の比較（Grafana公式）](https://grafana.com/compare/grafana-vs-elastic/)
+- [Grafana Cloud：メトリクス・ログ・トレース等の相関（公式）](https://grafana.com/docs/grafana-cloud/learn-and-build/telemetry-signals/)
