@@ -59,6 +59,8 @@ Linux の構築・運用を志望しているため、まず **Ubuntu の設定�
 
 [AI 案内付きの Nginx 停止・手動復旧](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)を1回実施しました。HTTP 200→接続失敗（curl終了7）→HTTP 200、停止中の app healthy を本人提供画面で確認しました。理由の説明を受けた後、本人が停止対象と HTTP 復帰の根拠を回答しました。独力の原因特定・ライブデモ全体の合格には数えていません。原画像・生ログはリポジトリ未収録です。
 
+同日の[再起動後の2サービス確認](https://github.com/ns7jp/server/blob/44d672ac2c160dbcd5907c21d935cc74e449d8e6/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)では、再接続後に Docker active・app healthy・nginx 稼働・HTTP 200・curl終了0を確認しました。起動時刻から約9分後の観測で、復帰所要時間や監視全体、24時間稼働は評価していません。再起動前ログ末尾の表示と再接続後の画面を比較し、起動時刻の更新・前後の HTTP 200・curl終了0を確認しました。原ログは本人の手元に保管し、ハッシュ表示は確認、再計算・全文照合は未実施です。
+
 ## 資料の確認と、次の実行
 
 上のリンクは `server` の文書版 `1f6d4cc1e16e8180c2f562b3aa2c4591af64ce77` に固定しています。これは閲覧する資料の版であり、各演習の実行コード版ではありません。
