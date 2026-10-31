@@ -1,0 +1,47 @@
+2026-10-31T00:03:49+00:00 $ curl --noproxy 127.0.0.1 --fail --silent --show-error --max-time 10 -w 
+http=%{http_code}
+ http://127.0.0.1:18080/healthz
+{"status":"ok"}
+
+http=200
+2026-10-31T00:03:49+00:00 exit_code=0; expected=0
+2026-10-31T00:03:49+00:00 PASS healthz before failure: HTTP 200; JSON status=ok
+2026-10-31T00:03:49+00:00 $ curl --noproxy 127.0.0.1 --silent --show-error --max-time 10 -o /dev/null -w http=%{http_code}
+ http://127.0.0.1:18080/
+http=401
+2026-10-31T00:03:49+00:00 exit_code=0; expected=0
+2026-10-31T00:03:49+00:00 PASS anonymous access: HTTP 401
+2026-10-31T00:03:49+00:00 PASS authenticated access: HTTP 200; credential and response body not recorded
+2026-10-31T00:03:49+00:00 Prometheus query=up{job="server-monitor"}; result=['1']
+2026-10-31T00:03:49+00:00 Prometheus query=probe_success{job="blackbox-probe-health"}; result=['1']
+2026-10-31T00:03:49+00:00 PASS monitoring before failure: app scrape up=1; entrance probe_success=1
+2026-10-31T00:03:49+00:00 $ /tmp/ns7jp-demo-check-20261031/compose.sh stop nginx
+ Container ns7jp-demo-check-20261031-nginx-1  Stopping
+ Container ns7jp-demo-check-20261031-nginx-1  Stopped
+2026-10-31T00:03:49+00:00 exit_code=0; expected=0
+2026-10-31T00:03:49+00:00 $ env -u DOCKER_HOST -u DOCKER_CONTEXT -u DOCKER_TLS -u DOCKER_TLS_VERIFY -u DOCKER_CERT_PATH docker --host=unix:///var/run/docker.sock inspect --format {{.State.Status}} {{.State.Health.Status}} ns7jp-demo-check-20261031-app-1
+running healthy
+2026-10-31T00:03:49+00:00 exit_code=0; expected=0
+2026-10-31T00:03:49+00:00 PASS app while entrance is stopped: running healthy
+2026-10-31T00:03:49+00:00 $ curl --noproxy 127.0.0.1 --silent --show-error --max-time 10 -o /dev/null -w http=%{http_code}
+ http://127.0.0.1:18080/healthz
+curl: (7) Failed to connect to 127.0.0.1 port 18080 after 0 ms: Could not connect to server
+http=000
+2026-10-31T00:03:49+00:00 exit_code=7; expected=7
+2026-10-31T00:03:49+00:00 PASS entrance connection failure: curl exit 7; http_code=000 (no HTTP response)
+2026-10-31T00:04:10+00:00 Prometheus query=probe_success{job="blackbox-probe-health"}; result=['0']
+2026-10-31T00:04:10+00:00 Prometheus query=up{job="server-monitor"}; result=['1']
+2026-10-31T00:04:10+00:00 PASS monitoring while entrance is stopped: app scrape up=1; entrance probe_success=0
+2026-10-31T00:04:10+00:00 $ /tmp/ns7jp-demo-check-20261031/compose.sh start nginx
+ Container ns7jp-demo-check-20261031-app-1  Waiting
+ Container ns7jp-demo-check-20261031-app-1  Healthy
+ Container ns7jp-demo-check-20261031-nginx-1  Starting
+ Container ns7jp-demo-check-20261031-nginx-1  Started
+2026-10-31T00:04:10+00:00 exit_code=0; expected=0
+2026-10-31T00:04:11+00:00 PASS manual recovery: HTTP 200; JSON status=ok
+2026-10-31T00:04:39+00:00 Prometheus query=probe_success{job="blackbox-probe-health"}; result=['1']
+2026-10-31T00:04:39+00:00 PASS monitoring after recovery: entrance probe_success=1
+2026-10-31T00:04:39+00:00 POST local Alertmanager /api/v2/alerts: synthetic PortfolioDemo; independent of nginx failure
+2026-10-31T00:04:40+00:00 local webhook matched event={"received_at": "2026-10-31T00:04:40.886186+00:00", "status": "firing", "alerts": [{"status": "firing", "labels": {"alertname": "PortfolioDemo", "instance": "demo-procedure-20261031T000439Z", "severity": "warning"}}]}
+2026-10-31T00:04:41+00:00 local webhook matched event={"received_at": "2026-10-31T00:04:41.888516+00:00", "status": "resolved", "alerts": [{"status": "resolved", "labels": {"alertname": "PortfolioDemo", "instance": "demo-procedure-20261031T000439Z", "severity": "warning"}}]}
+2026-10-31T00:04:41+00:00 PASS local notification: synthetic PortfolioDemo FIRING and RESOLVED received; Slack not tested

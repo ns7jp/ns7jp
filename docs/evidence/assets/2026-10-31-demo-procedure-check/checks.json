@@ -1,0 +1,62 @@
+[
+  {
+    "check": "healthz before failure",
+    "result": "PASS",
+    "observed": "HTTP 200; JSON status=ok",
+    "utc": "2026-10-31T00:03:49+00:00"
+  },
+  {
+    "check": "anonymous access",
+    "result": "PASS",
+    "observed": "HTTP 401",
+    "utc": "2026-10-31T00:03:49+00:00"
+  },
+  {
+    "check": "authenticated access",
+    "result": "PASS",
+    "observed": "HTTP 200; credential and response body not recorded",
+    "utc": "2026-10-31T00:03:49+00:00"
+  },
+  {
+    "check": "monitoring before failure",
+    "result": "PASS",
+    "observed": "app scrape up=1; entrance probe_success=1",
+    "utc": "2026-10-31T00:03:49+00:00"
+  },
+  {
+    "check": "app while entrance is stopped",
+    "result": "PASS",
+    "observed": "running healthy",
+    "utc": "2026-10-31T00:03:49+00:00"
+  },
+  {
+    "check": "entrance connection failure",
+    "result": "PASS",
+    "observed": "curl exit 7; http_code=000 (no HTTP response)",
+    "utc": "2026-10-31T00:03:49+00:00"
+  },
+  {
+    "check": "monitoring while entrance is stopped",
+    "result": "PASS",
+    "observed": "app scrape up=1; entrance probe_success=0",
+    "utc": "2026-10-31T00:04:10+00:00"
+  },
+  {
+    "check": "manual recovery",
+    "result": "PASS",
+    "observed": "HTTP 200; JSON status=ok",
+    "utc": "2026-10-31T00:04:11+00:00"
+  },
+  {
+    "check": "monitoring after recovery",
+    "result": "PASS",
+    "observed": "entrance probe_success=1",
+    "utc": "2026-10-31T00:04:39+00:00"
+  },
+  {
+    "check": "local notification",
+    "result": "PASS",
+    "observed": "synthetic PortfolioDemo FIRING and RESOLVED received; Slack not tested",
+    "utc": "2026-10-31T00:04:41+00:00"
+  }
+]

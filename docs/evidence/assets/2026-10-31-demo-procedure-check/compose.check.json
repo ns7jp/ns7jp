@@ -1,0 +1,51 @@
+{
+  "services": {
+    "app": {
+      "image": "ns7jp-demo-check:20261031",
+      "build": {
+        "context": "/workspace/server",
+        "dockerfile": "/tmp/ns7jp-demo-check-20261031/Dockerfile",
+        "secrets": [
+          "proxy_ca"
+        ]
+      }
+    },
+    "prometheus": {
+      "volumes": [
+        "/tmp/ns7jp-demo-check-20261031/prometheus.yml:/etc/prometheus/prometheus.yml:ro",
+        "/tmp/ns7jp-demo-check-20261031/rules.yml:/etc/prometheus/rules.yml:ro",
+        "/tmp/ns7jp-demo-check-20261031/slo-rules.yml:/etc/prometheus/slo-rules.yml:ro"
+      ]
+    },
+    "alertmanager": {
+      "volumes": [
+        "/tmp/ns7jp-demo-check-20261031/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro"
+      ]
+    },
+    "blackbox": {
+      "volumes": [
+        "/tmp/ns7jp-demo-check-20261031/blackbox.yml:/etc/blackbox/blackbox.yml:ro"
+      ]
+    },
+    "webhook-sink": {
+      "image": "ns7jp-demo-check:20261031",
+      "volumes": [
+        "/tmp/ns7jp-demo-check-20261031/webhook_sink.py:/app/webhook_sink.py:ro"
+      ]
+    }
+  },
+  "secrets": {
+    "dashboard_password": {
+      "file": "/tmp/ns7jp-demo-check-20261031/dashboard_password.txt"
+    },
+    "metrics_token": {
+      "file": "/tmp/ns7jp-demo-check-20261031/metrics_token.txt"
+    },
+    "grafana_admin_password": {
+      "file": "/tmp/ns7jp-demo-check-20261031/grafana_admin_password.txt"
+    },
+    "proxy_ca": {
+      "file": "/etc/ssl/certs/ca-certificates.crt"
+    }
+  }
+}

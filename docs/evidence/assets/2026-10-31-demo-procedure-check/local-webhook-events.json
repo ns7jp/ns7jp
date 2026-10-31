@@ -1,0 +1,30 @@
+[
+  {
+    "received_at": "2026-10-31T00:04:40.886186+00:00",
+    "status": "firing",
+    "alerts": [
+      {
+        "status": "firing",
+        "labels": {
+          "alertname": "PortfolioDemo",
+          "instance": "demo-procedure-20261031T000439Z",
+          "severity": "warning"
+        }
+      }
+    ]
+  },
+  {
+    "received_at": "2026-10-31T00:04:41.888516+00:00",
+    "status": "resolved",
+    "alerts": [
+      {
+        "status": "resolved",
+        "labels": {
+          "alertname": "PortfolioDemo",
+          "instance": "demo-procedure-20261031T000439Z",
+          "severity": "warning"
+        }
+      }
+    ]
+  }
+]
