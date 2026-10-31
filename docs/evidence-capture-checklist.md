@@ -21,7 +21,7 @@
 | 結果から原資料への導線 | [代表実績と原画像・ハッシュ](./evidence/featured-evidence.md)を作成。既存画像56枚のハッシュ一致を確認 | AD・WSUS・10/1 の未収録原資料は所在未確認。取得できなければ新しい日付で再実施 |
 | 本人のライブ実演 | [実施・採録手順](./demo-script.md#面接でのライブ操作5-分ai-なし)と[記録用紙](./evidence/templates/linux-live-demo.md)を準備 | 10/31 に AI 案内付き本人操作で正常→停止→手動復旧を1回確認。説明後に停止対象と復旧根拠を回答。連続録画・独力説明・3回の反復は未確認。[今回の結果票](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)を公開。原ログの照合・本人による記入は残作業 |
 | 本人の Ubuntu 初期構築 | [10/25 に用意した結果票](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-10-25-independent-rerun-ubuntu-initial-build.md)を使用 | **NOT RUN**。結果票は下書き。新規 VM で本人が実施 |
-| 再起動・監視・通知・別 VM 復元 | 既存の順位 0e・1・2・3 の手順と結果票を使用 | 10/31 に AI 案内付き本人操作で[再接続後の app / nginx と HTTP 200](https://github.com/ns7jp/server/blob/848d7d416e540f341589d0e1d1b3c9e3ee31697e/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)を確認。監視全体、24時間点検、通知、別 VM 復元は未完了。ログ原本の照合も残る |
+| 再起動・監視・通知・別 VM 復元 | 既存の順位 0e・1・2・3 の手順と結果票を使用 | 10/31 に AI 案内付き本人操作で[再接続後の app / nginx と HTTP 200](https://github.com/ns7jp/server/blob/44d672ac2c160dbcd5907c21d935cc74e449d8e6/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)を確認。監視全体、24時間点検、通知、別 VM 復元は未完了。ログ原本の照合も残る |
 | WSUS の修正後再試験 | 既存の順位 2b の修正済み手順と必須28 IDを使用 | 手元の Windows Server への接続設定なし。対象・退避・同期条件を確認して再開。過去の総合 **FAIL** は維持 |
 
 デモの実行部分は、[Codex による別環境での手順動作確認](./evidence/2026-10-31-demo-procedure-check.md)で 10 観点 PASS を採録しました。Nginx の停止・手動復旧、外形監視、合成アラートのローカル通知の結果であり、上表の本人実演・手元 VM の運用試験を完了に変えるものではありません。

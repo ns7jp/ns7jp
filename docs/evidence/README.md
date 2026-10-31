@@ -29,7 +29,7 @@
 
 [正常→Nginx 停止→手動復旧の結果票](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)に、AI の案内を受けた本人操作1回の結果を追加しました。停止中も app healthy、入口の接続失敗、再開後 HTTP 200・curl終了0 を確認しました。原ログ照合・連続録画・独力説明・反復は未確認です。
 
-同日の[再接続後の app / nginx 復帰確認](https://github.com/ns7jp/server/blob/848d7d416e540f341589d0e1d1b3c9e3ee31697e/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)も採録しました。2サービスの稼働と HTTP 200 の範囲で、監視全体・長期稼働とは区別します。
+同日の[再接続後の app / nginx 復帰確認](https://github.com/ns7jp/server/blob/44d672ac2c160dbcd5907c21d935cc74e449d8e6/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)も採録しました。2サービスの稼働と HTTP 200 の範囲で、監視全体・長期稼働とは区別します。
 
 ## AI が実行した新ラボの記録
 

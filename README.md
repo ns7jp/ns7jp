@@ -59,7 +59,7 @@
 
 AI の手順案内を受け、Tera Term から nginx の停止・手動復旧を1回操作しました。HTTP 200→接続失敗（curl終了7）→HTTP 200 を確認し、AI の説明後に停止対象と復旧判断の根拠を回答しました。[操作結果と確認範囲](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)。独力説明・連続録画・3回の反復は未確認です。
 
-同日、再接続後に Docker active・app healthy・nginx 稼働・HTTP 200・curl終了0も確認しました。[再起動後の2サービス確認](https://github.com/ns7jp/server/blob/848d7d416e540f341589d0e1d1b3c9e3ee31697e/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)。起動直後の復帰時間、監視全体・長期稼働は未確認です。
+同日、再接続後に Docker active・app healthy・nginx 稼働・HTTP 200・curl終了0も確認しました。[再起動後の2サービス確認](https://github.com/ns7jp/server/blob/44d672ac2c160dbcd5907c21d935cc74e449d8e6/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)。起動直後の復帰時間、監視全体・長期稼働は未確認です。
 
 ## 何を作ったか
 

@@ -132,7 +132,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 | 9/30 新しい VM と SSH 鍵認証 | [新しい Ubuntu VM（`ubuntu-practice01`）を用意](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-30-ubuntu-practice01-ssh-key-auth.md)し、公開鍵認証が失敗したときに、登録した鍵の各行の先頭に余分な文字（BOM）と行末の CR があることを確認。修正後の接続成功は私の報告だけで、成功画面は未採録 |
 | 10/1 Docker 最小構成 | [同じ VM に Docker を入れ](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-10-01-ubuntu-practice01-nginx-manual-recovery.md)、app と nginx で healthz 200・未認証 401・認証あり 200、nginx を止めている間の接続失敗と手動再開後の 200 を確認 |
 
-10/31 は AI の案内を受け、本人の2サービス構成で再接続後の Docker active・app healthy・nginx 稼働・HTTP 200・curl終了0を確認しました。[再起動後の確認結果](https://github.com/ns7jp/server/blob/848d7d416e540f341589d0e1d1b3c9e3ee31697e/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)。原ログの独立照合・監視全体の復帰・長期稼働は未確認です。
+10/31 は AI の案内を受け、本人の2サービス構成で再接続後の Docker active・app healthy・nginx 稼働・HTTP 200・curl終了0を確認しました。[再起動後の確認結果](https://github.com/ns7jp/server/blob/44d672ac2c160dbcd5907c21d935cc74e449d8e6/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)。原ログの独立照合・監視全体の復帰・長期稼働は未確認です。
 
 9/9〜15 の Ansible と Git の小さな練習は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)に並べています。
 
