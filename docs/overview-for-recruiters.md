@@ -33,7 +33,7 @@ Ansible では Ubuntu と再利用 AlmaLinux VM に OS 共通設定と Docker �
 ## 正直な境界
 
 - **AI 支援の範囲**：文書・実装コードの生成とレビュー、実機操作の手順案内に使用しました。AI が操作した 9/27〜28 の新ラボや 8/24 の演習は、上の本人実績に含めていません。[詳細](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)
-- **現在の再現状況**：9 月の VM は残っていません。現在の `ubuntu-practice01` の記録は app / nginx の最小構成までで、AI なしの初期構築は未実施です。10/31 に AI の案内を受けた本人操作で nginx の停止・手動復旧を1回確認しました。説明後に停止対象と HTTP 復帰の根拠を回答しました。独力説明・連続録画・3回の反復は未確認です。[10/31 の記録](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)。公開デモは保存済み画面の証跡リプレイです。[デモの状態](./demo-script.md)
+- **現在の再現状況**：9 月の VM は残っていません。現在の `ubuntu-practice01` の記録は app / nginx の最小構成までで、AI なしの初期構築は未実施です。10/31 に AI の案内を受けた本人操作で nginx の停止・手動復旧を1回確認しました。説明後に停止対象と HTTP 復帰の根拠を回答しました。独力説明・連続録画・3回の反復は未確認です。[10/31 の記録](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)。同日の[再接続後の確認](https://github.com/ns7jp/server/blob/848d7d416e540f341589d0e1d1b3c9e3ee31697e/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)では2サービスの稼働と HTTP 200 を確認しました。監視全体の復帰は未確認です。公開デモは保存済み画面の証跡リプレイです。[デモの状態](./demo-script.md)
 - **未実測の主な範囲**：本人による監視込みのホスト再起動、24 / 72 時間稼働、別 VM への復元、Slack 実通知、AWS の実構築、第三者による手順確認。AD は実クライアント PC を含む環境、WSUS は修正後の通し再試験が未実施です。[次の実施項目](./evidence-capture-checklist.md)
 
 「実装済み」はコード・設定・文書がある状態、「実測済み」は日時・環境・結果が残る状態です。次は Linux の小さな構成を本人が再現し、切り分けと復旧を説明する記録を増やします。
