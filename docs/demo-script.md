@@ -4,7 +4,7 @@
 >
 > 2026-08-22 時点で、[2 分 15 秒の実測証跡リプレイ](https://ns7jp.github.io/demo.html)を公開しています。これは実操作の連続録画ではなく、2026-08-18・19 に保存した実測スクリーンショットと D-1 復旧ログを時系列で再構成した映像です。
 
-最終更新: 2026-10-31（本人によるライブ操作の採録手順・判定条件を追加。実演は未実施）
+最終更新: 2026-10-31（AI 案内付き本人操作1回の結果を追加。ライブデモ全体は未合格）
 
 ## いま確認できるもの
 
@@ -71,9 +71,11 @@ Slack 通知は実配信の証跡がまだないため、動画の必須条件�
 
 本人が操作し、**何を確認し、なぜ次の操作を選んだか**を説明するデモです。手順書・man・公式資料は参照して構いません。実行中に AI へ相談した場合は、相談箇所を記録して `ai-assisted` とします。AI が操作した記録は `ai-executed` とし、本人の実演には数えません。
 
-対象は [2026-10-01 の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-10-01-ubuntu-practice01-nginx-manual-recovery.md)の `ubuntu-practice01`（Ubuntu VM）、作業場所は `~/server-nginx-practice`、Compose 名は `nginx-practice` です。旧 VM の `lab-base01` は使いません。状態は **NOT RUN**（本人の通し練習の記録なし）のままです。
+対象は [2026-10-01 の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-10-01-ubuntu-practice01-nginx-manual-recovery.md)の `ubuntu-practice01`（Ubuntu VM）、作業場所は `~/server-nginx-practice`、Compose 名は `nginx-practice` です。旧 VM の `lab-base01` は使いません。2026-10-31 に、AI の案内を受けた本人操作で正常→停止→手動復旧を1回確認しました。AI の説明後に停止対象と復旧判断の根拠を回答しました。連続録画・5分以内の実演・独力説明・3回の反復は未確認で、ライブデモ全体は未合格です。
 
 [2026-10-31 の手順動作確認](./evidence/2026-10-31-demo-procedure-check.md)では、Codex が別のクラウド環境で正常応答・停止・手動復旧と外形監視を確認しました。本人の VM での実演とは分けた記録です。
+
+[10/31 の本人操作の結果票](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)には、操作時刻・HTTP結果・本人の回答・未確認範囲を記録しています。原ログは本人の手元にあり、リポジトリには未収録です。
 
 ### 準備と採録の開始
 

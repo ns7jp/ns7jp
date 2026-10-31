@@ -55,6 +55,10 @@
 | [8/22：一連の構築・試験](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) | GitHub Actions の使い捨て Ubuntu で、構築・再実行・監視・通知・復旧・復元の 23 項目が PASS |
 | [9/17：性能試験の見直し](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md) | 以前の集計が HTTP 502 を失敗に数えていなかったことを見つけて修正。[接続再利用を加えた比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)では 2 回の CI で失敗 0 件 |
 
+### 現在の VM での再確認（2026-10-31）
+
+AI の手順案内を受け、Tera Term から nginx の停止・手動復旧を1回操作しました。HTTP 200→接続失敗（curl終了7）→HTTP 200 を確認し、AI の説明後に停止対象と復旧判断の根拠を回答しました。[操作結果と確認範囲](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)。独力説明・連続録画・3回の反復は未確認です。
+
 ## 何を作ったか
 
 「サーバーが止まっているのに誰も気づかない」状態を減らすため、**応答を返すアプリ**と、**異常を見つけて知らせる監視基盤**を組み合わせました。

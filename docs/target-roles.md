@@ -30,7 +30,7 @@
 | Windows Server / AD が中心の現場 | [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad) と [作業結果・引き渡し報告（SM-AD-001）](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md) | System State 復元の流れと、GPO による設定の上書きを切り分けた説明 |
 | IT サポート・社内 SE | [AD の構築・試験の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)と[ドメイン参加時の名前解決障害の対処](./resume.md#取り組み事例-ad-ドメイン参加時の名前解決障害2026-08) | トライアル就業の研修で遭遇したドメイン参加の失敗（DNS の向き先の誤り）を例にした、確認順と記録方法 |
 
-9 月の記録に使った VM（`ans-01`・`lab-base01` など）は、もう残っていません。今ある `ubuntu-practice01` で記録があるのは app と nginx の最小構成までで、Ansible・監視・UFW を入れた記録はまだありません。現在の環境で練習する対象は[ライブ操作の台本](./demo-script.md#面接でのライブ操作5-分ai-なし)（nginx の停止と再開）です。通し練習は `NOT RUN` のため、現時点で実演できると確認したものではありません。表の各項目は、今は記録（画面・ログ）を示しての説明になります。[代表実績と原画像への案内](./evidence/featured-evidence.md)から根拠を確認できます。
+9 月の記録に使った VM（`ans-01`・`lab-base01` など）は、もう残っていません。今ある `ubuntu-practice01` で記録があるのは app と nginx の最小構成までで、Ansible・監視・UFW を入れた記録はまだありません。現在の環境で練習する対象は[ライブ操作の台本](./demo-script.md#面接でのライブ操作5-分ai-なし)（nginx の停止と再開）です。10/31 は AI の手順案内を受けて1回操作し、停止と手動復旧を確認しました。[結果票](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)。独力説明・連続録画・5分以内の実演・3回の反復は未確認で、ライブデモ全体は未合格です。表の各項目は、今は記録（画面・ログ）を示しての説明になります。[代表実績と原画像への案内](./evidence/featured-evidence.md)から根拠を確認できます。
 
 ## 現時点の境界
 
