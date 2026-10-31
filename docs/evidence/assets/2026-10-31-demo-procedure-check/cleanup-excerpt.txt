@@ -1,0 +1,5 @@
+compose down --volumes: exit 0
+custom image removal: exit 0
+post-cleanup docker ps -a --filter label=com.docker.compose.project=ns7jp-demo-check-20261031: no containers, exit 0
+post-cleanup docker volume ls --filter label=com.docker.compose.project=ns7jp-demo-check-20261031: no volumes, exit 0
+post-cleanup docker network ls --filter label=com.docker.compose.project=ns7jp-demo-check-20261031: no networks, exit 0

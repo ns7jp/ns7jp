@@ -2,29 +2,39 @@
 
 ## 未経験からインフラエンジニアへ
 
-製造・物流を中心に約 15 年、「計測する・原因を絞る・手順化する・改善を続ける」を続けてきました。今はそれをサーバーの構築と運用に生かすため、**Linux と Windows Server の両方で、作る → 確かめる → 壊して直す → 記録する**を練習しています。
+第一志望は **Linux サーバーの構築・運用を担うインフラエンジニア**です。Windows Server / Active Directory も学習しています。製造・物流を中心に約 15 年続けてきた「計測する・原因を絞る・手順化する・改善を続ける」を生かし、手順に沿った設定、試験、ログによる一次切り分け、手順書の更新から担当したいと考えています。
 
 > 個人の学習記録です（実務経験ではありません）。AI 支援の範囲と未実施の範囲は[この資料の読み方](#この資料の読み方)にまとめています。
 
 | 目的 | 開くページ |
 | --- | --- |
 | 志望と検証範囲を 1 ページで読む | [採用ご担当者さま向けページ](./docs/overview-for-recruiters.md) |
+| 原画像・ログと確認範囲を見る | [代表実績と証拠](./docs/evidence/featured-evidence.md) |
 | 経歴と応募条件を見る | [職務経歴書・スキルシート](./docs/resume.md) |
 | 詰まった記録を見る | [LEARNINGS.md](./LEARNINGS.md) |
 
 ## まず見ていただきたい 3 本
 
-2026 年 9 月に、手元の Hyper-V（Windows の仮想化機能）上の仮想マシン（VM）で行った記録から、特に説明したいものを 3 本に絞りました。
+2026 年 9 月に、手元の Hyper-V（Windows の仮想化機能）上の仮想マシン（VM）で行った記録から、特に説明したいものを 3 本に絞りました。いずれも **AI の手順案内を受け、私が操作して結果を画面で確認した記録**です。独力再現の記録はまだありません。
 
 | # | 題材 | 何を示すか | 記録 |
 | --- | --- | --- | --- |
-| 1 | **AD の 2 台構成と復旧** | Windows Server 2022 で AD を構築し必須 31 項目 PASS。DC を 2 台にして複製を確認し、System State 復元と、1 台を失った想定での FSMO 役割の奪取まで実施 | [構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)・[復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)・[FSMO 奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) |
-| 2 | **Ubuntu の構築と監視** | 固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新を手作業で設定し、わざと起こした設定不備から復旧。Prometheus / Grafana でアプリの手動停止・再開に伴う収集状態の 1→0→1 を確認し、Loki で Nginx の目印付きログを検索 | [初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)・[監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)・[ログ検索](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-loki-practice.md) |
-| 3 | **原因の切り分け** | WSUS の試験が FAIL。承認件数の突き合わせで前日の仮説を否定し、「分類・製品 0 件＝絞り込みなし」という最有力の原因を突き止め、手順書を修正（0 件になった操作の再現はできていない） | [原因特定](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md) |
+| 1 | **Ubuntu の構築と監視** | 固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新を手作業で設定し、わざと起こした設定不備から復旧。Prometheus / Grafana でアプリの手動停止・再開に伴う収集状態の 1→0→1 を確認し、Loki で Nginx の目印付きログを検索 | [初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)・[監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)・[ログ検索](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-loki-practice.md) |
+| 2 | **AD の 2 台構成と復旧** | Windows Server 2022 で AD を構築し必須 31 項目 PASS。DC を 2 台にして複製を確認し、System State 復元と、1 台を失った想定での FSMO 役割の奪取まで実施 | [構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)・[復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)・[FSMO 奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) |
+| 3 | **WSUS の原因の切り分け** | 試験が FAIL。承認件数の突き合わせで前日の仮説を否定し、分類・製品 0 件のルールが全分類・全製品を対象にする仕組みを確認し、手順書を修正。絞り込みが 0 件になった操作は未特定で、通しの再試験は未実施 | [原因調査](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md) |
 
 主作品は **[サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server)** です。上の 3 本以外の練習記録は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)に日付順で並べています。
 
 ## 主な実測結果
+
+### Linux（2026-09-04〜08）
+
+| 記録 | 確認したこと |
+| --- | --- |
+| [9/7〜8：Ubuntu の初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md) | 固定 IP、SSH 鍵認証、sudo、UFW、時刻同期、自動更新を手作業で設定。設定不備を起こし、拒否の表示とサーバーのログを照合して復旧 |
+| [9/4：Ansible での基礎設定](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-build.md) | Ubuntu と [AlmaLinux](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md) に OS の共通設定と Docker を適用し、2 回目の変更 0 件。AlmaLinux では SELinux 設定の欠陥を修正 |
+| [9/8：数値の監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)・[ログ検索](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-loki-practice.md) | サービスの停止・再開に合わせて収集状態が 1→0→1 と変わることを表示。Nginx の目印付きログを Loki で検索 |
+| [9/8：復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md)・[自動復旧](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) | Loki のデータを別ボリュームへ復元して過去のログを再取得。アプリ停止後の自動再起動で HTTP 復帰 2 秒（1 回の計測） |
 
 ### Windows Server / Active Directory（2026-09-01〜08）
 
@@ -37,15 +47,6 @@
 | [9/7〜8：WSUS の構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md) | 必須 28 項目中 26 PASS・判定は FAIL。翌日、[残った 2 件の原因](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)を特定して手順書を修正（通しの再試験は未実施） |
 
 作業結果と障害 15 件の対処は[作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)、設計書・手順書・試験仕様書は [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad)にあります。
-
-### Linux（2026-09-04〜08）
-
-| 記録 | 確認したこと |
-| --- | --- |
-| [9/7〜8：Ubuntu の初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md) | 固定 IP、SSH 鍵認証、sudo、UFW、時刻同期、自動更新を手作業で設定。設定不備を起こし、拒否の表示とサーバーのログを照合して復旧 |
-| [9/4：Ansible での基礎設定](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-build.md) | Ubuntu と [AlmaLinux](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md) に OS の共通設定と Docker を適用し、2 回目の変更 0 件。AlmaLinux では SELinux 設定の欠陥を修正 |
-| [9/8：数値の監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)・[ログ検索](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-loki-practice.md) | サービスの停止・再開に合わせて収集状態が 1→0→1 と変わることを表示。Nginx の目印付きログを Loki で検索 |
-| [9/8：復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md)・[自動復旧](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) | Loki のデータを別ボリュームへ復元して過去のログを再取得。アプリ停止後の自動再起動で HTTP 復帰 2 秒（1 回の計測） |
 
 ### CI（自動試験）の記録
 
