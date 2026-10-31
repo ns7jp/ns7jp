@@ -25,6 +25,10 @@
 | FSMO 役割の奪取 | [2026-09-04](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) | `PASS`（最終状態は DC 1 台） |
 | WSUS の構築・試験 | [2026-09-07](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md) | `FAIL`（原因調査は [2026-09-08](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)） |
 
+## 10/31 の本人操作による再確認
+
+[正常→Nginx 停止→手動復旧の結果票](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)に、AI の案内を受けた本人操作1回の結果を追加しました。停止中も app healthy、入口の接続失敗、再開後 HTTP 200・curl終了0 を確認しました。原ログ照合・連続録画・独力説明・反復は未確認です。
+
 ## AI が実行した新ラボの記録
 
 旧環境とは別の Hyper-V ラボで、承認を受けて Codex が操作した記録です。本人操作・独力再現・人間の第三者確認の実績には数えません。
