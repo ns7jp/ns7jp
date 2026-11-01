@@ -114,12 +114,11 @@ AI の手順案内を受け、Tera Term から nginx の停止・手動復旧を
 
 ### まだ実測していないこと
 
-- **AI を使わずに再現した記録**（最初の一件を[採録計画](./docs/evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)の順位 0 に置いています）
 - 常時起動のホストでの 24 時間以上の稼働（新ラボの試験は未合格）、本人操作による監視全体を載せたホストの再起動後の確認、Slack への実際の通知
 - AWS への実際の構築（`apply / destroy`）、別の VM への復元
 - 組織の DNS やクライアント PC を含むドメイン環境、第三者による手順の確認
 
-ほかの学習用リポジトリ（design・shell・network・aws と、教材の learning）は、2026-10-18 に更新を止めた参考資料です。採用の判断には不要です。確認範囲は[作品案内](./docs/github-profile-cleanup.md#主作品と副作品)に書いています。
+ほかの学習用リポジトリ（design・shell・network・aws と、教材の learning）は、2026-10-18 に更新を止めた参考資料です。確認範囲は[作品案内](./docs/github-profile-cleanup.md#主作品と副作品)に書いています。
 
 ## Contact
 
