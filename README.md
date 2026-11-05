@@ -2,123 +2,73 @@
 
 ## 未経験からインフラエンジニアへ
 
-第一志望は **Linux サーバーの構築・運用を担うインフラエンジニア**です。Windows Server / Active Directory も学習しています。製造・物流を中心に約 15 年続けてきた「計測する・原因を絞る・手順化する・改善を続ける」を生かし、手順に沿った設定、試験、ログによる一次切り分け、手順書の更新から担当したいと考えています。
+第一志望は **Linux サーバーの構築・運用を担うインフラエンジニア**です。まずは手順書と確認者のある基礎業務（IT 事務・キッティング、監視・運用の補助）から経験を積み、将来はサーバー構築・運用を担当したいと考えています。Windows Server / Active Directory も学習しています。
 
-> 個人の学習記録です（実務経験ではありません）。AI 支援の範囲と未実施の範囲は[この資料の読み方](#この資料の読み方)にまとめています。
+**現況（2026-11-05 本人確認）**：2026 年 10 月 7 日から IT 企業でトライアル就労・社内研修中です。勤務開始時期は相談となります。
 
 | 目的 | 開くページ |
 | --- | --- |
-| 志望と検証範囲を 1 ページで読む | [採用ご担当者さま向けページ](./docs/overview-for-recruiters.md) |
+| 志望・現況・できることを短く読む | [採用ご担当者さま向けページ](./docs/overview-for-recruiters.md) |
 | 原画像・ログと確認範囲を見る | [代表実績と証拠](./docs/evidence/featured-evidence.md) |
-| 経歴と応募条件を見る | [職務経歴書・スキルシート](./docs/resume.md) |
-| 詰まった記録を見る | [LEARNINGS.md](./LEARNINGS.md) |
+| 経歴・資格・応募条件を見る | [職務経歴書](./docs/resume.md)・[スキルシート](./docs/skill-sheet.md) |
+| 学びと失敗の記録を読む | [LEARNINGS.md](./LEARNINGS.md) |
 
 ## まず見ていただきたい 3 本
 
-2026 年 9 月に、手元の Hyper-V（Windows の仮想化機能）上の仮想マシン（VM）で行った記録から、特に説明したいものを 3 本に絞りました。いずれも **AI の手順案内を受け、私が操作して結果を画面で確認した記録**です。独力再現の記録はまだありません。
+主作品は **[サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server)** です。以下は手元の Hyper-V VM で、**AI の手順案内を受けて本人が操作・確認した個人学習**です。独力での原因特定・再現を示す記録とは区別しています。
 
-| # | 題材 | 何を示すか | 記録 |
-| --- | --- | --- | --- |
-| 1 | **Ubuntu の構築と監視** | 固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新を手作業で設定し、わざと起こした設定不備から復旧。Prometheus / Grafana でアプリの手動停止・再開に伴う収集状態の 1→0→1 を確認し、Loki で Nginx の目印付きログを検索 | [初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)・[監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)・[ログ検索](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-loki-practice.md) |
-| 2 | **AD の 2 台構成と復旧** | Windows Server 2022 で AD を構築し必須 31 項目 PASS。DC を 2 台にして複製を確認し、System State 復元と、1 台を失った想定での FSMO 役割の奪取まで実施 | [構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)・[復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)・[FSMO 奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) |
-| 3 | **WSUS の原因の切り分け** | 試験が FAIL。承認件数の突き合わせで前日の仮説を否定し、分類・製品 0 件のルールが全分類・全製品を対象にする仕組みを確認し、手順書を修正。絞り込みが 0 件になった操作は未特定で、通しの再試験は未実施 | [原因調査](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md) |
+### 1. Ubuntu：SSH の設定不備から復旧を確認
 
-主作品は **[サーバー構築・監視ラボ `server`](https://github.com/ns7jp/server)** です。上の 3 本以外の練習記録は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)に日付順で並べています。
+- **課題**：意図的に入れた SSH の設定不備を見つけ、安全に接続できる状態へ戻す。
+- **本人の確認**：構文検査、設定復元、鍵接続とサーバー状態の確認を操作。
+- **判断の根拠**：`sshd -t` の終了コードが 255 → 0 となり、別途 SSH 鍵接続も確認。
+- **結果**：対象の設定不備から復旧。全21項目の内訳と未確認範囲は[初期構築の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)に掲載。
+
+### 2. Active Directory：バックアップ時点へ戻ったことを確認
+
+- **課題**：System State バックアップから復元できるかを確かめる。
+- **本人の確認**：バックアップ後に目印の OU を作り、復元後にその有無を確認。
+- **判断の根拠**：目印の OU が消え、バックアップ時点へ戻ったことを確認。
+- **結果**：復元処理 15 分 29 秒、復旧全体は約 40 分。起動設定の解除漏れによるやり直しと、翌日判明した SYSVOL 欠損も[復元の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)に掲載。
+
+### 3. WSUS：試験の失敗を調べ、手順を修正
+
+- **課題**：更新承認の試験が期待結果を満たさなかった理由を調べる。
+- **本人の確認**：AI の案内で承認件数とルールの分類・製品設定を照合。
+- **判断の根拠**：分類・製品が 0 件のルールでは、絞り込みなしとして全対象へ適用されることを確認。
+- **結果**：手順書を修正。0 件になった操作の特定と通し再試験は未完了のため、元の試験判定は **FAIL** のまま。[原因調査の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)
 
 ## 主な実測結果
 
-### Linux（2026-09-04〜08）
+Ubuntu の監視・ログ検索、Ansible の再実行、AD の2台構成、CI の結果は[代表実績と証拠](./docs/evidence/featured-evidence.md)と[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)から確認できます。
 
-| 記録 | 確認したこと |
-| --- | --- |
-| [9/7〜8：Ubuntu の初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md) | 固定 IP、SSH 鍵認証、sudo、UFW、時刻同期、自動更新を手作業で設定。設定不備を起こし、拒否の表示とサーバーのログを照合して復旧 |
-| [9/4：Ansible での基礎設定](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-build.md) | Ubuntu と [AlmaLinux](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md) に OS の共通設定と Docker を適用し、2 回目の変更 0 件。AlmaLinux では SELinux 設定の欠陥を修正 |
-| [9/8：数値の監視](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)・[ログ検索](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-loki-practice.md) | サービスの停止・再開に合わせて収集状態が 1→0→1 と変わることを表示。Nginx の目印付きログを Loki で検索 |
-| [9/8：復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md)・[自動復旧](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md) | Loki のデータを別ボリュームへ復元して過去のログを再取得。アプリ停止後の自動再起動で HTTP 復帰 2 秒（1 回の計測） |
-
-### Windows Server / Active Directory（2026-09-01〜08）
-
-| 記録 | 確認したこと |
-| --- | --- |
-| [9/1〜2：AD の構築・試験](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md) | AD DS（ドメインの認証基盤）を構築し、試験仕様書のフェーズ 1 必須 31 項目がすべて PASS。手順書・設計書の誤りを実機で見つけて修正 |
-| [9/2：System State 復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md) | バックアップ後に作った目印の OU が、復元で消えることを確認。復元処理 15 分 29 秒、復旧全体は約 40 分（うち約 18 分は起動設定の解除漏れによるやり直し） |
-| [9/3：2 台目の DC と複製](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-03-ad-second-dc-replication.md) | 複製の失敗 0/5、複製の遅延 17.8 秒。GPO が配られない原因を、前日の復元で消えていたファイルと突き止めて修復 |
-| [9/3〜4：DC の停止と役割の奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) | [1 台を止めても](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-03-ad-dc-outage-drill.md) DNS・LDAP・Kerberos が続くことと、復帰後の収束 18 分 31 秒を確認。FSMO 役割を奪取し、`ntdsutil` で古い DC の情報を削除 |
-| [9/7〜8：WSUS の構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md) | 必須 28 項目中 26 PASS・判定は FAIL。翌日、[残った 2 件の原因](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)を特定して手順書を修正（通しの再試験は未実施） |
-
-作業結果と障害 15 件の対処は[作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)、設計書・手順書・試験仕様書は [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad)にあります。
-
-### CI（自動試験）の記録
-
-| 記録 | 確認したこと |
-| --- | --- |
-| [8/22：一連の構築・試験](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証) | GitHub Actions の使い捨て Ubuntu で、構築・再実行・監視・通知・復旧・復元の 23 項目が PASS |
-| [9/17：性能試験の見直し](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-performance-ci-analysis.md) | 以前の集計が HTTP 502 を失敗に数えていなかったことを見つけて修正。[接続再利用を加えた比較](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-17-upstream-keepalive-comparison.md)では 2 回の CI で失敗 0 件 |
-
-### 現在の VM での再確認（2026-10-31）
-
-AI の手順案内を受け、Tera Term から nginx の停止・手動復旧を1回操作しました。HTTP 200→接続失敗（curl終了7）→HTTP 200 を確認し、AI の説明後に停止対象と復旧判断の根拠を回答しました。[操作結果と確認範囲](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)。独力説明・連続録画・3回の反復は未確認です。
-
-同日、再接続後に Docker active・app healthy・nginx 稼働・HTTP 200・curl終了0も確認しました。[再起動後の2サービス確認](https://github.com/ns7jp/server/blob/44d672ac2c160dbcd5907c21d935cc74e449d8e6/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)。起動直後の復帰時間、監視全体・長期稼働は未確認です。
+現在の VM では、10/31 に AI の案内を受けて Nginx の停止・手動復旧を1回操作し、HTTP 200 → 接続失敗 → HTTP 200 を確認しました。説明後に停止対象と復旧判断の根拠を回答しています。[操作結果](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)・[再起動後の2サービス確認](https://github.com/ns7jp/server/blob/44d672ac2c160dbcd5907c21d935cc74e449d8e6/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)。11/5 は本人の環境を利用できないため、追加の実習は未実施です。環境を利用できるようになってから、この小さな構成で通信経路・確認の目的・復旧の根拠を本人が説明する練習に取り組みます。
 
 ## 何を作ったか
 
-「サーバーが止まっているのに誰も気づかない」状態を減らすため、**応答を返すアプリ**と、**異常を見つけて知らせる監視基盤**を組み合わせました。
+アプリの稼働環境と、数値・ログを集めて異常を見つける監視基盤を組み合わせました。
 
-[![利用者からNginx・アプリへの要求、Prometheusからアプリへの数値取得、GrafanaからPrometheus・Lokiへの問い合わせ、AlloyからLokiへのログ送信、PrometheusからAlertmanagerへの警告の流れ](./docs/images/architecture-overview.svg)](./docs/images/architecture-overview.svg)
+[![利用者からNginx・アプリへの要求、Prometheusからの数値取得、Grafanaの表示、AlloyからLokiへのログ送信、Alertmanagerへの警告の流れ](./docs/images/architecture-overview.svg)](./docs/images/architecture-overview.svg)
 
-| 役割 | 技術 | 何のために使うか |
-| --- | --- | --- |
-| 土台 | Linux（Ubuntu など） | アプリや監視を動かす |
-| 入口と本体 | Nginx / Flask / Gunicorn | 通信を受け、アプリの応答を返す |
-| 計測・判定 | Prometheus | 数値を集め、警告条件を判定する |
-| ログ | Alloy / Loki | ログを運び、保存・検索する |
-| 表示 | Grafana | 数値やログを問い合わせて見せる |
-| 通知 | Alertmanager | 警告を整理し、通知先へ送る |
-| 構築・起動 | Ansible / Docker Compose | OS の設定をそろえる / 複数のコンテナを起動する |
-
-詳細は[構成図](./docs/architecture-diagram.md)にあります。
-
-## 失敗から学んだこと
-
-失敗の記録は [LEARNINGS.md](./LEARNINGS.md) にあります。原因調査は **「事実を見る → 範囲を絞る → 1 つ変える → 再確認する」** の順で進めます。9 月の AD の記録にも、最初の仮説が外れた例を残しています。「強制停止でレジストリが巻き戻った」と考えた設定の変化は、実際には GPO による上書きでした。
+構成と各技術の役割は[構成図](./docs/architecture-diagram.md)、採用理由は[設計判断](./docs/adr/README.md)にまとめています。
 
 ## 経験・資格
 
-- 製造・物流業務 約 15 年
-- IT 企業でのトライアル就業（2026/07〜09/15 に終了、人材派遣。Windows Server・Linux サーバーの構築と利用者アカウント・権限管理の研修）。現在は求職中で、すぐに勤務を開始できます
-- Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級、IT パスポート
-- 基本情報技術者を学習中で、次に受験予定（2026 年 12 月まで）。LinuC-1 は FE 受験後まで保留（[資格取得ロードマップ](./docs/certifications/roadmap.md)）
+製造・物流を中心に約15年。作業を計測して動線と手順を改善し、1日約1時間の作業短縮につなげました。[業務改善レポート](./docs/business-improvement/picking-improvement.md)
 
-詳しい職歴とスキルは [職務経歴書・スキルシート](./docs/resume.md)、現場改善の経験は [業務改善レポート](./docs/business-improvement/picking-improvement.md)にまとめています。
+2026年7月に派遣会社へ入社し、7/21〜9/15に IT 企業でインフラ研修、10/7から別の IT 企業でトライアル就労・社内研修に取り組んでいます。Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級、IT パスポートを取得。基本情報技術者を学習中です。[職務経歴書](./docs/resume.md)・[資格取得ロードマップ](./docs/certifications/roadmap.md)
 
 ## この資料の読み方
 
-このポートフォリオ全体にかかる前提を、この節だけにまとめています。
-
-### 言葉の定義
-
-| 表記 | 意味 |
-| --- | --- |
-| **実装済み** | コードや設定、文書がある |
-| **実測済み** | 対象・日時・環境・結果の記録がある |
-| **未実施（NOT RUN）** | 実行結果がない |
-
-判定の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
-
 ### 3 つの前提（AI の利用を含む）
 
-1. **実務経験ではありません。** 個人の学習・検証で作ったものと、その実行記録です。
-2. **結果は、その記録に書いた時点・環境・コード版のものです。** 個別の記録を合算して「全構成の合格」とは扱いません。
-3. **AI 支援（Claude と Codex）を使っています。** 文書と実装コード（Ansible role、Terraform module、CI workflow、テスト、ラボ）の生成・レビューに使いました。9/1〜15 の VM の記録は、AI が手順を案内し、私が操作して結果を画面で確かめたものです。9/27〜28 の[新しい Hyper-V ラボの記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-28-new-hyperv-lab-operations.md)は Codex が操作したもので、私の操作経験や独力再現の実績には加えていません。範囲は [職務経歴書 §4-b](./docs/resume.md#4-b-ポートフォリオにおける-ai-支援の範囲) に書いています。
+1. **個人の学習・検証です。** 顧客環境での構築・運用の実務経験を示すものではありません。
+2. **記録ごとに日時・環境・実施者・確認範囲が異なります。** 個別の演習を合算して、全構成の合格とは扱いません。
+3. **AI（Claude・Codex）を文書・コードの生成と操作の案内に使っています。** AI が直接操作した記録は本人の操作経験に含めません。本人の独力再現・説明は未確認です。[支援の内訳](./docs/resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)
 
-### まだ実測していないこと
+「実装済み」はコード・文書がある状態、「実測済み」は実行結果がある状態、「未実施（NOT RUN）」は結果がない状態です。本人による監視から実通知・復旧までの一連の検証、24時間以上の稼働、別 VM への復元、AWS の実構築は未完了です。各項目の実施・合否と確認範囲は[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)にあります。
 
-- 常時起動のホストでの 24 時間以上の稼働（新ラボの試験は未合格）、本人操作による監視全体を載せたホストの再起動後の確認、Slack への実際の通知
-- AWS への実際の構築（`apply / destroy`）、別の VM への復元
-- 組織の DNS やクライアント PC を含むドメイン環境、第三者による手順の確認
-
-ほかの学習用リポジトリ（design・shell・network・aws と、教材の learning）は、2026-10-18 に更新を止めた参考資料です。確認範囲は[作品案内](./docs/github-profile-cleanup.md#主作品と副作品)に書いています。
+その他の学習用リポジトリは[作品案内](./docs/github-profile-cleanup.md#主作品と副作品)をご覧ください。
 
 ## Contact
 
