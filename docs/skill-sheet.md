@@ -2,14 +2,14 @@
 
 案件との照合用の 1 枚版です。詳しい説明と根拠は[職務経歴書・スキルシート](./resume.md)にあります。
 
-文書更新: 2026-10-18
+文書更新・就業状況の本人確認: 2026-11-05
 
 ## 基本情報
 
 | 項目 | 内容 |
 | --- | --- |
-| 希望職種 | インフラエンジニア（Linux サーバーの構築・運用が中心。Windows Server / AD にも対応）。入口として監視・運用、応募先によっては IT サポート・社内 SE 補助も可 |
-| 稼働開始 | すぐに開始できます（求職中） |
+| 希望職種 | 第一志望はインフラエンジニア（Linux サーバーの構築・運用が中心）。まずは手順書と確認者のある IT 事務・キッティング、監視・運用の補助から経験を積む |
+| 稼働開始 | 相談（2026/10/07から IT 企業でトライアル就労・社内研修中） |
 | 勤務地 | 東京都内通勤可能圏 |
 | 雇用形態 | 正社員志望。SES 可 |
 | シフト | 24/365 監視業務のシフト勤務（夜勤を含む）に対応可能 |
@@ -22,7 +22,8 @@
 
 | 期間 | 区分 | 内容 | OS | ミドルウェア・ツール | 構築 | 単体試験 | 障害・復旧の演習 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026/07〜09/15 | 研修 | Windows Server・Linux サーバーの構築、利用者アカウントと権限の管理 | Windows Server 2022、Linux | Active Directory、Hyper-V、DHCP、SSH、Apache、Zabbix、Ansible、Docker | ○ | — | — |
+| 2026/10/07〜現在 | 研修 | 別の IT 企業でトライアル就労・社内研修中 | — | — | — | — | — |
+| 2026/07/21〜09/15 | 研修 | Windows Server・Linux サーバーの構築、利用者アカウントと権限の管理 | Windows Server 2022、Linux | Active Directory、Hyper-V、DHCP、SSH、Apache、Zabbix、Ansible、Docker | ○ | — | — |
 | 2026/09/01〜08 | 個人学習 | AD の構築・試験、System State 復元、2 台目の DC と複製、FSMO 役割の奪取、WSUS の構築 | Windows Server 2022 | AD DS、DNS、GPO、WSUS、Windows Server バックアップ、PowerShell | ○ | ○ | ○ |
 | 2026/09/04〜15 | 個人学習 | Ubuntu Server の初期構築（固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新）、LVM のオンライン拡張、Docker での監視構成、Ansible・Git の練習 | Ubuntu 24.04、AlmaLinux 9 | OpenSSH、UFW、systemd-timesyncd・chrony（Ansible で適用）、LVM、Docker Compose、Nginx、Prometheus、Grafana、Loki、Ansible、Git | ○ | ○ | ○ |
 | 2025/10〜2026/01 | 職業訓練 | 情報処理（Python エンジニア）コース | — | Python、Flask、PHP、MySQL、HTML / CSS / JavaScript | — | — | — |

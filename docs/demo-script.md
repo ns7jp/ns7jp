@@ -4,7 +4,7 @@
 >
 > 2026-08-22 時点で、[2 分 15 秒の実測証跡リプレイ](https://ns7jp.github.io/demo.html)を公開しています。これは実操作の連続録画ではなく、2026-08-18・19 に保存した実測スクリーンショットと D-1 復旧ログを時系列で再構成した映像です。
 
-最終更新: 2026-10-31（AI 案内付き本人操作1回の結果を追加。ライブデモ全体は未合格）
+最終更新: 2026-11-05（本人の説明と1回の操作記録を中心に練習手順を簡素化。新しい本人実演の実績は追加していません）
 
 ## いま確認できるもの
 
@@ -67,121 +67,69 @@ Slack 通知は実配信の証跡がまだないため、動画の必須条件�
 3. [ビジュアルショーケース](./showcase/README.md) にサムネイルと実行証跡を掲載
 4. 非公開の運営記録（STATUS.md）に公開日、対象 commit、収録環境を記録
 
-## 面接でのライブ操作（5 分・AI なし）
+## 本人による小さな構成の確認
 
-本人が操作し、**何を確認し、なぜ次の操作を選んだか**を説明するデモです。手順書・man・公式資料は参照して構いません。実行中に AI へ相談した場合は、相談箇所を記録して `ai-assisted` とします。AI が操作した記録は `ai-executed` とし、本人の実演には数えません。
+まず app / nginx の2サービスで、**通信経路・確認する順序・復旧の判断根拠**を自分の言葉で説明します。手順書・man・公式資料は参照して構いません。最初の練習に時間制限は設けません。録画や3回の反復は任意で、1回の操作結果と本人の説明を記録することから始めます。
 
-対象は [2026-10-01 の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-10-01-ubuntu-practice01-nginx-manual-recovery.md)の `ubuntu-practice01`（Ubuntu VM）、作業場所は `~/server-nginx-practice`、Compose 名は `nginx-practice` です。旧 VM の `lab-base01` は使いません。2026-10-31 に、AI の案内を受けた本人操作で正常→停止→手動復旧を1回確認しました。AI の説明後に停止対象と復旧判断の根拠を回答しました。連続録画・5分以内の実演・独力説明・3回の反復は未確認で、ライブデモ全体は未合格です。
+2026-10-31 の[本人操作の記録](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)では、AI の案内を受けて正常→停止→手動復旧を確認しました。原因の説明を受けた後に回答した範囲であり、独力の原因特定は未確認です。今回、録画・反復の要件を変えても、この確認範囲は変わりません。
 
-[2026-10-31 の手順動作確認](./evidence/2026-10-31-demo-procedure-check.md)では、Codex が別のクラウド環境で正常応答・停止・手動復旧と外形監視を確認しました。本人の VM での実演とは分けた記録です。
+2026-11-05 は本人から「今の環境では使えません」と回答があり、対象 VM での操作には進んでいません。現在の再実施は **BLOCKED（対象 VM を利用できない）** です。対象 VM を利用できるようになったら、次の準備から再開します。
 
-[10/31 の本人操作の結果票](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)には、操作時刻・HTTP結果・本人の回答・未確認範囲を記録しています。原ログは本人の手元にあり、リポジトリには未収録です。
+### 対象の確認
 
-### 準備と採録の開始
-
-本人が対象 VM へ接続し、[結果票](./evidence/templates/linux-live-demo.md)を Git 管理外へコピーします。録画対象をこの演習用の端末に絞り、本人が画面録画を開始します。準備時間と下の 5 分の実演時間は分けて記録します。
-
-まず、対象 VM・Docker の接続先・作業場所を確認し、app と nginx が起動済みであることを確かめます。想定と違う環境やサービスが出たら停止操作へ進まず、[最小起動ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md)に戻って準備します。
+以前の記録では Ubuntu VM の名前は `ubuntu-practice01`、作業場所は `~/server-nginx-practice`、Compose 名は `nginx-practice` です。Hyper-V の表示名と VM 内のホスト名は一致するとは限りません。本人が接続先を確認し、以下のフォルダーとサービスがある環境を使います。存在しなければ別の VM を推測で操作せず、[最小起動ガイド](https://github.com/ns7jp/server/blob/main/docs/beginner-learning-guide.md)で環境を準備します。
 
 ```bash
 cd "$HOME/server-nginx-practice" || exit 1
+hostname
 docker context show
+git rev-parse HEAD
+git status --short
 docker compose -p nginx-practice ps --all app nginx
-curl --max-time 5 -sS -o /dev/null -w 'http_code=%{http_code}\n' http://127.0.0.1:8080/healthz
 ```
 
-次に、公開リポジトリの外へ原ログを保存します。Ubuntu の util-linux 版 `script` を使い、入力専用ログは取りません。画面に表示された文字は出力ログにも入るため、秘密値を入力・表示する作業はこの録画に含めません。
+対象が確認できたら、[短い結果票](./evidence/templates/linux-live-demo.md)をコピーし、実施日・環境・対象版・参照資料を記入します。出力はテキストまたは画像で保存します。端末全体を保存したい場合は `script` を利用できますが、録画・ハッシュの作成はこの練習の合格条件ではありません。公開用の出力に秘密値や個人情報を含めないでください。
+
+### 1. 正常な状態を確認する
 
 ```bash
-umask 077
-mkdir -p "$HOME/portfolio-private"
-demo_record_dir="$(mktemp -d "$HOME/portfolio-private/live-demo-$(date -u +%Y%m%dT%H%M%SZ)-XXXXXX")"
-HISTFILE=/dev/null PS1='demo$ ' script --quiet --return --flush \
-  --log-out "$demo_record_dir/terminal.log" \
-  --log-timing "$demo_record_dir/timing.log" \
-  --command 'bash --noprofile --norc -i'
+docker compose -p nginx-practice ps --all app nginx
+curl --max-time 10 -sS -o /dev/null -w 'http_code=%{http_code}\n' http://127.0.0.1:8080/healthz
+echo "curl_exit=$?"
 ```
 
-`script` 内のシェルで次を定義します。以下の `run` はコマンド・時刻・終了コードを残すための関数です。期待どおりの接続失敗も採録するため、このシェルでは `set -e` を使いません。
+app が healthy、nginx が稼働、HTTP 200・curl 終了0を確認してから停止へ進みます。正常でなければ、まずその状態を調べます。
+
+操作前に「この curl はどこを通って app に届くか」「app の healthy はどの範囲を確認しているか」を自分の言葉で書いてください。分からない点は分からないまま記録し、資料で調べた後の説明と区別します。
+
+### 2. 入口を止めて、違いを確認する
 
 ```bash
-run() {
-  date -u '+TIME=%Y-%m-%dT%H:%M:%SZ'
-  printf 'COMMAND'
-  printf ' %q' "$@"
-  printf '\n'
-  "$@"
-  local demo_exit=$?
-  printf 'EXIT=%s\n' "$demo_exit"
-  return "$demo_exit"
-}
-run git rev-parse HEAD
-run git status --short
-run cat /etc/os-release
-run uname -r
-run docker compose version
-date -u '+DEMO_START=%Y-%m-%dT%H:%M:%SZ'
+docker compose -p nginx-practice stop nginx
+docker compose -p nginx-practice ps --all app nginx
+curl --max-time 10 -sS -o /dev/null -w 'http_code=%{http_code}\n' http://127.0.0.1:8080/healthz
+echo "curl_exit=$?"
+docker compose -p nginx-practice logs --since 5m --tail 20 --no-color nginx
 ```
 
-全環境変数、`.env`、秘密値ファイル、`docker inspect`、展開した Compose 設定、全コマンド履歴は表示しません。`set -x` も使いません。差分がある場合は結果票に対象ファイルと変更内容を記録し、同じ commit の無変更状態とは扱いません。
+正常時との違いと、どの出力から原因の範囲を絞ったかを書きます。`http_code=000` は HTTP 応答未受信の表示です。curl 終了7（接続失敗）と28（タイムアウト）などは区別し、実際の出力を残します。計画的に nginx を止めた演習なので、初見の原因不明障害を解決した実績にはしません。
 
-### 本人が操作する順序
-
-| 時間 | 操作 | 口頭で伝えること |
-| --- | --- | --- |
-| 0:00–0:30 | 下の「正常確認」を実行 | app と nginx の状態、入口経由の HTTP 応答を比較の基準にする |
-| 0:30–1:30 | nginx だけを停止し、同じ HTTP 確認を実行 | app の healthy と、利用者側の到達性は別の観点である |
-| 1:30–3:00 | 状態一覧・直近ログ・8080 番のソケットを確認 | どの出力から入口の停止と判断したか。`ss` 単独では Docker の転送の有無を断定しない |
-| 3:00–4:00 | nginx を開始し、同じ HTTP 確認を実行 | 再開コマンドの成功に加え、入口経由の 200 とサービス状態で復旧を確認する |
-| 4:00–5:00 | 終了時刻を記録し、判断と未確認範囲を説明 | 今回確認したのは計画停止からの手動復旧。利用者経路の監視は次の検証で扱う |
-
-正常確認は、app が healthy、nginx が稼働、curl の終了コードが 0・HTTP 応答が 200 であることを確かめます。一致しなければ停止演習へ進まず、実際の結果を残します。
+### 3. 再開して復旧を確認する
 
 ```bash
-run docker compose -p nginx-practice ps --all app nginx
-run curl --max-time 5 -sS -o /dev/null -w 'http_code=%{http_code}\n' http://127.0.0.1:8080/healthz
+docker compose -p nginx-practice start nginx
+curl --max-time 10 -sS -o /dev/null -w 'http_code=%{http_code}\n' http://127.0.0.1:8080/healthz
+echo "curl_exit=$?"
+docker compose -p nginx-practice ps --all app nginx
 ```
 
-正常を確認した後、nginx だけを止めます。
+起動直後に応答しない場合はログと状態を確認し、同じ HTTP 確認を再実行します。「開始コマンドが成功した」ことに加え、HTTP 200・curl 終了0とサービス状態を確認し、復旧と判断した理由を書きます。説明に詰まっても停止したまま終えず、この復旧を行ってください。SSH が切れた場合も、再接続後に同じ対象を確認して復旧します。
 
-```bash
-run docker compose -p nginx-practice stop nginx
-run curl --max-time 5 -sS -o /dev/null -w 'http_code=%{http_code}\n' http://127.0.0.1:8080/healthz
-run docker compose -p nginx-practice ps --all app nginx
-run docker compose -p nginx-practice logs --since 5m --tail 20 --no-color nginx
-run ss -ltn '( sport = :8080 )'
-```
+### 記録の扱いと次の練習
 
-期待値は nginx の停止、app の healthy 継続、入口の接続失敗です。curl の `http_code=000` は HTTP ステータスコードではなく、HTTP 応答を受信していない表示です。通常の接続拒否は終了コード 7、タイムアウトなら 28 となるため、実際の終了コードとエラー文を記録します。予想と異なる出力を成功として処理しません。
+正常・停止中・復旧後の実出力と、本人の説明がそろったら、その回で確認できた範囲を結果票へ記入します。AI が手順を案内した回は `ai-assisted`、本人が資料を参照して進めた回はその参照資料を記録します。AI が操作した場合は `ai-executed` とします。操作の成功と、本人の説明を確認できた範囲は別欄に残します。
 
-途中で説明に詰まっても、nginx を停止したまま終えず、次の復旧を行います。
-
-```bash
-run docker compose -p nginx-practice start nginx
-run curl --max-time 5 -sS -o /dev/null -w 'http_code=%{http_code}\n' http://127.0.0.1:8080/healthz
-run docker compose -p nginx-practice ps --all app nginx
-date -u '+DEMO_END=%Y-%m-%dT%H:%M:%SZ'
-exit
-```
-
-起動直後の curl が失敗した場合は、`exit` の前にログと状態を確認し、同じ HTTP 確認を再実行して時刻も残します。200 に戻らなければ復旧失敗として記録します。SSH が切れた場合は再接続し、同じ作業場所・Compose 名を確認して nginx の開始と HTTP 確認を行い、録画中断も明記します。
-
-### 原ログの保存と結果票
-
-`exit` で元のシェルへ戻った後、画面録画を停止し、次のコマンドで原ログのハッシュを保存します。
-
-```bash
-(cd "$demo_record_dir" && sha256sum terminal.log timing.log > SHA256SUMS)
-```
-
-原ログと録画は Git 管理外に保管し、[結果票](./evidence/templates/linux-live-demo.md)へ日時・版・実出力・本人の判断・参照資料を記入します。公開用コピーから個人情報や秘密値を除き、加工箇所を明記します。原本のハッシュと公開用コピーのハッシュは別に残し、公開版を未加工の原本とは呼びません。記録は `server/docs/evidence/` に追加し、[代表実績と元資料](./evidence/featured-evidence.md)からリンクします。
-
-練習のルール：
-
-- 手順書・man・公式資料の参照箇所を記録し、詰まったときの調べ方も説明する
-- 3 回を別々に採録し、所要時間と改善点を比較する。長くなっても復旧確認は省かない
-- 合格は正常確認・停止中の差・手動復旧後の確認・本人の判断の記録がそろった回だけとする
-- このデモだけで OS 初期構築、外部通知、自動復旧、別 VM 復元の実績にはしない。新規 Ubuntu 初期構築の独力再現は[採録計画の順位 0](./evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)で別に扱う
+次は同じ環境で **障害→監視検知→通知受信→調査→復旧→正常確認** を行います。[既存の実測計画](https://github.com/ns7jp/server/blob/main/docs/real-environment-validation-plan.md)を使い、通知先と対象を決めてから実施します。この2サービスの練習は、監視全体・外部通知・自動復旧・新規 OS 構築・別 VM 復元を確認するものではありません。
 
 ## 関連ドキュメント
 

@@ -2,6 +2,8 @@
 
 第一志望は **インフラエンジニア**（中心は **Linux サーバー設計・構築**）で、すべての応募先で主作品の [server](https://github.com/ns7jp/server) を最初に提示します。成果物やコードがある状態を **実装済み**、日付・環境・commit SHA を含む結果がある状態を **実測済み**、実行ログがない状態を **未実施（NOT RUN）** と表記します。
 
+上の志望は将来の目標です。現在は、手順書と確認者のある基礎業務（IT 事務・キッティング、監視・運用の補助）から経験を積むことを想定しています。以下の順位は学習・作品の提示順であり、記載した作業を独力で担当できるという意味ではありません。
+
 ## 優先順位
 
 このページで挙げる 9/1〜15 の Windows Server / AD と Ubuntu の記録は、AI の支援（手順の案内など）を受けながら私が手元の Hyper-V 上の VM を操作し、結果を画面で確認したものです。
@@ -30,7 +32,7 @@
 | Windows Server / AD が中心の現場 | [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad) と [作業結果・引き渡し報告（SM-AD-001）](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md) | System State 復元の流れと、GPO による設定の上書きを切り分けた説明 |
 | IT サポート・社内 SE | [AD の構築・試験の記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)と[ドメイン参加時の名前解決障害の対処](./resume.md#取り組み事例-ad-ドメイン参加時の名前解決障害2026-08) | トライアル就業の研修で遭遇したドメイン参加の失敗（DNS の向き先の誤り）を例にした、確認順と記録方法 |
 
-9 月の記録に使った VM（`ans-01`・`lab-base01` など）は、もう残っていません。今ある `ubuntu-practice01` で記録があるのは app と nginx の最小構成までで、Ansible・監視・UFW を入れた記録はまだありません。現在の環境で練習する対象は[ライブ操作の台本](./demo-script.md#面接でのライブ操作5-分ai-なし)（nginx の停止と再開）です。10/31 は AI の手順案内を受けて1回操作し、停止と手動復旧を確認しました。[結果票](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)。独力説明・連続録画・5分以内の実演・3回の反復は未確認で、ライブデモ全体は未合格です。表の各項目は、今は記録（画面・ログ）を示しての説明になります。[代表実績と原画像への案内](./evidence/featured-evidence.md)から根拠を確認できます。
+9 月の記録に使った VM（`ans-01`・`lab-base01` など）は、もう残っていません。今ある `ubuntu-practice01` で記録があるのは app と nginx の最小構成までで、Ansible・監視・UFW を入れた記録はまだありません。現在の環境で練習する対象は[ライブ操作の台本](./demo-script.md#本人による小さな構成の確認)（nginx の停止と再開）です。10/31 は AI の手順案内を受けて1回操作し、停止と手動復旧を確認しました。[結果票](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)。この実施では独力での原因特定・説明までは確認していません。現在の練習では、既存の手順書を参照しながら、1回の操作結果と自分の言葉による説明を残すことを目標にします。表の各項目は、今は記録（画面・ログ）を示しての説明になります。[代表実績と原画像への案内](./evidence/featured-evidence.md)から根拠を確認できます。
 
 ## 現時点の境界
 
