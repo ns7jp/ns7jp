@@ -24,20 +24,24 @@
 | --- | --- | --- |
 | 2026/10/07〜現在・研修 | 別の IT 企業でトライアル就労・社内研修中 | — |
 | 2026/07/21〜09/15・研修 | Windows Server・Linux サーバーの構築、利用者アカウントと権限の管理 | 構築 |
+| 2026/11/05・個人学習 | KVM の7サービス部分構成で監視・ローカル通知・手動復旧・復旧通知を確認。後続で Grafana 表示・Loki 検索 | 監視・通知・復旧演習 |
+| 2026/11/10記録整理・個人学習（実施日時未採録） | KVM 上で AD とクライアント VM の連携、部署別共有・GPO・異動後の切替等を確認 | 構築・アクセス制御の部分試験 |
 | 2026/09/01〜08・個人学習 | AD 構築、System State 復元、2台目 DC・複製、FSMO 奪取、WSUS 構築 | 構築・単体試験・障害／復旧演習 |
 | 2026/09/04〜15・個人学習 | Ubuntu 初期構築、LVM オンライン拡張、Docker 監視構成、Ansible・Git の練習 | 構築・単体試験・障害／復旧演習 |
 | 2025/10〜2026/01・職業訓練 | 情報処理（Python エンジニア）コース | — |
 
 AD の復元では翌日 SYSVOL 欠損が判明し、修正手順の実機検証は未完了です。WSUS は総合 **FAIL** で、修正後の通し再試験は未実施です。[結果と確認範囲](./resume-evidence.md)
 
+11月の本人実習は AI の案内に沿った操作で、原画像・生ログはリポジトリ未収録です。外部通知、全構成の受け入れ、長期稼働の実績には数えません。[実習状況と原記録](./practice-status.md)
+
 ## 主要技術
 
 | 区分 | OS・主要技術 | 経験範囲 |
 | --- | --- | --- |
 | インフラ研修 | Windows Server 2022、Linux、Hyper-V、AD、DHCP、SSH、Apache、Zabbix、Ansible、Docker | 2026/7〜9 の研修で使用 |
-| Windows 個人学習 | Windows Server 2022、AD DS、DNS、GPO、WSUS、Windows Server バックアップ、PowerShell | 上記の構築・試験・復旧演習で使用 |
+| Windows 個人学習 | Windows Server 2022、AD DS、DNS、GPO、WSUS、Windows Server バックアップ、PowerShell | 9月の構築・試験・復旧演習と、11月整理のクライアント連携・アクセス制御で使用 |
 | Linux 基本設定 | Ubuntu 24.04、AlmaLinux 9、OpenSSH、UFW、LVM、systemd-timesyncd、chrony | 固定 IP・SSH 鍵認証・時刻同期・自動更新等。chrony は Ansible で適用 |
-| コンテナ・監視 | Docker Compose、Nginx、Prometheus、Grafana、Loki | 部分構成で起動、数値・ログ、停止・復帰を確認 |
+| コンテナ・監視 | Docker Compose、Nginx、Prometheus、Grafana、Loki、Alertmanager | 数値・ログ、部分構成での停止・手動復旧、同じ VM 内への FIRING / RESOLVED 通知を確認 |
 | 構成管理・版管理 | Ansible、Git | 基礎設定適用、ファイル管理、変更予測、ブランチ・履歴・競合の練習 |
 | 職業訓練 | Python、Flask、PHP、MySQL、HTML / CSS / JavaScript | 2025/10〜2026/01 の職業訓練で使用 |
 
