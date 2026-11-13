@@ -55,9 +55,13 @@
 
 原資料が見つからない箇所を、今回作った画面や推測の出力で埋めません。再実施は別の日付・環境の記録として追加します。
 
-## 10/31：現在の VM で本人が再実施したこと
+## 10/31 以降：最近の本人実習
 
 Nginx の停止・手動復旧と再起動後の確認は、[実習状況と次の確認](../practice-status.md#1031nginx-の停止手動復旧)にまとめています。本人の操作範囲、資料の保存状況、未確認事項もそちらで確認できます。
+
+11/5 の [KVM 監視・通知実習](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-05-kvm-monitoring-notification.md)では、AI の案内で本人が同じ7サービス部分構成の正常確認、app 停止、ローカル FIRING 受信、手動復旧、RESOLVED 受信と最終正常確認を行いました。通知先は VM 内の受信器です。原画像・生ログ・受信 JSON は未収録で、上の原画像付き3事例と資料の状態が異なります。
+
+11/6 の [Nginx 停止・復旧と本人の説明](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-06-nginx-guided-recovery.md)も公開しています。次は[短い結果票](../evidence/templates/linux-live-demo.md)で、本人が選んだ確認と理由、各段階の実出力、実行日時・対象版を一緒に保存します。11/5〜6 の原資料が残っていなければ、新しい日付で再実施し、当時の記録とは分けます。
 
 ## 資料の確認と、次の実行
 

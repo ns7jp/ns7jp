@@ -46,6 +46,10 @@ KVM 上の Ubuntu VM で、AI の案内に沿って本人が **7サービスの�
 
 独力での原因特定・再構築・説明は未確認です。公開済みの動画は保存画面の証跡リプレイで、実操作の連続録画ではありません。
 
+次回は一つの小構成で、停止前の予想、選んだ確認コマンドと理由、正常・停止中・復旧後の実出力を[短い結果票](./evidence/templates/linux-live-demo.md)に残します。実行日時・対象版も同時に採録します。11/5 の通知履歴など過去の原資料が残っている場合は、内容と由来を確認した公開用コピーを当時の記録へ添えます。残っていない資料は新しい実行結果で埋めず、別の日付で再実施します。
+
+クラウド応募向けの追加実習には、[既存の EC2 1 台の採録手順](https://github.com/ns7jp/aws/blob/main/evidence/level02/README.md)を使います。実 AWS での構築・疎通・削除・残存確認・費用確認は **NOT RUN** です。アカウントへの認証、費用上限、終了時刻が揃ってから実施し、後日の費用確認まで結果を分けて残します。
+
 ### 採録計画と記入用紙
 
 本人の次の実行は、既存の[採録計画](./evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)にまとめています。[初期構築の記入用結果票](https://github.com/ns7jp/server/blob/1f6d4cc1e16e8180c2f562b3aa2c4591af64ce77/docs/evidence/2026-10-25-independent-rerun-ubuntu-initial-build.md)は準備済みですが、**下書き・NOT RUN** です。[ライブデモの記録用紙](./evidence/templates/linux-live-demo.md)も、実施後に本人が記入します。

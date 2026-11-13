@@ -17,11 +17,15 @@
 
 ## まず見ていただきたい 3 本
 
-以下は、**AI の手順案内を受けて本人が VM を操作・確認した個人学習**です。
+以下は、**AI の手順案内を受けて本人が VM を操作・確認した個人学習**です。Linux の3事例を、[結果票と原画像](./docs/evidence/featured-evidence.md)で確認できます。
 
 - **Ubuntu：SSH の設定不備から復旧** — 設定を復元し、`sshd -t` の終了コード 255 → 0 と鍵接続の成功を確認。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)
-- **AD：バックアップ時点への復元を確認** — 復元後に目印の OU が消えたことを確認。翌日 SYSVOL 欠損が判明し、修正手順の実機検証は未完了。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)
-- **WSUS：承認試験の失敗を調べ、手順を修正** — 分類・製品が 0 件だと全対象に適用されることを確認。0 件になった操作は未特定、通し再試験は未実施で、判定は **FAIL** のまま。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)
+- **Ubuntu：停止と再開を監視で確認** — Prometheus / Grafana でアプリのメトリクス収集状態が 1 → 0 → 1 と変わることを確認。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)
+- **Ubuntu：アプリの自動再起動を確認** — 再起動回数 0 → 1、PID の変化、HTTP 復帰 2 秒を記録し、その後の healthy・HTTP 200 を確認。2 秒は1回の計測です。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md)
+
+演習ごとに構成が異なり、上の結果を一つの構成の運用試験として合算しません。最近の本人操作では、11/5 に7サービスの部分構成で **監視 → ローカル通知 → 手動復旧 → 復旧通知**を確認しました。[結果と残る確認](./docs/practice-status.md)
+
+補足の失敗・調査事例：[AD 復元後の SYSVOL 欠損（修正手順の検証未完了）](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)／[WSUS の承認試験（総合 FAIL・通し再試験未実施）](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)。
 
 ## 経験・資格
 
