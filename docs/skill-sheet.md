@@ -1,14 +1,14 @@
 # スキルシート（SES 形式・要約） — 島田則幸
 
-案件との照合用の 1 枚版です。詳しい説明と根拠は[職務経歴書・スキルシート](./resume.md)にあります。
+案件との照合用に、経歴と主要技術をまとめています。[職務経歴書](./resume.md) ／ [実習と技術経験の詳細](./resume-evidence.md)
 
-文書更新・就業状況の本人確認: 2026-11-05
+就業状況の本人確認: 2026-11-05
 
 ## 基本情報
 
 | 項目 | 内容 |
 | --- | --- |
-| 希望職種 | 第一志望はインフラエンジニア（Linux サーバーの構築・運用が中心）。まずは手順書と確認者のある IT 事務・キッティング、監視・運用の補助から経験を積む |
+| 希望職種 | インフラエンジニア（Linux サーバーの構築・運用）。まずは手順書と確認者のある IT 事務・キッティング、監視・運用の補助から経験を積む |
 | 稼働開始 | 相談（2026/10/07から IT 企業でトライアル就労・社内研修中） |
 | 勤務地 | 東京都内通勤可能圏 |
 | 雇用形態 | 正社員志望。SES 可 |
@@ -18,20 +18,33 @@
 
 ## 経歴（IT 関連）
 
-区分は「研修」（トライアル就業先での研修）と「個人学習」（手元の VM での学習。AI の手順案内を受けて私が操作）の 2 つです。○ は、その工程を経験したことを表します。
+研修、個人学習、職業訓練を区別しています。個人学習は **AI の手順案内を受けて本人が手元の VM を操作した記録**で、経験した工程はその工程の合格や独力での遂行能力を意味しません。
 
-| 期間 | 区分 | 内容 | OS | ミドルウェア・ツール | 構築 | 単体試験 | 障害・復旧の演習 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026/10/07〜現在 | 研修 | 別の IT 企業でトライアル就労・社内研修中 | — | — | — | — | — |
-| 2026/07/21〜09/15 | 研修 | Windows Server・Linux サーバーの構築、利用者アカウントと権限の管理 | Windows Server 2022、Linux | Active Directory、Hyper-V、DHCP、SSH、Apache、Zabbix、Ansible、Docker | ○ | — | — |
-| 2026/09/01〜08 | 個人学習 | AD の構築・試験、System State 復元、2 台目の DC と複製、FSMO 役割の奪取、WSUS の構築 | Windows Server 2022 | AD DS、DNS、GPO、WSUS、Windows Server バックアップ、PowerShell | ○ | ○ | ○ |
-| 2026/09/04〜15 | 個人学習 | Ubuntu Server の初期構築（固定 IP・SSH 鍵認証・UFW・時刻同期・自動更新）、LVM のオンライン拡張、Docker での監視構成、Ansible・Git の練習 | Ubuntu 24.04、AlmaLinux 9 | OpenSSH、UFW、systemd-timesyncd・chrony（Ansible で適用）、LVM、Docker Compose、Nginx、Prometheus、Grafana、Loki、Ansible、Git | ○ | ○ | ○ |
-| 2025/10〜2026/01 | 職業訓練 | 情報処理（Python エンジニア）コース | — | Python、Flask、PHP、MySQL、HTML / CSS / JavaScript | — | — | — |
+| 期間・区分 | 内容 | 経験した工程 |
+| --- | --- | --- |
+| 2026/10/07〜現在・研修 | 別の IT 企業でトライアル就労・社内研修中 | — |
+| 2026/07/21〜09/15・研修 | Windows Server・Linux サーバーの構築、利用者アカウントと権限の管理 | 構築 |
+| 2026/09/01〜08・個人学習 | AD 構築、System State 復元、2台目 DC・複製、FSMO 奪取、WSUS 構築 | 構築・単体試験・障害／復旧演習 |
+| 2026/09/04〜15・個人学習 | Ubuntu 初期構築、LVM オンライン拡張、Docker 監視構成、Ansible・Git の練習 | 構築・単体試験・障害／復旧演習 |
+| 2025/10〜2026/01・職業訓練 | 情報処理（Python エンジニア）コース | — |
 
-- 設計書・手順書・試験仕様書は、AI 支援で作成した学習用の文書です。設計工程の実務経験には数えていません。
-- AI を使わずに再現した記録はまだありません。AI 支援の範囲は[職務経歴書 §4-b](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)にあります。
+AD の復元では翌日 SYSVOL 欠損が判明し、修正手順の実機検証は未完了です。WSUS は総合 **FAIL** で、修正後の通し再試験は未実施です。[結果と確認範囲](./resume-evidence.md)
+
+## 主要技術
+
+| 区分 | OS・主要技術 | 経験範囲 |
+| --- | --- | --- |
+| インフラ研修 | Windows Server 2022、Linux、Hyper-V、AD、DHCP、SSH、Apache、Zabbix、Ansible、Docker | 2026/7〜9 の研修で使用 |
+| Windows 個人学習 | Windows Server 2022、AD DS、DNS、GPO、WSUS、Windows Server バックアップ、PowerShell | 上記の構築・試験・復旧演習で使用 |
+| Linux 基本設定 | Ubuntu 24.04、AlmaLinux 9、OpenSSH、UFW、LVM、systemd-timesyncd、chrony | 固定 IP・SSH 鍵認証・時刻同期・自動更新等。chrony は Ansible で適用 |
+| コンテナ・監視 | Docker Compose、Nginx、Prometheus、Grafana、Loki | 部分構成で起動、数値・ログ、停止・復帰を確認 |
+| 構成管理・版管理 | Ansible、Git | 基礎設定適用、ファイル管理、変更予測、ブランチ・履歴・競合の練習 |
+| 職業訓練 | Python、Flask、PHP、MySQL、HTML / CSS / JavaScript | 2025/10〜2026/01 の職業訓練で使用 |
+
+- 設計書・手順書・試験仕様書は AI 支援で作成した学習用の文書です。設計工程の実務経験には数えていません。
+- **独力再現・説明は未確認**です。[AI 支援の範囲](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)と[技術ごとの実施・未確認範囲](./resume-evidence.md#技術ごとの経験範囲)を公開しています。
 - 各記録の日時・環境・判定は、主作品の[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)にあります。
 
 ## 前職
 
-製造・物流を中心に約 15 年（在庫管理、ピッキング、入出庫、現場の業務改善）。作業時間の計測をもとに、1 日約 1 時間の作業短縮を提案・定着させました（[業務改善レポート](./business-improvement/picking-improvement.md)）。
+製造・物流を中心に約15年（在庫管理、ピッキング、入出庫、業務改善）。作業時間の計測をもとに、1日約1時間の作業短縮を提案・定着させました。[業務改善レポート](./business-improvement/picking-improvement.md)
