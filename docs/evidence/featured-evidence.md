@@ -2,7 +2,7 @@
 
 [採用担当者向け要約](../overview-for-recruiters.md) / [プロフィール](../../README.md) / [全件の検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)
 
-Linux の構築・運用を志望しているため、まず **Ubuntu の設定不備を検出し、修正後に再確認した例**を示します。
+**原画像を確認できる Linux の3事例**をまとめています。設定不備の修正、停止の監視、アプリの自動再起動について、結果と根拠をたどれます。
 以下は本人が手元の Hyper-V VM を操作した学習記録です。AI は手順案内・結果の整理を支援しました。
 本人の独力再現や、本番運用の実績を示すものではありません。
 
@@ -57,19 +57,16 @@ Linux の構築・運用を志望しているため、まず **Ubuntu の設定�
 
 ## 10/31：現在の VM で本人が再実施したこと
 
-[AI 案内付きの Nginx 停止・手動復旧](https://github.com/ns7jp/server/blob/92609440727e6351a551da54e6d640a707902f0d/docs/evidence/2026-10-31-ubuntu-practice01-guided-recovery.md)を1回実施しました。HTTP 200→接続失敗（curl終了7）→HTTP 200、停止中の app healthy を本人提供画面で確認しました。理由の説明を受けた後、本人が停止対象と HTTP 復帰の根拠を回答しました。独力の原因特定・ライブデモ全体の合格には数えていません。原画像・生ログはリポジトリ未収録です。
-
-同日の[再起動後の2サービス確認](https://github.com/ns7jp/server/blob/44d672ac2c160dbcd5907c21d935cc74e449d8e6/docs/evidence/2026-10-31-ubuntu-practice01-reboot-check.md)では、再接続後に Docker active・app healthy・nginx 稼働・HTTP 200・curl終了0を確認しました。起動時刻から約9分後の観測で、復帰所要時間や監視全体、24時間稼働は評価していません。再起動前ログ末尾の表示と再接続後の画面を比較し、起動時刻の更新・前後の HTTP 200・curl終了0を確認しました。原ログは本人の手元に保管し、ハッシュ表示は確認、再計算・全文照合は未実施です。
+Nginx の停止・手動復旧と再起動後の確認は、[実習状況と次の確認](../practice-status.md#1031nginx-の停止手動復旧)にまとめています。本人の操作範囲、資料の保存状況、未確認事項もそちらで確認できます。
 
 ## 資料の確認と、次の実行
 
-上のリンクは `server` の文書版 `1f6d4cc1e16e8180c2f562b3aa2c4591af64ce77` に固定しています。これは閲覧する資料の版であり、各演習の実行コード版ではありません。
+各事例の結果票・原画像へのリンクは、`server` の文書版 `1f6d4cc1e16e8180c2f562b3aa2c4591af64ce77` に固定しています。これは閲覧する資料の版であり、各演習の実行コード版ではありません。
+
 2026-10-31 に Codex が、リンク先24ファイルの存在と、上記3演習の画像計56枚の SHA-256 が保存済み一覧に一致することを確認しました。これは資料の整合確認です。
 原画像のハッシュはファイルの同一性を確かめるもので、操作主体・撮影日時・本人の理解を認証するものではありません。
 
-本人の次の実行は、既存の[採録計画](../evidence-capture-checklist.md#現在の残タスクlinux-サーバー構築を最優先)にまとめています。
-[初期構築の記入用結果票](https://github.com/ns7jp/server/blob/1f6d4cc1e16e8180c2f562b3aa2c4591af64ce77/docs/evidence/2026-10-25-independent-rerun-ubuntu-initial-build.md)は準備済みですが、**下書き・NOT RUN** です。
-[ライブデモの記録用紙](./templates/linux-live-demo.md)も、実施後に本人が記入します。
+本人の次の予定と未実施の記入用紙は、[実習状況の採録計画](../practice-status.md#採録計画と記入用紙)をご覧ください。
 
 [linux-record]: https://github.com/ns7jp/server/blob/1f6d4cc1e16e8180c2f562b3aa2c4591af64ce77/docs/evidence/2026-09-08-lab-base01-initial-build.md
 [linux-images]: https://github.com/ns7jp/server/blob/1f6d4cc1e16e8180c2f562b3aa2c4591af64ce77/docs/evidence/screenshots/2026-09-07-08-lab-base01/README.md
