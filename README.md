@@ -17,7 +17,7 @@
 
 ## まず見ていただきたい 3 本
 
-以下は、**AI の手順案内を受けて本人が VM を操作・確認した個人学習**です。Linux の3事例を、[結果票と原画像](./docs/evidence/featured-evidence.md)で確認できます。
+以下は、**AI の手順案内を受けて私が VM を操作・確認した個人学習**です。Linux の3事例を、[結果票と原画像](./docs/evidence/featured-evidence.md)で確認できます。
 
 - **Ubuntu：SSH の設定不備から復旧** — 設定を復元し、`sshd -t` の終了コード 255 → 0 と鍵接続の成功を確認。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)
 - **Ubuntu：停止と再開を監視で確認** — Prometheus / Grafana でアプリのメトリクス収集状態が 1 → 0 → 1 と変わることを確認。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)
@@ -44,10 +44,6 @@ IT パスポート、Python 3 エンジニア認定基礎・実践、PHP 8 技�
 
 <!-- markdownlint-disable-next-line MD033 -->
 <a id="3-つの前提ai-の利用を含む"></a>
-
-## この資料の読み方
-
-文書・コードの生成にも AI を利用しています。**本人の独力再現・説明は未確認**で、AI が直接操作した記録は本人の操作経験に含めません。顧客環境での実務経験を示すものではありません。[AI 支援の内訳](./docs/resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)・[検証範囲の読み方](./docs/practice-status.md#検証範囲の読み方)
 
 ## Contact
 
