@@ -4,6 +4,14 @@
 
 研修事例、日付付きの実習一覧、技術ごとの確認範囲をまとめた補足資料です。本人が AI の案内を受けて操作した記録と、CI・AI が実行した記録を区別しています。独力再現・説明を確認したものではありません。
 
+## 11月の本人実習
+
+- **11/5、KVM 上の Ubuntu**：7サービス部分構成で監視・ローカル FIRING 通知・手動復旧・RESOLVED 通知を確認。後続の実習で Grafana の数値表示と Loki のログ検索、10サービス Up を確認しました。両者を全機能の合格には合算しません。
+- **11/6記録、Ubuntu**：Nginx の停止・手動復旧、本人による復旧判断の説明と AI の補足を記録。実機日時・仮想化方式・コード版は未採録です。
+- **11/10記録整理、KVM 上の AD とクライアント VM**：ドメイン参加、部署別共有・GPO・異動後の切替等を部分確認。各操作の正確な実施日時は未採録です。
+
+いずれも AI の手順案内を受けた本人操作で、原画像・生ログはリポジトリ未収録です。外部通知、独力再現、全構成の受け入れ・長期稼働を確認したものではありません。[環境別の結果と原記録](./practice-status.md)で確認範囲を区別し、以下の過去の記録・判定は上書きしません。
+
 ## 取り組み事例: AD ドメイン参加時の名前解決障害（2026-08）
 
 > この事例の記述は AI が代筆したものです（[AI 支援の内訳](./ai-usage.md)参照）。私の記憶に基づく書き直しは、まだ終えていません。
@@ -30,7 +38,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 | [9/3〜4：DC の停止と FSMO 役割の奪取](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ad-fsmo-seize.md) | [dc01 の計画停止中](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-03-ad-dc-outage-drill.md)も dc02 単独で DNS・LDAP・Kerberos が続き、復帰後は強制再同期を含めて 18 分 31 秒で完全に収束。次に dc01 を失った想定で、dc02 で FSMO 役割 3 つを奪取し、`ntdsutil` で dc01 の情報を削除 |
 | [9/7〜8：WSUS の構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md) | `wsus-01` をドメインに参加させて WSUS（更新プログラムの配信サーバー）を構築。必須 28 項目中 26 PASS・1 FAIL・1 期待結果未達で、総合判定は FAIL。翌日、[残った 2 件の原因調査](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)を行い、手順書を修正。分類・製品が 0 件になった操作は未特定で、通し再試験は未実施 |
 
-障害・課題 15 件の対処は[作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)に、設計書・手順書・試験仕様書は [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad)と [WSUS 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-wsus)にあります。組織の DNS、実クライアント PC を含むドメイン環境、中央 Prometheus からの収集（BLOCKED）、24 / 72 時間の連続稼働、サイト間複製、電源断からの復旧、WSUS の通し再試験は、まだ確認していません。
+障害・課題 15 件の対処は[作業結果・引き渡し報告](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-work-result-SM-AD-001.md)に、設計書・手順書・試験仕様書は [AD 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-ad)と [WSUS 構築案件パック](https://github.com/ns7jp/server/tree/main/docs/build-package-wsus)にあります。この9月の環境では、組織の DNS、実クライアント PC を含むドメイン環境、中央 Prometheus からの収集（BLOCKED）、24 / 72 時間の連続稼働、サイト間複製、電源断からの復旧、WSUS の通し再試験は確認していません。
 
 ## Linux の VM で確認したこと（2026-09-04〜10-31）
 
@@ -50,7 +58,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 9/9〜15 の Ansible と Git の小さな練習は、[検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)に並べています。
 
-監視・復元・D-1 は、構成を切り替えた別々の演習です。監視全体の同時稼働とアラートの外部通知、AlmaLinux の新規構築と最小公開、監視全体を載せたホストの再起動後の確認、24 / 72 時間の稼働、別の新規 VM への復元、自力での再構築、第三者による手順確認は、**本人による実測は NOT RUN** で、次の課題として残しています。Codex による新ラボ実行は[AI 支援の内訳](./ai-usage.md#作業の流れ)に分けて記載します。結果の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
+上記9〜10月の監視・復元・D-1 は、構成を切り替えた別々の演習です。11月の本人実習は冒頭に別環境の記録として掲載しています。アラートの外部通知、AlmaLinux の新規構築と最小公開、監視全体を載せたホストの再起動後の確認・受け入れ、24 / 72 時間の稼働、別の新規 VM への復元、自力での再構築、第三者による手順確認は、**本人による実測は NOT RUN** のままです。Codex による新ラボ実行は[AI 支援の内訳](./ai-usage.md#作業の流れ)に分けて記載します。結果の正本は [検証証跡台帳](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md) です。
 
 ## 過去の CI・WSL2・AI 支援環境の記録
 
@@ -78,12 +86,12 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 | 分類 | 項目 | レベル |
 | --- | --- | --- |
 | OS | Linux サーバー構築・基本運用（Ubuntu） | ○（[9/7〜8 に Ubuntu Server を手作業で初期構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)。ほかに個人ラボと研修での構築・確認） |
-| OS | Windows Server 2022（AD DS / DNS / WSUS / Windows Server バックアップ） | ○（9/1〜8 に手元の Hyper-V VM で [AD の構築・試験](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)（必須 31 項目 PASS）、System State 復元、2 台目 DC と FSMO 奪取、[WSUS の構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md)（判定 FAIL、原因調査・手順修正後の通し再試験は未実施）。AI の手順案内あり、実クライアントを含むドメイン環境・長期運用は未経験） |
+| OS | Windows Server 2022（AD DS / DNS / WSUS / Windows Server バックアップ） | ○（9/1〜8 に手元の Hyper-V VM で [AD の構築・試験](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-01-ad-build-validation.md)（必須 31 項目 PASS）、System State 復元、2 台目 DC と FSMO 奪取、[WSUS の構築](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-07-wsus-build-validation.md)（判定 FAIL、原因調査・手順修正後の通し再試験は未実施）。AI の手順案内あり。別の KVM 環境でクライアント VM のドメイン参加・GPO 等を部分確認（[11月の記録](#11月の本人実習)）。組織環境のクライアント連携・長期運用は未経験） |
 | OS | RHEL 系（AlmaLinux / Rocky 9） | ○（コンテナでの Molecule に加え、[9/4 に手元の再利用 AlmaLinux VM へ基礎設定を適用し、変更 0 件・SELinux enforcing 等を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-04-ansible-foundation-el9-build.md)。専用の新規 VM・最小公開・全監視構成は未実施） |
 | ストレージ | LVM（VG / LV / ファイルシステム / online 拡張） | ○（9/8 に手元の VM で、VG の未割り当て領域を使い `lvextend -l +100%FREE -r` で `/` をオンライン拡張（[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-compose-practice.md)）。PV の追加・fstab の編集・縮小は未実施。VG / LV の作成と PV 追加を含む [8/24 の B-1](https://github.com/ns7jp/server/blob/main/docs/drills/logs/2026-08-24-B-1.md) は AI 支援環境での実行で、私の実績には数えません） |
-| コンテナ | Docker / Docker Compose | ○（WSL2・使い捨て runner と手元の Hyper-V VM の部分構成で起動・停止・再作成等を確認。長期稼働は未実測） |
+| コンテナ | Docker / Docker Compose | ○（WSL2・使い捨て runner と本人の Hyper-V / KVM VM で起動・停止・再作成等を確認。11/5 は7サービスで通知・復旧を確認後、後続実習で10サービス Up を観測。全構成の受け入れ・長期稼働は未実測） |
 | Web / Proxy | Nginx（リバースプロキシ。TLS は設定例・自己署名証明書での確認まで） | ○ |
-| 監視 | Prometheus / Grafana / Alertmanager | ○（[9/8 に手元の VM で数値表示と停止・復帰表示を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)。Alertmanager は起動確認まで。アラート発火・外部通知は同演習で未実施） |
+| 監視 | Prometheus / Grafana / Alertmanager | ○（[9/8 に手元の VM で数値表示と停止・復帰表示を確認](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)。同演習の Alertmanager は起動確認まで。11/5 の KVM 実習では7サービス部分構成のローカル FIRING / RESOLVED 通知と、後続実習の Grafana 表示を本人が確認。Slack・メール等の外部通知は未実施） |
 | ログ | Loki / Grafana Alloy | ○（手元の VM でログ検索と[同一 VM 内の別ボリュームへの Loki 復元](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-restore-practice.md)を確認。別 VM への復元は未実施） |
 | 構成管理 | Ansible | ○（手元の VM への基礎設定適用と、ホーム内のファイル生成・変更予測・入力検証を確認。全監視構成の `site.yml` 一括適用・再実行の記録は使い捨て runner。上記の環境別記録を参照） |
 | 版管理 | Git | △（手元の VM 内でブランチ・履歴・競合解消・中止を実行。AI の案内あり。VM からの push と独力での説明は未実施） |
