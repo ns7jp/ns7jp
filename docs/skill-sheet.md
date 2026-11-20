@@ -10,6 +10,7 @@
 | --- | --- |
 | 希望職種 | 社内ヘルプデスク・IT サポート（一次対応） |
 | 初めに担当したい業務 | 手順書に沿った問い合わせ一次受付、状況の記録、担当者への引き継ぎ、利用者への経過連絡。PC キッティング・IT 事務の補助も希望 |
+| 経験を積んで関わりたい業務 | 利用者から聞いた操作の再現とアプリ修正後のテスト、監視通知を受けたときの状況確認と復旧確認 |
 | 稼働開始 | 相談（2026/10/07から IT 企業でトライアル就労・社内研修中） |
 | 勤務地 | 東京都内通勤可能圏 |
 | 雇用形態 | 正社員志望。SES 可 |
@@ -52,8 +53,8 @@ AD の復元では翌日 SYSVOL 欠損が判明し、修正手順の実機検証
 | Windows 個人学習 | Windows Server 2022、AD DS、DNS、GPO、WSUS、Windows Server バックアップ、PowerShell | 9月の構築・試験・復旧演習と、11月整理のクライアント連携・アクセス制御で使用 |
 | Linux 基本設定 | Ubuntu 24.04、AlmaLinux 9、OpenSSH、UFW、LVM、systemd-timesyncd、chrony | 固定 IP・SSH 鍵認証・時刻同期・自動更新等。chrony は Ansible で適用 |
 | コンテナ・監視 | Docker Compose、Nginx、Prometheus、Grafana、Loki、Alertmanager | 数値・ログ、部分構成での停止・手動復旧、同じ VM 内への FIRING / RESOLVED 通知を確認 |
-| 構成管理・版管理 | Ansible、Git | 基礎設定適用、ファイル管理、変更予測、ブランチ・履歴・競合の練習 |
-| 職業訓練 | Python、Flask、PHP、MySQL、HTML / CSS / JavaScript | 2025/10〜2026/01 の職業訓練で使用 |
+| 構成管理・版管理 | Ansible、Git | 基礎設定の適用・変更予測と、Git のブランチ・履歴・競合を練習。個人の Ubuntu VM で AI が示した Ansible の手順を実行し、同じ状態での再実行は変更0件、手動で変えたファイルは再実行で元の内容に戻ることを確認。[ファイル管理を自動化した実習](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-ansible-intro-practice.md) |
+| 職業訓練・学習作品 | Python、Flask、PHP、MySQL、HTML / CSS / JavaScript | 2025/10〜2026/01 の職業訓練で使用。Python の定型文管理アプリでは、保存した日本語の文面を UTF-8 と CP932 のファイルから読み込むテスト例を公開。作品のコード・テストの作成と修正に AI の支援を利用。[文字コード別の単体テスト](https://github.com/ns7jp/works/blob/main/tests/test_teikei_kanri.py) |
 
 - 設計書・手順書・試験仕様書は AI 支援で作成した学習用の文書です。設計工程の実務経験には数えていません。
 - **独力再現・説明は未確認**です。[AI 支援の範囲](./resume.md#4-b-ポートフォリオにおける-ai-支援の範囲)と[技術ごとの実施・未確認範囲](./resume-evidence.md#技術ごとの経験範囲)を公開しています。

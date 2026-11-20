@@ -1,10 +1,10 @@
 # 島田則幸（Noriyuki Shimada）
 
-**社内ヘルプデスク・ITサポートの一次対応を志望しています。** 製造・物流を中心に約15年働きました。倉庫では、新人が自分で商品を探せるように、よく出る品番を載せた地図と、初日から使えるチェックリストを作りました。
+**社内ヘルプデスク・ITサポートの一次対応を志望しています。** 問い合わせを通じて利用者の仕事を知り、将来は、障害の再発を防ぐ仕組みや、繰り返す手作業を減らすアプリを作れるITエンジニアを目指しています。
 
-ITでは、利用者の仕事がどこで止まったかを聞き取り、手順に沿って確認し、必要なときは担当者へ引き継ぐ仕事から始めたいと考えています。PCのキッティングや、貸与端末と台帳を照合するIT事務の補助にも関心があります。
+製造・物流を中心に約15年働きました。倉庫では、新人が自分で商品を探せるよう、品番を載せた地図と作業チェックリストを作りました。PCのセットアップや貸与端末の台帳管理を補助する仕事にも、この経験を活かしたいです。
 
-[職務経歴書](./docs/resume.md) ／ [スキルシート](./docs/skill-sheet.md) ／ [応募条件・連絡先](./docs/overview-for-recruiters.md)
+[希望業務とエンジニアとしての進路](./docs/target-roles.md) ／ [職務経歴書](./docs/resume.md) ／ [スキルシート](./docs/skill-sheet.md) ／ [応募条件・連絡先](./docs/overview-for-recruiters.md)
 
 <!-- markdownlint-disable-next-line MD033 -->
 <a id="ヘルプデスクに関連する学習"></a>
@@ -29,11 +29,18 @@ ITでは、利用者の仕事がどこで止まったかを聞き取り、手順
 <!-- markdownlint-disable-next-line MD033 -->
 <a id="まず見ていただきたい-3-本"></a>
 
-## 技術担当者向けの実習記録
+<!-- markdownlint-disable-next-line MD033 -->
+<a id="技術担当者向けの実習記録"></a>
 
-Linuxの個人実習では、アプリが正常と表示されているのに、サイトの入口からは接続できない場面を経験しました。「今後は、各コンテナの状態に加えて、利用者がアクセスする入口から応答を確認する。」と自分の言葉で振り返っています。[本人が書いた経緯と学び](./LEARNINGS.md#2026-09-appがhealthyでも入口のnginxを止めるとアクセスできなかった)
+## サポートから広げたいエンジニアの仕事
 
-[Windowsで部署異動後に確かめたアクセス権](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-10-kvm-ad-client-access-gpo.md#部署異動の検証) ／ [サーバーラボの構成図](./docs/architecture-diagram.md) ／ [Linux実習の結果と画面](./docs/evidence/featured-evidence.md)
+| 関心のある仕事 | これまでの学習と、仕事で試したいこと |
+| --- | --- |
+| インフラ・ネットワーク運用 | Linuxの個人実習で、アプリが正常と表示されても、利用者が通るWebの入口が止まると接続できないことを確かめました。監視・運用でも、利用者と同じ経路で復旧を確かめたいです。[本人が書いた経緯と学び](./LEARNINGS.md#2026-09-appがhealthyでも入口のnginxを止めるとアクセスできなかった) |
+| 業務改善・自動化 | Ubuntuの個人実習で、AIの案内に沿ってAnsibleを再実行し、手で書き換えたファイルだけが指定の内容に戻ることを確認しました。繰り返す設定作業を、小さく試してから自動化する仕事に関心があります。[操作画面と試験結果](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-ansible-intro-practice.md#試験結果) |
+| アプリ開発・テスト | 職業訓練のPython作品に、定型文を保存・編集・コピーするアプリがあります。問い合わせの返信文を題材に、利用者の手順をたどって動作を確かめるところから、機能の改善に関わりたいです。作品のコードやテストにはAIの支援を利用しています。[操作例](https://github.com/ns7jp/works/blob/main/docs/demo-flow.md#定型文管理アプリ) ／ [コード](https://github.com/ns7jp/works/blob/main/teikei_kanri.py) |
+
+[PHP・SQLを使った掲示板のコード](https://github.com/ns7jp/works/blob/post/index.php) ／ [Windowsの部署別アクセス権の実習](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-10-kvm-ad-client-access-gpo.md#部署異動の検証) ／ [サーバーラボの構成図](./docs/architecture-diagram.md)
 
 ## 研修・資格
 
