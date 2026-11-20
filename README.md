@@ -1,27 +1,33 @@
-# 島田則幸 (Noriyuki Shimada)
+# 島田則幸（Noriyuki Shimada）
 
-Linux サーバーの構築・運用を第一志望とし、社内ヘルプデスクの一次対応も希望しています。
+**社内ヘルプデスク・ITサポートを第一志望としています。** 製造・物流の現場で約15年働き、新人が商品を見つけられるよう、倉庫の地図と作業チェックリストを作りました。ITでも、相手がどこで困っているかを聞き取り、仕事を再開できるところまで支える役割を希望しています。
 
-**ヘルプデスクの一次対応例**　「10時の打ち合わせで使う資料が開けない」という相談を題材に、利用者への最初の返信、権限担当への引き継ぎ、資料が開けたことの確認までをまとめました。[共有フォルダが開けないときの模擬チケット](./docs/helpdesk-intake.md)
+[職務経歴書](./docs/resume.md) ／ [スキルシート](./docs/skill-sheet.md) ／ [応募条件・連絡先](./docs/overview-for-recruiters.md)
 
-**現況（2026-11-05）**：10/7 から IT 企業でトライアル就労・社内研修中。勤務開始時期は相談となります。
+## 問い合わせ対応例「10時の打ち合わせで使う資料が開けません」
+
+部署を異動した方からの相談を想定した、AIの支援で作成した**模擬チケット**です。[受付から完了までのやり取りを読む](./docs/helpdesk-intake.md)
+
+| 場面 | 対応例 |
+| --- | --- |
+| 受付 | 必要な資料と使う時刻を聞く。利用者の画面には「アクセスが拒否されました」と表示され、同じ部署の同僚はフォルダを開けたことを記録する。 |
+| 引き継ぎ | 権限担当へ申請と設定の照合を依頼する。10時の会議に影響があることを伝え、利用者には9時30分までの途中連絡を約束する。 |
+| 完了 | 再サインイン後、会議で使う資料を開けて準備を再開できたと利用者に確認し、チケットに結果を残す。 |
 
 <!-- markdownlint-disable-next-line MD033 -->
 <a id="ヘルプデスクに関連する学習"></a>
 
 ## 社内ヘルプデスクに活かせる経験
 
-- **物流現場での新人支援**　新人が商品を探す際に迷う場所を地図にし、作業を覚えるためのチェックリストを作りました。[新人向けマップとチェックリスト](./docs/business-improvement/picking-improvement.md#44-新人向けマップチェックリスト)
-- **部署異動後のアクセス確認（本人の VM 実習）**　AI の案内で検証用アカウントを操作しました。再サインイン後、新部署のファイルを読めることと、旧部署の共有先を直接開くとアクセスが拒否されることを確認しました。[実習記録「部署異動の検証」](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-10-kvm-ad-client-access-gpo.md#部署異動の検証)
-- **社内サイトが開けないときの切り分け（机上演習）**　Web サイトの入口とアプリ内部で応答が異なるという測定結果を読み、次にどこを確認したいかを答えました。[測定結果と本人の回答](./docs/practice-status.md#社内サイトが開けないときの確認)
+- **物流現場での新人支援・業務改善**　倉庫の地図では商品の種類ごとにエリアを色分けし、よく出る品番を示しました。チェックリストには初日・数日後・1週間目に覚える作業をまとめました。棚の配置や補充手順も見直し、在庫管理・ピッキングで自分の作業時間を1日約1時間短縮しました。[業務改善レポート](./docs/business-improvement/picking-improvement.md)
+- **Windows の共有フォルダを開ける条件の確認（個人実習）**　AIの案内を受けて仮想環境を操作しました。部署異動後に同じ利用者でサインインし直し、新部署のファイルは読めて、旧部署の共有先を直接開くと拒否されることを確認しました。[部署異動の検証記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-10-kvm-ad-client-access-gpo.md#部署異動の検証)
+- **社内サイトが開けないときの切り分け（机上演習）**　AIが測定した結果を読み、アプリ内部は応答していても、利用者が通る入口に問題が残っていないかを確認したいと回答しました。[測定結果と本人の回答](./docs/practice-status.md#社内サイトが開けないときの確認)
 
-## 主作品：サーバー構築・監視ラボ
+## 研修・資格
 
-**[server](https://github.com/ns7jp/server)** で、Linux 上のアプリ稼働、数値・ログの監視、Windows Server / AD の構築・復旧を学んでいます。
+公共職業訓練を修了し、ITパスポート、Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級を取得しました。基本情報技術者試験を学習中です。
 
-[![利用者からNginx・アプリへの要求、Prometheusによる数値取得、Grafanaの表示、Alloy・Lokiによるログ収集、Alertmanagerへの警告の流れ](./docs/images/architecture-overview.svg)](./docs/architecture-diagram.md)
-
-図は実装した構成です。確認済みの範囲は演習ごとに異なり、全構成の一連の検証は未完了です。[設計判断](./docs/adr/README.md)
+2026年10月7日からIT企業でトライアル就労・社内研修中です（11月5日本人確認）。勤務開始時期は相談となります。[職歴・研修内容と希望条件](./docs/resume.md)
 
 <!-- markdownlint-disable-next-line MD033 -->
 <a id="主な実測結果"></a>
@@ -29,36 +35,19 @@ Linux サーバーの構築・運用を第一志望とし、社内ヘルプデ�
 <!-- markdownlint-disable-next-line MD033 -->
 <a id="まず見ていただきたい-3-本"></a>
 
-## Linux の構築・運用を学んだ3事例
+## 技術担当者向けの実習記録
 
-以下は、**AI の手順案内を受けて私が VM を操作・確認した個人学習**です。Linux の3事例を、[結果票と原画像](./docs/evidence/featured-evidence.md)で確認できます。
+Linux の個人ラボでは、AIの案内を受けて Web サイトの入口を停止・再開し、再開後に同じ経路で稼働確認用の URL にアクセスし、HTTP 200 が返ることを確認しました。[本人の操作と復旧判断](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-06-nginx-guided-recovery.md)
 
-- **Ubuntu：SSH の設定不備から復旧** — 設定を復元し、`sshd -t` の終了コード 255 → 0 と鍵接続の成功を確認。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-initial-build.md)
-- **Ubuntu：停止と再開を監視で確認** — Prometheus / Grafana でアプリのメトリクス収集状態が 1 → 0 → 1 と変わることを確認。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-monitoring-practice.md)
-- **Ubuntu：アプリの自動再起動を確認** — 再起動回数 0 → 1、PID の変化、HTTP 復帰 2 秒を記録し、その後の healthy・HTTP 200 を確認。2 秒は1回の計測です。[記録](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-lab-base01-d1-practice.md)
-
-演習ごとに構成が異なり、上の結果を一つの構成の運用試験として合算しません。最近の本人操作では、11/5 に7サービスの部分構成で **監視 → ローカル通知 → 手動復旧 → 復旧通知**を確認しました。[結果と残る確認](./docs/practice-status.md)
-
-補足の失敗・調査事例：[AD 復元後の SYSVOL 欠損（修正手順の検証未完了）](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-02-ad-restore-drill.md)／[WSUS の承認試験（総合 FAIL・通し再試験未実施）](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-09-08-wsus-sit04-sit06-root-cause.md)。
-
-## 経験・資格
-
-製造・物流を中心に約15年。動線と手順の改善で、1日約1時間の作業短縮につなげました。[業務改善レポート](./docs/business-improvement/picking-improvement.md)
-
-IT パスポート、Python 3 エンジニア認定基礎・実践、PHP 8 技術者認定初級を取得。基本情報技術者を学習中です。
-
-## 詳しく見る
-
-| 知りたいこと | 開くページ |
-| --- | --- |
-| 職歴・応募条件 | [採用ご担当者さまへ](./docs/overview-for-recruiters.md)・[職務経歴書](./docs/resume.md)・[スキルシート](./docs/skill-sheet.md) |
-| 原画像・確認範囲 | [代表実績と証拠](./docs/evidence/featured-evidence.md) |
-| 実習の状況・学習記録 | [実習状況と次の確認](./docs/practice-status.md)・[学びと失敗の記録](./LEARNINGS.md) |
-| その他の作品 | [作品案内](./docs/github-profile-cleanup.md#主作品と副作品) |
+[サーバーラボの構成図](./docs/architecture-diagram.md) ／ [Linux実習3件の結果と画面](./docs/evidence/featured-evidence.md) ／ [実習状況と次の確認](./docs/practice-status.md)
 
 <!-- markdownlint-disable-next-line MD033 -->
 <a id="3-つの前提ai-の利用を含む"></a>
 
-## Contact
+## この資料の読み方
 
-[net7jp@gmail.com](mailto:net7jp@gmail.com) ／ [GitHub](https://github.com/ns7jp)
+模擬チケットは架空のやり取りです。技術実習の記録には、私が端末を操作したものと、AIが測定した結果を読んで私が回答したものがあります。[AIの支援範囲](./docs/ai-usage.md)
+
+## 連絡先
+
+[メール](mailto:net7jp@gmail.com) ／ [ポートフォリオサイト](https://ns7jp.github.io/)

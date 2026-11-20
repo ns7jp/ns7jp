@@ -10,7 +10,7 @@
 
 ## 主作品と副作品
 
-主作品は [server](https://github.com/ns7jp/server) です。Linux の構築・監視・復旧をコードと実行記録で確認します。
+ヘルプデスクの選考向けには、[問い合わせの模擬チケット](./helpdesk-intake.md)と[物流での新人支援](./business-improvement/picking-improvement.md#44-新人向けマップチェックリスト)を先に紹介しています。技術面の主作品は [server](https://github.com/ns7jp/server) で、Windows の共有フォルダや Linux の構築・監視・復旧を個人で学んだ記録があります。
 
 > **2026-10-18 追記**：副作品（design・shell・network・aws）と教材の [learning](https://github.com/ns7jp/learning) は、更新を止めて参考資料にしました。各リポジトリの README に「更新停止（参考資料）」と書き、プロフィール README では案内を 1 文にまとめています。ファイルは消していません。
 
@@ -40,11 +40,7 @@
 
 ## ピン留めで見せる順番
 
-> **2026-10-18 訂正**：副作品を参考資料にしたため、配置案を改めました。以前の案（server → ns7jp.github.io → design → shell → network → aws）は取り下げます。
-
-表示を組み直す場合の案は、**server → ns7jp.github.io** の 2 つです。先頭の主作品で実行記録、続くサイトで全体像を確認できます。副作品（design・shell・network・aws）と learning は、ピン留めしません。
-
-これは配置案であり、現在のピン設定を確認した記録ではありません。採用担当者に見える画面で、先頭が主作品か、Description が表示されるか、各リンクが開くかを確認した後、[表示設定の記録](./github-profile-settings.md)へ日時と結果を残します。
+ヘルプデスク応募向けの配置案は **ns7jp → ns7jp.github.io → server** です。問い合わせ対応の記入例、職歴をまとめたサイト、技術実習の順に読めます。確認時の公開順と掲載案は[プロフィール表示設定](./github-profile-settings.md#社内ヘルプデスク応募向けの表示案)にまとめました。
 
 ## 言語判定と入口の確認
 
