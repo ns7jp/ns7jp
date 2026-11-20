@@ -4,11 +4,13 @@
 
 研修事例、日付付きの実習一覧、技術ごとの確認範囲をまとめた補足資料です。本人が AI の案内を受けて操作した記録と、CI・AI が実行した記録を区別しています。独力再現・説明を確認したものではありません。
 
+一次受付の文面は、架空の利用者とのやり取りを収めた[模擬チケット](./helpdesk-intake.md)で確認できます。以下は、その題材に関連する Windows のアクセス試験と、Web の入口に接続できない場合の実習を含む記録です。
+
 ## 11月の本人実習
 
-- **11/5、KVM 上の Ubuntu**：7サービス部分構成で監視・ローカル FIRING 通知・手動復旧・RESOLVED 通知を確認。後続の実習で Grafana の数値表示と Loki のログ検索、10サービス Up を確認しました。両者を全機能の合格には合算しません。
-- **11/6記録、Ubuntu**：Nginx の停止・手動復旧、本人による復旧判断の説明と AI の補足を記録。実機日時・仮想化方式・コード版は未採録です。
-- **11/10記録整理、KVM 上の AD とクライアント VM**：ドメイン参加、部署別共有・GPO・異動後の切替等を部分確認。各操作の正確な実施日時は未採録です。
+- **11/10 記録整理、KVM 上の AD とクライアント VM**　部署異動を想定し、同じユーザーで再サインインした後、新部署のファイルを読めること、旧部署の共有先を直接開くと拒否されることを確認しました。各操作の正確な実施日時は未採録です。[部署異動の検証](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-10-kvm-ad-client-access-gpo.md#部署異動の検証)
+- **11/6 記録、Ubuntu**　Nginx の停止・手動復旧、本人による復旧判断の説明と AI の補足を記録。実機日時・仮想化方式・コード版は未採録です。[操作と復旧判断](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-06-nginx-guided-recovery.md)
+- **11/5、KVM 上の Ubuntu**　7サービス部分構成で監視・ローカル FIRING 通知・手動復旧・RESOLVED 通知を確認。後続の実習で Grafana の数値表示と Loki のログ検索、10サービス Up を確認しました。両者を全機能の合格には合算しません。
 
 いずれも AI の手順案内を受けた本人操作で、原画像・生ログはリポジトリ未収録です。外部通知、独力再現、全構成の受け入れ・長期稼働を確認したものではありません。[環境別の結果と原記録](./practice-status.md)で確認範囲を区別し、以下の過去の記録・判定は上書きしません。
 
@@ -62,7 +64,7 @@ Hyper-V で Windows Server 評価版の AD DS を構築した際、クライア�
 
 ## 過去の CI・WSL2・AI 支援環境の記録
 
-2026-08-22 には、主作品の監視ラボ一式（`site.yml`、対象 commit [`7622a9d`](https://github.com/ns7jp/server/commit/7622a9da974f694ae75e0173135923701be9e5a5)）を、GitHub Actions の使い捨て Ubuntu 24.04（Docker 導入済み）へ一括で適用しました。2 回目の実行で変更 0 件、11 コンテナ（監視ラボの 10 サービスと CI 用の通知受け口）の起動、ローカル通知、network / UFW、アプリ自動復旧（D-1）の RTO 1 秒、3 つのボリュームのバックアップと復元を含む [23 項目がすべて PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)しました。
+2026-08-22 には、監視ラボ一式（`site.yml`、対象 commit [`7622a9d`](https://github.com/ns7jp/server/commit/7622a9da974f694ae75e0173135923701be9e5a5)）を、GitHub Actions の使い捨て Ubuntu 24.04（Docker 導入済み）へ一括で適用しました。2 回目の実行で変更 0 件、11 コンテナ（監視ラボの 10 サービスと CI 用の通知受け口）の起動、ローカル通知、network / UFW、アプリ自動復旧（D-1）の RTO 1 秒、3 つのボリュームのバックアップと復元を含む [23 項目がすべて PASS](https://github.com/ns7jp/server/blob/4a292026b569dd1a522c0f2913b4ad40aeccebe7/docs/evidence/2026-08-22-full-stack-e2e.md#pr-75-hardening後の再検証)しました。
 
 2026-08-23 の [PR #77 CI](https://github.com/ns7jp/server/actions/runs/32611251044)では、候補 SHA `84e1492` の配備後、旧版 `59aa88e` へ戻し、稼働中の版番号と実行ファイルのハッシュ、app コンテナの再生成、不要ファイル除去、ローカル限定公開、Loki 取り込みまで再確認して PASS しました。これは PR ブランチ上の使い捨て Ubuntu runner での実演で、main への反映や永続ホストでの変更ではありません。Slack への実際の通知、AWS の `apply / destroy`、D-2、独立した管理端末・引き渡し先ホスト、組織 DNS、本人操作による監視全体を載せたホストの再起動後の確認、24 / 72 時間の稼働、Windows / AD・winget の公開再現ラボ（9 月に手元の Hyper-V で行った AD 構築とは別）は、まだ `NOT RUN` です。
 
