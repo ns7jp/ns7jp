@@ -51,13 +51,14 @@
 | 英語力 | 英語の技術文書・エラーメッセージの読解を学習中 |
 | 普通自動車運転免許 | なし |
 
-手順書と確認者のある環境で、問い合わせの一次受付から経験を積みたいと考えています。PC キッティングや IT 事務の補助にも関心があります。[希望する仕事と関連する経験](./target-roles.md)
+手順書と確認者のある環境で、問い合わせの一次受付から経験を積みたいと考えています。PC キッティングや IT 事務の補助にも関心があります。将来は、アプリの問い合わせで聞いた操作を検証環境で再現し、修正後の動作を確かめる仕事や、サーバーの監視・運用にも携わりたいです。[希望する仕事と関連する経験](./target-roles.md)
 
 ## 4. 活かせる経験・知識・スキル
 
 | 業務との接点 | これまでに取り組んだこと |
 | --- | --- |
 | 利用者への案内・手順の改善 | 前職で新人向けの場所マップと作業チェックリストを作成。動線と補充ルールも見直し、自分の作業時間を1日約1時間短縮しました。[業務改善の記録](./business-improvement/picking-improvement.md) |
+| 仕様に沿った動作確認・不具合報告 | 前職の派遣先で自動販売機の動作試験を担当し、仕様書に沿って操作し、不具合を報告しました。アプリのテストでも、期待した動作と実際の結果を伝える仕事に活かしたいです。[前職での動作試験の記載](https://github.com/ns7jp/ns7jp.github.io/blob/main/learning-docs/skills-reference.md#pcit基礎) |
 | 問い合わせの記録・引き継ぎ | 共有フォルダが開けないという架空の相談をもとに、利用者の期限、同僚がアクセスできたこと、権限担当への確認依頼を書き分けました。AI の支援で作成した[チケットの記入例](./helpdesk-intake.md)です。 |
 | Windows のアクセス確認 | 個人の仮想環境で、AI の案内に沿って検証用アカウントの部署を変更。再サインイン後、新部署のファイルが読め、旧部署の共有先への直接アクセスが拒否されることを確認しました。[部署異動の検証](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-10-kvm-ad-client-access-gpo.md#部署異動の検証) |
 | Web サイトに接続できない場合の確認 | 個人の仮想環境で AI の案内を受け、Web の入口を停止・再開。再開直後は応答を得られず、同じ入口で再確認し、HTTP 200 とコマンドの正常終了を復旧の根拠として記録しました。[操作と本人の説明](https://github.com/ns7jp/server/blob/main/docs/evidence/2026-11-06-nginx-guided-recovery.md) |
@@ -96,7 +97,7 @@ Linux・Windows Server の構築と監視の演習では、設定、試験結果
 
 - **ヘルプデスクの対応例**　共有フォルダの模擬チケットのほか、PC の動作が遅い場合やネットワークに接続できない場合の聞き取りと案内を掲載しています。[問い合わせと対応ログの記入例](https://github.com/ns7jp/ns7jp.github.io/blob/main/learning-docs/support-scenarios.md)
 - **技術学習の記録**　Linux / Windows Server の構築・監視・復旧の実習について、環境と結果を公開しています。[server の検証記録](https://github.com/ns7jp/server/blob/main/docs/evidence/README.md)
-- **[works](https://github.com/ns7jp/works)**：職業訓練中に制作した Python・PHP 等の6作品の索引。各作品のコードの所在はリンク先に掲載。
+- **職業訓練の開発作品**　Python の定型文管理アプリには、問い合わせの受付文を保存し、コピーして貼り付ける操作確認手順があります。作品のコードやテストの作成・修正に AI の支援を利用しています。[定型文の操作確認手順](https://github.com/ns7jp/works/blob/main/docs/demo-flow.md#定型文管理アプリ) ／ [Python・PHP 等の6作品](https://github.com/ns7jp/works)
 
 ## 8. 学歴・職業訓練
 
